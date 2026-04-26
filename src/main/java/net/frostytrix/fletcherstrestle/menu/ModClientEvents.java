@@ -1,0 +1,79 @@
+package net.frostytrix.fletcherstrestle.menu;
+
+import net.frostytrix.fletcherstrestle.FletcherTrestle;
+import net.frostytrix.fletcherstrestle.item.ModItems;
+import net.frostytrix.fletcherstrestle.registry.ModDataComponents;
+import net.minecraft.client.renderer.item.ItemProperties;
+import net.minecraft.resources.ResourceLocation;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
+
+// Notice the bus = MOD and value = CLIENT.
+// This ensures servers don't crash trying to load graphics!
+@EventBusSubscriber(modid = FletcherTrestle.MOD_ID, value = Dist.CLIENT)
+public class ModClientEvents {
+
+    @SubscribeEvent
+    public static void registerScreens(RegisterMenuScreensEvent event) {
+        event.register(ModMenuTypes.FLETCHING_MENU.get(), FletchingScreen::new);
+    }
+
+    @SubscribeEvent
+    public static void onClientSetup(FMLClientSetupEvent event) {
+        event.enqueueWork(() -> {
+            // 1. The Vanilla Pulling Properties
+            ItemProperties.register(ModItems.MODULAR_BOW.get(), ResourceLocation.withDefaultNamespace("pull"), (stack, level, entity, seed) -> {
+                if (entity == null) return 0.0F;
+                return entity.getUseItem() != stack ? 0.0F : (float) (stack.getUseDuration(entity) - entity.getUseItemRemainingTicks()) / 20.0F;
+            });
+            ItemProperties.register(ModItems.MODULAR_BOW.get(), ResourceLocation.withDefaultNamespace("pulling"), (stack, level, entity, seed) -> {
+                return entity != null && entity.isUsingItem() && entity.getUseItem() == stack ? 1.0F : 0.0F;
+            });
+
+            // 2. Our Custom Material Properties!
+            ItemProperties.register(ModItems.MODULAR_BOW.get(), ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "limb"), (stack, level, entity, seed) -> {
+                var assembly = stack.get(ModDataComponents.BOW_ASSEMBLY.get());
+                if (assembly == null) return 0.0F; // Default
+                return switch (assembly.limbMaterial()) {
+                    case "Oak" -> 0.1F;
+                    case "Spruce" -> 0.2F;
+                    case "Birch" -> 0.3F;
+                    case "Jungle" -> 0.4F;
+                    case "Acacia" -> 0.5F;
+                    case "Dark Oak" -> 0.6F;
+                    case "Mangrove" -> 0.7F;
+                    case "Cherry" -> 0.8F;
+                    case "Pale Oak" -> 0.9F;
+                    case "Crimson" -> 1.0F;
+                    case "Warped" -> 1.1F;
+                    default -> 0.1F;
+                };
+            });
+
+            ItemProperties.register(ModItems.MODULAR_BOW.get(), ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "riser"), (stack, level, entity, seed) -> {
+                var assembly = stack.get(ModDataComponents.BOW_ASSEMBLY.get());
+                if (assembly == null) return 0.0F;
+                return switch (assembly.riserMaterial()) {
+                    case "Wood" -> 0.1F;
+                    case "Iron" -> 0.2F;
+                    case "Copper" -> 0.3F;
+                    default -> 0.1F;
+                };
+            });
+
+            ItemProperties.register(ModItems.MODULAR_BOW.get(), ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "string"), (stack, level, entity, seed) -> {
+                var assembly = stack.get(ModDataComponents.BOW_ASSEMBLY.get());
+                if (assembly == null) return 0.0F;
+                return switch (assembly.stringMaterial()) {
+                    case "Spider" -> 0.1F;
+                    case "Flax" -> 0.2F;
+                    case "High Tension" -> 0.3F;
+                    default -> 0.1F;
+                };
+            });
+        });
+    }
+}

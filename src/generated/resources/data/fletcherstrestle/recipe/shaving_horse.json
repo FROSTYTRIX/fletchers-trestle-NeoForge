@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "L": {
+      "tag": "minecraft:logs"
+    },
+    "S": {
+      "tag": "minecraft:wooden_slabs"
+    },
+    "s": {
+      "item": "minecraft:stick"
+    }
+  },
+  "pattern": [
+    "SS ",
+    "sLs",
+    "s s"
+  ],
+  "result": {
+    "count": 1,
+    "id": "fletcherstrestle:shaving_horse"
+  }
+}

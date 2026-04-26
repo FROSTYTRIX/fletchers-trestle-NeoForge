@@ -1,0 +1,45 @@
+{
+"item.fletcherstrestle.rough_oak_limb": "Rough Oak Limb",
+"item.fletcherstrestle.rough_spruce_limb": "Rough Spruce Limb",
+"item.fletcherstrestle.rough_birch_limb": "Rough Birch Limb",
+"item.fletcherstrestle.rough_jungle_limb": "Rough Jungle Limb",
+"item.fletcherstrestle.rough_acacia_limb": "Rough Acacia Limb",
+"item.fletcherstrestle.rough_dark_oak_limb": "Rough Dark Oak Limb",
+"item.fletcherstrestle.rough_mangrove_limb": "Rough Mangrove Limb",
+"item.fletcherstrestle.rough_cherry_limb": "Rough Cherry Limb",
+"item.fletcherstrestle.rough_pale_oak_limb": "Rough Pale Oak Limb",
+"item.fletcherstrestle.rough_crimson_limb": "Rough Crimson Limb",
+"item.fletcherstrestle.rough_warped_limb": "Rough Warped Limb",
+
+"item.fletcherstrestle.pliable_oak_limb": "Pliable Oak Limb",
+"item.fletcherstrestle.pliable_spruce_limb": "Pliable Spruce Limb",
+"item.fletcherstrestle.pliable_birch_limb": "Pliable Birch Limb",
+"item.fletcherstrestle.pliable_jungle_limb": "Pliable Jungle Limb",
+"item.fletcherstrestle.pliable_acacia_limb": "Pliable Acacia Limb",
+"item.fletcherstrestle.pliable_dark_oak_limb": "Pliable Dark Oak Limb",
+"item.fletcherstrestle.pliable_mangrove_limb": "Pliable Mangrove Limb",
+"item.fletcherstrestle.pliable_cherry_limb": "Pliable Cherry Limb",
+"item.fletcherstrestle.pliable_pale_oak_limb": "Pliable Pale Oak Limb",
+"item.fletcherstrestle.pliable_crimson_limb": "Pliable Crimson Limb",
+"item.fletcherstrestle.pliable_warped_limb": "Pliable Warped Limb",
+
+"item.fletcherstrestle.wood_riser": "Wood Riser",
+"item.fletcherstrestle.iron_riser": "Iron Riser",
+"item.fletcherstrestle.copper_riser": "Copper Riser",
+
+"item.fletcherstrestle.high_tension_string": "High Tension String",
+
+"item.fletcherstrestle.drawknife": "Drawknife",
+
+"item.fletcherstrestle.modular_bow": "Modular Bow",
+
+"block.fletcherstrestle.shaving_horse": "Shaving Horse",
+"block.fletcherstrestle.steam_box": "Steam Box",
+
+"creative_tab.fletcherstrestle.fletchers_trestle_tab": "Fletcher's Trestle",
+
+"fletcherstrestle.configuration.minigame_settings": "Minigame Settings",
+"fletcherstrestle.configuration.cursor_speed": "Cursor Speed",
+"fletcherstrestle.configuration.punish_multiplier": "Punish Multiplier",
+"fletcherstrestle.configuration.minimum_score": "Minimum Score"
+}

@@ -1,0 +1,2452 @@
+{
+  "parent": "minecraft:item/bow",
+  "overrides": [
+    {
+      "model": "fletcherstrestle:item/modular_bow_oak_wood_spider",
+      "predicate": {
+        "fletcherstrestle:limb": 0.1,
+        "fletcherstrestle:riser": 0.1,
+        "fletcherstrestle:string": 0.1
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_oak_wood_spider_pulling_0",
+      "predicate": {
+        "fletcherstrestle:limb": 0.1,
+        "fletcherstrestle:riser": 0.1,
+        "fletcherstrestle:string": 0.1,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_oak_wood_spider_pulling_1",
+      "predicate": {
+        "fletcherstrestle:limb": 0.1,
+        "fletcherstrestle:riser": 0.1,
+        "fletcherstrestle:string": 0.1,
+        "minecraft:pull": 0.65,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_oak_wood_spider_pulling_2",
+      "predicate": {
+        "fletcherstrestle:limb": 0.1,
+        "fletcherstrestle:riser": 0.1,
+        "fletcherstrestle:string": 0.1,
+        "minecraft:pull": 0.9,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_oak_wood_high_tension",
+      "predicate": {
+        "fletcherstrestle:limb": 0.1,
+        "fletcherstrestle:riser": 0.1,
+        "fletcherstrestle:string": 0.3
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_oak_wood_high_tension_pulling_0",
+      "predicate": {
+        "fletcherstrestle:limb": 0.1,
+        "fletcherstrestle:riser": 0.1,
+        "fletcherstrestle:string": 0.3,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_oak_wood_high_tension_pulling_1",
+      "predicate": {
+        "fletcherstrestle:limb": 0.1,
+        "fletcherstrestle:riser": 0.1,
+        "fletcherstrestle:string": 0.3,
+        "minecraft:pull": 0.65,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_oak_wood_high_tension_pulling_2",
+      "predicate": {
+        "fletcherstrestle:limb": 0.1,
+        "fletcherstrestle:riser": 0.1,
+        "fletcherstrestle:string": 0.3,
+        "minecraft:pull": 0.9,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_oak_iron_spider",
+      "predicate": {
+        "fletcherstrestle:limb": 0.1,
+        "fletcherstrestle:riser": 0.2,
+        "fletcherstrestle:string": 0.1
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_oak_iron_spider_pulling_0",
+      "predicate": {
+        "fletcherstrestle:limb": 0.1,
+        "fletcherstrestle:riser": 0.2,
+        "fletcherstrestle:string": 0.1,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_oak_iron_spider_pulling_1",
+      "predicate": {
+        "fletcherstrestle:limb": 0.1,
+        "fletcherstrestle:riser": 0.2,
+        "fletcherstrestle:string": 0.1,
+        "minecraft:pull": 0.65,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_oak_iron_spider_pulling_2",
+      "predicate": {
+        "fletcherstrestle:limb": 0.1,
+        "fletcherstrestle:riser": 0.2,
+        "fletcherstrestle:string": 0.1,
+        "minecraft:pull": 0.9,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_oak_iron_high_tension",
+      "predicate": {
+        "fletcherstrestle:limb": 0.1,
+        "fletcherstrestle:riser": 0.2,
+        "fletcherstrestle:string": 0.3
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_oak_iron_high_tension_pulling_0",
+      "predicate": {
+        "fletcherstrestle:limb": 0.1,
+        "fletcherstrestle:riser": 0.2,
+        "fletcherstrestle:string": 0.3,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_oak_iron_high_tension_pulling_1",
+      "predicate": {
+        "fletcherstrestle:limb": 0.1,
+        "fletcherstrestle:riser": 0.2,
+        "fletcherstrestle:string": 0.3,
+        "minecraft:pull": 0.65,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_oak_iron_high_tension_pulling_2",
+      "predicate": {
+        "fletcherstrestle:limb": 0.1,
+        "fletcherstrestle:riser": 0.2,
+        "fletcherstrestle:string": 0.3,
+        "minecraft:pull": 0.9,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_oak_copper_spider",
+      "predicate": {
+        "fletcherstrestle:limb": 0.1,
+        "fletcherstrestle:riser": 0.3,
+        "fletcherstrestle:string": 0.1
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_oak_copper_spider_pulling_0",
+      "predicate": {
+        "fletcherstrestle:limb": 0.1,
+        "fletcherstrestle:riser": 0.3,
+        "fletcherstrestle:string": 0.1,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_oak_copper_spider_pulling_1",
+      "predicate": {
+        "fletcherstrestle:limb": 0.1,
+        "fletcherstrestle:riser": 0.3,
+        "fletcherstrestle:string": 0.1,
+        "minecraft:pull": 0.65,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_oak_copper_spider_pulling_2",
+      "predicate": {
+        "fletcherstrestle:limb": 0.1,
+        "fletcherstrestle:riser": 0.3,
+        "fletcherstrestle:string": 0.1,
+        "minecraft:pull": 0.9,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_oak_copper_high_tension",
+      "predicate": {
+        "fletcherstrestle:limb": 0.1,
+        "fletcherstrestle:riser": 0.3,
+        "fletcherstrestle:string": 0.3
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_oak_copper_high_tension_pulling_0",
+      "predicate": {
+        "fletcherstrestle:limb": 0.1,
+        "fletcherstrestle:riser": 0.3,
+        "fletcherstrestle:string": 0.3,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_oak_copper_high_tension_pulling_1",
+      "predicate": {
+        "fletcherstrestle:limb": 0.1,
+        "fletcherstrestle:riser": 0.3,
+        "fletcherstrestle:string": 0.3,
+        "minecraft:pull": 0.65,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_oak_copper_high_tension_pulling_2",
+      "predicate": {
+        "fletcherstrestle:limb": 0.1,
+        "fletcherstrestle:riser": 0.3,
+        "fletcherstrestle:string": 0.3,
+        "minecraft:pull": 0.9,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_spruce_wood_spider",
+      "predicate": {
+        "fletcherstrestle:limb": 0.2,
+        "fletcherstrestle:riser": 0.1,
+        "fletcherstrestle:string": 0.1
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_spruce_wood_spider_pulling_0",
+      "predicate": {
+        "fletcherstrestle:limb": 0.2,
+        "fletcherstrestle:riser": 0.1,
+        "fletcherstrestle:string": 0.1,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_spruce_wood_spider_pulling_1",
+      "predicate": {
+        "fletcherstrestle:limb": 0.2,
+        "fletcherstrestle:riser": 0.1,
+        "fletcherstrestle:string": 0.1,
+        "minecraft:pull": 0.65,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_spruce_wood_spider_pulling_2",
+      "predicate": {
+        "fletcherstrestle:limb": 0.2,
+        "fletcherstrestle:riser": 0.1,
+        "fletcherstrestle:string": 0.1,
+        "minecraft:pull": 0.9,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_spruce_wood_high_tension",
+      "predicate": {
+        "fletcherstrestle:limb": 0.2,
+        "fletcherstrestle:riser": 0.1,
+        "fletcherstrestle:string": 0.3
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_spruce_wood_high_tension_pulling_0",
+      "predicate": {
+        "fletcherstrestle:limb": 0.2,
+        "fletcherstrestle:riser": 0.1,
+        "fletcherstrestle:string": 0.3,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_spruce_wood_high_tension_pulling_1",
+      "predicate": {
+        "fletcherstrestle:limb": 0.2,
+        "fletcherstrestle:riser": 0.1,
+        "fletcherstrestle:string": 0.3,
+        "minecraft:pull": 0.65,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_spruce_wood_high_tension_pulling_2",
+      "predicate": {
+        "fletcherstrestle:limb": 0.2,
+        "fletcherstrestle:riser": 0.1,
+        "fletcherstrestle:string": 0.3,
+        "minecraft:pull": 0.9,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_spruce_iron_spider",
+      "predicate": {
+        "fletcherstrestle:limb": 0.2,
+        "fletcherstrestle:riser": 0.2,
+        "fletcherstrestle:string": 0.1
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_spruce_iron_spider_pulling_0",
+      "predicate": {
+        "fletcherstrestle:limb": 0.2,
+        "fletcherstrestle:riser": 0.2,
+        "fletcherstrestle:string": 0.1,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_spruce_iron_spider_pulling_1",
+      "predicate": {
+        "fletcherstrestle:limb": 0.2,
+        "fletcherstrestle:riser": 0.2,
+        "fletcherstrestle:string": 0.1,
+        "minecraft:pull": 0.65,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_spruce_iron_spider_pulling_2",
+      "predicate": {
+        "fletcherstrestle:limb": 0.2,
+        "fletcherstrestle:riser": 0.2,
+        "fletcherstrestle:string": 0.1,
+        "minecraft:pull": 0.9,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_spruce_iron_high_tension",
+      "predicate": {
+        "fletcherstrestle:limb": 0.2,
+        "fletcherstrestle:riser": 0.2,
+        "fletcherstrestle:string": 0.3
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_spruce_iron_high_tension_pulling_0",
+      "predicate": {
+        "fletcherstrestle:limb": 0.2,
+        "fletcherstrestle:riser": 0.2,
+        "fletcherstrestle:string": 0.3,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_spruce_iron_high_tension_pulling_1",
+      "predicate": {
+        "fletcherstrestle:limb": 0.2,
+        "fletcherstrestle:riser": 0.2,
+        "fletcherstrestle:string": 0.3,
+        "minecraft:pull": 0.65,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_spruce_iron_high_tension_pulling_2",
+      "predicate": {
+        "fletcherstrestle:limb": 0.2,
+        "fletcherstrestle:riser": 0.2,
+        "fletcherstrestle:string": 0.3,
+        "minecraft:pull": 0.9,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_spruce_copper_spider",
+      "predicate": {
+        "fletcherstrestle:limb": 0.2,
+        "fletcherstrestle:riser": 0.3,
+        "fletcherstrestle:string": 0.1
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_spruce_copper_spider_pulling_0",
+      "predicate": {
+        "fletcherstrestle:limb": 0.2,
+        "fletcherstrestle:riser": 0.3,
+        "fletcherstrestle:string": 0.1,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_spruce_copper_spider_pulling_1",
+      "predicate": {
+        "fletcherstrestle:limb": 0.2,
+        "fletcherstrestle:riser": 0.3,
+        "fletcherstrestle:string": 0.1,
+        "minecraft:pull": 0.65,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_spruce_copper_spider_pulling_2",
+      "predicate": {
+        "fletcherstrestle:limb": 0.2,
+        "fletcherstrestle:riser": 0.3,
+        "fletcherstrestle:string": 0.1,
+        "minecraft:pull": 0.9,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_spruce_copper_high_tension",
+      "predicate": {
+        "fletcherstrestle:limb": 0.2,
+        "fletcherstrestle:riser": 0.3,
+        "fletcherstrestle:string": 0.3
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_spruce_copper_high_tension_pulling_0",
+      "predicate": {
+        "fletcherstrestle:limb": 0.2,
+        "fletcherstrestle:riser": 0.3,
+        "fletcherstrestle:string": 0.3,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_spruce_copper_high_tension_pulling_1",
+      "predicate": {
+        "fletcherstrestle:limb": 0.2,
+        "fletcherstrestle:riser": 0.3,
+        "fletcherstrestle:string": 0.3,
+        "minecraft:pull": 0.65,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_spruce_copper_high_tension_pulling_2",
+      "predicate": {
+        "fletcherstrestle:limb": 0.2,
+        "fletcherstrestle:riser": 0.3,
+        "fletcherstrestle:string": 0.3,
+        "minecraft:pull": 0.9,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_birch_wood_spider",
+      "predicate": {
+        "fletcherstrestle:limb": 0.3,
+        "fletcherstrestle:riser": 0.1,
+        "fletcherstrestle:string": 0.1
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_birch_wood_spider_pulling_0",
+      "predicate": {
+        "fletcherstrestle:limb": 0.3,
+        "fletcherstrestle:riser": 0.1,
+        "fletcherstrestle:string": 0.1,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_birch_wood_spider_pulling_1",
+      "predicate": {
+        "fletcherstrestle:limb": 0.3,
+        "fletcherstrestle:riser": 0.1,
+        "fletcherstrestle:string": 0.1,
+        "minecraft:pull": 0.65,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_birch_wood_spider_pulling_2",
+      "predicate": {
+        "fletcherstrestle:limb": 0.3,
+        "fletcherstrestle:riser": 0.1,
+        "fletcherstrestle:string": 0.1,
+        "minecraft:pull": 0.9,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_birch_wood_high_tension",
+      "predicate": {
+        "fletcherstrestle:limb": 0.3,
+        "fletcherstrestle:riser": 0.1,
+        "fletcherstrestle:string": 0.3
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_birch_wood_high_tension_pulling_0",
+      "predicate": {
+        "fletcherstrestle:limb": 0.3,
+        "fletcherstrestle:riser": 0.1,
+        "fletcherstrestle:string": 0.3,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_birch_wood_high_tension_pulling_1",
+      "predicate": {
+        "fletcherstrestle:limb": 0.3,
+        "fletcherstrestle:riser": 0.1,
+        "fletcherstrestle:string": 0.3,
+        "minecraft:pull": 0.65,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_birch_wood_high_tension_pulling_2",
+      "predicate": {
+        "fletcherstrestle:limb": 0.3,
+        "fletcherstrestle:riser": 0.1,
+        "fletcherstrestle:string": 0.3,
+        "minecraft:pull": 0.9,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_birch_iron_spider",
+      "predicate": {
+        "fletcherstrestle:limb": 0.3,
+        "fletcherstrestle:riser": 0.2,
+        "fletcherstrestle:string": 0.1
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_birch_iron_spider_pulling_0",
+      "predicate": {
+        "fletcherstrestle:limb": 0.3,
+        "fletcherstrestle:riser": 0.2,
+        "fletcherstrestle:string": 0.1,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_birch_iron_spider_pulling_1",
+      "predicate": {
+        "fletcherstrestle:limb": 0.3,
+        "fletcherstrestle:riser": 0.2,
+        "fletcherstrestle:string": 0.1,
+        "minecraft:pull": 0.65,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_birch_iron_spider_pulling_2",
+      "predicate": {
+        "fletcherstrestle:limb": 0.3,
+        "fletcherstrestle:riser": 0.2,
+        "fletcherstrestle:string": 0.1,
+        "minecraft:pull": 0.9,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_birch_iron_high_tension",
+      "predicate": {
+        "fletcherstrestle:limb": 0.3,
+        "fletcherstrestle:riser": 0.2,
+        "fletcherstrestle:string": 0.3
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_birch_iron_high_tension_pulling_0",
+      "predicate": {
+        "fletcherstrestle:limb": 0.3,
+        "fletcherstrestle:riser": 0.2,
+        "fletcherstrestle:string": 0.3,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_birch_iron_high_tension_pulling_1",
+      "predicate": {
+        "fletcherstrestle:limb": 0.3,
+        "fletcherstrestle:riser": 0.2,
+        "fletcherstrestle:string": 0.3,
+        "minecraft:pull": 0.65,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_birch_iron_high_tension_pulling_2",
+      "predicate": {
+        "fletcherstrestle:limb": 0.3,
+        "fletcherstrestle:riser": 0.2,
+        "fletcherstrestle:string": 0.3,
+        "minecraft:pull": 0.9,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_birch_copper_spider",
+      "predicate": {
+        "fletcherstrestle:limb": 0.3,
+        "fletcherstrestle:riser": 0.3,
+        "fletcherstrestle:string": 0.1
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_birch_copper_spider_pulling_0",
+      "predicate": {
+        "fletcherstrestle:limb": 0.3,
+        "fletcherstrestle:riser": 0.3,
+        "fletcherstrestle:string": 0.1,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_birch_copper_spider_pulling_1",
+      "predicate": {
+        "fletcherstrestle:limb": 0.3,
+        "fletcherstrestle:riser": 0.3,
+        "fletcherstrestle:string": 0.1,
+        "minecraft:pull": 0.65,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_birch_copper_spider_pulling_2",
+      "predicate": {
+        "fletcherstrestle:limb": 0.3,
+        "fletcherstrestle:riser": 0.3,
+        "fletcherstrestle:string": 0.1,
+        "minecraft:pull": 0.9,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_birch_copper_high_tension",
+      "predicate": {
+        "fletcherstrestle:limb": 0.3,
+        "fletcherstrestle:riser": 0.3,
+        "fletcherstrestle:string": 0.3
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_birch_copper_high_tension_pulling_0",
+      "predicate": {
+        "fletcherstrestle:limb": 0.3,
+        "fletcherstrestle:riser": 0.3,
+        "fletcherstrestle:string": 0.3,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_birch_copper_high_tension_pulling_1",
+      "predicate": {
+        "fletcherstrestle:limb": 0.3,
+        "fletcherstrestle:riser": 0.3,
+        "fletcherstrestle:string": 0.3,
+        "minecraft:pull": 0.65,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_birch_copper_high_tension_pulling_2",
+      "predicate": {
+        "fletcherstrestle:limb": 0.3,
+        "fletcherstrestle:riser": 0.3,
+        "fletcherstrestle:string": 0.3,
+        "minecraft:pull": 0.9,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_jungle_wood_spider",
+      "predicate": {
+        "fletcherstrestle:limb": 0.4,
+        "fletcherstrestle:riser": 0.1,
+        "fletcherstrestle:string": 0.1
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_jungle_wood_spider_pulling_0",
+      "predicate": {
+        "fletcherstrestle:limb": 0.4,
+        "fletcherstrestle:riser": 0.1,
+        "fletcherstrestle:string": 0.1,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_jungle_wood_spider_pulling_1",
+      "predicate": {
+        "fletcherstrestle:limb": 0.4,
+        "fletcherstrestle:riser": 0.1,
+        "fletcherstrestle:string": 0.1,
+        "minecraft:pull": 0.65,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_jungle_wood_spider_pulling_2",
+      "predicate": {
+        "fletcherstrestle:limb": 0.4,
+        "fletcherstrestle:riser": 0.1,
+        "fletcherstrestle:string": 0.1,
+        "minecraft:pull": 0.9,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_jungle_wood_high_tension",
+      "predicate": {
+        "fletcherstrestle:limb": 0.4,
+        "fletcherstrestle:riser": 0.1,
+        "fletcherstrestle:string": 0.3
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_jungle_wood_high_tension_pulling_0",
+      "predicate": {
+        "fletcherstrestle:limb": 0.4,
+        "fletcherstrestle:riser": 0.1,
+        "fletcherstrestle:string": 0.3,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_jungle_wood_high_tension_pulling_1",
+      "predicate": {
+        "fletcherstrestle:limb": 0.4,
+        "fletcherstrestle:riser": 0.1,
+        "fletcherstrestle:string": 0.3,
+        "minecraft:pull": 0.65,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_jungle_wood_high_tension_pulling_2",
+      "predicate": {
+        "fletcherstrestle:limb": 0.4,
+        "fletcherstrestle:riser": 0.1,
+        "fletcherstrestle:string": 0.3,
+        "minecraft:pull": 0.9,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_jungle_iron_spider",
+      "predicate": {
+        "fletcherstrestle:limb": 0.4,
+        "fletcherstrestle:riser": 0.2,
+        "fletcherstrestle:string": 0.1
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_jungle_iron_spider_pulling_0",
+      "predicate": {
+        "fletcherstrestle:limb": 0.4,
+        "fletcherstrestle:riser": 0.2,
+        "fletcherstrestle:string": 0.1,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_jungle_iron_spider_pulling_1",
+      "predicate": {
+        "fletcherstrestle:limb": 0.4,
+        "fletcherstrestle:riser": 0.2,
+        "fletcherstrestle:string": 0.1,
+        "minecraft:pull": 0.65,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_jungle_iron_spider_pulling_2",
+      "predicate": {
+        "fletcherstrestle:limb": 0.4,
+        "fletcherstrestle:riser": 0.2,
+        "fletcherstrestle:string": 0.1,
+        "minecraft:pull": 0.9,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_jungle_iron_high_tension",
+      "predicate": {
+        "fletcherstrestle:limb": 0.4,
+        "fletcherstrestle:riser": 0.2,
+        "fletcherstrestle:string": 0.3
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_jungle_iron_high_tension_pulling_0",
+      "predicate": {
+        "fletcherstrestle:limb": 0.4,
+        "fletcherstrestle:riser": 0.2,
+        "fletcherstrestle:string": 0.3,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_jungle_iron_high_tension_pulling_1",
+      "predicate": {
+        "fletcherstrestle:limb": 0.4,
+        "fletcherstrestle:riser": 0.2,
+        "fletcherstrestle:string": 0.3,
+        "minecraft:pull": 0.65,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_jungle_iron_high_tension_pulling_2",
+      "predicate": {
+        "fletcherstrestle:limb": 0.4,
+        "fletcherstrestle:riser": 0.2,
+        "fletcherstrestle:string": 0.3,
+        "minecraft:pull": 0.9,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_jungle_copper_spider",
+      "predicate": {
+        "fletcherstrestle:limb": 0.4,
+        "fletcherstrestle:riser": 0.3,
+        "fletcherstrestle:string": 0.1
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_jungle_copper_spider_pulling_0",
+      "predicate": {
+        "fletcherstrestle:limb": 0.4,
+        "fletcherstrestle:riser": 0.3,
+        "fletcherstrestle:string": 0.1,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_jungle_copper_spider_pulling_1",
+      "predicate": {
+        "fletcherstrestle:limb": 0.4,
+        "fletcherstrestle:riser": 0.3,
+        "fletcherstrestle:string": 0.1,
+        "minecraft:pull": 0.65,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_jungle_copper_spider_pulling_2",
+      "predicate": {
+        "fletcherstrestle:limb": 0.4,
+        "fletcherstrestle:riser": 0.3,
+        "fletcherstrestle:string": 0.1,
+        "minecraft:pull": 0.9,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_jungle_copper_high_tension",
+      "predicate": {
+        "fletcherstrestle:limb": 0.4,
+        "fletcherstrestle:riser": 0.3,
+        "fletcherstrestle:string": 0.3
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_jungle_copper_high_tension_pulling_0",
+      "predicate": {
+        "fletcherstrestle:limb": 0.4,
+        "fletcherstrestle:riser": 0.3,
+        "fletcherstrestle:string": 0.3,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_jungle_copper_high_tension_pulling_1",
+      "predicate": {
+        "fletcherstrestle:limb": 0.4,
+        "fletcherstrestle:riser": 0.3,
+        "fletcherstrestle:string": 0.3,
+        "minecraft:pull": 0.65,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_jungle_copper_high_tension_pulling_2",
+      "predicate": {
+        "fletcherstrestle:limb": 0.4,
+        "fletcherstrestle:riser": 0.3,
+        "fletcherstrestle:string": 0.3,
+        "minecraft:pull": 0.9,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_acacia_wood_spider",
+      "predicate": {
+        "fletcherstrestle:limb": 0.5,
+        "fletcherstrestle:riser": 0.1,
+        "fletcherstrestle:string": 0.1
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_acacia_wood_spider_pulling_0",
+      "predicate": {
+        "fletcherstrestle:limb": 0.5,
+        "fletcherstrestle:riser": 0.1,
+        "fletcherstrestle:string": 0.1,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_acacia_wood_spider_pulling_1",
+      "predicate": {
+        "fletcherstrestle:limb": 0.5,
+        "fletcherstrestle:riser": 0.1,
+        "fletcherstrestle:string": 0.1,
+        "minecraft:pull": 0.65,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_acacia_wood_spider_pulling_2",
+      "predicate": {
+        "fletcherstrestle:limb": 0.5,
+        "fletcherstrestle:riser": 0.1,
+        "fletcherstrestle:string": 0.1,
+        "minecraft:pull": 0.9,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_acacia_wood_high_tension",
+      "predicate": {
+        "fletcherstrestle:limb": 0.5,
+        "fletcherstrestle:riser": 0.1,
+        "fletcherstrestle:string": 0.3
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_acacia_wood_high_tension_pulling_0",
+      "predicate": {
+        "fletcherstrestle:limb": 0.5,
+        "fletcherstrestle:riser": 0.1,
+        "fletcherstrestle:string": 0.3,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_acacia_wood_high_tension_pulling_1",
+      "predicate": {
+        "fletcherstrestle:limb": 0.5,
+        "fletcherstrestle:riser": 0.1,
+        "fletcherstrestle:string": 0.3,
+        "minecraft:pull": 0.65,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_acacia_wood_high_tension_pulling_2",
+      "predicate": {
+        "fletcherstrestle:limb": 0.5,
+        "fletcherstrestle:riser": 0.1,
+        "fletcherstrestle:string": 0.3,
+        "minecraft:pull": 0.9,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_acacia_iron_spider",
+      "predicate": {
+        "fletcherstrestle:limb": 0.5,
+        "fletcherstrestle:riser": 0.2,
+        "fletcherstrestle:string": 0.1
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_acacia_iron_spider_pulling_0",
+      "predicate": {
+        "fletcherstrestle:limb": 0.5,
+        "fletcherstrestle:riser": 0.2,
+        "fletcherstrestle:string": 0.1,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_acacia_iron_spider_pulling_1",
+      "predicate": {
+        "fletcherstrestle:limb": 0.5,
+        "fletcherstrestle:riser": 0.2,
+        "fletcherstrestle:string": 0.1,
+        "minecraft:pull": 0.65,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_acacia_iron_spider_pulling_2",
+      "predicate": {
+        "fletcherstrestle:limb": 0.5,
+        "fletcherstrestle:riser": 0.2,
+        "fletcherstrestle:string": 0.1,
+        "minecraft:pull": 0.9,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_acacia_iron_high_tension",
+      "predicate": {
+        "fletcherstrestle:limb": 0.5,
+        "fletcherstrestle:riser": 0.2,
+        "fletcherstrestle:string": 0.3
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_acacia_iron_high_tension_pulling_0",
+      "predicate": {
+        "fletcherstrestle:limb": 0.5,
+        "fletcherstrestle:riser": 0.2,
+        "fletcherstrestle:string": 0.3,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_acacia_iron_high_tension_pulling_1",
+      "predicate": {
+        "fletcherstrestle:limb": 0.5,
+        "fletcherstrestle:riser": 0.2,
+        "fletcherstrestle:string": 0.3,
+        "minecraft:pull": 0.65,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_acacia_iron_high_tension_pulling_2",
+      "predicate": {
+        "fletcherstrestle:limb": 0.5,
+        "fletcherstrestle:riser": 0.2,
+        "fletcherstrestle:string": 0.3,
+        "minecraft:pull": 0.9,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_acacia_copper_spider",
+      "predicate": {
+        "fletcherstrestle:limb": 0.5,
+        "fletcherstrestle:riser": 0.3,
+        "fletcherstrestle:string": 0.1
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_acacia_copper_spider_pulling_0",
+      "predicate": {
+        "fletcherstrestle:limb": 0.5,
+        "fletcherstrestle:riser": 0.3,
+        "fletcherstrestle:string": 0.1,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_acacia_copper_spider_pulling_1",
+      "predicate": {
+        "fletcherstrestle:limb": 0.5,
+        "fletcherstrestle:riser": 0.3,
+        "fletcherstrestle:string": 0.1,
+        "minecraft:pull": 0.65,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_acacia_copper_spider_pulling_2",
+      "predicate": {
+        "fletcherstrestle:limb": 0.5,
+        "fletcherstrestle:riser": 0.3,
+        "fletcherstrestle:string": 0.1,
+        "minecraft:pull": 0.9,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_acacia_copper_high_tension",
+      "predicate": {
+        "fletcherstrestle:limb": 0.5,
+        "fletcherstrestle:riser": 0.3,
+        "fletcherstrestle:string": 0.3
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_acacia_copper_high_tension_pulling_0",
+      "predicate": {
+        "fletcherstrestle:limb": 0.5,
+        "fletcherstrestle:riser": 0.3,
+        "fletcherstrestle:string": 0.3,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_acacia_copper_high_tension_pulling_1",
+      "predicate": {
+        "fletcherstrestle:limb": 0.5,
+        "fletcherstrestle:riser": 0.3,
+        "fletcherstrestle:string": 0.3,
+        "minecraft:pull": 0.65,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_acacia_copper_high_tension_pulling_2",
+      "predicate": {
+        "fletcherstrestle:limb": 0.5,
+        "fletcherstrestle:riser": 0.3,
+        "fletcherstrestle:string": 0.3,
+        "minecraft:pull": 0.9,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_dark_oak_wood_spider",
+      "predicate": {
+        "fletcherstrestle:limb": 0.6,
+        "fletcherstrestle:riser": 0.1,
+        "fletcherstrestle:string": 0.1
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_dark_oak_wood_spider_pulling_0",
+      "predicate": {
+        "fletcherstrestle:limb": 0.6,
+        "fletcherstrestle:riser": 0.1,
+        "fletcherstrestle:string": 0.1,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_dark_oak_wood_spider_pulling_1",
+      "predicate": {
+        "fletcherstrestle:limb": 0.6,
+        "fletcherstrestle:riser": 0.1,
+        "fletcherstrestle:string": 0.1,
+        "minecraft:pull": 0.65,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_dark_oak_wood_spider_pulling_2",
+      "predicate": {
+        "fletcherstrestle:limb": 0.6,
+        "fletcherstrestle:riser": 0.1,
+        "fletcherstrestle:string": 0.1,
+        "minecraft:pull": 0.9,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_dark_oak_wood_high_tension",
+      "predicate": {
+        "fletcherstrestle:limb": 0.6,
+        "fletcherstrestle:riser": 0.1,
+        "fletcherstrestle:string": 0.3
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_dark_oak_wood_high_tension_pulling_0",
+      "predicate": {
+        "fletcherstrestle:limb": 0.6,
+        "fletcherstrestle:riser": 0.1,
+        "fletcherstrestle:string": 0.3,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_dark_oak_wood_high_tension_pulling_1",
+      "predicate": {
+        "fletcherstrestle:limb": 0.6,
+        "fletcherstrestle:riser": 0.1,
+        "fletcherstrestle:string": 0.3,
+        "minecraft:pull": 0.65,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_dark_oak_wood_high_tension_pulling_2",
+      "predicate": {
+        "fletcherstrestle:limb": 0.6,
+        "fletcherstrestle:riser": 0.1,
+        "fletcherstrestle:string": 0.3,
+        "minecraft:pull": 0.9,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_dark_oak_iron_spider",
+      "predicate": {
+        "fletcherstrestle:limb": 0.6,
+        "fletcherstrestle:riser": 0.2,
+        "fletcherstrestle:string": 0.1
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_dark_oak_iron_spider_pulling_0",
+      "predicate": {
+        "fletcherstrestle:limb": 0.6,
+        "fletcherstrestle:riser": 0.2,
+        "fletcherstrestle:string": 0.1,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_dark_oak_iron_spider_pulling_1",
+      "predicate": {
+        "fletcherstrestle:limb": 0.6,
+        "fletcherstrestle:riser": 0.2,
+        "fletcherstrestle:string": 0.1,
+        "minecraft:pull": 0.65,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_dark_oak_iron_spider_pulling_2",
+      "predicate": {
+        "fletcherstrestle:limb": 0.6,
+        "fletcherstrestle:riser": 0.2,
+        "fletcherstrestle:string": 0.1,
+        "minecraft:pull": 0.9,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_dark_oak_iron_high_tension",
+      "predicate": {
+        "fletcherstrestle:limb": 0.6,
+        "fletcherstrestle:riser": 0.2,
+        "fletcherstrestle:string": 0.3
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_dark_oak_iron_high_tension_pulling_0",
+      "predicate": {
+        "fletcherstrestle:limb": 0.6,
+        "fletcherstrestle:riser": 0.2,
+        "fletcherstrestle:string": 0.3,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_dark_oak_iron_high_tension_pulling_1",
+      "predicate": {
+        "fletcherstrestle:limb": 0.6,
+        "fletcherstrestle:riser": 0.2,
+        "fletcherstrestle:string": 0.3,
+        "minecraft:pull": 0.65,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_dark_oak_iron_high_tension_pulling_2",
+      "predicate": {
+        "fletcherstrestle:limb": 0.6,
+        "fletcherstrestle:riser": 0.2,
+        "fletcherstrestle:string": 0.3,
+        "minecraft:pull": 0.9,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_dark_oak_copper_spider",
+      "predicate": {
+        "fletcherstrestle:limb": 0.6,
+        "fletcherstrestle:riser": 0.3,
+        "fletcherstrestle:string": 0.1
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_dark_oak_copper_spider_pulling_0",
+      "predicate": {
+        "fletcherstrestle:limb": 0.6,
+        "fletcherstrestle:riser": 0.3,
+        "fletcherstrestle:string": 0.1,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_dark_oak_copper_spider_pulling_1",
+      "predicate": {
+        "fletcherstrestle:limb": 0.6,
+        "fletcherstrestle:riser": 0.3,
+        "fletcherstrestle:string": 0.1,
+        "minecraft:pull": 0.65,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_dark_oak_copper_spider_pulling_2",
+      "predicate": {
+        "fletcherstrestle:limb": 0.6,
+        "fletcherstrestle:riser": 0.3,
+        "fletcherstrestle:string": 0.1,
+        "minecraft:pull": 0.9,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_dark_oak_copper_high_tension",
+      "predicate": {
+        "fletcherstrestle:limb": 0.6,
+        "fletcherstrestle:riser": 0.3,
+        "fletcherstrestle:string": 0.3
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_dark_oak_copper_high_tension_pulling_0",
+      "predicate": {
+        "fletcherstrestle:limb": 0.6,
+        "fletcherstrestle:riser": 0.3,
+        "fletcherstrestle:string": 0.3,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_dark_oak_copper_high_tension_pulling_1",
+      "predicate": {
+        "fletcherstrestle:limb": 0.6,
+        "fletcherstrestle:riser": 0.3,
+        "fletcherstrestle:string": 0.3,
+        "minecraft:pull": 0.65,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_dark_oak_copper_high_tension_pulling_2",
+      "predicate": {
+        "fletcherstrestle:limb": 0.6,
+        "fletcherstrestle:riser": 0.3,
+        "fletcherstrestle:string": 0.3,
+        "minecraft:pull": 0.9,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_mangrove_wood_spider",
+      "predicate": {
+        "fletcherstrestle:limb": 0.7,
+        "fletcherstrestle:riser": 0.1,
+        "fletcherstrestle:string": 0.1
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_mangrove_wood_spider_pulling_0",
+      "predicate": {
+        "fletcherstrestle:limb": 0.7,
+        "fletcherstrestle:riser": 0.1,
+        "fletcherstrestle:string": 0.1,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_mangrove_wood_spider_pulling_1",
+      "predicate": {
+        "fletcherstrestle:limb": 0.7,
+        "fletcherstrestle:riser": 0.1,
+        "fletcherstrestle:string": 0.1,
+        "minecraft:pull": 0.65,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_mangrove_wood_spider_pulling_2",
+      "predicate": {
+        "fletcherstrestle:limb": 0.7,
+        "fletcherstrestle:riser": 0.1,
+        "fletcherstrestle:string": 0.1,
+        "minecraft:pull": 0.9,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_mangrove_wood_high_tension",
+      "predicate": {
+        "fletcherstrestle:limb": 0.7,
+        "fletcherstrestle:riser": 0.1,
+        "fletcherstrestle:string": 0.3
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_mangrove_wood_high_tension_pulling_0",
+      "predicate": {
+        "fletcherstrestle:limb": 0.7,
+        "fletcherstrestle:riser": 0.1,
+        "fletcherstrestle:string": 0.3,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_mangrove_wood_high_tension_pulling_1",
+      "predicate": {
+        "fletcherstrestle:limb": 0.7,
+        "fletcherstrestle:riser": 0.1,
+        "fletcherstrestle:string": 0.3,
+        "minecraft:pull": 0.65,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_mangrove_wood_high_tension_pulling_2",
+      "predicate": {
+        "fletcherstrestle:limb": 0.7,
+        "fletcherstrestle:riser": 0.1,
+        "fletcherstrestle:string": 0.3,
+        "minecraft:pull": 0.9,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_mangrove_iron_spider",
+      "predicate": {
+        "fletcherstrestle:limb": 0.7,
+        "fletcherstrestle:riser": 0.2,
+        "fletcherstrestle:string": 0.1
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_mangrove_iron_spider_pulling_0",
+      "predicate": {
+        "fletcherstrestle:limb": 0.7,
+        "fletcherstrestle:riser": 0.2,
+        "fletcherstrestle:string": 0.1,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_mangrove_iron_spider_pulling_1",
+      "predicate": {
+        "fletcherstrestle:limb": 0.7,
+        "fletcherstrestle:riser": 0.2,
+        "fletcherstrestle:string": 0.1,
+        "minecraft:pull": 0.65,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_mangrove_iron_spider_pulling_2",
+      "predicate": {
+        "fletcherstrestle:limb": 0.7,
+        "fletcherstrestle:riser": 0.2,
+        "fletcherstrestle:string": 0.1,
+        "minecraft:pull": 0.9,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_mangrove_iron_high_tension",
+      "predicate": {
+        "fletcherstrestle:limb": 0.7,
+        "fletcherstrestle:riser": 0.2,
+        "fletcherstrestle:string": 0.3
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_mangrove_iron_high_tension_pulling_0",
+      "predicate": {
+        "fletcherstrestle:limb": 0.7,
+        "fletcherstrestle:riser": 0.2,
+        "fletcherstrestle:string": 0.3,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_mangrove_iron_high_tension_pulling_1",
+      "predicate": {
+        "fletcherstrestle:limb": 0.7,
+        "fletcherstrestle:riser": 0.2,
+        "fletcherstrestle:string": 0.3,
+        "minecraft:pull": 0.65,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_mangrove_iron_high_tension_pulling_2",
+      "predicate": {
+        "fletcherstrestle:limb": 0.7,
+        "fletcherstrestle:riser": 0.2,
+        "fletcherstrestle:string": 0.3,
+        "minecraft:pull": 0.9,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_mangrove_copper_spider",
+      "predicate": {
+        "fletcherstrestle:limb": 0.7,
+        "fletcherstrestle:riser": 0.3,
+        "fletcherstrestle:string": 0.1
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_mangrove_copper_spider_pulling_0",
+      "predicate": {
+        "fletcherstrestle:limb": 0.7,
+        "fletcherstrestle:riser": 0.3,
+        "fletcherstrestle:string": 0.1,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_mangrove_copper_spider_pulling_1",
+      "predicate": {
+        "fletcherstrestle:limb": 0.7,
+        "fletcherstrestle:riser": 0.3,
+        "fletcherstrestle:string": 0.1,
+        "minecraft:pull": 0.65,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_mangrove_copper_spider_pulling_2",
+      "predicate": {
+        "fletcherstrestle:limb": 0.7,
+        "fletcherstrestle:riser": 0.3,
+        "fletcherstrestle:string": 0.1,
+        "minecraft:pull": 0.9,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_mangrove_copper_high_tension",
+      "predicate": {
+        "fletcherstrestle:limb": 0.7,
+        "fletcherstrestle:riser": 0.3,
+        "fletcherstrestle:string": 0.3
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_mangrove_copper_high_tension_pulling_0",
+      "predicate": {
+        "fletcherstrestle:limb": 0.7,
+        "fletcherstrestle:riser": 0.3,
+        "fletcherstrestle:string": 0.3,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_mangrove_copper_high_tension_pulling_1",
+      "predicate": {
+        "fletcherstrestle:limb": 0.7,
+        "fletcherstrestle:riser": 0.3,
+        "fletcherstrestle:string": 0.3,
+        "minecraft:pull": 0.65,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_mangrove_copper_high_tension_pulling_2",
+      "predicate": {
+        "fletcherstrestle:limb": 0.7,
+        "fletcherstrestle:riser": 0.3,
+        "fletcherstrestle:string": 0.3,
+        "minecraft:pull": 0.9,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_cherry_wood_spider",
+      "predicate": {
+        "fletcherstrestle:limb": 0.8,
+        "fletcherstrestle:riser": 0.1,
+        "fletcherstrestle:string": 0.1
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_cherry_wood_spider_pulling_0",
+      "predicate": {
+        "fletcherstrestle:limb": 0.8,
+        "fletcherstrestle:riser": 0.1,
+        "fletcherstrestle:string": 0.1,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_cherry_wood_spider_pulling_1",
+      "predicate": {
+        "fletcherstrestle:limb": 0.8,
+        "fletcherstrestle:riser": 0.1,
+        "fletcherstrestle:string": 0.1,
+        "minecraft:pull": 0.65,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_cherry_wood_spider_pulling_2",
+      "predicate": {
+        "fletcherstrestle:limb": 0.8,
+        "fletcherstrestle:riser": 0.1,
+        "fletcherstrestle:string": 0.1,
+        "minecraft:pull": 0.9,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_cherry_wood_high_tension",
+      "predicate": {
+        "fletcherstrestle:limb": 0.8,
+        "fletcherstrestle:riser": 0.1,
+        "fletcherstrestle:string": 0.3
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_cherry_wood_high_tension_pulling_0",
+      "predicate": {
+        "fletcherstrestle:limb": 0.8,
+        "fletcherstrestle:riser": 0.1,
+        "fletcherstrestle:string": 0.3,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_cherry_wood_high_tension_pulling_1",
+      "predicate": {
+        "fletcherstrestle:limb": 0.8,
+        "fletcherstrestle:riser": 0.1,
+        "fletcherstrestle:string": 0.3,
+        "minecraft:pull": 0.65,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_cherry_wood_high_tension_pulling_2",
+      "predicate": {
+        "fletcherstrestle:limb": 0.8,
+        "fletcherstrestle:riser": 0.1,
+        "fletcherstrestle:string": 0.3,
+        "minecraft:pull": 0.9,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_cherry_iron_spider",
+      "predicate": {
+        "fletcherstrestle:limb": 0.8,
+        "fletcherstrestle:riser": 0.2,
+        "fletcherstrestle:string": 0.1
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_cherry_iron_spider_pulling_0",
+      "predicate": {
+        "fletcherstrestle:limb": 0.8,
+        "fletcherstrestle:riser": 0.2,
+        "fletcherstrestle:string": 0.1,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_cherry_iron_spider_pulling_1",
+      "predicate": {
+        "fletcherstrestle:limb": 0.8,
+        "fletcherstrestle:riser": 0.2,
+        "fletcherstrestle:string": 0.1,
+        "minecraft:pull": 0.65,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_cherry_iron_spider_pulling_2",
+      "predicate": {
+        "fletcherstrestle:limb": 0.8,
+        "fletcherstrestle:riser": 0.2,
+        "fletcherstrestle:string": 0.1,
+        "minecraft:pull": 0.9,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_cherry_iron_high_tension",
+      "predicate": {
+        "fletcherstrestle:limb": 0.8,
+        "fletcherstrestle:riser": 0.2,
+        "fletcherstrestle:string": 0.3
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_cherry_iron_high_tension_pulling_0",
+      "predicate": {
+        "fletcherstrestle:limb": 0.8,
+        "fletcherstrestle:riser": 0.2,
+        "fletcherstrestle:string": 0.3,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_cherry_iron_high_tension_pulling_1",
+      "predicate": {
+        "fletcherstrestle:limb": 0.8,
+        "fletcherstrestle:riser": 0.2,
+        "fletcherstrestle:string": 0.3,
+        "minecraft:pull": 0.65,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_cherry_iron_high_tension_pulling_2",
+      "predicate": {
+        "fletcherstrestle:limb": 0.8,
+        "fletcherstrestle:riser": 0.2,
+        "fletcherstrestle:string": 0.3,
+        "minecraft:pull": 0.9,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_cherry_copper_spider",
+      "predicate": {
+        "fletcherstrestle:limb": 0.8,
+        "fletcherstrestle:riser": 0.3,
+        "fletcherstrestle:string": 0.1
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_cherry_copper_spider_pulling_0",
+      "predicate": {
+        "fletcherstrestle:limb": 0.8,
+        "fletcherstrestle:riser": 0.3,
+        "fletcherstrestle:string": 0.1,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_cherry_copper_spider_pulling_1",
+      "predicate": {
+        "fletcherstrestle:limb": 0.8,
+        "fletcherstrestle:riser": 0.3,
+        "fletcherstrestle:string": 0.1,
+        "minecraft:pull": 0.65,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_cherry_copper_spider_pulling_2",
+      "predicate": {
+        "fletcherstrestle:limb": 0.8,
+        "fletcherstrestle:riser": 0.3,
+        "fletcherstrestle:string": 0.1,
+        "minecraft:pull": 0.9,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_cherry_copper_high_tension",
+      "predicate": {
+        "fletcherstrestle:limb": 0.8,
+        "fletcherstrestle:riser": 0.3,
+        "fletcherstrestle:string": 0.3
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_cherry_copper_high_tension_pulling_0",
+      "predicate": {
+        "fletcherstrestle:limb": 0.8,
+        "fletcherstrestle:riser": 0.3,
+        "fletcherstrestle:string": 0.3,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_cherry_copper_high_tension_pulling_1",
+      "predicate": {
+        "fletcherstrestle:limb": 0.8,
+        "fletcherstrestle:riser": 0.3,
+        "fletcherstrestle:string": 0.3,
+        "minecraft:pull": 0.65,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_cherry_copper_high_tension_pulling_2",
+      "predicate": {
+        "fletcherstrestle:limb": 0.8,
+        "fletcherstrestle:riser": 0.3,
+        "fletcherstrestle:string": 0.3,
+        "minecraft:pull": 0.9,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_pale_oak_wood_spider",
+      "predicate": {
+        "fletcherstrestle:limb": 0.9,
+        "fletcherstrestle:riser": 0.1,
+        "fletcherstrestle:string": 0.1
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_pale_oak_wood_spider_pulling_0",
+      "predicate": {
+        "fletcherstrestle:limb": 0.9,
+        "fletcherstrestle:riser": 0.1,
+        "fletcherstrestle:string": 0.1,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_pale_oak_wood_spider_pulling_1",
+      "predicate": {
+        "fletcherstrestle:limb": 0.9,
+        "fletcherstrestle:riser": 0.1,
+        "fletcherstrestle:string": 0.1,
+        "minecraft:pull": 0.65,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_pale_oak_wood_spider_pulling_2",
+      "predicate": {
+        "fletcherstrestle:limb": 0.9,
+        "fletcherstrestle:riser": 0.1,
+        "fletcherstrestle:string": 0.1,
+        "minecraft:pull": 0.9,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_pale_oak_wood_high_tension",
+      "predicate": {
+        "fletcherstrestle:limb": 0.9,
+        "fletcherstrestle:riser": 0.1,
+        "fletcherstrestle:string": 0.3
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_pale_oak_wood_high_tension_pulling_0",
+      "predicate": {
+        "fletcherstrestle:limb": 0.9,
+        "fletcherstrestle:riser": 0.1,
+        "fletcherstrestle:string": 0.3,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_pale_oak_wood_high_tension_pulling_1",
+      "predicate": {
+        "fletcherstrestle:limb": 0.9,
+        "fletcherstrestle:riser": 0.1,
+        "fletcherstrestle:string": 0.3,
+        "minecraft:pull": 0.65,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_pale_oak_wood_high_tension_pulling_2",
+      "predicate": {
+        "fletcherstrestle:limb": 0.9,
+        "fletcherstrestle:riser": 0.1,
+        "fletcherstrestle:string": 0.3,
+        "minecraft:pull": 0.9,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_pale_oak_iron_spider",
+      "predicate": {
+        "fletcherstrestle:limb": 0.9,
+        "fletcherstrestle:riser": 0.2,
+        "fletcherstrestle:string": 0.1
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_pale_oak_iron_spider_pulling_0",
+      "predicate": {
+        "fletcherstrestle:limb": 0.9,
+        "fletcherstrestle:riser": 0.2,
+        "fletcherstrestle:string": 0.1,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_pale_oak_iron_spider_pulling_1",
+      "predicate": {
+        "fletcherstrestle:limb": 0.9,
+        "fletcherstrestle:riser": 0.2,
+        "fletcherstrestle:string": 0.1,
+        "minecraft:pull": 0.65,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_pale_oak_iron_spider_pulling_2",
+      "predicate": {
+        "fletcherstrestle:limb": 0.9,
+        "fletcherstrestle:riser": 0.2,
+        "fletcherstrestle:string": 0.1,
+        "minecraft:pull": 0.9,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_pale_oak_iron_high_tension",
+      "predicate": {
+        "fletcherstrestle:limb": 0.9,
+        "fletcherstrestle:riser": 0.2,
+        "fletcherstrestle:string": 0.3
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_pale_oak_iron_high_tension_pulling_0",
+      "predicate": {
+        "fletcherstrestle:limb": 0.9,
+        "fletcherstrestle:riser": 0.2,
+        "fletcherstrestle:string": 0.3,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_pale_oak_iron_high_tension_pulling_1",
+      "predicate": {
+        "fletcherstrestle:limb": 0.9,
+        "fletcherstrestle:riser": 0.2,
+        "fletcherstrestle:string": 0.3,
+        "minecraft:pull": 0.65,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_pale_oak_iron_high_tension_pulling_2",
+      "predicate": {
+        "fletcherstrestle:limb": 0.9,
+        "fletcherstrestle:riser": 0.2,
+        "fletcherstrestle:string": 0.3,
+        "minecraft:pull": 0.9,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_pale_oak_copper_spider",
+      "predicate": {
+        "fletcherstrestle:limb": 0.9,
+        "fletcherstrestle:riser": 0.3,
+        "fletcherstrestle:string": 0.1
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_pale_oak_copper_spider_pulling_0",
+      "predicate": {
+        "fletcherstrestle:limb": 0.9,
+        "fletcherstrestle:riser": 0.3,
+        "fletcherstrestle:string": 0.1,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_pale_oak_copper_spider_pulling_1",
+      "predicate": {
+        "fletcherstrestle:limb": 0.9,
+        "fletcherstrestle:riser": 0.3,
+        "fletcherstrestle:string": 0.1,
+        "minecraft:pull": 0.65,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_pale_oak_copper_spider_pulling_2",
+      "predicate": {
+        "fletcherstrestle:limb": 0.9,
+        "fletcherstrestle:riser": 0.3,
+        "fletcherstrestle:string": 0.1,
+        "minecraft:pull": 0.9,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_pale_oak_copper_high_tension",
+      "predicate": {
+        "fletcherstrestle:limb": 0.9,
+        "fletcherstrestle:riser": 0.3,
+        "fletcherstrestle:string": 0.3
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_pale_oak_copper_high_tension_pulling_0",
+      "predicate": {
+        "fletcherstrestle:limb": 0.9,
+        "fletcherstrestle:riser": 0.3,
+        "fletcherstrestle:string": 0.3,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_pale_oak_copper_high_tension_pulling_1",
+      "predicate": {
+        "fletcherstrestle:limb": 0.9,
+        "fletcherstrestle:riser": 0.3,
+        "fletcherstrestle:string": 0.3,
+        "minecraft:pull": 0.65,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_pale_oak_copper_high_tension_pulling_2",
+      "predicate": {
+        "fletcherstrestle:limb": 0.9,
+        "fletcherstrestle:riser": 0.3,
+        "fletcherstrestle:string": 0.3,
+        "minecraft:pull": 0.9,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_crimson_wood_spider",
+      "predicate": {
+        "fletcherstrestle:limb": 1.0,
+        "fletcherstrestle:riser": 0.1,
+        "fletcherstrestle:string": 0.1
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_crimson_wood_spider_pulling_0",
+      "predicate": {
+        "fletcherstrestle:limb": 1.0,
+        "fletcherstrestle:riser": 0.1,
+        "fletcherstrestle:string": 0.1,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_crimson_wood_spider_pulling_1",
+      "predicate": {
+        "fletcherstrestle:limb": 1.0,
+        "fletcherstrestle:riser": 0.1,
+        "fletcherstrestle:string": 0.1,
+        "minecraft:pull": 0.65,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_crimson_wood_spider_pulling_2",
+      "predicate": {
+        "fletcherstrestle:limb": 1.0,
+        "fletcherstrestle:riser": 0.1,
+        "fletcherstrestle:string": 0.1,
+        "minecraft:pull": 0.9,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_crimson_wood_high_tension",
+      "predicate": {
+        "fletcherstrestle:limb": 1.0,
+        "fletcherstrestle:riser": 0.1,
+        "fletcherstrestle:string": 0.3
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_crimson_wood_high_tension_pulling_0",
+      "predicate": {
+        "fletcherstrestle:limb": 1.0,
+        "fletcherstrestle:riser": 0.1,
+        "fletcherstrestle:string": 0.3,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_crimson_wood_high_tension_pulling_1",
+      "predicate": {
+        "fletcherstrestle:limb": 1.0,
+        "fletcherstrestle:riser": 0.1,
+        "fletcherstrestle:string": 0.3,
+        "minecraft:pull": 0.65,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_crimson_wood_high_tension_pulling_2",
+      "predicate": {
+        "fletcherstrestle:limb": 1.0,
+        "fletcherstrestle:riser": 0.1,
+        "fletcherstrestle:string": 0.3,
+        "minecraft:pull": 0.9,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_crimson_iron_spider",
+      "predicate": {
+        "fletcherstrestle:limb": 1.0,
+        "fletcherstrestle:riser": 0.2,
+        "fletcherstrestle:string": 0.1
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_crimson_iron_spider_pulling_0",
+      "predicate": {
+        "fletcherstrestle:limb": 1.0,
+        "fletcherstrestle:riser": 0.2,
+        "fletcherstrestle:string": 0.1,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_crimson_iron_spider_pulling_1",
+      "predicate": {
+        "fletcherstrestle:limb": 1.0,
+        "fletcherstrestle:riser": 0.2,
+        "fletcherstrestle:string": 0.1,
+        "minecraft:pull": 0.65,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_crimson_iron_spider_pulling_2",
+      "predicate": {
+        "fletcherstrestle:limb": 1.0,
+        "fletcherstrestle:riser": 0.2,
+        "fletcherstrestle:string": 0.1,
+        "minecraft:pull": 0.9,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_crimson_iron_high_tension",
+      "predicate": {
+        "fletcherstrestle:limb": 1.0,
+        "fletcherstrestle:riser": 0.2,
+        "fletcherstrestle:string": 0.3
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_crimson_iron_high_tension_pulling_0",
+      "predicate": {
+        "fletcherstrestle:limb": 1.0,
+        "fletcherstrestle:riser": 0.2,
+        "fletcherstrestle:string": 0.3,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_crimson_iron_high_tension_pulling_1",
+      "predicate": {
+        "fletcherstrestle:limb": 1.0,
+        "fletcherstrestle:riser": 0.2,
+        "fletcherstrestle:string": 0.3,
+        "minecraft:pull": 0.65,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_crimson_iron_high_tension_pulling_2",
+      "predicate": {
+        "fletcherstrestle:limb": 1.0,
+        "fletcherstrestle:riser": 0.2,
+        "fletcherstrestle:string": 0.3,
+        "minecraft:pull": 0.9,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_crimson_copper_spider",
+      "predicate": {
+        "fletcherstrestle:limb": 1.0,
+        "fletcherstrestle:riser": 0.3,
+        "fletcherstrestle:string": 0.1
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_crimson_copper_spider_pulling_0",
+      "predicate": {
+        "fletcherstrestle:limb": 1.0,
+        "fletcherstrestle:riser": 0.3,
+        "fletcherstrestle:string": 0.1,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_crimson_copper_spider_pulling_1",
+      "predicate": {
+        "fletcherstrestle:limb": 1.0,
+        "fletcherstrestle:riser": 0.3,
+        "fletcherstrestle:string": 0.1,
+        "minecraft:pull": 0.65,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_crimson_copper_spider_pulling_2",
+      "predicate": {
+        "fletcherstrestle:limb": 1.0,
+        "fletcherstrestle:riser": 0.3,
+        "fletcherstrestle:string": 0.1,
+        "minecraft:pull": 0.9,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_crimson_copper_high_tension",
+      "predicate": {
+        "fletcherstrestle:limb": 1.0,
+        "fletcherstrestle:riser": 0.3,
+        "fletcherstrestle:string": 0.3
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_crimson_copper_high_tension_pulling_0",
+      "predicate": {
+        "fletcherstrestle:limb": 1.0,
+        "fletcherstrestle:riser": 0.3,
+        "fletcherstrestle:string": 0.3,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_crimson_copper_high_tension_pulling_1",
+      "predicate": {
+        "fletcherstrestle:limb": 1.0,
+        "fletcherstrestle:riser": 0.3,
+        "fletcherstrestle:string": 0.3,
+        "minecraft:pull": 0.65,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_crimson_copper_high_tension_pulling_2",
+      "predicate": {
+        "fletcherstrestle:limb": 1.0,
+        "fletcherstrestle:riser": 0.3,
+        "fletcherstrestle:string": 0.3,
+        "minecraft:pull": 0.9,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_warped_wood_spider",
+      "predicate": {
+        "fletcherstrestle:limb": 1.1,
+        "fletcherstrestle:riser": 0.1,
+        "fletcherstrestle:string": 0.1
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_warped_wood_spider_pulling_0",
+      "predicate": {
+        "fletcherstrestle:limb": 1.1,
+        "fletcherstrestle:riser": 0.1,
+        "fletcherstrestle:string": 0.1,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_warped_wood_spider_pulling_1",
+      "predicate": {
+        "fletcherstrestle:limb": 1.1,
+        "fletcherstrestle:riser": 0.1,
+        "fletcherstrestle:string": 0.1,
+        "minecraft:pull": 0.65,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_warped_wood_spider_pulling_2",
+      "predicate": {
+        "fletcherstrestle:limb": 1.1,
+        "fletcherstrestle:riser": 0.1,
+        "fletcherstrestle:string": 0.1,
+        "minecraft:pull": 0.9,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_warped_wood_high_tension",
+      "predicate": {
+        "fletcherstrestle:limb": 1.1,
+        "fletcherstrestle:riser": 0.1,
+        "fletcherstrestle:string": 0.3
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_warped_wood_high_tension_pulling_0",
+      "predicate": {
+        "fletcherstrestle:limb": 1.1,
+        "fletcherstrestle:riser": 0.1,
+        "fletcherstrestle:string": 0.3,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_warped_wood_high_tension_pulling_1",
+      "predicate": {
+        "fletcherstrestle:limb": 1.1,
+        "fletcherstrestle:riser": 0.1,
+        "fletcherstrestle:string": 0.3,
+        "minecraft:pull": 0.65,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_warped_wood_high_tension_pulling_2",
+      "predicate": {
+        "fletcherstrestle:limb": 1.1,
+        "fletcherstrestle:riser": 0.1,
+        "fletcherstrestle:string": 0.3,
+        "minecraft:pull": 0.9,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_warped_iron_spider",
+      "predicate": {
+        "fletcherstrestle:limb": 1.1,
+        "fletcherstrestle:riser": 0.2,
+        "fletcherstrestle:string": 0.1
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_warped_iron_spider_pulling_0",
+      "predicate": {
+        "fletcherstrestle:limb": 1.1,
+        "fletcherstrestle:riser": 0.2,
+        "fletcherstrestle:string": 0.1,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_warped_iron_spider_pulling_1",
+      "predicate": {
+        "fletcherstrestle:limb": 1.1,
+        "fletcherstrestle:riser": 0.2,
+        "fletcherstrestle:string": 0.1,
+        "minecraft:pull": 0.65,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_warped_iron_spider_pulling_2",
+      "predicate": {
+        "fletcherstrestle:limb": 1.1,
+        "fletcherstrestle:riser": 0.2,
+        "fletcherstrestle:string": 0.1,
+        "minecraft:pull": 0.9,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_warped_iron_high_tension",
+      "predicate": {
+        "fletcherstrestle:limb": 1.1,
+        "fletcherstrestle:riser": 0.2,
+        "fletcherstrestle:string": 0.3
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_warped_iron_high_tension_pulling_0",
+      "predicate": {
+        "fletcherstrestle:limb": 1.1,
+        "fletcherstrestle:riser": 0.2,
+        "fletcherstrestle:string": 0.3,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_warped_iron_high_tension_pulling_1",
+      "predicate": {
+        "fletcherstrestle:limb": 1.1,
+        "fletcherstrestle:riser": 0.2,
+        "fletcherstrestle:string": 0.3,
+        "minecraft:pull": 0.65,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_warped_iron_high_tension_pulling_2",
+      "predicate": {
+        "fletcherstrestle:limb": 1.1,
+        "fletcherstrestle:riser": 0.2,
+        "fletcherstrestle:string": 0.3,
+        "minecraft:pull": 0.9,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_warped_copper_spider",
+      "predicate": {
+        "fletcherstrestle:limb": 1.1,
+        "fletcherstrestle:riser": 0.3,
+        "fletcherstrestle:string": 0.1
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_warped_copper_spider_pulling_0",
+      "predicate": {
+        "fletcherstrestle:limb": 1.1,
+        "fletcherstrestle:riser": 0.3,
+        "fletcherstrestle:string": 0.1,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_warped_copper_spider_pulling_1",
+      "predicate": {
+        "fletcherstrestle:limb": 1.1,
+        "fletcherstrestle:riser": 0.3,
+        "fletcherstrestle:string": 0.1,
+        "minecraft:pull": 0.65,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_warped_copper_spider_pulling_2",
+      "predicate": {
+        "fletcherstrestle:limb": 1.1,
+        "fletcherstrestle:riser": 0.3,
+        "fletcherstrestle:string": 0.1,
+        "minecraft:pull": 0.9,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_warped_copper_high_tension",
+      "predicate": {
+        "fletcherstrestle:limb": 1.1,
+        "fletcherstrestle:riser": 0.3,
+        "fletcherstrestle:string": 0.3
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_warped_copper_high_tension_pulling_0",
+      "predicate": {
+        "fletcherstrestle:limb": 1.1,
+        "fletcherstrestle:riser": 0.3,
+        "fletcherstrestle:string": 0.3,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_warped_copper_high_tension_pulling_1",
+      "predicate": {
+        "fletcherstrestle:limb": 1.1,
+        "fletcherstrestle:riser": 0.3,
+        "fletcherstrestle:string": 0.3,
+        "minecraft:pull": 0.65,
+        "minecraft:pulling": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_bow_warped_copper_high_tension_pulling_2",
+      "predicate": {
+        "fletcherstrestle:limb": 1.1,
+        "fletcherstrestle:riser": 0.3,
+        "fletcherstrestle:string": 0.3,
+        "minecraft:pull": 0.9,
+        "minecraft:pulling": 1.0
+      }
+    }
+  ],
+  "textures": {
+    "layer0": "fletcherstrestle:item/risers/wood_riser",
+    "layer1": "fletcherstrestle:item/limbs/oak_limb",
+    "layer2": "fletcherstrestle:item/strings/spider_string"
+  }
+}

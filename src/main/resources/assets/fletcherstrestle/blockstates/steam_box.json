@@ -1,0 +1,9 @@
+{
+  "variants": {
+    "water_level=0": { "model": "fletcherstrestle:block/steam_box/steam_box_water_0" },
+    "water_level=1": { "model": "fletcherstrestle:block/steam_box/steam_box_water_1" },
+    "water_level=2": { "model": "fletcherstrestle:block/steam_box/steam_box_water_2" },
+    "water_level=3": { "model": "fletcherstrestle:block/steam_box/steam_box_water_3" },
+    "water_level=4": { "model": "fletcherstrestle:block/steam_box/steam_box_water_4" }
+  }
+}
