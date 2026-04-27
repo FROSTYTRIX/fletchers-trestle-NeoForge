@@ -1,0 +1,9 @@
+{
+  "parent": "minecraft:item/bow",
+  "textures": {
+    "layer0": "fletcherstrestle:item/limbs/oak_limb",
+    "layer1": "fletcherstrestle:item/risers/iron_riser",
+    "layer2": "fletcherstrestle:item/strings/flax_string",
+    "layer3": "fletcherstrestle:item/extras/no_arrow"
+  }
+}

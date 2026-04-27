@@ -1,8 +1,10 @@
 package net.frostytrix.fletcherstrestle.item;
 
 import net.frostytrix.fletcherstrestle.FletcherTrestle;
+import net.frostytrix.fletcherstrestle.block.ModBlocks;
 import net.frostytrix.fletcherstrestle.item.custom.ModularBowItem;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemNameBlockItem;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -79,6 +81,18 @@ public class ModItems {
             () -> new Item(new Item.Properties()));
 
     public static final DeferredItem<Item> COPPER_RISER = ITEMS.register("copper_riser",
+            () -> new Item(new Item.Properties()));
+
+
+    // Flax
+
+    public static final DeferredItem<Item> FLAX_SEEDS = ITEMS.register("flax_seeds",
+            () -> new ItemNameBlockItem(ModBlocks.FLAX_CROP.get(),new Item.Properties()));
+
+    public static final DeferredItem<Item> FLAX = ITEMS.register("flax",
+            () -> new Item(new Item.Properties()));
+
+    public static final DeferredItem<Item> FLAX_STRING = ITEMS.register("flax_string",
             () -> new Item(new Item.Properties()));
 
 

@@ -56,6 +56,9 @@ public class ModItemModelProvider extends ItemModelProvider {
         basicItem(ModItems.COPPER_RISER.get());
 
         basicItem(ModItems.HIGH_TENSION_STRING.get());
+        basicItem(ModItems.FLAX.get());
+        basicItem(ModItems.FLAX_SEEDS.get());
+        basicItem(ModItems.FLAX_STRING.get());
         handheldItem(ModItems.DRAWKNIFE.get());
 
         Map<String, Float> limbs = new LinkedHashMap<>();
@@ -78,6 +81,7 @@ public class ModItemModelProvider extends ItemModelProvider {
 
         Map<String, Float> strings = new LinkedHashMap<>();
         strings.put("spider", 0.1f);
+        strings.put("flax", 0.2f);
         strings.put("high_tension", 0.3f);
 
         ItemModelBuilder baseBow = getBuilder("modular_bow")

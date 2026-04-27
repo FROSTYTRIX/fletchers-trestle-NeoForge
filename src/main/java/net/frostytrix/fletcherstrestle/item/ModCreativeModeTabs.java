@@ -66,6 +66,11 @@ public class ModCreativeModeTabs {
 
 
                         output.accept(ModItems.HIGH_TENSION_STRING.get());
+
+                        output.accept(ModItems.FLAX_STRING.get());
+                        output.accept(ModItems.FLAX.get());
+                        output.accept(ModItems.FLAX_SEEDS.get());
+
                         output.accept(ModItems.MODULAR_BOW.get());
                     })
                     .build());

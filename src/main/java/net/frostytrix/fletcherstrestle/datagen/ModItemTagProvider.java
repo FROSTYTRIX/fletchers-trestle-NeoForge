@@ -57,6 +57,7 @@ public class ModItemTagProvider extends ItemTagsProvider {
         tag(ModTags.Items.BOW_STRINGS)
                 .add(Items.STRING)
                 .add(ModItems.HIGH_TENSION_STRING.get())
+                .add(ModItems.FLAX_STRING.get())
                 ;
     }
 }

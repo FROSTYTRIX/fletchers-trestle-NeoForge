@@ -1,6 +1,7 @@
 {
   "values": [
     "minecraft:string",
-    "fletcherstrestle:high_tension_string"
+    "fletcherstrestle:high_tension_string",
+    "fletcherstrestle:flax_string"
   ]
 }

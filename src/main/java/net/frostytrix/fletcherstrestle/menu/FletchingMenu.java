@@ -155,6 +155,7 @@ public class FletchingMenu extends AbstractContainerMenu {
         // Strings
 
         if (name.contains("string") && !name.contains("high_tension") && !name.contains("flax")) return "Spider";
+        if (name.contains("flax")) return "Flax";
         if (name.contains("high_tension")) return "High Tension";
 
         return "Unknown";
