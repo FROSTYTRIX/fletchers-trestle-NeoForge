@@ -1,0 +1,3178 @@
+{
+  "parent": "minecraft:item/generated",
+  "overrides": [
+    {
+      "model": "fletcherstrestle:item/modular_arrow_flint_oak_feather",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.1,
+        "fletcherstrestle:arrow_head": 0.1,
+        "fletcherstrestle:arrow_shaft": 0.1
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_flint_oak_rigid",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.2,
+        "fletcherstrestle:arrow_head": 0.1,
+        "fletcherstrestle:arrow_shaft": 0.1
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_flint_oak_trailing",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.3,
+        "fletcherstrestle:arrow_head": 0.1,
+        "fletcherstrestle:arrow_shaft": 0.1
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_flint_oak_serrated",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.4,
+        "fletcherstrestle:arrow_head": 0.1,
+        "fletcherstrestle:arrow_shaft": 0.1
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_flint_oak_bound",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.5,
+        "fletcherstrestle:arrow_head": 0.1,
+        "fletcherstrestle:arrow_shaft": 0.1
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_flint_oak_vex",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.6,
+        "fletcherstrestle:arrow_head": 0.1,
+        "fletcherstrestle:arrow_shaft": 0.1
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_flint_spruce_feather",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.1,
+        "fletcherstrestle:arrow_head": 0.1,
+        "fletcherstrestle:arrow_shaft": 0.2
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_flint_spruce_rigid",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.2,
+        "fletcherstrestle:arrow_head": 0.1,
+        "fletcherstrestle:arrow_shaft": 0.2
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_flint_spruce_trailing",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.3,
+        "fletcherstrestle:arrow_head": 0.1,
+        "fletcherstrestle:arrow_shaft": 0.2
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_flint_spruce_serrated",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.4,
+        "fletcherstrestle:arrow_head": 0.1,
+        "fletcherstrestle:arrow_shaft": 0.2
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_flint_spruce_bound",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.5,
+        "fletcherstrestle:arrow_head": 0.1,
+        "fletcherstrestle:arrow_shaft": 0.2
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_flint_spruce_vex",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.6,
+        "fletcherstrestle:arrow_head": 0.1,
+        "fletcherstrestle:arrow_shaft": 0.2
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_flint_birch_feather",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.1,
+        "fletcherstrestle:arrow_head": 0.1,
+        "fletcherstrestle:arrow_shaft": 0.3
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_flint_birch_rigid",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.2,
+        "fletcherstrestle:arrow_head": 0.1,
+        "fletcherstrestle:arrow_shaft": 0.3
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_flint_birch_trailing",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.3,
+        "fletcherstrestle:arrow_head": 0.1,
+        "fletcherstrestle:arrow_shaft": 0.3
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_flint_birch_serrated",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.4,
+        "fletcherstrestle:arrow_head": 0.1,
+        "fletcherstrestle:arrow_shaft": 0.3
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_flint_birch_bound",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.5,
+        "fletcherstrestle:arrow_head": 0.1,
+        "fletcherstrestle:arrow_shaft": 0.3
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_flint_birch_vex",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.6,
+        "fletcherstrestle:arrow_head": 0.1,
+        "fletcherstrestle:arrow_shaft": 0.3
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_flint_jungle_feather",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.1,
+        "fletcherstrestle:arrow_head": 0.1,
+        "fletcherstrestle:arrow_shaft": 0.4
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_flint_jungle_rigid",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.2,
+        "fletcherstrestle:arrow_head": 0.1,
+        "fletcherstrestle:arrow_shaft": 0.4
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_flint_jungle_trailing",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.3,
+        "fletcherstrestle:arrow_head": 0.1,
+        "fletcherstrestle:arrow_shaft": 0.4
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_flint_jungle_serrated",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.4,
+        "fletcherstrestle:arrow_head": 0.1,
+        "fletcherstrestle:arrow_shaft": 0.4
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_flint_jungle_bound",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.5,
+        "fletcherstrestle:arrow_head": 0.1,
+        "fletcherstrestle:arrow_shaft": 0.4
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_flint_jungle_vex",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.6,
+        "fletcherstrestle:arrow_head": 0.1,
+        "fletcherstrestle:arrow_shaft": 0.4
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_flint_acacia_feather",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.1,
+        "fletcherstrestle:arrow_head": 0.1,
+        "fletcherstrestle:arrow_shaft": 0.5
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_flint_acacia_rigid",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.2,
+        "fletcherstrestle:arrow_head": 0.1,
+        "fletcherstrestle:arrow_shaft": 0.5
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_flint_acacia_trailing",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.3,
+        "fletcherstrestle:arrow_head": 0.1,
+        "fletcherstrestle:arrow_shaft": 0.5
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_flint_acacia_serrated",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.4,
+        "fletcherstrestle:arrow_head": 0.1,
+        "fletcherstrestle:arrow_shaft": 0.5
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_flint_acacia_bound",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.5,
+        "fletcherstrestle:arrow_head": 0.1,
+        "fletcherstrestle:arrow_shaft": 0.5
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_flint_acacia_vex",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.6,
+        "fletcherstrestle:arrow_head": 0.1,
+        "fletcherstrestle:arrow_shaft": 0.5
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_flint_dark_oak_feather",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.1,
+        "fletcherstrestle:arrow_head": 0.1,
+        "fletcherstrestle:arrow_shaft": 0.6
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_flint_dark_oak_rigid",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.2,
+        "fletcherstrestle:arrow_head": 0.1,
+        "fletcherstrestle:arrow_shaft": 0.6
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_flint_dark_oak_trailing",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.3,
+        "fletcherstrestle:arrow_head": 0.1,
+        "fletcherstrestle:arrow_shaft": 0.6
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_flint_dark_oak_serrated",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.4,
+        "fletcherstrestle:arrow_head": 0.1,
+        "fletcherstrestle:arrow_shaft": 0.6
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_flint_dark_oak_bound",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.5,
+        "fletcherstrestle:arrow_head": 0.1,
+        "fletcherstrestle:arrow_shaft": 0.6
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_flint_dark_oak_vex",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.6,
+        "fletcherstrestle:arrow_head": 0.1,
+        "fletcherstrestle:arrow_shaft": 0.6
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_flint_mangrove_feather",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.1,
+        "fletcherstrestle:arrow_head": 0.1,
+        "fletcherstrestle:arrow_shaft": 0.7
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_flint_mangrove_rigid",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.2,
+        "fletcherstrestle:arrow_head": 0.1,
+        "fletcherstrestle:arrow_shaft": 0.7
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_flint_mangrove_trailing",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.3,
+        "fletcherstrestle:arrow_head": 0.1,
+        "fletcherstrestle:arrow_shaft": 0.7
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_flint_mangrove_serrated",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.4,
+        "fletcherstrestle:arrow_head": 0.1,
+        "fletcherstrestle:arrow_shaft": 0.7
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_flint_mangrove_bound",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.5,
+        "fletcherstrestle:arrow_head": 0.1,
+        "fletcherstrestle:arrow_shaft": 0.7
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_flint_mangrove_vex",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.6,
+        "fletcherstrestle:arrow_head": 0.1,
+        "fletcherstrestle:arrow_shaft": 0.7
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_flint_cherry_feather",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.1,
+        "fletcherstrestle:arrow_head": 0.1,
+        "fletcherstrestle:arrow_shaft": 0.8
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_flint_cherry_rigid",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.2,
+        "fletcherstrestle:arrow_head": 0.1,
+        "fletcherstrestle:arrow_shaft": 0.8
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_flint_cherry_trailing",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.3,
+        "fletcherstrestle:arrow_head": 0.1,
+        "fletcherstrestle:arrow_shaft": 0.8
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_flint_cherry_serrated",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.4,
+        "fletcherstrestle:arrow_head": 0.1,
+        "fletcherstrestle:arrow_shaft": 0.8
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_flint_cherry_bound",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.5,
+        "fletcherstrestle:arrow_head": 0.1,
+        "fletcherstrestle:arrow_shaft": 0.8
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_flint_cherry_vex",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.6,
+        "fletcherstrestle:arrow_head": 0.1,
+        "fletcherstrestle:arrow_shaft": 0.8
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_flint_pale_oak_feather",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.1,
+        "fletcherstrestle:arrow_head": 0.1,
+        "fletcherstrestle:arrow_shaft": 0.9
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_flint_pale_oak_rigid",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.2,
+        "fletcherstrestle:arrow_head": 0.1,
+        "fletcherstrestle:arrow_shaft": 0.9
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_flint_pale_oak_trailing",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.3,
+        "fletcherstrestle:arrow_head": 0.1,
+        "fletcherstrestle:arrow_shaft": 0.9
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_flint_pale_oak_serrated",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.4,
+        "fletcherstrestle:arrow_head": 0.1,
+        "fletcherstrestle:arrow_shaft": 0.9
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_flint_pale_oak_bound",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.5,
+        "fletcherstrestle:arrow_head": 0.1,
+        "fletcherstrestle:arrow_shaft": 0.9
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_flint_pale_oak_vex",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.6,
+        "fletcherstrestle:arrow_head": 0.1,
+        "fletcherstrestle:arrow_shaft": 0.9
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_flint_crimson_feather",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.1,
+        "fletcherstrestle:arrow_head": 0.1,
+        "fletcherstrestle:arrow_shaft": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_flint_crimson_rigid",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.2,
+        "fletcherstrestle:arrow_head": 0.1,
+        "fletcherstrestle:arrow_shaft": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_flint_crimson_trailing",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.3,
+        "fletcherstrestle:arrow_head": 0.1,
+        "fletcherstrestle:arrow_shaft": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_flint_crimson_serrated",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.4,
+        "fletcherstrestle:arrow_head": 0.1,
+        "fletcherstrestle:arrow_shaft": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_flint_crimson_bound",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.5,
+        "fletcherstrestle:arrow_head": 0.1,
+        "fletcherstrestle:arrow_shaft": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_flint_crimson_vex",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.6,
+        "fletcherstrestle:arrow_head": 0.1,
+        "fletcherstrestle:arrow_shaft": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_flint_warped_feather",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.1,
+        "fletcherstrestle:arrow_head": 0.1,
+        "fletcherstrestle:arrow_shaft": 1.1
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_flint_warped_rigid",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.2,
+        "fletcherstrestle:arrow_head": 0.1,
+        "fletcherstrestle:arrow_shaft": 1.1
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_flint_warped_trailing",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.3,
+        "fletcherstrestle:arrow_head": 0.1,
+        "fletcherstrestle:arrow_shaft": 1.1
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_flint_warped_serrated",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.4,
+        "fletcherstrestle:arrow_head": 0.1,
+        "fletcherstrestle:arrow_shaft": 1.1
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_flint_warped_bound",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.5,
+        "fletcherstrestle:arrow_head": 0.1,
+        "fletcherstrestle:arrow_shaft": 1.1
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_flint_warped_vex",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.6,
+        "fletcherstrestle:arrow_head": 0.1,
+        "fletcherstrestle:arrow_shaft": 1.1
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_broadhead_oak_feather",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.1,
+        "fletcherstrestle:arrow_head": 0.2,
+        "fletcherstrestle:arrow_shaft": 0.1
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_broadhead_oak_rigid",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.2,
+        "fletcherstrestle:arrow_head": 0.2,
+        "fletcherstrestle:arrow_shaft": 0.1
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_broadhead_oak_trailing",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.3,
+        "fletcherstrestle:arrow_head": 0.2,
+        "fletcherstrestle:arrow_shaft": 0.1
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_broadhead_oak_serrated",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.4,
+        "fletcherstrestle:arrow_head": 0.2,
+        "fletcherstrestle:arrow_shaft": 0.1
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_broadhead_oak_bound",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.5,
+        "fletcherstrestle:arrow_head": 0.2,
+        "fletcherstrestle:arrow_shaft": 0.1
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_broadhead_oak_vex",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.6,
+        "fletcherstrestle:arrow_head": 0.2,
+        "fletcherstrestle:arrow_shaft": 0.1
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_broadhead_spruce_feather",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.1,
+        "fletcherstrestle:arrow_head": 0.2,
+        "fletcherstrestle:arrow_shaft": 0.2
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_broadhead_spruce_rigid",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.2,
+        "fletcherstrestle:arrow_head": 0.2,
+        "fletcherstrestle:arrow_shaft": 0.2
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_broadhead_spruce_trailing",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.3,
+        "fletcherstrestle:arrow_head": 0.2,
+        "fletcherstrestle:arrow_shaft": 0.2
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_broadhead_spruce_serrated",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.4,
+        "fletcherstrestle:arrow_head": 0.2,
+        "fletcherstrestle:arrow_shaft": 0.2
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_broadhead_spruce_bound",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.5,
+        "fletcherstrestle:arrow_head": 0.2,
+        "fletcherstrestle:arrow_shaft": 0.2
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_broadhead_spruce_vex",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.6,
+        "fletcherstrestle:arrow_head": 0.2,
+        "fletcherstrestle:arrow_shaft": 0.2
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_broadhead_birch_feather",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.1,
+        "fletcherstrestle:arrow_head": 0.2,
+        "fletcherstrestle:arrow_shaft": 0.3
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_broadhead_birch_rigid",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.2,
+        "fletcherstrestle:arrow_head": 0.2,
+        "fletcherstrestle:arrow_shaft": 0.3
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_broadhead_birch_trailing",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.3,
+        "fletcherstrestle:arrow_head": 0.2,
+        "fletcherstrestle:arrow_shaft": 0.3
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_broadhead_birch_serrated",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.4,
+        "fletcherstrestle:arrow_head": 0.2,
+        "fletcherstrestle:arrow_shaft": 0.3
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_broadhead_birch_bound",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.5,
+        "fletcherstrestle:arrow_head": 0.2,
+        "fletcherstrestle:arrow_shaft": 0.3
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_broadhead_birch_vex",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.6,
+        "fletcherstrestle:arrow_head": 0.2,
+        "fletcherstrestle:arrow_shaft": 0.3
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_broadhead_jungle_feather",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.1,
+        "fletcherstrestle:arrow_head": 0.2,
+        "fletcherstrestle:arrow_shaft": 0.4
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_broadhead_jungle_rigid",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.2,
+        "fletcherstrestle:arrow_head": 0.2,
+        "fletcherstrestle:arrow_shaft": 0.4
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_broadhead_jungle_trailing",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.3,
+        "fletcherstrestle:arrow_head": 0.2,
+        "fletcherstrestle:arrow_shaft": 0.4
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_broadhead_jungle_serrated",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.4,
+        "fletcherstrestle:arrow_head": 0.2,
+        "fletcherstrestle:arrow_shaft": 0.4
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_broadhead_jungle_bound",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.5,
+        "fletcherstrestle:arrow_head": 0.2,
+        "fletcherstrestle:arrow_shaft": 0.4
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_broadhead_jungle_vex",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.6,
+        "fletcherstrestle:arrow_head": 0.2,
+        "fletcherstrestle:arrow_shaft": 0.4
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_broadhead_acacia_feather",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.1,
+        "fletcherstrestle:arrow_head": 0.2,
+        "fletcherstrestle:arrow_shaft": 0.5
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_broadhead_acacia_rigid",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.2,
+        "fletcherstrestle:arrow_head": 0.2,
+        "fletcherstrestle:arrow_shaft": 0.5
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_broadhead_acacia_trailing",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.3,
+        "fletcherstrestle:arrow_head": 0.2,
+        "fletcherstrestle:arrow_shaft": 0.5
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_broadhead_acacia_serrated",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.4,
+        "fletcherstrestle:arrow_head": 0.2,
+        "fletcherstrestle:arrow_shaft": 0.5
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_broadhead_acacia_bound",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.5,
+        "fletcherstrestle:arrow_head": 0.2,
+        "fletcherstrestle:arrow_shaft": 0.5
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_broadhead_acacia_vex",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.6,
+        "fletcherstrestle:arrow_head": 0.2,
+        "fletcherstrestle:arrow_shaft": 0.5
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_broadhead_dark_oak_feather",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.1,
+        "fletcherstrestle:arrow_head": 0.2,
+        "fletcherstrestle:arrow_shaft": 0.6
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_broadhead_dark_oak_rigid",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.2,
+        "fletcherstrestle:arrow_head": 0.2,
+        "fletcherstrestle:arrow_shaft": 0.6
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_broadhead_dark_oak_trailing",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.3,
+        "fletcherstrestle:arrow_head": 0.2,
+        "fletcherstrestle:arrow_shaft": 0.6
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_broadhead_dark_oak_serrated",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.4,
+        "fletcherstrestle:arrow_head": 0.2,
+        "fletcherstrestle:arrow_shaft": 0.6
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_broadhead_dark_oak_bound",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.5,
+        "fletcherstrestle:arrow_head": 0.2,
+        "fletcherstrestle:arrow_shaft": 0.6
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_broadhead_dark_oak_vex",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.6,
+        "fletcherstrestle:arrow_head": 0.2,
+        "fletcherstrestle:arrow_shaft": 0.6
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_broadhead_mangrove_feather",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.1,
+        "fletcherstrestle:arrow_head": 0.2,
+        "fletcherstrestle:arrow_shaft": 0.7
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_broadhead_mangrove_rigid",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.2,
+        "fletcherstrestle:arrow_head": 0.2,
+        "fletcherstrestle:arrow_shaft": 0.7
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_broadhead_mangrove_trailing",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.3,
+        "fletcherstrestle:arrow_head": 0.2,
+        "fletcherstrestle:arrow_shaft": 0.7
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_broadhead_mangrove_serrated",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.4,
+        "fletcherstrestle:arrow_head": 0.2,
+        "fletcherstrestle:arrow_shaft": 0.7
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_broadhead_mangrove_bound",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.5,
+        "fletcherstrestle:arrow_head": 0.2,
+        "fletcherstrestle:arrow_shaft": 0.7
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_broadhead_mangrove_vex",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.6,
+        "fletcherstrestle:arrow_head": 0.2,
+        "fletcherstrestle:arrow_shaft": 0.7
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_broadhead_cherry_feather",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.1,
+        "fletcherstrestle:arrow_head": 0.2,
+        "fletcherstrestle:arrow_shaft": 0.8
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_broadhead_cherry_rigid",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.2,
+        "fletcherstrestle:arrow_head": 0.2,
+        "fletcherstrestle:arrow_shaft": 0.8
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_broadhead_cherry_trailing",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.3,
+        "fletcherstrestle:arrow_head": 0.2,
+        "fletcherstrestle:arrow_shaft": 0.8
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_broadhead_cherry_serrated",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.4,
+        "fletcherstrestle:arrow_head": 0.2,
+        "fletcherstrestle:arrow_shaft": 0.8
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_broadhead_cherry_bound",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.5,
+        "fletcherstrestle:arrow_head": 0.2,
+        "fletcherstrestle:arrow_shaft": 0.8
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_broadhead_cherry_vex",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.6,
+        "fletcherstrestle:arrow_head": 0.2,
+        "fletcherstrestle:arrow_shaft": 0.8
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_broadhead_pale_oak_feather",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.1,
+        "fletcherstrestle:arrow_head": 0.2,
+        "fletcherstrestle:arrow_shaft": 0.9
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_broadhead_pale_oak_rigid",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.2,
+        "fletcherstrestle:arrow_head": 0.2,
+        "fletcherstrestle:arrow_shaft": 0.9
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_broadhead_pale_oak_trailing",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.3,
+        "fletcherstrestle:arrow_head": 0.2,
+        "fletcherstrestle:arrow_shaft": 0.9
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_broadhead_pale_oak_serrated",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.4,
+        "fletcherstrestle:arrow_head": 0.2,
+        "fletcherstrestle:arrow_shaft": 0.9
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_broadhead_pale_oak_bound",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.5,
+        "fletcherstrestle:arrow_head": 0.2,
+        "fletcherstrestle:arrow_shaft": 0.9
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_broadhead_pale_oak_vex",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.6,
+        "fletcherstrestle:arrow_head": 0.2,
+        "fletcherstrestle:arrow_shaft": 0.9
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_broadhead_crimson_feather",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.1,
+        "fletcherstrestle:arrow_head": 0.2,
+        "fletcherstrestle:arrow_shaft": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_broadhead_crimson_rigid",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.2,
+        "fletcherstrestle:arrow_head": 0.2,
+        "fletcherstrestle:arrow_shaft": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_broadhead_crimson_trailing",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.3,
+        "fletcherstrestle:arrow_head": 0.2,
+        "fletcherstrestle:arrow_shaft": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_broadhead_crimson_serrated",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.4,
+        "fletcherstrestle:arrow_head": 0.2,
+        "fletcherstrestle:arrow_shaft": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_broadhead_crimson_bound",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.5,
+        "fletcherstrestle:arrow_head": 0.2,
+        "fletcherstrestle:arrow_shaft": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_broadhead_crimson_vex",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.6,
+        "fletcherstrestle:arrow_head": 0.2,
+        "fletcherstrestle:arrow_shaft": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_broadhead_warped_feather",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.1,
+        "fletcherstrestle:arrow_head": 0.2,
+        "fletcherstrestle:arrow_shaft": 1.1
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_broadhead_warped_rigid",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.2,
+        "fletcherstrestle:arrow_head": 0.2,
+        "fletcherstrestle:arrow_shaft": 1.1
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_broadhead_warped_trailing",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.3,
+        "fletcherstrestle:arrow_head": 0.2,
+        "fletcherstrestle:arrow_shaft": 1.1
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_broadhead_warped_serrated",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.4,
+        "fletcherstrestle:arrow_head": 0.2,
+        "fletcherstrestle:arrow_shaft": 1.1
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_broadhead_warped_bound",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.5,
+        "fletcherstrestle:arrow_head": 0.2,
+        "fletcherstrestle:arrow_shaft": 1.1
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_broadhead_warped_vex",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.6,
+        "fletcherstrestle:arrow_head": 0.2,
+        "fletcherstrestle:arrow_shaft": 1.1
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_bodkin_point_oak_feather",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.1,
+        "fletcherstrestle:arrow_head": 0.3,
+        "fletcherstrestle:arrow_shaft": 0.1
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_bodkin_point_oak_rigid",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.2,
+        "fletcherstrestle:arrow_head": 0.3,
+        "fletcherstrestle:arrow_shaft": 0.1
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_bodkin_point_oak_trailing",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.3,
+        "fletcherstrestle:arrow_head": 0.3,
+        "fletcherstrestle:arrow_shaft": 0.1
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_bodkin_point_oak_serrated",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.4,
+        "fletcherstrestle:arrow_head": 0.3,
+        "fletcherstrestle:arrow_shaft": 0.1
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_bodkin_point_oak_bound",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.5,
+        "fletcherstrestle:arrow_head": 0.3,
+        "fletcherstrestle:arrow_shaft": 0.1
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_bodkin_point_oak_vex",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.6,
+        "fletcherstrestle:arrow_head": 0.3,
+        "fletcherstrestle:arrow_shaft": 0.1
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_bodkin_point_spruce_feather",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.1,
+        "fletcherstrestle:arrow_head": 0.3,
+        "fletcherstrestle:arrow_shaft": 0.2
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_bodkin_point_spruce_rigid",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.2,
+        "fletcherstrestle:arrow_head": 0.3,
+        "fletcherstrestle:arrow_shaft": 0.2
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_bodkin_point_spruce_trailing",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.3,
+        "fletcherstrestle:arrow_head": 0.3,
+        "fletcherstrestle:arrow_shaft": 0.2
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_bodkin_point_spruce_serrated",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.4,
+        "fletcherstrestle:arrow_head": 0.3,
+        "fletcherstrestle:arrow_shaft": 0.2
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_bodkin_point_spruce_bound",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.5,
+        "fletcherstrestle:arrow_head": 0.3,
+        "fletcherstrestle:arrow_shaft": 0.2
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_bodkin_point_spruce_vex",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.6,
+        "fletcherstrestle:arrow_head": 0.3,
+        "fletcherstrestle:arrow_shaft": 0.2
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_bodkin_point_birch_feather",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.1,
+        "fletcherstrestle:arrow_head": 0.3,
+        "fletcherstrestle:arrow_shaft": 0.3
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_bodkin_point_birch_rigid",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.2,
+        "fletcherstrestle:arrow_head": 0.3,
+        "fletcherstrestle:arrow_shaft": 0.3
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_bodkin_point_birch_trailing",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.3,
+        "fletcherstrestle:arrow_head": 0.3,
+        "fletcherstrestle:arrow_shaft": 0.3
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_bodkin_point_birch_serrated",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.4,
+        "fletcherstrestle:arrow_head": 0.3,
+        "fletcherstrestle:arrow_shaft": 0.3
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_bodkin_point_birch_bound",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.5,
+        "fletcherstrestle:arrow_head": 0.3,
+        "fletcherstrestle:arrow_shaft": 0.3
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_bodkin_point_birch_vex",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.6,
+        "fletcherstrestle:arrow_head": 0.3,
+        "fletcherstrestle:arrow_shaft": 0.3
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_bodkin_point_jungle_feather",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.1,
+        "fletcherstrestle:arrow_head": 0.3,
+        "fletcherstrestle:arrow_shaft": 0.4
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_bodkin_point_jungle_rigid",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.2,
+        "fletcherstrestle:arrow_head": 0.3,
+        "fletcherstrestle:arrow_shaft": 0.4
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_bodkin_point_jungle_trailing",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.3,
+        "fletcherstrestle:arrow_head": 0.3,
+        "fletcherstrestle:arrow_shaft": 0.4
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_bodkin_point_jungle_serrated",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.4,
+        "fletcherstrestle:arrow_head": 0.3,
+        "fletcherstrestle:arrow_shaft": 0.4
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_bodkin_point_jungle_bound",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.5,
+        "fletcherstrestle:arrow_head": 0.3,
+        "fletcherstrestle:arrow_shaft": 0.4
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_bodkin_point_jungle_vex",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.6,
+        "fletcherstrestle:arrow_head": 0.3,
+        "fletcherstrestle:arrow_shaft": 0.4
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_bodkin_point_acacia_feather",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.1,
+        "fletcherstrestle:arrow_head": 0.3,
+        "fletcherstrestle:arrow_shaft": 0.5
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_bodkin_point_acacia_rigid",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.2,
+        "fletcherstrestle:arrow_head": 0.3,
+        "fletcherstrestle:arrow_shaft": 0.5
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_bodkin_point_acacia_trailing",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.3,
+        "fletcherstrestle:arrow_head": 0.3,
+        "fletcherstrestle:arrow_shaft": 0.5
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_bodkin_point_acacia_serrated",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.4,
+        "fletcherstrestle:arrow_head": 0.3,
+        "fletcherstrestle:arrow_shaft": 0.5
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_bodkin_point_acacia_bound",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.5,
+        "fletcherstrestle:arrow_head": 0.3,
+        "fletcherstrestle:arrow_shaft": 0.5
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_bodkin_point_acacia_vex",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.6,
+        "fletcherstrestle:arrow_head": 0.3,
+        "fletcherstrestle:arrow_shaft": 0.5
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_bodkin_point_dark_oak_feather",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.1,
+        "fletcherstrestle:arrow_head": 0.3,
+        "fletcherstrestle:arrow_shaft": 0.6
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_bodkin_point_dark_oak_rigid",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.2,
+        "fletcherstrestle:arrow_head": 0.3,
+        "fletcherstrestle:arrow_shaft": 0.6
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_bodkin_point_dark_oak_trailing",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.3,
+        "fletcherstrestle:arrow_head": 0.3,
+        "fletcherstrestle:arrow_shaft": 0.6
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_bodkin_point_dark_oak_serrated",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.4,
+        "fletcherstrestle:arrow_head": 0.3,
+        "fletcherstrestle:arrow_shaft": 0.6
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_bodkin_point_dark_oak_bound",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.5,
+        "fletcherstrestle:arrow_head": 0.3,
+        "fletcherstrestle:arrow_shaft": 0.6
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_bodkin_point_dark_oak_vex",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.6,
+        "fletcherstrestle:arrow_head": 0.3,
+        "fletcherstrestle:arrow_shaft": 0.6
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_bodkin_point_mangrove_feather",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.1,
+        "fletcherstrestle:arrow_head": 0.3,
+        "fletcherstrestle:arrow_shaft": 0.7
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_bodkin_point_mangrove_rigid",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.2,
+        "fletcherstrestle:arrow_head": 0.3,
+        "fletcherstrestle:arrow_shaft": 0.7
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_bodkin_point_mangrove_trailing",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.3,
+        "fletcherstrestle:arrow_head": 0.3,
+        "fletcherstrestle:arrow_shaft": 0.7
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_bodkin_point_mangrove_serrated",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.4,
+        "fletcherstrestle:arrow_head": 0.3,
+        "fletcherstrestle:arrow_shaft": 0.7
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_bodkin_point_mangrove_bound",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.5,
+        "fletcherstrestle:arrow_head": 0.3,
+        "fletcherstrestle:arrow_shaft": 0.7
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_bodkin_point_mangrove_vex",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.6,
+        "fletcherstrestle:arrow_head": 0.3,
+        "fletcherstrestle:arrow_shaft": 0.7
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_bodkin_point_cherry_feather",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.1,
+        "fletcherstrestle:arrow_head": 0.3,
+        "fletcherstrestle:arrow_shaft": 0.8
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_bodkin_point_cherry_rigid",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.2,
+        "fletcherstrestle:arrow_head": 0.3,
+        "fletcherstrestle:arrow_shaft": 0.8
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_bodkin_point_cherry_trailing",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.3,
+        "fletcherstrestle:arrow_head": 0.3,
+        "fletcherstrestle:arrow_shaft": 0.8
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_bodkin_point_cherry_serrated",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.4,
+        "fletcherstrestle:arrow_head": 0.3,
+        "fletcherstrestle:arrow_shaft": 0.8
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_bodkin_point_cherry_bound",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.5,
+        "fletcherstrestle:arrow_head": 0.3,
+        "fletcherstrestle:arrow_shaft": 0.8
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_bodkin_point_cherry_vex",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.6,
+        "fletcherstrestle:arrow_head": 0.3,
+        "fletcherstrestle:arrow_shaft": 0.8
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_bodkin_point_pale_oak_feather",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.1,
+        "fletcherstrestle:arrow_head": 0.3,
+        "fletcherstrestle:arrow_shaft": 0.9
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_bodkin_point_pale_oak_rigid",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.2,
+        "fletcherstrestle:arrow_head": 0.3,
+        "fletcherstrestle:arrow_shaft": 0.9
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_bodkin_point_pale_oak_trailing",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.3,
+        "fletcherstrestle:arrow_head": 0.3,
+        "fletcherstrestle:arrow_shaft": 0.9
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_bodkin_point_pale_oak_serrated",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.4,
+        "fletcherstrestle:arrow_head": 0.3,
+        "fletcherstrestle:arrow_shaft": 0.9
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_bodkin_point_pale_oak_bound",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.5,
+        "fletcherstrestle:arrow_head": 0.3,
+        "fletcherstrestle:arrow_shaft": 0.9
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_bodkin_point_pale_oak_vex",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.6,
+        "fletcherstrestle:arrow_head": 0.3,
+        "fletcherstrestle:arrow_shaft": 0.9
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_bodkin_point_crimson_feather",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.1,
+        "fletcherstrestle:arrow_head": 0.3,
+        "fletcherstrestle:arrow_shaft": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_bodkin_point_crimson_rigid",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.2,
+        "fletcherstrestle:arrow_head": 0.3,
+        "fletcherstrestle:arrow_shaft": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_bodkin_point_crimson_trailing",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.3,
+        "fletcherstrestle:arrow_head": 0.3,
+        "fletcherstrestle:arrow_shaft": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_bodkin_point_crimson_serrated",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.4,
+        "fletcherstrestle:arrow_head": 0.3,
+        "fletcherstrestle:arrow_shaft": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_bodkin_point_crimson_bound",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.5,
+        "fletcherstrestle:arrow_head": 0.3,
+        "fletcherstrestle:arrow_shaft": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_bodkin_point_crimson_vex",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.6,
+        "fletcherstrestle:arrow_head": 0.3,
+        "fletcherstrestle:arrow_shaft": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_bodkin_point_warped_feather",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.1,
+        "fletcherstrestle:arrow_head": 0.3,
+        "fletcherstrestle:arrow_shaft": 1.1
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_bodkin_point_warped_rigid",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.2,
+        "fletcherstrestle:arrow_head": 0.3,
+        "fletcherstrestle:arrow_shaft": 1.1
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_bodkin_point_warped_trailing",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.3,
+        "fletcherstrestle:arrow_head": 0.3,
+        "fletcherstrestle:arrow_shaft": 1.1
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_bodkin_point_warped_serrated",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.4,
+        "fletcherstrestle:arrow_head": 0.3,
+        "fletcherstrestle:arrow_shaft": 1.1
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_bodkin_point_warped_bound",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.5,
+        "fletcherstrestle:arrow_head": 0.3,
+        "fletcherstrestle:arrow_shaft": 1.1
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_bodkin_point_warped_vex",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.6,
+        "fletcherstrestle:arrow_head": 0.3,
+        "fletcherstrestle:arrow_shaft": 1.1
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_resonance_tip_oak_feather",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.1,
+        "fletcherstrestle:arrow_head": 0.4,
+        "fletcherstrestle:arrow_shaft": 0.1
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_resonance_tip_oak_rigid",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.2,
+        "fletcherstrestle:arrow_head": 0.4,
+        "fletcherstrestle:arrow_shaft": 0.1
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_resonance_tip_oak_trailing",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.3,
+        "fletcherstrestle:arrow_head": 0.4,
+        "fletcherstrestle:arrow_shaft": 0.1
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_resonance_tip_oak_serrated",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.4,
+        "fletcherstrestle:arrow_head": 0.4,
+        "fletcherstrestle:arrow_shaft": 0.1
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_resonance_tip_oak_bound",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.5,
+        "fletcherstrestle:arrow_head": 0.4,
+        "fletcherstrestle:arrow_shaft": 0.1
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_resonance_tip_oak_vex",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.6,
+        "fletcherstrestle:arrow_head": 0.4,
+        "fletcherstrestle:arrow_shaft": 0.1
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_resonance_tip_spruce_feather",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.1,
+        "fletcherstrestle:arrow_head": 0.4,
+        "fletcherstrestle:arrow_shaft": 0.2
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_resonance_tip_spruce_rigid",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.2,
+        "fletcherstrestle:arrow_head": 0.4,
+        "fletcherstrestle:arrow_shaft": 0.2
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_resonance_tip_spruce_trailing",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.3,
+        "fletcherstrestle:arrow_head": 0.4,
+        "fletcherstrestle:arrow_shaft": 0.2
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_resonance_tip_spruce_serrated",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.4,
+        "fletcherstrestle:arrow_head": 0.4,
+        "fletcherstrestle:arrow_shaft": 0.2
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_resonance_tip_spruce_bound",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.5,
+        "fletcherstrestle:arrow_head": 0.4,
+        "fletcherstrestle:arrow_shaft": 0.2
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_resonance_tip_spruce_vex",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.6,
+        "fletcherstrestle:arrow_head": 0.4,
+        "fletcherstrestle:arrow_shaft": 0.2
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_resonance_tip_birch_feather",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.1,
+        "fletcherstrestle:arrow_head": 0.4,
+        "fletcherstrestle:arrow_shaft": 0.3
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_resonance_tip_birch_rigid",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.2,
+        "fletcherstrestle:arrow_head": 0.4,
+        "fletcherstrestle:arrow_shaft": 0.3
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_resonance_tip_birch_trailing",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.3,
+        "fletcherstrestle:arrow_head": 0.4,
+        "fletcherstrestle:arrow_shaft": 0.3
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_resonance_tip_birch_serrated",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.4,
+        "fletcherstrestle:arrow_head": 0.4,
+        "fletcherstrestle:arrow_shaft": 0.3
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_resonance_tip_birch_bound",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.5,
+        "fletcherstrestle:arrow_head": 0.4,
+        "fletcherstrestle:arrow_shaft": 0.3
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_resonance_tip_birch_vex",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.6,
+        "fletcherstrestle:arrow_head": 0.4,
+        "fletcherstrestle:arrow_shaft": 0.3
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_resonance_tip_jungle_feather",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.1,
+        "fletcherstrestle:arrow_head": 0.4,
+        "fletcherstrestle:arrow_shaft": 0.4
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_resonance_tip_jungle_rigid",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.2,
+        "fletcherstrestle:arrow_head": 0.4,
+        "fletcherstrestle:arrow_shaft": 0.4
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_resonance_tip_jungle_trailing",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.3,
+        "fletcherstrestle:arrow_head": 0.4,
+        "fletcherstrestle:arrow_shaft": 0.4
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_resonance_tip_jungle_serrated",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.4,
+        "fletcherstrestle:arrow_head": 0.4,
+        "fletcherstrestle:arrow_shaft": 0.4
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_resonance_tip_jungle_bound",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.5,
+        "fletcherstrestle:arrow_head": 0.4,
+        "fletcherstrestle:arrow_shaft": 0.4
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_resonance_tip_jungle_vex",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.6,
+        "fletcherstrestle:arrow_head": 0.4,
+        "fletcherstrestle:arrow_shaft": 0.4
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_resonance_tip_acacia_feather",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.1,
+        "fletcherstrestle:arrow_head": 0.4,
+        "fletcherstrestle:arrow_shaft": 0.5
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_resonance_tip_acacia_rigid",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.2,
+        "fletcherstrestle:arrow_head": 0.4,
+        "fletcherstrestle:arrow_shaft": 0.5
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_resonance_tip_acacia_trailing",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.3,
+        "fletcherstrestle:arrow_head": 0.4,
+        "fletcherstrestle:arrow_shaft": 0.5
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_resonance_tip_acacia_serrated",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.4,
+        "fletcherstrestle:arrow_head": 0.4,
+        "fletcherstrestle:arrow_shaft": 0.5
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_resonance_tip_acacia_bound",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.5,
+        "fletcherstrestle:arrow_head": 0.4,
+        "fletcherstrestle:arrow_shaft": 0.5
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_resonance_tip_acacia_vex",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.6,
+        "fletcherstrestle:arrow_head": 0.4,
+        "fletcherstrestle:arrow_shaft": 0.5
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_resonance_tip_dark_oak_feather",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.1,
+        "fletcherstrestle:arrow_head": 0.4,
+        "fletcherstrestle:arrow_shaft": 0.6
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_resonance_tip_dark_oak_rigid",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.2,
+        "fletcherstrestle:arrow_head": 0.4,
+        "fletcherstrestle:arrow_shaft": 0.6
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_resonance_tip_dark_oak_trailing",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.3,
+        "fletcherstrestle:arrow_head": 0.4,
+        "fletcherstrestle:arrow_shaft": 0.6
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_resonance_tip_dark_oak_serrated",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.4,
+        "fletcherstrestle:arrow_head": 0.4,
+        "fletcherstrestle:arrow_shaft": 0.6
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_resonance_tip_dark_oak_bound",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.5,
+        "fletcherstrestle:arrow_head": 0.4,
+        "fletcherstrestle:arrow_shaft": 0.6
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_resonance_tip_dark_oak_vex",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.6,
+        "fletcherstrestle:arrow_head": 0.4,
+        "fletcherstrestle:arrow_shaft": 0.6
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_resonance_tip_mangrove_feather",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.1,
+        "fletcherstrestle:arrow_head": 0.4,
+        "fletcherstrestle:arrow_shaft": 0.7
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_resonance_tip_mangrove_rigid",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.2,
+        "fletcherstrestle:arrow_head": 0.4,
+        "fletcherstrestle:arrow_shaft": 0.7
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_resonance_tip_mangrove_trailing",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.3,
+        "fletcherstrestle:arrow_head": 0.4,
+        "fletcherstrestle:arrow_shaft": 0.7
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_resonance_tip_mangrove_serrated",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.4,
+        "fletcherstrestle:arrow_head": 0.4,
+        "fletcherstrestle:arrow_shaft": 0.7
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_resonance_tip_mangrove_bound",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.5,
+        "fletcherstrestle:arrow_head": 0.4,
+        "fletcherstrestle:arrow_shaft": 0.7
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_resonance_tip_mangrove_vex",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.6,
+        "fletcherstrestle:arrow_head": 0.4,
+        "fletcherstrestle:arrow_shaft": 0.7
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_resonance_tip_cherry_feather",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.1,
+        "fletcherstrestle:arrow_head": 0.4,
+        "fletcherstrestle:arrow_shaft": 0.8
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_resonance_tip_cherry_rigid",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.2,
+        "fletcherstrestle:arrow_head": 0.4,
+        "fletcherstrestle:arrow_shaft": 0.8
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_resonance_tip_cherry_trailing",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.3,
+        "fletcherstrestle:arrow_head": 0.4,
+        "fletcherstrestle:arrow_shaft": 0.8
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_resonance_tip_cherry_serrated",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.4,
+        "fletcherstrestle:arrow_head": 0.4,
+        "fletcherstrestle:arrow_shaft": 0.8
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_resonance_tip_cherry_bound",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.5,
+        "fletcherstrestle:arrow_head": 0.4,
+        "fletcherstrestle:arrow_shaft": 0.8
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_resonance_tip_cherry_vex",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.6,
+        "fletcherstrestle:arrow_head": 0.4,
+        "fletcherstrestle:arrow_shaft": 0.8
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_resonance_tip_pale_oak_feather",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.1,
+        "fletcherstrestle:arrow_head": 0.4,
+        "fletcherstrestle:arrow_shaft": 0.9
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_resonance_tip_pale_oak_rigid",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.2,
+        "fletcherstrestle:arrow_head": 0.4,
+        "fletcherstrestle:arrow_shaft": 0.9
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_resonance_tip_pale_oak_trailing",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.3,
+        "fletcherstrestle:arrow_head": 0.4,
+        "fletcherstrestle:arrow_shaft": 0.9
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_resonance_tip_pale_oak_serrated",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.4,
+        "fletcherstrestle:arrow_head": 0.4,
+        "fletcherstrestle:arrow_shaft": 0.9
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_resonance_tip_pale_oak_bound",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.5,
+        "fletcherstrestle:arrow_head": 0.4,
+        "fletcherstrestle:arrow_shaft": 0.9
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_resonance_tip_pale_oak_vex",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.6,
+        "fletcherstrestle:arrow_head": 0.4,
+        "fletcherstrestle:arrow_shaft": 0.9
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_resonance_tip_crimson_feather",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.1,
+        "fletcherstrestle:arrow_head": 0.4,
+        "fletcherstrestle:arrow_shaft": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_resonance_tip_crimson_rigid",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.2,
+        "fletcherstrestle:arrow_head": 0.4,
+        "fletcherstrestle:arrow_shaft": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_resonance_tip_crimson_trailing",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.3,
+        "fletcherstrestle:arrow_head": 0.4,
+        "fletcherstrestle:arrow_shaft": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_resonance_tip_crimson_serrated",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.4,
+        "fletcherstrestle:arrow_head": 0.4,
+        "fletcherstrestle:arrow_shaft": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_resonance_tip_crimson_bound",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.5,
+        "fletcherstrestle:arrow_head": 0.4,
+        "fletcherstrestle:arrow_shaft": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_resonance_tip_crimson_vex",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.6,
+        "fletcherstrestle:arrow_head": 0.4,
+        "fletcherstrestle:arrow_shaft": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_resonance_tip_warped_feather",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.1,
+        "fletcherstrestle:arrow_head": 0.4,
+        "fletcherstrestle:arrow_shaft": 1.1
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_resonance_tip_warped_rigid",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.2,
+        "fletcherstrestle:arrow_head": 0.4,
+        "fletcherstrestle:arrow_shaft": 1.1
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_resonance_tip_warped_trailing",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.3,
+        "fletcherstrestle:arrow_head": 0.4,
+        "fletcherstrestle:arrow_shaft": 1.1
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_resonance_tip_warped_serrated",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.4,
+        "fletcherstrestle:arrow_head": 0.4,
+        "fletcherstrestle:arrow_shaft": 1.1
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_resonance_tip_warped_bound",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.5,
+        "fletcherstrestle:arrow_head": 0.4,
+        "fletcherstrestle:arrow_shaft": 1.1
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_resonance_tip_warped_vex",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.6,
+        "fletcherstrestle:arrow_head": 0.4,
+        "fletcherstrestle:arrow_shaft": 1.1
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_barbed_tip_oak_feather",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.1,
+        "fletcherstrestle:arrow_head": 0.5,
+        "fletcherstrestle:arrow_shaft": 0.1
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_barbed_tip_oak_rigid",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.2,
+        "fletcherstrestle:arrow_head": 0.5,
+        "fletcherstrestle:arrow_shaft": 0.1
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_barbed_tip_oak_trailing",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.3,
+        "fletcherstrestle:arrow_head": 0.5,
+        "fletcherstrestle:arrow_shaft": 0.1
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_barbed_tip_oak_serrated",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.4,
+        "fletcherstrestle:arrow_head": 0.5,
+        "fletcherstrestle:arrow_shaft": 0.1
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_barbed_tip_oak_bound",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.5,
+        "fletcherstrestle:arrow_head": 0.5,
+        "fletcherstrestle:arrow_shaft": 0.1
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_barbed_tip_oak_vex",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.6,
+        "fletcherstrestle:arrow_head": 0.5,
+        "fletcherstrestle:arrow_shaft": 0.1
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_barbed_tip_spruce_feather",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.1,
+        "fletcherstrestle:arrow_head": 0.5,
+        "fletcherstrestle:arrow_shaft": 0.2
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_barbed_tip_spruce_rigid",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.2,
+        "fletcherstrestle:arrow_head": 0.5,
+        "fletcherstrestle:arrow_shaft": 0.2
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_barbed_tip_spruce_trailing",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.3,
+        "fletcherstrestle:arrow_head": 0.5,
+        "fletcherstrestle:arrow_shaft": 0.2
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_barbed_tip_spruce_serrated",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.4,
+        "fletcherstrestle:arrow_head": 0.5,
+        "fletcherstrestle:arrow_shaft": 0.2
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_barbed_tip_spruce_bound",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.5,
+        "fletcherstrestle:arrow_head": 0.5,
+        "fletcherstrestle:arrow_shaft": 0.2
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_barbed_tip_spruce_vex",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.6,
+        "fletcherstrestle:arrow_head": 0.5,
+        "fletcherstrestle:arrow_shaft": 0.2
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_barbed_tip_birch_feather",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.1,
+        "fletcherstrestle:arrow_head": 0.5,
+        "fletcherstrestle:arrow_shaft": 0.3
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_barbed_tip_birch_rigid",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.2,
+        "fletcherstrestle:arrow_head": 0.5,
+        "fletcherstrestle:arrow_shaft": 0.3
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_barbed_tip_birch_trailing",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.3,
+        "fletcherstrestle:arrow_head": 0.5,
+        "fletcherstrestle:arrow_shaft": 0.3
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_barbed_tip_birch_serrated",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.4,
+        "fletcherstrestle:arrow_head": 0.5,
+        "fletcherstrestle:arrow_shaft": 0.3
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_barbed_tip_birch_bound",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.5,
+        "fletcherstrestle:arrow_head": 0.5,
+        "fletcherstrestle:arrow_shaft": 0.3
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_barbed_tip_birch_vex",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.6,
+        "fletcherstrestle:arrow_head": 0.5,
+        "fletcherstrestle:arrow_shaft": 0.3
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_barbed_tip_jungle_feather",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.1,
+        "fletcherstrestle:arrow_head": 0.5,
+        "fletcherstrestle:arrow_shaft": 0.4
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_barbed_tip_jungle_rigid",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.2,
+        "fletcherstrestle:arrow_head": 0.5,
+        "fletcherstrestle:arrow_shaft": 0.4
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_barbed_tip_jungle_trailing",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.3,
+        "fletcherstrestle:arrow_head": 0.5,
+        "fletcherstrestle:arrow_shaft": 0.4
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_barbed_tip_jungle_serrated",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.4,
+        "fletcherstrestle:arrow_head": 0.5,
+        "fletcherstrestle:arrow_shaft": 0.4
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_barbed_tip_jungle_bound",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.5,
+        "fletcherstrestle:arrow_head": 0.5,
+        "fletcherstrestle:arrow_shaft": 0.4
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_barbed_tip_jungle_vex",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.6,
+        "fletcherstrestle:arrow_head": 0.5,
+        "fletcherstrestle:arrow_shaft": 0.4
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_barbed_tip_acacia_feather",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.1,
+        "fletcherstrestle:arrow_head": 0.5,
+        "fletcherstrestle:arrow_shaft": 0.5
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_barbed_tip_acacia_rigid",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.2,
+        "fletcherstrestle:arrow_head": 0.5,
+        "fletcherstrestle:arrow_shaft": 0.5
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_barbed_tip_acacia_trailing",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.3,
+        "fletcherstrestle:arrow_head": 0.5,
+        "fletcherstrestle:arrow_shaft": 0.5
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_barbed_tip_acacia_serrated",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.4,
+        "fletcherstrestle:arrow_head": 0.5,
+        "fletcherstrestle:arrow_shaft": 0.5
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_barbed_tip_acacia_bound",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.5,
+        "fletcherstrestle:arrow_head": 0.5,
+        "fletcherstrestle:arrow_shaft": 0.5
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_barbed_tip_acacia_vex",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.6,
+        "fletcherstrestle:arrow_head": 0.5,
+        "fletcherstrestle:arrow_shaft": 0.5
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_barbed_tip_dark_oak_feather",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.1,
+        "fletcherstrestle:arrow_head": 0.5,
+        "fletcherstrestle:arrow_shaft": 0.6
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_barbed_tip_dark_oak_rigid",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.2,
+        "fletcherstrestle:arrow_head": 0.5,
+        "fletcherstrestle:arrow_shaft": 0.6
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_barbed_tip_dark_oak_trailing",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.3,
+        "fletcherstrestle:arrow_head": 0.5,
+        "fletcherstrestle:arrow_shaft": 0.6
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_barbed_tip_dark_oak_serrated",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.4,
+        "fletcherstrestle:arrow_head": 0.5,
+        "fletcherstrestle:arrow_shaft": 0.6
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_barbed_tip_dark_oak_bound",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.5,
+        "fletcherstrestle:arrow_head": 0.5,
+        "fletcherstrestle:arrow_shaft": 0.6
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_barbed_tip_dark_oak_vex",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.6,
+        "fletcherstrestle:arrow_head": 0.5,
+        "fletcherstrestle:arrow_shaft": 0.6
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_barbed_tip_mangrove_feather",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.1,
+        "fletcherstrestle:arrow_head": 0.5,
+        "fletcherstrestle:arrow_shaft": 0.7
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_barbed_tip_mangrove_rigid",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.2,
+        "fletcherstrestle:arrow_head": 0.5,
+        "fletcherstrestle:arrow_shaft": 0.7
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_barbed_tip_mangrove_trailing",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.3,
+        "fletcherstrestle:arrow_head": 0.5,
+        "fletcherstrestle:arrow_shaft": 0.7
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_barbed_tip_mangrove_serrated",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.4,
+        "fletcherstrestle:arrow_head": 0.5,
+        "fletcherstrestle:arrow_shaft": 0.7
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_barbed_tip_mangrove_bound",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.5,
+        "fletcherstrestle:arrow_head": 0.5,
+        "fletcherstrestle:arrow_shaft": 0.7
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_barbed_tip_mangrove_vex",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.6,
+        "fletcherstrestle:arrow_head": 0.5,
+        "fletcherstrestle:arrow_shaft": 0.7
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_barbed_tip_cherry_feather",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.1,
+        "fletcherstrestle:arrow_head": 0.5,
+        "fletcherstrestle:arrow_shaft": 0.8
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_barbed_tip_cherry_rigid",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.2,
+        "fletcherstrestle:arrow_head": 0.5,
+        "fletcherstrestle:arrow_shaft": 0.8
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_barbed_tip_cherry_trailing",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.3,
+        "fletcherstrestle:arrow_head": 0.5,
+        "fletcherstrestle:arrow_shaft": 0.8
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_barbed_tip_cherry_serrated",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.4,
+        "fletcherstrestle:arrow_head": 0.5,
+        "fletcherstrestle:arrow_shaft": 0.8
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_barbed_tip_cherry_bound",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.5,
+        "fletcherstrestle:arrow_head": 0.5,
+        "fletcherstrestle:arrow_shaft": 0.8
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_barbed_tip_cherry_vex",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.6,
+        "fletcherstrestle:arrow_head": 0.5,
+        "fletcherstrestle:arrow_shaft": 0.8
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_barbed_tip_pale_oak_feather",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.1,
+        "fletcherstrestle:arrow_head": 0.5,
+        "fletcherstrestle:arrow_shaft": 0.9
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_barbed_tip_pale_oak_rigid",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.2,
+        "fletcherstrestle:arrow_head": 0.5,
+        "fletcherstrestle:arrow_shaft": 0.9
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_barbed_tip_pale_oak_trailing",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.3,
+        "fletcherstrestle:arrow_head": 0.5,
+        "fletcherstrestle:arrow_shaft": 0.9
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_barbed_tip_pale_oak_serrated",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.4,
+        "fletcherstrestle:arrow_head": 0.5,
+        "fletcherstrestle:arrow_shaft": 0.9
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_barbed_tip_pale_oak_bound",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.5,
+        "fletcherstrestle:arrow_head": 0.5,
+        "fletcherstrestle:arrow_shaft": 0.9
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_barbed_tip_pale_oak_vex",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.6,
+        "fletcherstrestle:arrow_head": 0.5,
+        "fletcherstrestle:arrow_shaft": 0.9
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_barbed_tip_crimson_feather",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.1,
+        "fletcherstrestle:arrow_head": 0.5,
+        "fletcherstrestle:arrow_shaft": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_barbed_tip_crimson_rigid",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.2,
+        "fletcherstrestle:arrow_head": 0.5,
+        "fletcherstrestle:arrow_shaft": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_barbed_tip_crimson_trailing",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.3,
+        "fletcherstrestle:arrow_head": 0.5,
+        "fletcherstrestle:arrow_shaft": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_barbed_tip_crimson_serrated",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.4,
+        "fletcherstrestle:arrow_head": 0.5,
+        "fletcherstrestle:arrow_shaft": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_barbed_tip_crimson_bound",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.5,
+        "fletcherstrestle:arrow_head": 0.5,
+        "fletcherstrestle:arrow_shaft": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_barbed_tip_crimson_vex",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.6,
+        "fletcherstrestle:arrow_head": 0.5,
+        "fletcherstrestle:arrow_shaft": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_barbed_tip_warped_feather",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.1,
+        "fletcherstrestle:arrow_head": 0.5,
+        "fletcherstrestle:arrow_shaft": 1.1
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_barbed_tip_warped_rigid",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.2,
+        "fletcherstrestle:arrow_head": 0.5,
+        "fletcherstrestle:arrow_shaft": 1.1
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_barbed_tip_warped_trailing",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.3,
+        "fletcherstrestle:arrow_head": 0.5,
+        "fletcherstrestle:arrow_shaft": 1.1
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_barbed_tip_warped_serrated",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.4,
+        "fletcherstrestle:arrow_head": 0.5,
+        "fletcherstrestle:arrow_shaft": 1.1
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_barbed_tip_warped_bound",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.5,
+        "fletcherstrestle:arrow_head": 0.5,
+        "fletcherstrestle:arrow_shaft": 1.1
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_barbed_tip_warped_vex",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.6,
+        "fletcherstrestle:arrow_head": 0.5,
+        "fletcherstrestle:arrow_shaft": 1.1
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_weighted_blunt_oak_feather",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.1,
+        "fletcherstrestle:arrow_head": 0.6,
+        "fletcherstrestle:arrow_shaft": 0.1
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_weighted_blunt_oak_rigid",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.2,
+        "fletcherstrestle:arrow_head": 0.6,
+        "fletcherstrestle:arrow_shaft": 0.1
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_weighted_blunt_oak_trailing",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.3,
+        "fletcherstrestle:arrow_head": 0.6,
+        "fletcherstrestle:arrow_shaft": 0.1
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_weighted_blunt_oak_serrated",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.4,
+        "fletcherstrestle:arrow_head": 0.6,
+        "fletcherstrestle:arrow_shaft": 0.1
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_weighted_blunt_oak_bound",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.5,
+        "fletcherstrestle:arrow_head": 0.6,
+        "fletcherstrestle:arrow_shaft": 0.1
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_weighted_blunt_oak_vex",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.6,
+        "fletcherstrestle:arrow_head": 0.6,
+        "fletcherstrestle:arrow_shaft": 0.1
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_weighted_blunt_spruce_feather",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.1,
+        "fletcherstrestle:arrow_head": 0.6,
+        "fletcherstrestle:arrow_shaft": 0.2
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_weighted_blunt_spruce_rigid",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.2,
+        "fletcherstrestle:arrow_head": 0.6,
+        "fletcherstrestle:arrow_shaft": 0.2
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_weighted_blunt_spruce_trailing",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.3,
+        "fletcherstrestle:arrow_head": 0.6,
+        "fletcherstrestle:arrow_shaft": 0.2
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_weighted_blunt_spruce_serrated",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.4,
+        "fletcherstrestle:arrow_head": 0.6,
+        "fletcherstrestle:arrow_shaft": 0.2
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_weighted_blunt_spruce_bound",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.5,
+        "fletcherstrestle:arrow_head": 0.6,
+        "fletcherstrestle:arrow_shaft": 0.2
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_weighted_blunt_spruce_vex",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.6,
+        "fletcherstrestle:arrow_head": 0.6,
+        "fletcherstrestle:arrow_shaft": 0.2
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_weighted_blunt_birch_feather",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.1,
+        "fletcherstrestle:arrow_head": 0.6,
+        "fletcherstrestle:arrow_shaft": 0.3
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_weighted_blunt_birch_rigid",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.2,
+        "fletcherstrestle:arrow_head": 0.6,
+        "fletcherstrestle:arrow_shaft": 0.3
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_weighted_blunt_birch_trailing",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.3,
+        "fletcherstrestle:arrow_head": 0.6,
+        "fletcherstrestle:arrow_shaft": 0.3
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_weighted_blunt_birch_serrated",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.4,
+        "fletcherstrestle:arrow_head": 0.6,
+        "fletcherstrestle:arrow_shaft": 0.3
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_weighted_blunt_birch_bound",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.5,
+        "fletcherstrestle:arrow_head": 0.6,
+        "fletcherstrestle:arrow_shaft": 0.3
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_weighted_blunt_birch_vex",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.6,
+        "fletcherstrestle:arrow_head": 0.6,
+        "fletcherstrestle:arrow_shaft": 0.3
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_weighted_blunt_jungle_feather",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.1,
+        "fletcherstrestle:arrow_head": 0.6,
+        "fletcherstrestle:arrow_shaft": 0.4
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_weighted_blunt_jungle_rigid",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.2,
+        "fletcherstrestle:arrow_head": 0.6,
+        "fletcherstrestle:arrow_shaft": 0.4
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_weighted_blunt_jungle_trailing",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.3,
+        "fletcherstrestle:arrow_head": 0.6,
+        "fletcherstrestle:arrow_shaft": 0.4
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_weighted_blunt_jungle_serrated",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.4,
+        "fletcherstrestle:arrow_head": 0.6,
+        "fletcherstrestle:arrow_shaft": 0.4
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_weighted_blunt_jungle_bound",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.5,
+        "fletcherstrestle:arrow_head": 0.6,
+        "fletcherstrestle:arrow_shaft": 0.4
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_weighted_blunt_jungle_vex",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.6,
+        "fletcherstrestle:arrow_head": 0.6,
+        "fletcherstrestle:arrow_shaft": 0.4
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_weighted_blunt_acacia_feather",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.1,
+        "fletcherstrestle:arrow_head": 0.6,
+        "fletcherstrestle:arrow_shaft": 0.5
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_weighted_blunt_acacia_rigid",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.2,
+        "fletcherstrestle:arrow_head": 0.6,
+        "fletcherstrestle:arrow_shaft": 0.5
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_weighted_blunt_acacia_trailing",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.3,
+        "fletcherstrestle:arrow_head": 0.6,
+        "fletcherstrestle:arrow_shaft": 0.5
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_weighted_blunt_acacia_serrated",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.4,
+        "fletcherstrestle:arrow_head": 0.6,
+        "fletcherstrestle:arrow_shaft": 0.5
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_weighted_blunt_acacia_bound",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.5,
+        "fletcherstrestle:arrow_head": 0.6,
+        "fletcherstrestle:arrow_shaft": 0.5
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_weighted_blunt_acacia_vex",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.6,
+        "fletcherstrestle:arrow_head": 0.6,
+        "fletcherstrestle:arrow_shaft": 0.5
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_weighted_blunt_dark_oak_feather",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.1,
+        "fletcherstrestle:arrow_head": 0.6,
+        "fletcherstrestle:arrow_shaft": 0.6
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_weighted_blunt_dark_oak_rigid",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.2,
+        "fletcherstrestle:arrow_head": 0.6,
+        "fletcherstrestle:arrow_shaft": 0.6
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_weighted_blunt_dark_oak_trailing",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.3,
+        "fletcherstrestle:arrow_head": 0.6,
+        "fletcherstrestle:arrow_shaft": 0.6
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_weighted_blunt_dark_oak_serrated",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.4,
+        "fletcherstrestle:arrow_head": 0.6,
+        "fletcherstrestle:arrow_shaft": 0.6
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_weighted_blunt_dark_oak_bound",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.5,
+        "fletcherstrestle:arrow_head": 0.6,
+        "fletcherstrestle:arrow_shaft": 0.6
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_weighted_blunt_dark_oak_vex",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.6,
+        "fletcherstrestle:arrow_head": 0.6,
+        "fletcherstrestle:arrow_shaft": 0.6
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_weighted_blunt_mangrove_feather",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.1,
+        "fletcherstrestle:arrow_head": 0.6,
+        "fletcherstrestle:arrow_shaft": 0.7
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_weighted_blunt_mangrove_rigid",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.2,
+        "fletcherstrestle:arrow_head": 0.6,
+        "fletcherstrestle:arrow_shaft": 0.7
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_weighted_blunt_mangrove_trailing",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.3,
+        "fletcherstrestle:arrow_head": 0.6,
+        "fletcherstrestle:arrow_shaft": 0.7
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_weighted_blunt_mangrove_serrated",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.4,
+        "fletcherstrestle:arrow_head": 0.6,
+        "fletcherstrestle:arrow_shaft": 0.7
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_weighted_blunt_mangrove_bound",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.5,
+        "fletcherstrestle:arrow_head": 0.6,
+        "fletcherstrestle:arrow_shaft": 0.7
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_weighted_blunt_mangrove_vex",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.6,
+        "fletcherstrestle:arrow_head": 0.6,
+        "fletcherstrestle:arrow_shaft": 0.7
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_weighted_blunt_cherry_feather",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.1,
+        "fletcherstrestle:arrow_head": 0.6,
+        "fletcherstrestle:arrow_shaft": 0.8
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_weighted_blunt_cherry_rigid",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.2,
+        "fletcherstrestle:arrow_head": 0.6,
+        "fletcherstrestle:arrow_shaft": 0.8
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_weighted_blunt_cherry_trailing",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.3,
+        "fletcherstrestle:arrow_head": 0.6,
+        "fletcherstrestle:arrow_shaft": 0.8
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_weighted_blunt_cherry_serrated",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.4,
+        "fletcherstrestle:arrow_head": 0.6,
+        "fletcherstrestle:arrow_shaft": 0.8
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_weighted_blunt_cherry_bound",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.5,
+        "fletcherstrestle:arrow_head": 0.6,
+        "fletcherstrestle:arrow_shaft": 0.8
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_weighted_blunt_cherry_vex",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.6,
+        "fletcherstrestle:arrow_head": 0.6,
+        "fletcherstrestle:arrow_shaft": 0.8
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_weighted_blunt_pale_oak_feather",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.1,
+        "fletcherstrestle:arrow_head": 0.6,
+        "fletcherstrestle:arrow_shaft": 0.9
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_weighted_blunt_pale_oak_rigid",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.2,
+        "fletcherstrestle:arrow_head": 0.6,
+        "fletcherstrestle:arrow_shaft": 0.9
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_weighted_blunt_pale_oak_trailing",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.3,
+        "fletcherstrestle:arrow_head": 0.6,
+        "fletcherstrestle:arrow_shaft": 0.9
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_weighted_blunt_pale_oak_serrated",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.4,
+        "fletcherstrestle:arrow_head": 0.6,
+        "fletcherstrestle:arrow_shaft": 0.9
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_weighted_blunt_pale_oak_bound",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.5,
+        "fletcherstrestle:arrow_head": 0.6,
+        "fletcherstrestle:arrow_shaft": 0.9
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_weighted_blunt_pale_oak_vex",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.6,
+        "fletcherstrestle:arrow_head": 0.6,
+        "fletcherstrestle:arrow_shaft": 0.9
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_weighted_blunt_crimson_feather",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.1,
+        "fletcherstrestle:arrow_head": 0.6,
+        "fletcherstrestle:arrow_shaft": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_weighted_blunt_crimson_rigid",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.2,
+        "fletcherstrestle:arrow_head": 0.6,
+        "fletcherstrestle:arrow_shaft": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_weighted_blunt_crimson_trailing",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.3,
+        "fletcherstrestle:arrow_head": 0.6,
+        "fletcherstrestle:arrow_shaft": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_weighted_blunt_crimson_serrated",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.4,
+        "fletcherstrestle:arrow_head": 0.6,
+        "fletcherstrestle:arrow_shaft": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_weighted_blunt_crimson_bound",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.5,
+        "fletcherstrestle:arrow_head": 0.6,
+        "fletcherstrestle:arrow_shaft": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_weighted_blunt_crimson_vex",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.6,
+        "fletcherstrestle:arrow_head": 0.6,
+        "fletcherstrestle:arrow_shaft": 1.0
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_weighted_blunt_warped_feather",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.1,
+        "fletcherstrestle:arrow_head": 0.6,
+        "fletcherstrestle:arrow_shaft": 1.1
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_weighted_blunt_warped_rigid",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.2,
+        "fletcherstrestle:arrow_head": 0.6,
+        "fletcherstrestle:arrow_shaft": 1.1
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_weighted_blunt_warped_trailing",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.3,
+        "fletcherstrestle:arrow_head": 0.6,
+        "fletcherstrestle:arrow_shaft": 1.1
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_weighted_blunt_warped_serrated",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.4,
+        "fletcherstrestle:arrow_head": 0.6,
+        "fletcherstrestle:arrow_shaft": 1.1
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_weighted_blunt_warped_bound",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.5,
+        "fletcherstrestle:arrow_head": 0.6,
+        "fletcherstrestle:arrow_shaft": 1.1
+      }
+    },
+    {
+      "model": "fletcherstrestle:item/modular_arrow_weighted_blunt_warped_vex",
+      "predicate": {
+        "fletcherstrestle:arrow_fletching": 0.6,
+        "fletcherstrestle:arrow_head": 0.6,
+        "fletcherstrestle:arrow_shaft": 1.1
+      }
+    }
+  ],
+  "textures": {
+    "layer0": "fletcherstrestle:item/arrow/shafts/oak_shaft",
+    "layer1": "fletcherstrestle:item/arrow/fletchings/feather_fletching",
+    "layer2": "fletcherstrestle:item/arrow/heads/flint_head"
+  }
+}

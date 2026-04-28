@@ -61,6 +61,9 @@ public class ModItemModelProvider extends ItemModelProvider {
         basicItem(ModItems.FLAX_STRING.get());
         handheldItem(ModItems.DRAWKNIFE.get());
 
+
+        // TODO: Bow Data Gen
+
         Map<String, Float> limbs = new LinkedHashMap<>();
         limbs.put("oak", 0.1f);
         limbs.put("spruce", 0.2f);
@@ -99,6 +102,47 @@ public class ModItemModelProvider extends ItemModelProvider {
                 }
             }
         }
+
+        // TODO: Arrow Data Gen
+
+        Map<String, Float> heads = new LinkedHashMap<>();
+        heads.put("flint", 0.1f);
+        heads.put("broadhead", 0.2f);
+        heads.put("bodkin_point", 0.3f);
+        heads.put("resonance_tip", 0.4f);
+        heads.put("barbed_tip", 0.5f);
+        heads.put("weighted_blunt", 0.6f);
+
+        // Can reuse "limbs" map for the shafts since they use the same wood types
+        Map<String, Float> shafts = limbs;
+
+        Map<String, Float> fletchings = new LinkedHashMap<>();
+        fletchings.put("feather", 0.1f);
+        fletchings.put("rigid", 0.2f);
+        fletchings.put("trailing", 0.3f);
+        fletchings.put("serrated", 0.4f);
+        fletchings.put("bound", 0.5f);
+        fletchings.put("vex", 0.6f);
+
+        // The base arrow item (Fallback if it has no data)
+        ItemModelBuilder baseArrow = getBuilder("modular_arrow")
+                .parent(getExistingFile(mcLoc("item/generated")))
+                .texture("layer0", "item/arrow/shafts/oak_shaft")
+                .texture("layer1", "item/arrow/fletchings/feather_fletching")
+                .texture("layer2", "item/arrow/heads/flint_head");
+
+        for (var head : heads.entrySet()) {
+            for (var shaft : shafts.entrySet()) {
+                for (var fletching : fletchings.entrySet()) {
+                    buildArrowPermutation(baseArrow,
+                            head.getKey(), head.getValue(),
+                            shaft.getKey(), shaft.getValue(),
+                            fletching.getKey(), fletching.getValue());
+                }
+            }
+        }
+
+
     }
 
     private void buildBowPermutation(ItemModelBuilder baseBow, String limbName, float limbVal,
@@ -146,5 +190,32 @@ public class ModItemModelProvider extends ItemModelProvider {
 
             override.model(permutation).end();
         }
+    }
+
+    private void buildArrowPermutation(ItemModelBuilder baseArrow,
+                                      String headName, float headVal,
+                                      String shaftName, float shaftVal,
+                                      String fletchingName, float fletchingVal) {
+
+        String modelName = "modular_arrow_" + headName + "_" + shaftName + "_" + fletchingName;
+
+        // Pointing to your texture folders
+        String shaftTex = "item/arrow/shafts/" + shaftName + "_shaft";
+        String fletchingTex = "item/arrow/fletchings/" + fletchingName + "_fletching";
+        String headTex = "item/arrow/heads/" + headName + "_head";
+
+        // Generate the JSON file for this exact arrow
+        ItemModelBuilder permutation = getBuilder(modelName)
+                .parent(getExistingFile(mcLoc("item/generated")))
+                .texture("layer0", shaftTex)
+                .texture("layer1", fletchingTex)
+                .texture("layer2", headTex);
+
+        // Attach it to the base arrow's overrides
+        baseArrow.override()
+                .predicate(ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "arrow_head"), headVal)
+                .predicate(ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "arrow_shaft"), shaftVal)
+                .predicate(ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "arrow_fletching"), fletchingVal)
+                .model(permutation).end();
     }
 }

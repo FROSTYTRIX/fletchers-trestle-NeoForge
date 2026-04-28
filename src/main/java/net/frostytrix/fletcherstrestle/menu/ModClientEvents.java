@@ -2,7 +2,7 @@ package net.frostytrix.fletcherstrestle.menu;
 
 import net.frostytrix.fletcherstrestle.FletcherTrestle;
 import net.frostytrix.fletcherstrestle.item.ModItems;
-import net.frostytrix.fletcherstrestle.registry.ModDataComponents;
+import net.frostytrix.fletcherstrestle.component.ModDataComponents;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.api.distmarker.Dist;
@@ -71,6 +71,53 @@ public class ModClientEvents {
                     case "Spider" -> 0.1F;
                     case "Flax" -> 0.2F;
                     case "High Tension" -> 0.3F;
+                    default -> 0.1F;
+                };
+            });
+
+            ItemProperties.register(ModItems.MODULAR_ARROW.get(), ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "arrow_head"), (stack, level, entity, seed) -> {
+                var assembly = stack.get(ModDataComponents.ARROW_ASSEMBLY.get());
+                if (assembly == null) return 0.0F;
+                return switch (assembly.head()) {
+                    case "flint" -> 0.1F;
+                    case "broadhead" -> 0.2F;
+                    case "bodkin_point" -> 0.3F;
+                    case "resonance_tip" -> 0.4F;
+                    case "barbed_tip" -> 0.5F;
+                    case "weighted_blunt" -> 0.6F;
+                    default -> 0.1F;
+                };
+            });
+
+            ItemProperties.register(ModItems.MODULAR_ARROW.get(), ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "arrow_shaft"), (stack, level, entity, seed) -> {
+                var assembly = stack.get(ModDataComponents.ARROW_ASSEMBLY.get());
+                if (assembly == null) return 0.0F;
+                return switch (assembly.shaft()) {
+                    case "oak" -> 0.1F;
+                    case "spruce" -> 0.2F;
+                    case "birch" -> 0.3F;
+                    case "jungle" -> 0.4F;
+                    case "acacia" -> 0.5F;
+                    case "dark_oak" -> 0.6F;
+                    case "mangrove" -> 0.7F;
+                    case "cherry" -> 0.8F;
+                    case "pale_oak" -> 0.9F;
+                    case "crimson" -> 1.0F;
+                    case "warped" -> 1.1F;
+                    default -> 0.1F;
+                };
+            });
+
+            ItemProperties.register(ModItems.MODULAR_ARROW.get(), ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "arrow_fletching"), (stack, level, entity, seed) -> {
+                var assembly = stack.get(ModDataComponents.ARROW_ASSEMBLY.get());
+                if (assembly == null) return 0.0F;
+                return switch (assembly.fletching()) {
+                    case "feather" -> 0.1F;
+                    case "rigid" -> 0.2F;
+                    case "trailing" -> 0.3F;
+                    case "serrated" -> 0.4F;
+                    case "bound" -> 0.5F;
+                    case "vex" -> 0.6F;
                     default -> 0.1F;
                 };
             });

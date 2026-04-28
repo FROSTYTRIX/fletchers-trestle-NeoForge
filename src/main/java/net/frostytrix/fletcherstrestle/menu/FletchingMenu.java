@@ -2,7 +2,7 @@ package net.frostytrix.fletcherstrestle.menu;
 
 import net.frostytrix.fletcherstrestle.component.BowAssembly;
 import net.frostytrix.fletcherstrestle.item.ModItems;
-import net.frostytrix.fletcherstrestle.registry.ModDataComponents;
+import net.frostytrix.fletcherstrestle.component.ModDataComponents;
 import net.frostytrix.fletcherstrestle.tags.ModTags;
 import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;

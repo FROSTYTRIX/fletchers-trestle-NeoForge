@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "fletcherstrestle:item/arrow/shafts/jungle_shaft",
+    "layer1": "fletcherstrestle:item/arrow/fletchings/rigid_fletching",
+    "layer2": "fletcherstrestle:item/arrow/heads/weighted_blunt_head"
+  }
+}

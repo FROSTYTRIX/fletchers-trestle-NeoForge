@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "fletcherstrestle:item/arrow/shafts/mangrove_shaft",
+    "layer1": "fletcherstrestle:item/arrow/fletchings/trailing_fletching",
+    "layer2": "fletcherstrestle:item/arrow/heads/barbed_tip_head"
+  }
+}

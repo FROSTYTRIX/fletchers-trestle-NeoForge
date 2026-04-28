@@ -4,7 +4,7 @@ import net.frostytrix.fletcherstrestle.FletcherTrestle;
 import net.frostytrix.fletcherstrestle.component.BowAssembly;
 import net.frostytrix.fletcherstrestle.item.custom.ModularBowItem;
 import net.frostytrix.fletcherstrestle.menu.FletchingMenu;
-import net.frostytrix.fletcherstrestle.registry.ModDataComponents;
+import net.frostytrix.fletcherstrestle.component.ModDataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.world.entity.Entity;

@@ -1,7 +1,7 @@
 package net.frostytrix.fletcherstrestle.item.custom;
 
 import net.frostytrix.fletcherstrestle.component.BowAssembly;
-import net.frostytrix.fletcherstrestle.registry.ModDataComponents;
+import net.frostytrix.fletcherstrestle.component.ModDataComponents;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.effect.MobEffectInstance;

@@ -2,6 +2,7 @@ package net.frostytrix.fletcherstrestle.item;
 
 import net.frostytrix.fletcherstrestle.FletcherTrestle;
 import net.frostytrix.fletcherstrestle.block.ModBlocks;
+import net.frostytrix.fletcherstrestle.item.custom.ModularArrowItem;
 import net.frostytrix.fletcherstrestle.item.custom.ModularBowItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemNameBlockItem;
@@ -92,8 +93,7 @@ public class ModItems {
     public static final DeferredItem<Item> FLAX = ITEMS.register("flax",
             () -> new Item(new Item.Properties()));
 
-    public static final DeferredItem<Item> FLAX_STRING = ITEMS.register("flax_string",
-            () -> new Item(new Item.Properties()));
+
 
 
 
@@ -106,6 +106,14 @@ public class ModItems {
     // 3. Strings
     public static final DeferredItem<Item> HIGH_TENSION_STRING = ITEMS.register("high_tension_string",
             () -> new Item(new Item.Properties()));
+
+    public static final DeferredItem<Item> FLAX_STRING = ITEMS.register("flax_string",
+            () -> new Item(new Item.Properties()));
+
+    // Arrows
+
+    public static final DeferredItem<Item> MODULAR_ARROW = ITEMS.register("modular_arrow",
+            () -> new ModularArrowItem(new Item.Properties()));
 
     public static void register(IEventBus eventBus) {
         ITEMS.register(eventBus);
