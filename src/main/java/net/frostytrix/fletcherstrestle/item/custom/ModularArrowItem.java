@@ -17,6 +17,7 @@ import java.util.List;
 
 public class ModularArrowItem extends ArrowItem {
 
+
     public ModularArrowItem(Properties properties) {
         super(properties);
     }
@@ -66,8 +67,9 @@ public class ModularArrowItem extends ArrowItem {
 
     @Override
     public AbstractArrow createArrow(Level level, ItemStack ammo, LivingEntity shooter, @Nullable ItemStack weapon) {
-        ModularArrowEntity arrow = new ModularArrowEntity(level, shooter, ammo.copyWithCount(1), weapon);
-        return arrow;
+        // Pass the 'ammo' ItemStack directly into your entity!
+        // This 'ammo' contains your ArrowAssembly component.
+        return new ModularArrowEntity(level, shooter, ammo.copy(), weapon);
     }
 
 

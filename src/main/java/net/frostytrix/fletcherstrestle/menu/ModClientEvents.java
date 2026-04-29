@@ -1,8 +1,8 @@
 package net.frostytrix.fletcherstrestle.menu;
 
 import net.frostytrix.fletcherstrestle.FletcherTrestle;
-import net.frostytrix.fletcherstrestle.item.ModItems;
 import net.frostytrix.fletcherstrestle.component.ModDataComponents;
+import net.frostytrix.fletcherstrestle.item.ModItems;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.api.distmarker.Dist;

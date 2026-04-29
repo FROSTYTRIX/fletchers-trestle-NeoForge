@@ -1,10 +1,12 @@
 package net.frostytrix.fletcherstrestle.event;
 
 import net.frostytrix.fletcherstrestle.FletcherTrestle;
+import net.frostytrix.fletcherstrestle.component.ArrowAssembly;
 import net.frostytrix.fletcherstrestle.component.BowAssembly;
+import net.frostytrix.fletcherstrestle.component.ModDataComponents;
+import net.frostytrix.fletcherstrestle.entity.ModularArrowEntity;
 import net.frostytrix.fletcherstrestle.item.custom.ModularBowItem;
 import net.frostytrix.fletcherstrestle.menu.FletchingMenu;
-import net.frostytrix.fletcherstrestle.component.ModDataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.world.entity.Entity;
@@ -20,6 +22,7 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 import net.neoforged.neoforge.event.entity.ProjectileImpactEvent;
+import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 import net.neoforged.neoforge.event.entity.living.LivingKnockBackEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 
@@ -141,6 +144,31 @@ public class ModServerEvents {
                         lightning.moveTo(hitEntity.position());
                         arrow.level().addFreshEntity(lightning);
                     }
+                }
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public static void onLivingDamage(LivingDamageEvent.Pre event) {
+
+
+        // In 1.21, use event.getSource() (or event.getDamageSource() depending on your mapping snapshot)
+        if (event.getSource().getDirectEntity() instanceof ModularArrowEntity arrow) {
+            ItemStack ammo = arrow.getSyncedItemStack();
+            ArrowAssembly assembly = ammo.get(ModDataComponents.ARROW_ASSEMBLY.get());
+            if ("bodkin_point".equals(assembly.head())) {
+                LivingEntity target = event.getEntity();
+                float armorValue = target.getArmorValue();
+
+                if (armorValue > 0) {
+                    // Use getNewDamage() and setNewDamage() in 1.21+
+                    float baseDamage = event.getNewDamage();
+
+                    // Add bonus damage to simulate bypassing 25% of the target's armor
+                    float bonusDamage = (armorValue * 0.25f) * (baseDamage * 0.04f);
+
+                    event.setNewDamage(baseDamage + bonusDamage);
                 }
             }
         }
