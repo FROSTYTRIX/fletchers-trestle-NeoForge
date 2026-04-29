@@ -9,6 +9,7 @@ import net.frostytrix.fletcherstrestle.entity.ModEntities;
 import net.frostytrix.fletcherstrestle.item.ModItems;
 import net.frostytrix.fletcherstrestle.item.custom.ModularBowItem;
 import net.frostytrix.fletcherstrestle.component.ModDataComponents;
+import net.frostytrix.fletcherstrestle.network.FletchingTabPayload;
 import net.minecraft.client.renderer.BiomeColors;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -20,13 +21,21 @@ import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.event.MovementInputUpdateEvent;
 import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
 
-@EventBusSubscriber(modid = FletcherTrestle.MOD_ID, value = Dist.CLIENT)
+import static net.frostytrix.fletcherstrestle.FletcherTrestle.MOD_ID;
+
+@EventBusSubscriber(modid = MOD_ID, value = Dist.CLIENT)
 public class ModClientEvents {
 
     @SubscribeEvent
     public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
         event.registerBlockEntityRenderer(ModBlockEntities.SHAVING_HORSE_BE.get(), ShavingHorseRenderer::new);
         event.registerEntityRenderer(ModEntities.MODULAR_ARROW.get(), ModularArrowRenderer::new);
+    }
+
+    @SubscribeEvent
+    public static void registerPayloads(final net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent event) {
+        final net.neoforged.neoforge.network.registration.PayloadRegistrar registrar = event.registrar(MOD_ID);
+        registrar.playToServer(FletchingTabPayload.TYPE, FletchingTabPayload.STREAM_CODEC, FletchingTabPayload::handleData);
     }
 
     @SubscribeEvent

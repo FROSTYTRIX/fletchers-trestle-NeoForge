@@ -2,6 +2,8 @@ package net.frostytrix.fletcherstrestle.menu;
 
 import net.frostytrix.fletcherstrestle.FletcherTrestle;
 import net.frostytrix.fletcherstrestle.config.FletcherConfig;
+import net.frostytrix.fletcherstrestle.item.ModItems;
+import net.frostytrix.fletcherstrestle.network.FletchingTabPayload;
 import net.frostytrix.fletcherstrestle.network.TuningPacket;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -9,9 +11,11 @@ import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.item.ItemStack;
 
 public class FletchingScreen extends AbstractContainerScreen<FletchingMenu> {
     private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "textures/gui/fletching_table.png");
+    private static final ResourceLocation ARROW_TEXTURE = ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "textures/gui/fletching_table_arrow.png");
     private static final ResourceLocation MINIGAME_TEXTURE = ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "textures/gui/minigame.png");
 
     private boolean isTuning = false;
@@ -47,20 +51,43 @@ public class FletchingScreen extends AbstractContainerScreen<FletchingMenu> {
     @Override
     public void containerTick() {
         super.containerTick();
-
         if (this.assembleButton != null) {
-            // The button is ONLY active if the recipe is valid AND we aren't currently playing the mini-game!
+            // Hide the button entirely on the Arrow tab!
+            this.assembleButton.visible = this.menu.activeTab == 0;
             this.assembleButton.active = this.getMenu().canAssemble() && !this.isTuning;
         }
     }
 
     @Override
     protected void renderBg(GuiGraphics guiGraphics, float partialTick, int mouseX, int mouseY) {
-        // Calculate the center of the screen
         int x = (width - imageWidth) / 2;
         int y = (height - imageHeight) / 2;
-        // Draw the background texture
-        guiGraphics.blit(TEXTURE, x, y, 0, 0, imageWidth, imageHeight);
+
+        // Dynamically draw the correct background based on the tab!
+        if (this.menu.activeTab == 0) {
+            guiGraphics.blit(TEXTURE, x, y, 0, 0, imageWidth, imageHeight);
+        } else {
+            guiGraphics.blit(ARROW_TEXTURE, x, y, 0, 0, imageWidth, imageHeight);
+        }
+
+
+        // Draw Bow Tab (Tab 0)
+        int bowTabY = y + 10;
+        if (this.menu.activeTab == 0) {
+            guiGraphics.blit(TEXTURE, x - 23, bowTabY, 0, 166, 28, 32); // Active appearance
+        } else {
+            guiGraphics.blit(TEXTURE, x - 23, bowTabY, 28, 166, 28, 32); // Inactive appearance
+        }
+        guiGraphics.renderItem(new ItemStack(ModItems.MODULAR_BOW.get()), x - 17, bowTabY + 8); // Icon
+
+        // Draw Arrow Tab (Tab 1)
+        int arrowTabY = y + 44;
+        if (this.menu.activeTab == 1) {
+            guiGraphics.blit(TEXTURE, x - 23, arrowTabY, 0, 166, 28, 32);
+        } else {
+            guiGraphics.blit(TEXTURE, x - 23, arrowTabY, 28, 166, 28, 32);
+        }
+        guiGraphics.renderItem(new ItemStack(ModItems.MODULAR_ARROW.get()), x - 17, arrowTabY + 8); // Icon
     }
 
     @Override
@@ -75,6 +102,31 @@ public class FletchingScreen extends AbstractContainerScreen<FletchingMenu> {
             renderTuningBar(guiGraphics);
             updateBarLogic();
         }
+    }
+
+    @Override
+    public boolean mouseClicked(double mouseX, double mouseY, int button) {
+        int x = this.leftPos;
+        int y = this.topPos;
+
+        // Check if player clicked the Bow Tab (Tab 0)
+        if (this.menu.activeTab != 0 && mouseX >= x - 23 && mouseX < x && mouseY >= y + 10 && mouseY < y + 42) {
+            net.neoforged.neoforge.network.PacketDistributor.sendToServer(new FletchingTabPayload(0));
+            this.menu.activeTab = 0;
+            // Optional: Play a click sound
+            net.minecraft.client.Minecraft.getInstance().getSoundManager().play(net.minecraft.client.resources.sounds.SimpleSoundInstance.forUI(net.minecraft.sounds.SoundEvents.UI_BUTTON_CLICK, 1.0F));
+            return true;
+        }
+
+        // Check if player clicked the Arrow Tab (Tab 1)
+        if (this.menu.activeTab != 1 && mouseX >= x - 28 && mouseX < x && mouseY >= y + 44 && mouseY < y + 76) {
+            net.neoforged.neoforge.network.PacketDistributor.sendToServer(new FletchingTabPayload(1));
+            this.menu.activeTab = 1;
+            net.minecraft.client.Minecraft.getInstance().getSoundManager().play(net.minecraft.client.resources.sounds.SimpleSoundInstance.forUI(net.minecraft.sounds.SoundEvents.UI_BUTTON_CLICK, 1.0F));
+            return true;
+        }
+
+        return super.mouseClicked(mouseX, mouseY, button);
     }
 
     private void updateBarLogic() {
