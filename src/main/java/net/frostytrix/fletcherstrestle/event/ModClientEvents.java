@@ -9,6 +9,7 @@ import net.frostytrix.fletcherstrestle.entity.ModEntities;
 import net.frostytrix.fletcherstrestle.item.ModItems;
 import net.frostytrix.fletcherstrestle.item.custom.ModularBowItem;
 import net.frostytrix.fletcherstrestle.network.FletchingTabPayload;
+import net.frostytrix.fletcherstrestle.network.QuiverSlotPacket;
 import net.minecraft.client.renderer.BiomeColors;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -35,6 +36,7 @@ public class ModClientEvents {
     public static void registerPayloads(final net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent event) {
         final net.neoforged.neoforge.network.registration.PayloadRegistrar registrar = event.registrar(MOD_ID);
         registrar.playToServer(FletchingTabPayload.TYPE, FletchingTabPayload.STREAM_CODEC, FletchingTabPayload::handleData);
+        registrar.playToServer(QuiverSlotPacket.TYPE, QuiverSlotPacket.CODEC, QuiverSlotPacket::handle);
     }
 
     @SubscribeEvent

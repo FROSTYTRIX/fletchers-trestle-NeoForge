@@ -1,8 +1,10 @@
 package net.frostytrix.fletcherstrestle.component;
 
+import com.mojang.serialization.Codec;
 import net.frostytrix.fletcherstrestle.FletcherTrestle;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.network.codec.ByteBufCodecs;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
@@ -29,6 +31,13 @@ public class ModDataComponents {
                             .networkSynchronized(ArrowAssembly.STREAM_CODEC)
                             .build()
             );
+
+    public static final Supplier<DataComponentType<Integer>> QUIVER_SELECTED_SLOT =
+            DATA_COMPONENT_TYPES.register("quiver_selected_slot",
+            () -> DataComponentType.<Integer>builder()
+                    .persistent(Codec.INT)
+                    .networkSynchronized(ByteBufCodecs.INT)
+                    .build());
 
     public static void register(IEventBus bus) {DATA_COMPONENT_TYPES.register(bus);}
 }

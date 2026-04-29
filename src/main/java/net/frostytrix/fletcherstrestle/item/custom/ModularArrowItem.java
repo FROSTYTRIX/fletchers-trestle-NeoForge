@@ -73,7 +73,6 @@ public class ModularArrowItem extends ArrowItem {
     }
 
 
-
     public enum HeadStats {
         FLINT("flint", 1.0f, false, false),
         BROADHEAD("broadhead", 1.15f, true, false), // Applies Bleed

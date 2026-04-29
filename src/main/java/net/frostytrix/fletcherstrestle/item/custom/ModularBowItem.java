@@ -4,6 +4,8 @@ import net.frostytrix.fletcherstrestle.component.BowAssembly;
 import net.frostytrix.fletcherstrestle.component.ModDataComponents;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
@@ -20,6 +22,7 @@ public class ModularBowItem extends BowItem {
     public ModularBowItem(Properties properties) {
         super(properties);
     }
+
 
     @Override
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
@@ -42,22 +45,78 @@ public class ModularBowItem extends BowItem {
 
     @Override
     public void releaseUsing(ItemStack stack, Level level, LivingEntity entityLiving, int timeLeft) {
+        if (!(entityLiving instanceof Player player)) return;
         BowAssembly assembly = stack.get(ModDataComponents.BOW_ASSEMBLY.get());
 
+        // --- 1. THE QUIVER SWAP TRICK ---
+        int quiverInvSlot = -1;
+        ItemStack quiverStack = ItemStack.EMPTY;
+        int quiverSelectedIdx = -1;
+        ItemStack extractedArrow = ItemStack.EMPTY;
+
+        // Search the inventory for a quiver
+        for (int i = 0; i < player.getInventory().getContainerSize(); i++) {
+            ItemStack invStack = player.getInventory().getItem(i);
+            if (invStack.getItem() instanceof ModularQuiverItem) {
+                int selected = invStack.getOrDefault(ModDataComponents.QUIVER_SELECTED_SLOT.get(), 0);
+                List<ItemStack> list = ModularQuiverItem.getQuiverContents(invStack);
+
+                // If the selected slot has an arrow, pull it out!
+                if (selected >= 0 && selected < list.size() && !list.get(selected).isEmpty() && list.get(selected).getItem() instanceof net.minecraft.world.item.ArrowItem) {
+                    quiverInvSlot = i;
+                    quiverStack = invStack;
+                    quiverSelectedIdx = selected;
+                    extractedArrow = list.get(selected).copy();
+                    break;
+                }
+            }
+        }
+
+        // SWAP: Temporarily place the selected arrow directly into the player's inventory
+        if (quiverInvSlot != -1) {
+            player.getInventory().setItem(quiverInvSlot, extractedArrow);
+        }
+
+        // --- 2. VANILLA FIRING LOGIC ---
+        // Vanilla will find the arrow we just placed, shoot it, and consume it naturally!
         int chargeTicks = this.getUseDuration(stack, entityLiving) - timeLeft;
-
         float customDrawTime = getDrawTime(stack);
-
         int scaledCharge = (int) ((chargeTicks / customDrawTime) * 20.0f);
-
         int fakeTimeLeft = this.getUseDuration(stack, entityLiving) - scaledCharge;
-        super.releaseUsing(stack, level, entityLiving, fakeTimeLeft);
-        if (assembly != null && entityLiving instanceof Player player) {
 
+        super.releaseUsing(stack, level, entityLiving, fakeTimeLeft);
+
+        if (assembly != null && entityLiving instanceof Player player1) {
+
+            if (assembly.limbMaterial().equals("Acacia")) {
+                player1.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 60, 0, false, false, true));
+            }
+
+            StringStats string = StringStats.fromString(assembly.stringMaterial());
+            if (string.getDurabilityCost() > 1) {
+                stack.hurtAndBreak((int) (string.getDurabilityCost() - 1), player1, LivingEntity.getSlotForHand(player1.getUsedItemHand()));
+            }
+        }
+
+        // --- 3. RESTORE THE QUIVER ---
+        if (quiverInvSlot != -1) {
+            // Get the arrow back (it might be shrunken by 1 now)
+            ItemStack modifiedArrow = player.getInventory().getItem(quiverInvSlot);
+
+            // Put it back inside the Quiver's container
+            List<ItemStack> list = ModularQuiverItem.getQuiverContents(quiverStack);
+            list.set(quiverSelectedIdx, modifiedArrow.isEmpty() ? ItemStack.EMPTY : modifiedArrow);
+            ModularQuiverItem.saveQuiverContents(quiverStack, list);
+
+            // SWAP: Put the Quiver back into the player's inventory
+            player.getInventory().setItem(quiverInvSlot, quiverStack);
+        }
+
+        // --- 4. YOUR EXISTING CUSTOM EFFECTS ---
+        if (assembly != null) {
             if (assembly.limbMaterial().equals("Acacia")) {
                 player.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 60, 0, false, false, true));
             }
-
             StringStats string = StringStats.fromString(assembly.stringMaterial());
             if (string.getDurabilityCost() > 1) {
                 stack.hurtAndBreak((int) (string.getDurabilityCost() - 1), player, LivingEntity.getSlotForHand(player.getUsedItemHand()));
@@ -111,6 +170,39 @@ public class ModularBowItem extends BowItem {
                     player.setXRot(player.getXRot() + (level.random.nextFloat() - 0.5F) * 3.0F);
                 }
             }
+        }
+    }
+
+    @Override
+    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+        ItemStack stack = player.getItemInHand(hand);
+
+        // 1. Check if the player has a normal arrow in their open inventory
+        boolean hasNormalArrow = !player.getProjectile(stack).isEmpty();
+
+        // 2. Check if the player has a Quiver with an arrow selected
+        boolean hasQuiverArrow = false;
+        for (int i = 0; i < player.getInventory().getContainerSize(); i++) {
+            ItemStack invStack = player.getInventory().getItem(i);
+            if (invStack.getItem() instanceof ModularQuiverItem) {
+                int selected = invStack.getOrDefault(ModDataComponents.QUIVER_SELECTED_SLOT.get(), 0);
+                List<ItemStack> list = ModularQuiverItem.getQuiverContents(invStack);
+
+                // If the selected slot has an arrow, we are good to go!
+                if (selected >= 0 && selected < list.size() && !list.get(selected).isEmpty() && list.get(selected).getItem() instanceof net.minecraft.world.item.ArrowItem) {
+                    hasQuiverArrow = true;
+                    break;
+                }
+            }
+        }
+
+        // 3. If they are in Survival and have NO ammo anywhere, block the shot.
+        if (!player.getAbilities().instabuild && !hasNormalArrow && !hasQuiverArrow) {
+            return InteractionResultHolder.fail(stack);
+        } else {
+            // Otherwise, allow them to start pulling the bow!
+            player.startUsingItem(hand);
+            return InteractionResultHolder.consume(stack);
         }
     }
 

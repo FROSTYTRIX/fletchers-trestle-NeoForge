@@ -4,6 +4,7 @@ import net.frostytrix.fletcherstrestle.FletcherTrestle;
 import net.frostytrix.fletcherstrestle.block.ModBlocks;
 import net.frostytrix.fletcherstrestle.item.custom.ModularArrowItem;
 import net.frostytrix.fletcherstrestle.item.custom.ModularBowItem;
+import net.frostytrix.fletcherstrestle.item.custom.ModularQuiverItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemNameBlockItem;
 import net.neoforged.bus.api.IEventBus;
@@ -114,6 +115,9 @@ public class ModItems {
 
     public static final DeferredItem<Item> MODULAR_ARROW = ITEMS.register("modular_arrow",
             () -> new ModularArrowItem(new Item.Properties()));
+
+    public static final DeferredItem<Item> QUIVER = ITEMS.register("quiver",
+            () -> new ModularQuiverItem(new Item.Properties().stacksTo(1)));
 
     public static void register(IEventBus eventBus) {
         ITEMS.register(eventBus);

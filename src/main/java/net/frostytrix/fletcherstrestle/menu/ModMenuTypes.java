@@ -15,5 +15,11 @@ public class ModMenuTypes {
     public static final DeferredHolder<MenuType<?>, MenuType<FletchingMenu>> FLETCHING_MENU =
             MENUS.register("fletching_menu", () -> new MenuType<>(FletchingMenu::new, FeatureFlags.DEFAULT_FLAGS));
 
+    public static final java.util.function.Supplier<net.minecraft.world.inventory.MenuType<net.frostytrix.fletcherstrestle.menu.QuiverMenu>> QUIVER_MENU =
+            MENUS.register("quiver_menu", () -> new net.minecraft.world.inventory.MenuType<>(
+                    net.frostytrix.fletcherstrestle.menu.QuiverMenu::new,
+                    net.minecraft.world.flag.FeatureFlags.DEFAULT_FLAGS
+            ));
+
     public static void register(IEventBus bus) {MENUS.register(bus);}
 }

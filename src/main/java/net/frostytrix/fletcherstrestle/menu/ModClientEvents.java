@@ -1,6 +1,7 @@
 package net.frostytrix.fletcherstrestle.menu;
 
 import net.frostytrix.fletcherstrestle.FletcherTrestle;
+import net.frostytrix.fletcherstrestle.client.QuiverHudOverlay;
 import net.frostytrix.fletcherstrestle.component.ModDataComponents;
 import net.frostytrix.fletcherstrestle.item.ModItems;
 import net.minecraft.client.renderer.item.ItemProperties;
@@ -19,6 +20,15 @@ public class ModClientEvents {
     @SubscribeEvent
     public static void registerScreens(RegisterMenuScreensEvent event) {
         event.register(ModMenuTypes.FLETCHING_MENU.get(), FletchingScreen::new);
+        event.register(ModMenuTypes.QUIVER_MENU.get(), QuiverScreen::new);
+    }
+
+    @SubscribeEvent
+    public static void registerGuiOverlays(net.neoforged.neoforge.client.event.RegisterGuiLayersEvent event) {
+        // This ensures the Quiver HUD renders perfectly on top of the screen
+        event.registerAbove(net.neoforged.neoforge.client.gui.VanillaGuiLayers.HOTBAR,
+                ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "quiver_hud"),
+                QuiverHudOverlay::render);
     }
 
     @SubscribeEvent

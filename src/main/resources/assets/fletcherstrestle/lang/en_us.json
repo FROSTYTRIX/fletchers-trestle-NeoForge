@@ -37,6 +37,7 @@
 
 "item.fletcherstrestle.modular_bow": "Modular Bow",
 "item.fletcherstrestle.modular_arrow": "Modular Arrow",
+"item.fletcherstrestle.quiver": "Quiver",
 
 "block.fletcherstrestle.shaving_horse": "Shaving Horse",
 "block.fletcherstrestle.steam_box": "Steam Box",
@@ -46,5 +47,11 @@
 "fletcherstrestle.configuration.minigame_settings": "Minigame Settings",
 "fletcherstrestle.configuration.cursor_speed": "Cursor Speed",
 "fletcherstrestle.configuration.punish_multiplier": "Punish Multiplier",
-"fletcherstrestle.configuration.minimum_score": "Minimum Score"
+"fletcherstrestle.configuration.minimum_score": "Minimum Score",
+"fletcherstrestle.configuration.quiver_hud_x": "Quiver Hud X",
+"fletcherstrestle.configuration.quiver_hud_y": "Quiver Hud Y",
+
+"key.fletcherstrestle.quiver_left": "Quiver Cycle Left",
+"key.fletcherstrestle.quiver_right": "Quiver Cycle Right",
+"key.categories.fletcherstrestle": "Fletcher's Trestle"
 }

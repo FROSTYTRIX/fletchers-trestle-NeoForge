@@ -61,6 +61,7 @@ public class ModItemModelProvider extends ItemModelProvider {
         basicItem(ModItems.FLAX_STRING.get());
         handheldItem(ModItems.DRAWKNIFE.get());
 
+        basicItem(ModItems.QUIVER.get());
 
         // TODO: Bow Data Gen
 
