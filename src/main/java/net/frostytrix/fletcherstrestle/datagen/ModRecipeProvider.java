@@ -2,11 +2,13 @@ package net.frostytrix.fletcherstrestle.datagen;
 
 import net.frostytrix.fletcherstrestle.block.ModBlocks;
 import net.frostytrix.fletcherstrestle.item.ModItems;
+import net.frostytrix.fletcherstrestle.tags.ModTags;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.*;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.Blocks;
 import net.neoforged.neoforge.common.conditions.IConditionBuilder;
 
 import java.util.concurrent.CompletableFuture;
@@ -63,5 +65,15 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                 .pattern("III")
                 .define('I', Items.IRON_INGOT)
                 .unlockedBy("has_iron_ingot", has(Items.IRON_INGOT)).save(recipeOutput);
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModItems.QUIVER.get())
+                .pattern("SLS")
+                .pattern("LCL")
+                .pattern("ILI")
+                .define('I', Items.IRON_INGOT)
+                .define('S', ModTags.Items.BOW_STRINGS)
+                .define('L', Items.LEATHER)
+                .define('C', Blocks.CHEST)
+                .unlockedBy("has_arrow", has(ItemTags.ARROWS)).save(recipeOutput);
     }
 }

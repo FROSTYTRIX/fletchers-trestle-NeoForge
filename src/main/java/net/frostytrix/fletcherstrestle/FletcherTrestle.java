@@ -5,10 +5,14 @@ import net.frostytrix.fletcherstrestle.block.ModBlocks;
 import net.frostytrix.fletcherstrestle.block.entity.ModBlockEntities;
 import net.frostytrix.fletcherstrestle.component.ModDataComponents;
 import net.frostytrix.fletcherstrestle.config.FletcherConfig;
+import net.frostytrix.fletcherstrestle.effect.ModEffects;
 import net.frostytrix.fletcherstrestle.entity.ModEntities;
 import net.frostytrix.fletcherstrestle.item.ModCreativeModeTabs;
 import net.frostytrix.fletcherstrestle.item.ModItems;
 import net.frostytrix.fletcherstrestle.menu.ModMenuTypes;
+import net.minecraft.core.RegistrySetBuilder;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.data.worldgen.DimensionTypes;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModContainer;
@@ -28,6 +32,7 @@ public class FletcherTrestle {
     public static final String MOD_ID = "fletcherstrestle";
     public static final Logger LOGGER = LogUtils.getLogger();
 
+
     // The constructor for the mod class is the first code that is run when your mod is loaded.
     // FML will recognize some parameter types like IEventBus or ModContainer and pass them in automatically.
     public FletcherTrestle(IEventBus modEventBus, ModContainer modContainer) {
@@ -46,6 +51,7 @@ public class FletcherTrestle {
         ModMenuTypes.register(modEventBus);
         ModBlockEntities.register(modEventBus);
         ModEntities.register(modEventBus);
+        ModEffects.register(modEventBus);
 
         // Register the item to a creative tab
         modEventBus.addListener(this::addCreative);

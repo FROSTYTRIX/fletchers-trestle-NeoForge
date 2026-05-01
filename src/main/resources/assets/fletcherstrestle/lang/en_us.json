@@ -53,5 +53,7 @@
 
 "key.fletcherstrestle.quiver_left": "Quiver Cycle Left",
 "key.fletcherstrestle.quiver_right": "Quiver Cycle Right",
-"key.categories.fletcherstrestle": "Fletcher's Trestle"
+"key.categories.fletcherstrestle": "Fletcher's Trestle",
+
+"effect.fletcherstrestle.bleed": "Bleed"
 }

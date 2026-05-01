@@ -2,6 +2,7 @@ package net.frostytrix.fletcherstrestle.entity;
 
 import net.frostytrix.fletcherstrestle.component.ArrowAssembly;
 import net.frostytrix.fletcherstrestle.component.ModDataComponents;
+import net.frostytrix.fletcherstrestle.effect.ModEffects;
 import net.frostytrix.fletcherstrestle.item.ModItems;
 import net.frostytrix.fletcherstrestle.item.custom.ModularArrowItem;
 import net.minecraft.core.Direction;
@@ -121,7 +122,7 @@ public class ModularArrowEntity extends AbstractArrow {
         if (result.getEntity() instanceof LivingEntity target) {
             // BROADHEAD: Bleeding (Poison) for 3s (60 ticks)
             if ("broadhead".equals(assembly.head())) {
-                target.addEffect(new MobEffectInstance(MobEffects.POISON, 60, 0));
+                target.addEffect(new MobEffectInstance(ModEffects.BLEED_EFFECT, 60, 0));
             }
 
             // RESONANCE TIP: Setup the delayed echo hit

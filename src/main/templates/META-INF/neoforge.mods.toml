@@ -45,9 +45,8 @@ displayName="${mod_name}" #mandatory
 #authors=""
 
 # The description text for the mod (multi line!) (#mandatory)
-description='''
-Example mod description.
-'''
+description='''Fletcher's Trestle overhauls Minecraft?s archery by replacing the basic crafting table bow with a deep, rewarding modular system. \nFrom the raw log to the perfect release, every step of the process is in your hands.'''
+
 
 # The [[mixins]] block allows you to declare your mixin config to FML so that it gets loaded.
 #[[mixins]]
