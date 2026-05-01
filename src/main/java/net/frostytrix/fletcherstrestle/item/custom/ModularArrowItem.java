@@ -109,9 +109,14 @@ public class ModularArrowItem extends ArrowItem {
         OAK("oak", 1.0f, 1.0f),
         SPRUCE("spruce", 1.0f, 1.1f),   // Drops slightly faster (heavy)
         BIRCH("birch", 1f, 0.9f),
-        JUNGLE("jungle", 1f, 0.9f),
-        DARK_OAK("dark_oak", 1f, 0.9f),
-        ACACIA("acacia", 1f, 0.9f)
+        JUNGLE("jungle", 1f, 1.0f),
+        DARK_OAK("dark_oak", 1f, 01.0f),
+        ACACIA("acacia", 1f, 1.0f),
+        MANGROVE("mangrove", 1f, 1.0f),
+        CHERRY("cherry", 1f, 1.0f),
+        PALE_OAK("pale_oak", 1f, 1.0f),
+        CRIMSON("crimson", 1f, 1.0f),
+        WARPED("warped", 1f, 1.0f)
         ;// Flies faster, drops less
 
         private final String name;

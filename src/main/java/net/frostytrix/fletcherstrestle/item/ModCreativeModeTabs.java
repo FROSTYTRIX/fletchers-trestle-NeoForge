@@ -2,6 +2,8 @@ package net.frostytrix.fletcherstrestle.item;
 
 import net.frostytrix.fletcherstrestle.FletcherTrestle;
 import net.frostytrix.fletcherstrestle.block.ModBlocks;
+import net.frostytrix.fletcherstrestle.component.BowAssembly;
+import net.frostytrix.fletcherstrestle.component.ModDataComponents;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -71,7 +73,11 @@ public class ModCreativeModeTabs {
                         output.accept(ModItems.FLAX.get());
                         output.accept(ModItems.FLAX_SEEDS.get());
 
-                        output.accept(ModItems.MODULAR_BOW.get());
+                        ItemStack modularBowDisplay = new ItemStack(ModItems.MODULAR_BOW.get());
+                        modularBowDisplay.set(ModDataComponents.BOW_ASSEMBLY.get(),
+                                new BowAssembly("oak", "wood", "spider", 1.0f));
+                        output.accept(modularBowDisplay);
+                        output.accept(ModItems.QUIVER.get());
                     })
                     .build());
 

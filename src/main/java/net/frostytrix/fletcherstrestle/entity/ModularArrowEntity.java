@@ -119,10 +119,16 @@ public class ModularArrowEntity extends AbstractArrow {
         // Resolve the hit
         super.onHitEntity(result);
 
+        ModularArrowItem.HeadStats head = ModularArrowItem.HeadStats.fromString(assembly.head());
+
         if (result.getEntity() instanceof LivingEntity target) {
             // BROADHEAD: Bleeding (Poison) for 3s (60 ticks)
             if ("broadhead".equals(assembly.head())) {
                 target.addEffect(new MobEffectInstance(ModEffects.BLEED_EFFECT, 60, 0));
+            }
+
+            if (head.isArmorPiercing()) {
+                this.setBaseDamage(this.getBaseDamage() * 1.25);
             }
 
             // RESONANCE TIP: Setup the delayed echo hit
@@ -191,6 +197,7 @@ public class ModularArrowEntity extends AbstractArrow {
         }
     }
 
+
     @Override
     public void tick() {
         super.tick();
@@ -233,6 +240,7 @@ public class ModularArrowEntity extends AbstractArrow {
             }
         }
     }
+
 
     @Override
     protected void onHitBlock(BlockHitResult result) {

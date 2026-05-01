@@ -206,6 +206,7 @@ public class ModularBowItem extends BowItem {
         }
     }
 
+
     public enum LimbStats {
         OAK("oak", 20.0f, 1.0f,false,false),
         SPRUCE("spruce", 22.0f, 1.0f,false,false),
