@@ -1,123 +1,117 @@
 # Fletcher's Trestle
 
-> **Fletcher's Trestle** overhauls Minecraft's archery by replacing the basic crafting table bow with a deep, rewarding modular system.  
-> From the raw log to the perfect release, every step of the process is in your hands.
+> **Minecraft 1.21.1 · NeoForge 21.1.227 · v1.1.0 · MIT License**
 
-![Minecraft](https://img.shields.io/badge/Minecraft-1.21.1-brightgreen)
-![NeoForge](https://img.shields.io/badge/NeoForge-21.1.227-orange)
-![Version](https://img.shields.io/badge/version-1.1.0-blue)
-![License](https://img.shields.io/badge/license-MIT-lightgrey)
+[![CurseForge](https://img.shields.io/curseforge/dt/1228552?logo=curseforge&label=CurseForge&color=F16436)](https://www.curseforge.com/minecraft/mc-mods/fletchers-trestle)
+[![GitHub](https://img.shields.io/github/v/release/FROSTYTRIX/fletchers-trestle-NeoForge?logo=github&label=GitHub)](https://github.com/FROSTYTRIX/fletchers-trestle-NeoForge/releases)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
----
-
-## 🏹 Overview
-
-Fletcher's Trestle transforms the vanilla fletching table into a fully functional crafting station for modular bows and arrows. Instead of a single shapeless recipe, you'll source, process, and assemble every part yourself — choosing materials that affect the final weapon's feel and power.
+**Fletcher's Trestle** overhauls Minecraft's archery by replacing the basic crafting table bow with a deep, rewarding modular system.  
+From the raw log to the perfect release, every step of the process is in your hands.
 
 ---
 
 ## ✨ Features
 
-### Modular Bow Crafting
-Build your bow part by part via the upgraded **Fletching Table** UI:
+### 🏹 Modular Bow Crafting
+Bows are no longer assembled in a crafting table — they are **built step by step** using dedicated tools and blocks. Each component impacts the final weapon's stats.
 
-- **Limbs** — available in all vanilla wood types (Oak, Spruce, Birch, Jungle, Acacia, Dark Oak, Mangrove, Cherry, Pale Oak, Crimson, Warped). Each limb must first be roughed out as a `Rough Limb`, then bent into a `Pliable Limb` using the Steam Box.
-- **Risers** — the handle of the bow. Available in Wood, Iron, and Copper — each with different properties.
-- **Strings** — `Flax String` (crafted from grown flax) or `High Tension String` for more demanding builds.
+### 🪚 New Blocks & Tools
+| Block / Item | Role |
+|---|---|
+| **Shaving Horse** | Strip logs into rough limbs using the Drawknife |
+| **Steam Box** | Bend a rough limb into a pliable bow limb |
+| **Drawknife** | Tool used on the Shaving Horse |
+| **Fletching Table** *(modified)* | Final assembly + arrow crafting via the fletching minigame |
 
-### Modular Arrow Crafting
-Arrows are also assembled from components, giving you control over their behavior.
+### 🎯 Fletching Minigame
+Arrow and bow crafting on the Fletching Table is driven by an **interactive minigame** instead of a static recipe. Precision and timing affect the quality of the result.
 
-### The Fletching Minigame
-Crafting a bow isn't just clicking a button. A **skill-based minigame** runs when you assemble the bow, determining the final quality of the result. The better you play, the better your bow. Configurable via `fletcherstrestle-client.toml`.
+### 🪶 Modular Arrows
+Craft arrows from individual components: shaft, nock, fletching, and arrowhead. Mix and match materials to tune your ammunition.
 
-### Quiver
-Store and manage multiple arrow types in a **Quiver** item. A HUD element shows your current arrow count, with a configurable position.
+### 🩸 Bleed Effect
+A new status effect applied by certain arrowheads. Deals damage over time after impact.
 
-### Bleed Effect
-Certain arrow combinations can apply a **Bleed** status effect to targets, dealing damage over time.
+### 🌾 Flax
+A new crop. Flax fibres are used in string and fletching components, providing an early-game alternative to wool-based string.
 
-### New Crops & Materials
-- **Flax** — a new crop grown from `Flax Seeds`. Harvest it to produce `Flax`, which is spun into `Flax String`.
-
-### New Workblocks
-- **Steam Box** — used to bend `Rough Limbs` into `Pliable Limbs`, a required step before assembling a bow.
-- **Shaving Horse** — the woodworking bench used to shape raw wood into bow parts.
+### 🎒 Quiver + HUD
+Carry multiple arrow types in a Quiver item. A dedicated HUD element displays the currently selected ammunition.
 
 ---
 
-## 🪵 Crafting Workflow
+## 🔧 Crafting Pipeline
 
 ```
-Raw Log
-  └─► Drawknife + Shaving Horse ──► Rough Limb
-                                          │
-                                    Steam Box ──► Pliable Limb
-                                                        │
-                                  Fletching Table ◄─────┤◄─── Riser
-                                        │          ◄─────────── String
-                                        ▼
-                                  [ Minigame ]
-                                        │
-                                        ▼
-                                   Modular Bow
+Oak Log
+  └─► Shaving Horse + Drawknife
+        └─► Rough Bow Limb
+              └─► Steam Box
+                    └─► Pliable Bow Limb
+                          └─► Fletching Table (minigame)
+                                └─► Assembled Bow
 ```
+
+Arrows follow a parallel pipeline: grow Flax → harvest fibres → combine with a shaft material and arrowhead at the Fletching Table.
 
 ---
 
 ## ⚙️ Configuration
 
-The mod exposes several options in `fletcherstrestle-client.toml`:
+All options are exposed in `fletcherstrestle-common.toml` (located in your `config/` folder).
 
-| Option | Default | Description |
+| Key | Default | Description |
 |---|---|---|
-| `cursor_speed` | `0.02` | Speed of the cursor in the fletching minigame |
-| `punish_multiplier` | `3.0` | How harshly missing the sweet spot is penalized |
-| `minimum_score` | `0.2` | Minimum quality score even if you miss completely |
-| `quiver_hud_x` | `0` | Horizontal offset of the Quiver HUD (0 = centered) |
-| `quiver_hud_y` | `15` | Vertical position of the Quiver HUD from top of screen |
+| `minigameCursorSpeed` | `2.0` | Speed of the cursor in the fletching minigame |
+| `minigamePunishMultiplier` | `1.5` | Penalty multiplier for missed clicks |
+| `minigameMinScore` | `50` | Minimum score required to obtain a result |
+| `quiverHudX` | `10` | X position of the Quiver HUD element |
+| `quiverHudY` | `10` | Y position of the Quiver HUD element |
 
 ---
 
 ## 📦 Installation
 
-1. Install [NeoForge 21.1.227](https://neoforged.net/) for Minecraft **1.21.1**
-2. Download the latest `.jar` from [CurseForge](https://www.curseforge.com/minecraft/mc-mods/fletchers-trestle)
-3. Drop the `.jar` into your `mods/` folder
-4. Launch the game
-
-**No dependencies required.**
+1. Install **[NeoForge 21.1.227](https://neoforged.net/)** for Minecraft 1.21.1.
+2. Download the latest `.jar` from [CurseForge](https://www.curseforge.com/minecraft/mc-mods/fletchers-trestle) or [GitHub Releases](https://github.com/FROSTYTRIX/fletchers-trestle-NeoForge/releases).
+3. Drop the `.jar` into your `mods/` folder.
+4. Launch the game. Configuration is auto-generated on first run.
 
 ---
 
-## 🛠️ Building from Source
+## 🛠️ Build from Source
 
 ```bash
 git clone https://github.com/FROSTYTRIX/fletchers-trestle-NeoForge.git
 cd fletchers-trestle-NeoForge
 ./gradlew build
+# Output: build/libs/fletcherstrestle-<version>.jar
 ```
 
-The compiled `.jar` will be in `build/libs/`.
+Requires **Java 21** and an internet connection for Gradle to download NeoForge MDK dependencies.
 
 ---
 
 ## 🗺️ Roadmap
 
-- [ ] Modular Crossbow
-- [ ] More arrow effect types
-- [ ] Additional riser materials
-- [ ] Datapacks support for custom limb materials
+- [ ] **Modular Crossbow** — extend the modular system to crossbows with interchangeable prods, stocks, and triggers
+- [ ] Additional arrowhead materials (bone, obsidian, flint tiers)
+- [ ] Quiver skin system (dyeable)
+- [ ] JEI / REI integration for all custom recipes
+- [ ] Data-driven recipe support
+
+---
+
+## 🔗 Links
+
+- 📖 [CurseForge page](https://www.curseforge.com/minecraft/mc-mods/fletchers-trestle)
+- 💻 [GitHub repository](https://github.com/FROSTYTRIX/fletchers-trestle-NeoForge)
+- 🐦 [@FROSTYTRIX_code on X/Twitter](https://twitter.com/FROSTYTRIX_code)
 
 ---
 
 ## 📜 License
 
-This project is licensed under the **MIT License**. See [`TEMPLATE_LICENSE.txt`](./TEMPLATE_LICENSE.txt) for details.
-
----
-
-## 👤 Author
-
-Made with ❤️ by **FROSTYTRIX**  
-[GitHub](https://github.com/FROSTYTRIX) · [Twitter / X](https://twitter.com/FROSTYTRIX_code) · [CurseForge](https://www.curseforge.com/minecraft/mc-mods/fletchers-trestle)
+This mod is released under the **MIT License**. See [LICENSE](LICENSE) for details.  
+The NeoForge MDK template is licensed separately under [TEMPLATE_LICENSE.txt](TEMPLATE_LICENSE.txt).
