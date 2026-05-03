@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "C": {
+      "item": "minecraft:chest"
+    },
+    "I": {
+      "item": "minecraft:iron_ingot"
+    },
+    "L": {
+      "item": "minecraft:leather"
+    },
+    "S": {
+      "tag": "fletcherstrestle:bow_strings"
+    }
+  },
+  "pattern": [
+    "SLS",
+    "LCL",
+    "ILI"
+  ],
+  "result": {
+    "count": 1,
+    "id": "fletcherstrestle:quiver"
+  }
+}

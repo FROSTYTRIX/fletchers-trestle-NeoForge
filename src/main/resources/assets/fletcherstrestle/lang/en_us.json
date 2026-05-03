@@ -56,7 +56,7 @@
 "key.categories.fletcherstrestle": "Fletcher's Trestle",
 
 "block.fletcherstrestle.archery_target": "Archery Target",
-"gui.fletcherstrestle.retrieve_arrows": "Retrieve Arrows",
+"gui.fletcherstrestle.clear_shots": "Clear Shots",
 
 "effect.fletcherstrestle.bleed": "Bleed"
 }
