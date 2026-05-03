@@ -1,6 +1,7 @@
 package net.frostytrix.fletcherstrestle.block;
 
 import net.frostytrix.fletcherstrestle.FletcherTrestle;
+import net.frostytrix.fletcherstrestle.block.custom.ArcheryTargetBlock;
 import net.frostytrix.fletcherstrestle.block.custom.FlaxCropBlock;
 import net.frostytrix.fletcherstrestle.block.custom.ShavingHorseBlock;
 import net.frostytrix.fletcherstrestle.block.custom.SteamBoxBlock;
@@ -33,6 +34,11 @@ public class ModBlocks {
     public static final DeferredBlock<Block> FLAX_CROP = registerBlock("flax_crop",
             () -> new FlaxCropBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.WHEAT).noOcclusion().noCollission()));
 
+    public static final DeferredBlock<Block> ARCHERY_TARGET = registerBlock("archery_target",
+            () -> new ArcheryTargetBlock(Block.Properties.of()
+                    .strength(1.0f)
+                    .sound(SoundType.WOOD)
+                    .noOcclusion()));
 
     private static <T extends Block> DeferredBlock<T> registerBlock(String name, Supplier<T> block){
         DeferredBlock<T> toReturn = BLOCKS.register(name, block);

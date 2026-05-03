@@ -55,5 +55,8 @@
 "key.fletcherstrestle.quiver_right": "Quiver Cycle Right",
 "key.categories.fletcherstrestle": "Fletcher's Trestle",
 
+"block.fletcherstrestle.archery_target": "Archery Target",
+"gui.fletcherstrestle.retrieve_arrows": "Retrieve Arrows",
+
 "effect.fletcherstrestle.bleed": "Bleed"
 }

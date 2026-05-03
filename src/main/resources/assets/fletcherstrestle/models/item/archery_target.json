@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/handheld",
+  "textures": {
+    "layer0": "fletcherstrestle:item/archery_target_item"
+  }
+}

@@ -25,6 +25,12 @@ public class ModBlockEntities {
                             .build(null)
             );
 
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<ArcheryTargetBlockEntity>> ARCHERY_TARGET_BE =
+            BLOCK_ENTITIES.register("archery_target_be", () ->
+                    BlockEntityType.Builder.of(ArcheryTargetBlockEntity::new, ModBlocks.ARCHERY_TARGET.get())
+                            .build(null)
+            );
+
     public static void register(IEventBus eventBus) {
         BLOCK_ENTITIES.register(eventBus);
     }

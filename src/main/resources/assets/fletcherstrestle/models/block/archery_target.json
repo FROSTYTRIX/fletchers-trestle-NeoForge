@@ -1,0 +1,21 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "target": "fletcherstrestle:block/archery_target",
+    "particle": "fletcherstrestle:block/archery_target"
+  },
+  "elements": [
+    {
+      "from": [2, 2, 0],
+      "to": [14, 14, 2],
+      "faces": {
+        "north": { "texture": "#target", "uv": [2, 2, 14, 14] },
+        "south": { "texture": "#target", "uv": [2, 2, 14, 14] },
+        "east":  { "texture": "#target", "uv": [0, 2, 2, 14] },
+        "west":  { "texture": "#target", "uv": [0, 2, 2, 14] },
+        "up":    { "texture": "#target", "uv": [2, 0, 14, 2] },
+        "down":  { "texture": "#target", "uv": [2, 0, 14, 2] }
+      }
+    }
+  ]
+}

@@ -4,6 +4,8 @@ import net.frostytrix.fletcherstrestle.FletcherTrestle;
 import net.frostytrix.fletcherstrestle.client.QuiverHudOverlay;
 import net.frostytrix.fletcherstrestle.component.ModDataComponents;
 import net.frostytrix.fletcherstrestle.item.ModItems;
+import net.frostytrix.fletcherstrestle.network.FletchingTabPayload;
+import net.frostytrix.fletcherstrestle.network.QuiverSlotPacket;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.api.distmarker.Dist;
@@ -12,24 +14,29 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 
+import static net.frostytrix.fletcherstrestle.FletcherTrestle.MOD_ID;
+
 // Notice the bus = MOD and value = CLIENT.
 // This ensures servers don't crash trying to load graphics!
-@EventBusSubscriber(modid = FletcherTrestle.MOD_ID, value = Dist.CLIENT)
+@EventBusSubscriber(modid = MOD_ID, value = Dist.CLIENT)
 public class ModClientEvents {
 
     @SubscribeEvent
     public static void registerScreens(RegisterMenuScreensEvent event) {
         event.register(ModMenuTypes.FLETCHING_MENU.get(), FletchingScreen::new);
         event.register(ModMenuTypes.QUIVER_MENU.get(), QuiverScreen::new);
+        event.register(ModMenuTypes.ARCHERY_TARGET_MENU.get(), ArcheryTargetScreen::new);
     }
 
     @SubscribeEvent
     public static void registerGuiOverlays(net.neoforged.neoforge.client.event.RegisterGuiLayersEvent event) {
         // This ensures the Quiver HUD renders perfectly on top of the screen
         event.registerAbove(net.neoforged.neoforge.client.gui.VanillaGuiLayers.HOTBAR,
-                ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "quiver_hud"),
+                ResourceLocation.fromNamespaceAndPath(MOD_ID, "quiver_hud"),
                 QuiverHudOverlay::render);
     }
+
+
 
     @SubscribeEvent
     public static void onClientSetup(FMLClientSetupEvent event) {
@@ -44,7 +51,7 @@ public class ModClientEvents {
             });
 
             // 2. Our Custom Material Properties!
-            ItemProperties.register(ModItems.MODULAR_BOW.get(), ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "limb"), (stack, level, entity, seed) -> {
+            ItemProperties.register(ModItems.MODULAR_BOW.get(), ResourceLocation.fromNamespaceAndPath(MOD_ID, "limb"), (stack, level, entity, seed) -> {
                 var assembly = stack.get(ModDataComponents.BOW_ASSEMBLY.get());
                 if (assembly == null) return 0.0F; // Default
                 return switch (assembly.limbMaterial()) {
@@ -63,7 +70,7 @@ public class ModClientEvents {
                 };
             });
 
-            ItemProperties.register(ModItems.MODULAR_BOW.get(), ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "riser"), (stack, level, entity, seed) -> {
+            ItemProperties.register(ModItems.MODULAR_BOW.get(), ResourceLocation.fromNamespaceAndPath(MOD_ID, "riser"), (stack, level, entity, seed) -> {
                 var assembly = stack.get(ModDataComponents.BOW_ASSEMBLY.get());
                 if (assembly == null) return 0.0F;
                 return switch (assembly.riserMaterial()) {
@@ -74,7 +81,7 @@ public class ModClientEvents {
                 };
             });
 
-            ItemProperties.register(ModItems.MODULAR_BOW.get(), ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "string"), (stack, level, entity, seed) -> {
+            ItemProperties.register(ModItems.MODULAR_BOW.get(), ResourceLocation.fromNamespaceAndPath(MOD_ID, "string"), (stack, level, entity, seed) -> {
                 var assembly = stack.get(ModDataComponents.BOW_ASSEMBLY.get());
                 if (assembly == null) return 0.0F;
                 return switch (assembly.stringMaterial()) {
@@ -85,7 +92,7 @@ public class ModClientEvents {
                 };
             });
 
-            ItemProperties.register(ModItems.MODULAR_ARROW.get(), ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "arrow_head"), (stack, level, entity, seed) -> {
+            ItemProperties.register(ModItems.MODULAR_ARROW.get(), ResourceLocation.fromNamespaceAndPath(MOD_ID, "arrow_head"), (stack, level, entity, seed) -> {
                 var assembly = stack.get(ModDataComponents.ARROW_ASSEMBLY.get());
                 if (assembly == null) return 0.0F;
                 return switch (assembly.head()) {
@@ -99,7 +106,7 @@ public class ModClientEvents {
                 };
             });
 
-            ItemProperties.register(ModItems.MODULAR_ARROW.get(), ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "arrow_shaft"), (stack, level, entity, seed) -> {
+            ItemProperties.register(ModItems.MODULAR_ARROW.get(), ResourceLocation.fromNamespaceAndPath(MOD_ID, "arrow_shaft"), (stack, level, entity, seed) -> {
                 var assembly = stack.get(ModDataComponents.ARROW_ASSEMBLY.get());
                 if (assembly == null) return 0.0F;
                 return switch (assembly.shaft()) {
@@ -118,7 +125,7 @@ public class ModClientEvents {
                 };
             });
 
-            ItemProperties.register(ModItems.MODULAR_ARROW.get(), ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "arrow_fletching"), (stack, level, entity, seed) -> {
+            ItemProperties.register(ModItems.MODULAR_ARROW.get(), ResourceLocation.fromNamespaceAndPath(MOD_ID, "arrow_fletching"), (stack, level, entity, seed) -> {
                 var assembly = stack.get(ModDataComponents.ARROW_ASSEMBLY.get());
                 if (assembly == null) return 0.0F;
                 return switch (assembly.fletching()) {

@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "facing=south": { "model": "fletcherstrestle:block/archery_target" },
+    "facing=west":  { "model": "fletcherstrestle:block/archery_target", "y": 90 },
+    "facing=north": { "model": "fletcherstrestle:block/archery_target", "y": 180 },
+    "facing=east":  { "model": "fletcherstrestle:block/archery_target", "y": 270 }
+  }
+}

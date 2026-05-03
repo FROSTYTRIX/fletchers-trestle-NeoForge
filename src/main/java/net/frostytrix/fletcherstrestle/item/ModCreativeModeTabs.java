@@ -26,6 +26,8 @@ public class ModCreativeModeTabs {
                     .displayItems((itemDisplayParameters, output) -> {
                         output.accept(ModBlocks.STEAM_BOX);
                         output.accept(ModBlocks.SHAVING_HORSE);
+                        output.accept(ModBlocks.ARCHERY_TARGET);
+
                         output.accept(ModItems.DRAWKNIFE.get());
 
                         output.accept(ModItems.ROUGH_OAK_LIMB.get());

@@ -11,17 +11,27 @@ public class ModNetworking {
 
     @SubscribeEvent
     public static void register(final RegisterPayloadHandlersEvent event) {
-        // Create a registrar for our mod
         final PayloadRegistrar registrar = event.registrar(FletcherTrestle.MOD_ID);
 
-        // Register our TuningPacket. It goes FROM the Client TO the Server.
+        // Client → Server : change tab in the fletching menu
         registrar.playToServer(
                 TuningPacket.TYPE,
                 TuningPacket.CODEC,
-                (payload, context) -> {
-                    // This enqueueWork ensures the logic runs safely on the main server thread
-                    context.enqueueWork(() -> payload.handle(context.player()));
-                }
+                (payload, context) -> context.enqueueWork(() -> payload.handle(context.player()))
+        );
+
+        // Server → Client : sync shot list to the archery target GUI
+        registrar.playToClient(
+                TargetSyncPacket.TYPE,
+                TargetSyncPacket.CODEC,
+                (payload, context) -> context.enqueueWork(() -> payload.handle(context.player()))
+        );
+
+
+        registrar.playToServer(
+                ClearShotsPacket.TYPE,
+                ClearShotsPacket.CODEC,
+                (payload, context) -> context.enqueueWork(() -> payload.handle(context.player()))
         );
     }
 }

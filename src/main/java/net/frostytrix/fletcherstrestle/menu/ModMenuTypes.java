@@ -21,5 +21,9 @@ public class ModMenuTypes {
                     net.minecraft.world.flag.FeatureFlags.DEFAULT_FLAGS
             ));
 
+    public static final DeferredHolder<MenuType<?>, MenuType<ArcheryTargetMenu>> ARCHERY_TARGET_MENU =
+            MENUS.register("archery_target_menu",
+                    () -> new MenuType<>(ArcheryTargetMenu::new, FeatureFlags.DEFAULT_FLAGS));
+
     public static void register(IEventBus bus) {MENUS.register(bus);}
 }
