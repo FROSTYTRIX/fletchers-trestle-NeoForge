@@ -86,18 +86,6 @@ public class ModularBowItem extends BowItem {
 
         super.releaseUsing(stack, level, entityLiving, fakeTimeLeft);
 
-        if (assembly != null && entityLiving instanceof Player player1) {
-
-            if (assembly.limbMaterial().equals("Acacia")) {
-                player1.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 60, 0, false, false, true));
-            }
-
-            StringStats string = StringStats.fromString(assembly.stringMaterial());
-            if (string.getDurabilityCost() > 1) {
-                stack.hurtAndBreak((int) (string.getDurabilityCost() - 1), player1, LivingEntity.getSlotForHand(player1.getUsedItemHand()));
-            }
-        }
-
         // --- 3. RESTORE THE QUIVER ---
         if (quiverInvSlot != -1) {
             // Get the arrow back (it might be shrunken by 1 now)

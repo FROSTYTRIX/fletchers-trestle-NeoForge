@@ -80,6 +80,7 @@ public class ModCreativeModeTabs {
                                 new BowAssembly("oak", "wood", "spider", 1.0f));
                         output.accept(modularBowDisplay);
                         output.accept(ModItems.QUIVER.get());
+                        output.accept(ModItems.FLETCHER_GUIDE.get());
                     })
                     .build());
 

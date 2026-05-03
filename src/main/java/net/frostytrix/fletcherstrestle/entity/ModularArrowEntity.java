@@ -246,7 +246,7 @@ public class ModularArrowEntity extends AbstractArrow {
     protected void onHitBlock(BlockHitResult result) {
         ArrowAssembly assembly = this.getAssembly();
 
-        if (assembly != null && "jungle".equals(assembly.shaft()) && this.bounceCount < MAX_BOUNCES && this.random.nextFloat() < 1.0f) { // Keep at 1.0f for testing
+        if (assembly != null && "jungle".equals(assembly.shaft()) && this.bounceCount < MAX_BOUNCES && this.random.nextFloat() < 0.85f) { // Keep at 1.0f for testing
 
             // 1. SNAP TO SURFACE: Prevent the arrow from embedding in the wall and slingshotting out!
             Vec3 hitPos = result.getLocation();

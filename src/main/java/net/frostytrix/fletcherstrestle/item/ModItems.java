@@ -2,6 +2,7 @@ package net.frostytrix.fletcherstrestle.item;
 
 import net.frostytrix.fletcherstrestle.FletcherTrestle;
 import net.frostytrix.fletcherstrestle.block.ModBlocks;
+import net.frostytrix.fletcherstrestle.item.custom.FletcherGuideItem;
 import net.frostytrix.fletcherstrestle.item.custom.ModularArrowItem;
 import net.frostytrix.fletcherstrestle.item.custom.ModularBowItem;
 import net.frostytrix.fletcherstrestle.item.custom.ModularQuiverItem;
@@ -118,6 +119,9 @@ public class ModItems {
 
     public static final DeferredItem<Item> QUIVER = ITEMS.register("quiver",
             () -> new ModularQuiverItem(new Item.Properties().stacksTo(1)));
+
+    public static final DeferredItem<Item> FLETCHER_GUIDE = ITEMS.register("fletcher_guide",
+            () -> new FletcherGuideItem(new Item.Properties().stacksTo(1)));
 
     public static void register(IEventBus eventBus) {
         ITEMS.register(eventBus);

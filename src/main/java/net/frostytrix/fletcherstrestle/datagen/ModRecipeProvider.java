@@ -81,5 +81,10 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                 .requires(Blocks.WHITE_WOOL).requires(Items.BLACK_DYE).requires(Items.BLUE_DYE).requires(Items.RED_DYE).requires(Items.YELLOW_DYE)
                 .unlockedBy("has_paper", has(Items.PAPER))
                 .save(recipeOutput);
+
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC,ModItems.FLETCHER_GUIDE.get())
+                .requires(Items.BOOK).requires(ModTags.Items.BOW_STRINGS)
+                .unlockedBy("has_string", has(Items.STRING))
+                .save(recipeOutput);
     }
 }

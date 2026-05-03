@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "minecraft:book"
+    },
+    {
+      "tag": "fletcherstrestle:bow_strings"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "fletcherstrestle:fletcher_guide"
+  }
+}
