@@ -8,6 +8,7 @@ import net.frostytrix.fletcherstrestle.component.ModDataComponents;
 import net.frostytrix.fletcherstrestle.entity.ModEntities;
 import net.frostytrix.fletcherstrestle.item.ModItems;
 import net.frostytrix.fletcherstrestle.item.custom.ModularBowItem;
+import net.frostytrix.fletcherstrestle.item.custom.ModularCrossbowItem;
 import net.frostytrix.fletcherstrestle.network.FletchingTabPayload;
 import net.frostytrix.fletcherstrestle.network.QuiverSlotPacket;
 import net.minecraft.client.renderer.BiomeColors;
@@ -56,6 +57,20 @@ public class ModClientEvents {
         Player player = event.getPlayer();
         ItemStack stack = player.getUseItem();
 
+        if (player.isUsingItem() && stack.getItem() instanceof ModularCrossbowItem crossbow) {
+            float f = (float) (stack.getUseDuration(player) - player.getUseItemRemainingTicks());
+            float maxDrawTime = crossbow.getUseDuration(stack, player) - 3;
+            float progress = f / maxDrawTime;
+
+            if (progress > 1.0F) {
+                progress = 1.0F;
+            } else {
+                progress = progress * progress;
+            }
+
+            // Standard Vanilla Zoom Math (reduces FOV by up to 15%)
+            event.setNewFovModifier(event.getFovModifier() * (1.0F - (progress * 0.15F)));
+        }
 
         if (player.isUsingItem() && stack.getItem() instanceof ModularBowItem bow) {
             int ticksUsed = stack.getUseDuration(player) - player.getUseItemRemainingTicks();

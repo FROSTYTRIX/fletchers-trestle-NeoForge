@@ -3,7 +3,11 @@ package net.frostytrix.fletcherstrestle;
 import net.frostytrix.fletcherstrestle.item.ModItems;
 import net.frostytrix.fletcherstrestle.item.custom.ModularBowItem;
 import net.minecraft.client.renderer.item.ItemProperties;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.CrossbowItem;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.component.ChargedProjectiles;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModContainer;
@@ -49,6 +53,32 @@ public class FletcherTrestleClient {
                     (stack, level, entity, seed) -> {
                         return entity != null && entity.isUsingItem() && entity.getUseItem() == stack ? 1.0F : 0.0F;
                     });
+
+            ItemProperties.register(ModItems.MODULAR_CROSSBOW.get(), ResourceLocation.withDefaultNamespace("pull"), (stack, level, entity, seed) -> {
+                if (entity == null) {
+                    return 0.0F;
+                } else {
+                    return CrossbowItem.isCharged(stack) ? 0.0F : (float)(stack.getUseDuration(entity) - entity.getUseItemRemainingTicks()) / (float)CrossbowItem.getChargeDuration(stack, entity);
+                }
+            });
+
+            ItemProperties.register(ModItems.MODULAR_CROSSBOW.get(), ResourceLocation.withDefaultNamespace("pulling"), (stack, level, entity, seed) -> {
+                return entity != null && entity.isUsingItem() && entity.getUseItem() == stack && !CrossbowItem.isCharged(stack) ? 1.0F : 0.0F;
+            });
+
+            ItemProperties.register(ModItems.MODULAR_CROSSBOW.get(), ResourceLocation.withDefaultNamespace("charged"), (stack, level, entity, seed) -> {
+                return entity != null && CrossbowItem.isCharged(stack) ? 1.0F : 0.0F;
+            });
+
+            ItemProperties.register(ModItems.MODULAR_CROSSBOW.get(), ResourceLocation.withDefaultNamespace("firework"), (stack, level, entity, seed) -> {
+                if (entity != null && CrossbowItem.isCharged(stack)) {
+                    ChargedProjectiles projectiles = stack.get(DataComponents.CHARGED_PROJECTILES);
+                    if (projectiles != null && projectiles.contains(Items.FIREWORK_ROCKET)) {
+                        return 1.0F;
+                    }
+                }
+                return 0.0F;
+            });
 
         });
 

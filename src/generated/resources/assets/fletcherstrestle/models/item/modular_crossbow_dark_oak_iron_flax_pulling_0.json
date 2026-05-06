@@ -1,0 +1,8 @@
+{
+  "parent": "fletcherstrestle:item/modular_crossbow_base",
+  "textures": {
+    "layer0": "fletcherstrestle:item/modular_crossbow/limbs/dark_oak_limb",
+    "layer1": "fletcherstrestle:item/risers/iron_riser",
+    "layer2": "fletcherstrestle:item/modular_crossbow/strings/flax_string_pulling_0"
+  }
+}

@@ -43,6 +43,7 @@ public class ModularBowItem extends BowItem {
         }
     }
 
+
     @Override
     public void releaseUsing(ItemStack stack, Level level, LivingEntity entityLiving, int timeLeft) {
         if (!(entityLiving instanceof Player player)) return;

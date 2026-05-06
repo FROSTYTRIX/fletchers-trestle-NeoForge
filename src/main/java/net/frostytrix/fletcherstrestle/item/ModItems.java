@@ -2,10 +2,7 @@ package net.frostytrix.fletcherstrestle.item;
 
 import net.frostytrix.fletcherstrestle.FletcherTrestle;
 import net.frostytrix.fletcherstrestle.block.ModBlocks;
-import net.frostytrix.fletcherstrestle.item.custom.FletcherGuideItem;
-import net.frostytrix.fletcherstrestle.item.custom.ModularArrowItem;
-import net.frostytrix.fletcherstrestle.item.custom.ModularBowItem;
-import net.frostytrix.fletcherstrestle.item.custom.ModularQuiverItem;
+import net.frostytrix.fletcherstrestle.item.custom.*;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemNameBlockItem;
 import net.neoforged.bus.api.IEventBus;
@@ -104,6 +101,9 @@ public class ModItems {
 
     public static final DeferredItem<Item> MODULAR_BOW = ITEMS.register("modular_bow",
             () -> new ModularBowItem(new Item.Properties().durability(384)));
+
+    public static final DeferredItem<Item> MODULAR_CROSSBOW = ITEMS.register("modular_crossbow",
+            () -> new ModularCrossbowItem(new Item.Properties().durability(384)));
 
     // 3. Strings
     public static final DeferredItem<Item> HIGH_TENSION_STRING = ITEMS.register("high_tension_string",

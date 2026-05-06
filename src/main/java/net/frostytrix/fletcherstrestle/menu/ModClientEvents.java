@@ -2,6 +2,7 @@ package net.frostytrix.fletcherstrestle.menu;
 
 import net.frostytrix.fletcherstrestle.FletcherTrestle;
 import net.frostytrix.fletcherstrestle.client.QuiverHudOverlay;
+import net.frostytrix.fletcherstrestle.component.BowAssembly;
 import net.frostytrix.fletcherstrestle.component.ModDataComponents;
 import net.frostytrix.fletcherstrestle.item.ModItems;
 import net.frostytrix.fletcherstrestle.network.FletchingTabPayload;
@@ -138,6 +139,53 @@ public class ModClientEvents {
                     default -> 0.1F;
                 };
             });
+        });
+
+        ItemProperties.register(ModItems.MODULAR_CROSSBOW.get(), ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "crossbow_limb"), (stack, level, entity, seed) -> {
+            BowAssembly assembly = stack.get(ModDataComponents.BOW_ASSEMBLY.get());
+            if (assembly != null) {
+                return switch (assembly.limbMaterial().toLowerCase()) {
+                    case "oak" -> 0.1f;
+                    case "spruce" -> 0.2f;
+                    case "birch" -> 0.3f;
+                    case "jungle" -> 0.4f;
+                    case "acacia" -> 0.5f;
+                    case "dark oak" -> 0.6f;
+                    case "mangrove" -> 0.7f;
+                    case "cherry" -> 0.8f;
+                    case "pale oak" -> 0.9f;
+                    case "crimson" -> 1.0f;
+                    case "warped" -> 1.1f;
+                    default -> 0.1f;
+                };
+            }
+            return 0.1f;
+        });
+
+        ItemProperties.register(ModItems.MODULAR_CROSSBOW.get(), ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "crossbow_riser"), (stack, level, entity, seed) -> {
+            BowAssembly assembly = stack.get(ModDataComponents.BOW_ASSEMBLY.get());
+            if (assembly != null) {
+                return switch (assembly.riserMaterial().toLowerCase()) {
+                    case "wood" -> 0.1f;
+                    case "iron" -> 0.2f;
+                    case "copper" -> 0.3f;
+                    default -> 0.1f;
+                };
+            }
+            return 0.1f;
+        });
+
+        ItemProperties.register(ModItems.MODULAR_CROSSBOW.get(), ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "crossbow_string"), (stack, level, entity, seed) -> {
+            BowAssembly assembly = stack.get(ModDataComponents.BOW_ASSEMBLY.get());
+            if (assembly != null) {
+                return switch (assembly.stringMaterial().toLowerCase()) {
+                    case "spider" -> 0.1f;
+                    case "flax" -> 0.2f;
+                    case "high tension" -> 0.3f;
+                    default -> 0.1f;
+                };
+            }
+            return 0.1f;
         });
     }
 }

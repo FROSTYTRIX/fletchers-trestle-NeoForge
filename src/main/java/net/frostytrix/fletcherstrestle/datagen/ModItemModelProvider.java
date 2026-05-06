@@ -4,6 +4,7 @@ import net.frostytrix.fletcherstrestle.FletcherTrestle;
 import net.frostytrix.fletcherstrestle.item.ModItems;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemDisplayContext;
 import net.neoforged.neoforge.client.model.generators.ItemModelBuilder;
 import net.neoforged.neoforge.client.model.generators.ItemModelProvider;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
@@ -143,6 +144,8 @@ public class ModItemModelProvider extends ItemModelProvider {
             }
         }
 
+        generateCrossbowModels();
+
 
     }
 
@@ -218,5 +221,154 @@ public class ModItemModelProvider extends ItemModelProvider {
                 .predicate(ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "arrow_shaft"), shaftVal)
                 .predicate(ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "arrow_fletching"), fletchingVal)
                 .model(permutation).end();
+    }
+
+    public void generateCrossbowModels() {
+        ItemModelBuilder crossbowBase = getBuilder("modular_crossbow_base")
+                .parent(getExistingFile(mcLoc("item/generated")));
+        applyCrossbowTransforms(crossbowBase);
+
+        // 1. Create the base fallback item model
+        ItemModelBuilder baseCrossbow = getBuilder("modular_crossbow")
+                .parent(getExistingFile(modLoc("item/modular_crossbow_base")))
+                .texture("layer0", "item/modular_crossbow/limbs/oak_limb")
+                .texture("layer1", "item/modular_crossbow/risers/wood_riser")
+                .texture("layer2", "item/modular_crossbow/strings/spider_string");
+
+        String[] limbs = {"oak", "spruce", "birch", "jungle", "acacia", "dark_oak", "mangrove", "cherry", "pale_oak", "crimson", "warped"};
+        String[] risers = {"wood", "iron", "copper"};
+        String[] strings = {"spider", "flax", "high_tension"};
+
+        // 2. Loop through all combinations and assign unique float values
+        for (int l = 0; l < limbs.length; l++) {
+            float limbVal = (l + 1) * 0.1f;
+            for (int r = 0; r < risers.length; r++) {
+                float riserVal = (r + 1) * 0.1f;
+                for (int s = 0; s < strings.length; s++) {
+                    float stringVal = (s + 1) * 0.1f;
+
+                    buildCrossbowPermutation(baseCrossbow, limbs[l], limbVal, risers[r], riserVal, strings[s], stringVal);
+                }
+            }
+        }
+    }
+
+    private void buildCrossbowPermutation(ItemModelBuilder baseCrossbow,
+                                          String limbName, float limbVal,
+                                          String riserName, float riserVal,
+                                          String stringName, float stringVal) {
+
+        String baseName = "modular_crossbow_" + limbName + "_" + riserName + "_" + stringName;
+
+        ResourceLocation limbProp = ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "crossbow_limb");
+        ResourceLocation riserProp = ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "crossbow_riser");
+        ResourceLocation stringProp = ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "crossbow_string");
+
+        // --- UPDATED TEXTURE PATHS ---
+        // Risers stay shared, but Limbs and Strings move to the modular_crossbow subfolder!
+        String riserTex = "item/risers/" + riserName + "_riser";
+        String limbBase = "item/modular_crossbow/limbs/" + limbName + "_limb";
+        String stringBase = "item/modular_crossbow/strings/" + stringName + "_string";
+
+        // --- 1. UNCHARGED ---
+        ItemModelBuilder uncharged = getBuilder(baseName)
+                .parent(getExistingFile(modLoc("item/modular_crossbow_base")))
+                .texture("layer0", limbBase)
+                .texture("layer1", riserTex)
+                .texture("layer2", stringBase);
+
+        baseCrossbow.override()
+                .predicate(limbProp, limbVal).predicate(riserProp, riserVal).predicate(stringProp, stringVal)
+                .model(uncharged).end();
+
+        // --- 2. PULLING 0 ---
+        ItemModelBuilder pulling0 = getBuilder(baseName + "_pulling_0")
+                .parent(getExistingFile(modLoc("item/modular_crossbow_base")))
+                .texture("layer0", limbBase)
+                .texture("layer1", riserTex)
+                .texture("layer2", stringBase + "_pulling_0");
+
+        baseCrossbow.override()
+                .predicate(limbProp, limbVal).predicate(riserProp, riserVal).predicate(stringProp, stringVal)
+                .predicate(ResourceLocation.withDefaultNamespace("pulling"), 1.0f)
+                .model(pulling0).end();
+
+        // --- 3. PULLING 1 (Mid Draw) ---
+        ItemModelBuilder pulling1 = getBuilder(baseName + "_pulling_1")
+                .parent(getExistingFile(modLoc("item/modular_crossbow_base")))
+                .texture("layer0", limbBase)
+                .texture("layer1", riserTex)
+                .texture("layer2", stringBase + "_pulling_1");
+
+        baseCrossbow.override()
+                .predicate(limbProp, limbVal).predicate(riserProp, riserVal).predicate(stringProp, stringVal)
+                .predicate(ResourceLocation.withDefaultNamespace("pulling"), 1.0f)
+                .predicate(ResourceLocation.withDefaultNamespace("pull"), 0.58f)
+                .model(pulling1).end();
+
+        // --- 4. PULLING 2 (Full Draw) ---
+        ItemModelBuilder pulling2 = getBuilder(baseName + "_pulling_2")
+                .parent(getExistingFile(modLoc("item/modular_crossbow_base")))
+                .texture("layer0", limbBase)
+                .texture("layer1", riserTex)
+                .texture("layer2", stringBase + "_pulling_2");
+
+        baseCrossbow.override()
+                .predicate(limbProp, limbVal).predicate(riserProp, riserVal).predicate(stringProp, stringVal)
+                .predicate(ResourceLocation.withDefaultNamespace("pulling"), 1.0f)
+                .predicate(ResourceLocation.withDefaultNamespace("pull"), 1.0f)
+                .model(pulling2).end();
+
+        // --- 5. CHARGED (With Arrow) ---
+        ItemModelBuilder charged = getBuilder(baseName + "_charged")
+                .parent(getExistingFile(modLoc("item/modular_crossbow_base")))
+                .texture("layer0", limbBase)
+                .texture("layer1", riserTex)
+                .texture("layer2", stringBase + "_pulling_2")
+                .texture("layer3", "item/modular_crossbow/arrow");
+
+        baseCrossbow.override()
+                .predicate(limbProp, limbVal).predicate(riserProp, riserVal).predicate(stringProp, stringVal)
+                .predicate(ResourceLocation.withDefaultNamespace("charged"), 1.0f)
+                .model(charged).end();
+
+        // --- 6. CHARGED (With Firework) ---
+        ItemModelBuilder firework = getBuilder(baseName + "_firework")
+                .parent(getExistingFile(modLoc("item/modular_crossbow_base")))
+                .texture("layer0", limbBase)
+                .texture("layer1", riserTex)
+                .texture("layer2", stringBase + "_pulling_2")
+                .texture("layer3", "item/modular_crossbow/firework");
+
+        baseCrossbow.override()
+                .predicate(limbProp, limbVal).predicate(riserProp, riserVal).predicate(stringProp, stringVal)
+                .predicate(ResourceLocation.withDefaultNamespace("charged"), 1.0f)
+                .predicate(ResourceLocation.withDefaultNamespace("firework"), 1.0f)
+                .model(firework).end();
+    }
+
+    private void applyCrossbowTransforms(ItemModelBuilder builder) {
+        builder.transforms()
+                .transform(ItemDisplayContext.THIRD_PERSON_RIGHT_HAND)
+                .rotation(-90, 0, -60)
+                .translation(2, 0.1f, -3)
+                .scale(0.9f, 0.9f, 0.9f)
+                .end()
+                .transform(ItemDisplayContext.THIRD_PERSON_LEFT_HAND)
+                .rotation(-90, 0, 30)
+                .translation(2, 0.1f, -3)
+                .scale(0.9f, 0.9f, 0.9f)
+                .end()
+                .transform(ItemDisplayContext.FIRST_PERSON_RIGHT_HAND)
+                .rotation(-90, 0, -55)
+                .translation(1.13f, 3.2f, 1.13f)
+                .scale(0.68f, 0.68f, 0.68f)
+                .end()
+                .transform(ItemDisplayContext.FIRST_PERSON_LEFT_HAND)
+                .rotation(-90, 0, 35)
+                .translation(1.13f, 3.2f, 1.13f)
+                .scale(0.68f, 0.68f, 0.68f)
+                .end()
+                .end();
     }
 }
