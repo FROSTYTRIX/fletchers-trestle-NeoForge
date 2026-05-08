@@ -9,6 +9,7 @@ import net.frostytrix.fletcherstrestle.effect.ModEffects;
 import net.frostytrix.fletcherstrestle.entity.ModEntities;
 import net.frostytrix.fletcherstrestle.item.ModCreativeModeTabs;
 import net.frostytrix.fletcherstrestle.item.ModItems;
+import net.frostytrix.fletcherstrestle.loot.ModLootModifiers;
 import net.frostytrix.fletcherstrestle.menu.ModMenuTypes;
 import net.minecraft.core.RegistrySetBuilder;
 import net.minecraft.core.registries.Registries;
@@ -52,6 +53,7 @@ public class FletcherTrestle {
         ModBlockEntities.register(modEventBus);
         ModEntities.register(modEventBus);
         ModEffects.register(modEventBus);
+        ModLootModifiers.register(modEventBus);
 
         // Register the item to a creative tab
         modEventBus.addListener(this::addCreative);
