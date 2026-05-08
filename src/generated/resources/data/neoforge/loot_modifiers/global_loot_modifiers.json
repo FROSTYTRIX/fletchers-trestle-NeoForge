@@ -1,7 +1,11 @@
 {
   "entries": [
     "fletcherstrestle:mechanical_trigger_from_pillager_outpost",
-    "fletcherstrestle:mechanical_trigger_from_bastion_other"
+    "fletcherstrestle:mechanical_trigger_from_bastion_other",
+    "fletcherstrestle:flax_seed_from_short_grass",
+    "fletcherstrestle:flax_seed_from_tall_grass",
+    "fletcherstrestle:flax_seed_from_fern",
+    "fletcherstrestle:flax_seed_from_large_fern"
   ],
   "replace": false
 }
