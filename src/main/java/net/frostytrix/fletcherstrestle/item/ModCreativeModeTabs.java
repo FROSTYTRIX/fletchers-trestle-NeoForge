@@ -90,6 +90,7 @@ public class ModCreativeModeTabs {
 
                         output.accept(ModItems.QUIVER.get());
                         output.accept(ModItems.FLETCHER_GUIDE.get());
+                        output.accept(ModItems.MECHANICAL_TRIGGER.get());
                     })
                     .build());
 

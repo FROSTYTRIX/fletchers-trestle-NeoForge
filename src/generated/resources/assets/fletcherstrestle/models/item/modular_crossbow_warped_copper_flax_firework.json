@@ -2,7 +2,7 @@
   "parent": "fletcherstrestle:item/modular_crossbow_base",
   "textures": {
     "layer0": "fletcherstrestle:item/modular_crossbow/limbs/warped_limb",
-    "layer1": "fletcherstrestle:item/risers/copper_riser",
+    "layer1": "fletcherstrestle:item/modular_crossbow/risers/copper_riser",
     "layer2": "fletcherstrestle:item/modular_crossbow/strings/flax_string_pulling_2",
     "layer3": "fletcherstrestle:item/modular_crossbow/firework"
   }

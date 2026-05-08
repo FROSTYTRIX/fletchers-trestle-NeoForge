@@ -105,6 +105,9 @@ public class ModItems {
     public static final DeferredItem<Item> MODULAR_CROSSBOW = ITEMS.register("modular_crossbow",
             () -> new ModularCrossbowItem(new Item.Properties().durability(384)));
 
+    public static final DeferredItem<Item> MECHANICAL_TRIGGER = ITEMS.register("mechanical_trigger",
+            () -> new Item(new Item.Properties()));
+
     // 3. Strings
     public static final DeferredItem<Item> HIGH_TENSION_STRING = ITEMS.register("high_tension_string",
             () -> new Item(new Item.Properties()));

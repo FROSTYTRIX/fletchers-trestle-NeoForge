@@ -63,5 +63,11 @@ public class ModItemTagProvider extends ItemTagsProvider {
 
         tag(ItemTags.ARROWS)
                 .add(ModItems.MODULAR_ARROW.get());
+
+        tag(ItemTags.CROSSBOW_ENCHANTABLE)
+                .add(ModItems.MODULAR_CROSSBOW.get());
+
+        tag(ItemTags.BOW_ENCHANTABLE)
+                .add(ModItems.MODULAR_BOW.get());
     }
 }

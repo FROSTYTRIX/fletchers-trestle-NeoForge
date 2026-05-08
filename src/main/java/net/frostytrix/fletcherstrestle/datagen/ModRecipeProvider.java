@@ -1,5 +1,6 @@
 package net.frostytrix.fletcherstrestle.datagen;
 
+import net.frostytrix.fletcherstrestle.FletcherTrestle;
 import net.frostytrix.fletcherstrestle.block.ModBlocks;
 import net.frostytrix.fletcherstrestle.item.ModItems;
 import net.frostytrix.fletcherstrestle.tags.ModTags;
@@ -8,6 +9,7 @@ import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.*;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.block.Blocks;
 import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.common.conditions.IConditionBuilder;
@@ -86,5 +88,23 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                 .requires(Items.BOOK).requires(ModTags.Items.BOW_STRINGS)
                 .unlockedBy("has_string", has(Items.STRING))
                 .save(recipeOutput);
+
+        SmithingTransformRecipeBuilder.smithing(
+                        Ingredient.of(ModItems.MECHANICAL_TRIGGER.get()),
+                        Ingredient.of(ModItems.MODULAR_BOW.get()),
+                        Ingredient.of(Items.TRIPWIRE_HOOK),
+                        RecipeCategory.COMBAT,
+                        ModItems.MODULAR_CROSSBOW.get())
+                .unlocks("has_modular_bow", has(ModItems.MODULAR_BOW.get()))
+                .save(recipeOutput, FletcherTrestle.MOD_ID + ":modular_crossbow_smithing");
+
+        SmithingTransformRecipeBuilder.smithing(
+                        Ingredient.of(ModItems.MECHANICAL_TRIGGER.get()),
+                        Ingredient.of(Items.BOW),
+                        Ingredient.of(Items.TRIPWIRE_HOOK),
+                        RecipeCategory.COMBAT,
+                        Items.CROSSBOW)
+                .unlocks("has_bow", has(Items.BOW))
+                .save(recipeOutput, FletcherTrestle.MOD_ID + ":crossbow_smithing");
     }
 }

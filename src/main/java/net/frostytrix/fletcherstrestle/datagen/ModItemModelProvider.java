@@ -63,6 +63,7 @@ public class ModItemModelProvider extends ItemModelProvider {
         handheldItem(ModItems.DRAWKNIFE.get());
 
         basicItem(ModItems.QUIVER.get());
+        basicItem(ModItems.MECHANICAL_TRIGGER.get());
 
         // TODO: Bow Data Gen
 
@@ -266,7 +267,7 @@ public class ModItemModelProvider extends ItemModelProvider {
 
         // --- UPDATED TEXTURE PATHS ---
         // Risers stay shared, but Limbs and Strings move to the modular_crossbow subfolder!
-        String riserTex = "item/risers/" + riserName + "_riser";
+        String riserTex = "item/modular_crossbow/risers/" + riserName + "_riser";
         String limbBase = "item/modular_crossbow/limbs/" + limbName + "_limb";
         String stringBase = "item/modular_crossbow/strings/" + stringName + "_string";
 

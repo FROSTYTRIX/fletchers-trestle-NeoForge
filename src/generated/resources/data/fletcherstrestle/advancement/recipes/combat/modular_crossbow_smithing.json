@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_modular_bow": {
+      "conditions": {
+        "items": [
+          {
+            "items": "fletcherstrestle:modular_bow"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "fletcherstrestle:modular_crossbow_smithing"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_modular_bow"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "fletcherstrestle:modular_crossbow_smithing"
+    ]
+  }
+}
