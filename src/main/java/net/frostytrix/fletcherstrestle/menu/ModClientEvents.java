@@ -5,8 +5,6 @@ import net.frostytrix.fletcherstrestle.client.QuiverHudOverlay;
 import net.frostytrix.fletcherstrestle.component.BowAssembly;
 import net.frostytrix.fletcherstrestle.component.ModDataComponents;
 import net.frostytrix.fletcherstrestle.item.ModItems;
-import net.frostytrix.fletcherstrestle.network.FletchingTabPayload;
-import net.frostytrix.fletcherstrestle.network.QuiverSlotPacket;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.api.distmarker.Dist;

@@ -9,14 +9,12 @@ import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.neoforged.neoforge.common.CommonHooks;
 
 public class FlaxCropBlock extends CropBlock {
     public static final int FIRST_STAGE_MAX_AGE = 7;
@@ -38,7 +36,6 @@ public class FlaxCropBlock extends CropBlock {
 
     public FlaxCropBlock(Properties properties) {
         super(properties);
-
         this.registerDefaultState(this.stateDefinition.any().setValue(getAgeProperty(), 0));
     }
 
@@ -48,24 +45,31 @@ public class FlaxCropBlock extends CropBlock {
     }
 
     @Override
-    protected void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
-        if (level.isAreaLoaded(pos,1)) return;
-        if (level.getRawBrightness(pos,0) >= 9){
+    public void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
+        if (!level.isAreaLoaded(pos, 1)) return; // NeoForge safety check
+
+        if (level.getRawBrightness(pos, 0) >= 9) {
             int currentAge = this.getAge(state);
 
-            if (currentAge < this.getMaxAge()) {
-                float growthSpeed = getGrowthSpeed(this.getStateForAge(currentAge),level,pos);
+            // If it's already max age, do nothing
+            if (currentAge >= this.getMaxAge()) {
+                return;
+            }
 
-                if (CommonHooks.canCropGrow(level, pos, state, random.nextInt((int)((25/growthSpeed) + 1)) == 0)){
-                    if (currentAge == FIRST_STAGE_MAX_AGE){
-                        if (level.getBlockState(pos.above()).is(Blocks.AIR)){
-                            level.setBlock(pos.above(), this.getStateForAge(currentAge + 1), 2);
-                        }
-                    }else {
-                        level.setBlock(pos,this.getStateForAge(currentAge + 1), 2);
+            float growthSpeed = getGrowthSpeed(state, level, pos);
+            if (net.neoforged.neoforge.common.CommonHooks.canCropGrow(level, pos, state, random.nextInt((int)(25.0F / growthSpeed) + 1) == 0)) {
+
+                if (currentAge == FIRST_STAGE_MAX_AGE) {
+                    // Growing from Stage 7 to Stage 8 (Placing the top half!)
+                    if (level.getBlockState(pos.above()).isAir()) {
+                        level.setBlock(pos.above(), this.getStateForAge(currentAge + 1), 2);
+                        net.neoforged.neoforge.common.CommonHooks.fireCropGrowPost(level, pos.above(), state);
                     }
-                    CommonHooks.fireCropGrowPost(level, pos, state);
-                };
+                } else {
+                    // Normal growth for the bottom half (Stages 0 through 6)
+                    level.setBlock(pos, this.getStateForAge(currentAge + 1), 2);
+                    net.neoforged.neoforge.common.CommonHooks.fireCropGrowPost(level, pos, state);
+                }
             }
         }
     }
@@ -84,17 +88,21 @@ public class FlaxCropBlock extends CropBlock {
 
     @Override
     public void growCrops(Level level, BlockPos pos, BlockState state) {
-        int nextAge = this.getAge(state) + this.getBonemealAgeIncrease(level);
-        int maxAge = this.getMaxAge();
         int age = this.getAge(state);
-        if (nextAge > maxAge) {
-            nextAge = maxAge;
-        }
+        int maxAge = this.getMaxAge(); // 8
+        int nextAge = age + this.getBonemealAgeIncrease(level);
 
-        if (age == FIRST_STAGE_MAX_AGE && level.getBlockState(pos.above()).isAir()) {
-            level.setBlock(pos.above(), this.getStateForAge(nextAge), 2);
-        }else {
-            level.setBlock(pos, this.getStateForAge(nextAge - SECOND_STAGE_MAX_AGE), 2);
+        // If the bottom is fully grown, bonemeal places the top
+        if (age == FIRST_STAGE_MAX_AGE) {
+            if (level.getBlockState(pos.above()).isAir()) {
+                level.setBlock(pos.above(), this.getStateForAge(maxAge), 2);
+            }
+        } else {
+            // Cap the bottom block so it never exceeds Age 7
+            if (nextAge > FIRST_STAGE_MAX_AGE) {
+                nextAge = FIRST_STAGE_MAX_AGE;
+            }
+            level.setBlock(pos, this.getStateForAge(nextAge), 2);
         }
     }
 

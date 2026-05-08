@@ -1,10 +1,10 @@
 package net.frostytrix.fletcherstrestle.effect;
 
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.server.level.ServerLevel;
 
 public class BleedEffect extends MobEffect {
     public BleedEffect(MobEffectCategory category, int color) {
