@@ -29,6 +29,14 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                 .define('I', Items.IRON_INGOT)
                 .unlockedBy("has_iron_ingot", has(Items.IRON_INGOT)).save(recipeOutput);
 
+        ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, ModItems.DRAWKNIFE.get())
+                .pattern("S  ")
+                .pattern("I  ")
+                .pattern("S  ")
+                .define('S', Items.STICK)
+                .define('I', Items.IRON_INGOT)
+                .unlockedBy("has_iron_ingot", has(Items.IRON_INGOT)).save(recipeOutput,FletcherTrestle.MOD_ID + ":drawknife_vertical");
+
         ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC,ModItems.HIGH_TENSION_STRING.get())
                 .requires(Items.STRING,2).requires(Items.IRON_NUGGET)
                 .unlockedBy("has_iron_nugget", has(Items.IRON_NUGGET))
