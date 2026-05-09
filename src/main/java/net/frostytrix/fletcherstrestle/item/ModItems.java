@@ -126,6 +126,12 @@ public class ModItems {
     public static final DeferredItem<Item> FLETCHER_GUIDE = ITEMS.register("fletcher_guide",
             () -> new FletcherGuideItem(new Item.Properties().stacksTo(1)));
 
+
+    public static final DeferredItem<Item> HEAVY_DUMMY_ITEM = ITEMS.register("heavy_dummy",
+            () -> new HeavyDummyItem(new Item.Properties()));
+
+
+
     public static void register(IEventBus eventBus) {
         ITEMS.register(eventBus);
     }

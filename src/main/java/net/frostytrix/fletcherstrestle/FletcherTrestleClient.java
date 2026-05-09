@@ -1,7 +1,12 @@
 package net.frostytrix.fletcherstrestle;
 
+import net.frostytrix.fletcherstrestle.entity.ModEntities;
+import net.frostytrix.fletcherstrestle.entity.client.HeavyDummyModel;
+import net.frostytrix.fletcherstrestle.entity.client.HeavyDummyRenderer;
 import net.frostytrix.fletcherstrestle.item.ModItems;
 import net.frostytrix.fletcherstrestle.item.custom.ModularBowItem;
+import net.minecraft.client.model.geom.ModelLayers;
+import net.minecraft.client.renderer.entity.HumanoidMobRenderer;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.resources.ResourceLocation;
@@ -9,11 +14,13 @@ import net.minecraft.world.item.CrossbowItem;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.component.ChargedProjectiles;
 import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.gui.ConfigurationScreen;
 import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 
@@ -29,8 +36,22 @@ public class FletcherTrestleClient {
         container.registerExtensionPoint(IConfigScreenFactory.class, ConfigurationScreen::new);
     }
 
+    public FletcherTrestleClient(IEventBus modEventBus) {
+        // 2. Register the Entity Renderers (The line that fixes your crash)
+        modEventBus.addListener(this::registerRenderers);
+        modEventBus.addListener(this::registerLayers);
+    }
+
+
+    private void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
+        event.registerEntityRenderer(ModEntities.HEAVY_DUMMY.get(), HeavyDummyRenderer::new);
+    }
+    private void registerLayers(EntityRenderersEvent.RegisterLayerDefinitions event) {
+        event.registerLayerDefinition(HeavyDummyModel.LAYER_LOCATION, HeavyDummyModel::createBodyLayer);
+    }
+
     @SubscribeEvent
-    static void onClientSetup(FMLClientSetupEvent event) {
+    private static void onClientSetup(FMLClientSetupEvent event) {
         event.enqueueWork(() -> {
 
             // This binds the "pull" animation to our custom draw speed!

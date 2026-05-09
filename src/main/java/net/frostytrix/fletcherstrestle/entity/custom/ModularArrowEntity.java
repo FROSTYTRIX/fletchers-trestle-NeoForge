@@ -1,8 +1,9 @@
-package net.frostytrix.fletcherstrestle.entity;
+package net.frostytrix.fletcherstrestle.entity.custom;
 
 import net.frostytrix.fletcherstrestle.component.ArrowAssembly;
 import net.frostytrix.fletcherstrestle.component.ModDataComponents;
 import net.frostytrix.fletcherstrestle.effect.ModEffects;
+import net.frostytrix.fletcherstrestle.entity.ModEntities;
 import net.frostytrix.fletcherstrestle.item.ModItems;
 import net.frostytrix.fletcherstrestle.item.custom.ModularArrowItem;
 import net.minecraft.core.Direction;

@@ -113,5 +113,15 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                         Items.CROSSBOW)
                 .unlocks("has_bow", has(Items.BOW))
                 .save(recipeOutput, FletcherTrestle.MOD_ID + ":crossbow_smithing");
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModItems.HEAVY_DUMMY_ITEM.get())
+                .pattern("HTH")
+                .pattern("HTH")
+                .pattern(" I ")
+                .define('I', Blocks.IRON_BLOCK)
+                .define('H', Blocks.HAY_BLOCK )
+                .define('T', ModBlocks.ARCHERY_TARGET)
+                .unlockedBy("has_target", has(ModBlocks.ARCHERY_TARGET)).save(recipeOutput);
+
     }
 }

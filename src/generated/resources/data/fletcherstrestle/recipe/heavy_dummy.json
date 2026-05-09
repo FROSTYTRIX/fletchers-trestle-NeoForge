@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "H": {
+      "item": "minecraft:hay_block"
+    },
+    "I": {
+      "item": "minecraft:iron_block"
+    },
+    "T": {
+      "item": "fletcherstrestle:archery_target"
+    }
+  },
+  "pattern": [
+    "HTH",
+    "HTH",
+    " I "
+  ],
+  "result": {
+    "count": 1,
+    "id": "fletcherstrestle:heavy_dummy"
+  }
+}

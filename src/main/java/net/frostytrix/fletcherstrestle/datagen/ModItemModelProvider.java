@@ -64,6 +64,7 @@ public class ModItemModelProvider extends ItemModelProvider {
 
         basicItem(ModItems.QUIVER.get());
         basicItem(ModItems.MECHANICAL_TRIGGER.get());
+        basicItem(ModItems.HEAVY_DUMMY_ITEM.get());
 
         // TODO: Bow Data Gen
 

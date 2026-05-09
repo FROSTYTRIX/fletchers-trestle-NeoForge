@@ -7,7 +7,7 @@ import net.frostytrix.fletcherstrestle.block.entity.ShotRecord;
 import net.frostytrix.fletcherstrestle.component.ArrowAssembly;
 import net.frostytrix.fletcherstrestle.component.BowAssembly;
 import net.frostytrix.fletcherstrestle.component.ModDataComponents;
-import net.frostytrix.fletcherstrestle.entity.ModularArrowEntity;
+import net.frostytrix.fletcherstrestle.entity.custom.ModularArrowEntity;
 import net.frostytrix.fletcherstrestle.item.custom.ModularBowItem;
 import net.frostytrix.fletcherstrestle.menu.FletchingMenu;
 import net.minecraft.core.BlockPos;

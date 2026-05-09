@@ -6,7 +6,7 @@ import com.mojang.math.Axis;
 import net.frostytrix.fletcherstrestle.FletcherTrestle;
 import net.frostytrix.fletcherstrestle.component.ArrowAssembly;
 import net.frostytrix.fletcherstrestle.component.ModDataComponents;
-import net.frostytrix.fletcherstrestle.entity.ModularArrowEntity;
+import net.frostytrix.fletcherstrestle.entity.custom.ModularArrowEntity;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.ArrowRenderer;

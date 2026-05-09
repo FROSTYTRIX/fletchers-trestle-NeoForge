@@ -6,6 +6,7 @@ import net.frostytrix.fletcherstrestle.block.entity.ModBlockEntities;
 import net.frostytrix.fletcherstrestle.component.ModDataComponents;
 import net.frostytrix.fletcherstrestle.config.FletcherConfig;
 import net.frostytrix.fletcherstrestle.effect.ModEffects;
+import net.frostytrix.fletcherstrestle.entity.custom.HeavyDummyEntity;
 import net.frostytrix.fletcherstrestle.entity.ModEntities;
 import net.frostytrix.fletcherstrestle.item.ModCreativeModeTabs;
 import net.frostytrix.fletcherstrestle.item.ModItems;
@@ -21,6 +22,7 @@ import net.neoforged.neoforge.client.gui.ConfigurationScreen;
 import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
+import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent;
 import net.neoforged.neoforge.event.server.ServerStartingEvent;
 import org.slf4j.Logger;
 
@@ -54,6 +56,7 @@ public class FletcherTrestle {
 
         // Register the item to a creative tab
         modEventBus.addListener(this::addCreative);
+        modEventBus.addListener(this::registerEntityAttributes);
         // Register our mod's ModConfigSpec so that FML can create and load the config file for us
         modContainer.registerConfig(ModConfig.Type.COMMON, FletcherConfig.SPEC);
         modContainer.registerExtensionPoint(IConfigScreenFactory.class, ConfigurationScreen::new);
@@ -65,6 +68,11 @@ public class FletcherTrestle {
     // Add the example block item to the building blocks tab
     private void addCreative(BuildCreativeModeTabContentsEvent event) {
     }
+
+    private void registerEntityAttributes(EntityAttributeCreationEvent event) {
+        event.put(ModEntities.HEAVY_DUMMY.get(), HeavyDummyEntity.createAttributes().build());
+    }
+
 
     // You can use SubscribeEvent and let the Event Bus discover methods to call
     @SubscribeEvent

@@ -83,6 +83,7 @@ public class ModCreativeModeTabs {
                                 new BowAssembly("oak", "wood", "spider", 1.0f));
                         output.accept(modularBowDisplay);
 
+                        output.accept(ModItems.MECHANICAL_TRIGGER.get());
                         modularCrossowDisplay.set(ModDataComponents.BOW_ASSEMBLY.get(),
                                 new BowAssembly("oak", "wood", "spider", 1.0f));
                         output.accept(modularCrossowDisplay);
@@ -90,7 +91,8 @@ public class ModCreativeModeTabs {
 
                         output.accept(ModItems.QUIVER.get());
                         output.accept(ModItems.FLETCHER_GUIDE.get());
-                        output.accept(ModItems.MECHANICAL_TRIGGER.get());
+                        output.accept(ModItems.HEAVY_DUMMY_ITEM.get());
+
                     })
                     .build());
 
