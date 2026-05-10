@@ -2,6 +2,10 @@ package net.frostytrix.fletcherstrestle.entity.custom;
 
 import net.frostytrix.fletcherstrestle.item.ModItems;
 import net.minecraft.core.NonNullList;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
@@ -21,7 +25,14 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
+import java.util.Optional;
+import java.util.UUID;
+
 public class HeavyDummyEntity extends LivingEntity {
+    private static final EntityDataAccessor<String> DATA_SKIN_NAME =
+            SynchedEntityData.defineId(HeavyDummyEntity.class, EntityDataSerializers.STRING);
+    private static final EntityDataAccessor<Optional<UUID>> DATA_SKIN_UUID =
+            SynchedEntityData.defineId(HeavyDummyEntity.class, EntityDataSerializers.OPTIONAL_UUID);
 
     // Internal inventory for the dummy's armor
     private final NonNullList<ItemStack> armorItems = NonNullList.withSize(4, ItemStack.EMPTY);
@@ -90,6 +101,8 @@ public class HeavyDummyEntity extends LivingEntity {
     @Override
     public InteractionResult interact(Player player, InteractionHand hand) {
         ItemStack heldItem = player.getItemInHand(hand);
+
+
 
         // 1. Equip Armor
         if (heldItem.getItem() instanceof ArmorItem armorItem) {
@@ -232,5 +245,34 @@ public class HeavyDummyEntity extends LivingEntity {
         if (!this.level().isClientSide() && this.getHealth() < this.getMaxHealth()) {
             this.setHealth(this.getMaxHealth());
         }
+    }
+
+    @Override
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(DATA_SKIN_NAME, "");
+        builder.define(DATA_SKIN_UUID, Optional.empty());
+    }
+
+    public void setSkin(String name, UUID uuid) {
+        this.entityData.set(DATA_SKIN_NAME, name);
+        this.entityData.set(DATA_SKIN_UUID, Optional.ofNullable(uuid));
+    }
+
+    public String getSkinName() { return this.entityData.get(DATA_SKIN_NAME); }
+    public Optional<UUID> getSkinUUID() { return this.entityData.get(DATA_SKIN_UUID); }
+
+    // Save/Load so skins persist after a restart
+    @Override
+    public void addAdditionalSaveData(CompoundTag compound) {
+        super.addAdditionalSaveData(compound);
+        compound.putString("SkinName", this.getSkinName());
+        this.getSkinUUID().ifPresent(uuid -> compound.putUUID("SkinUUID", uuid));
+    }
+
+    @Override
+    public void readAdditionalSaveData(CompoundTag compound) {
+        super.readAdditionalSaveData(compound);
+        this.setSkin(compound.getString("SkinName"), compound.hasUUID("SkinUUID") ? compound.getUUID("SkinUUID") : null);
     }
 }
