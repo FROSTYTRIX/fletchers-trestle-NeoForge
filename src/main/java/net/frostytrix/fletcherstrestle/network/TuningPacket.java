@@ -1,13 +1,19 @@
 package net.frostytrix.fletcherstrestle.network;
 
 import net.frostytrix.fletcherstrestle.FletcherTrestle;
+import net.frostytrix.fletcherstrestle.component.BowAssembly;
+import net.frostytrix.fletcherstrestle.component.ModDataComponents;
 import net.frostytrix.fletcherstrestle.menu.FletchingMenu;
+import net.frostytrix.fletcherstrestle.recipe.FletchingRecipeInput;
+import net.frostytrix.fletcherstrestle.recipe.ModRecipes;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 public record TuningPacket(float quality) implements CustomPacketPayload {
     public static final Type<TuningPacket> TYPE = new Type<>(ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "tuning_packet"));
@@ -20,10 +26,17 @@ public record TuningPacket(float quality) implements CustomPacketPayload {
             TuningPacket::new
     );
 
-    // This runs on the SERVER when the packet arrives
-    public void handle(Player player) {
-        if (player.containerMenu instanceof FletchingMenu menu) {
-            menu.finalizeBow(this.quality);
-        }
+    public static void handle(TuningPacket message, IPayloadContext context) {
+        context.enqueueWork(() -> {
+            Player player = context.player();
+
+            if (player.containerMenu instanceof FletchingMenu fletchingMenu) {
+                // Set the score from the minigame
+                fletchingMenu.customTuning = message.quality(); // or message.score()
+
+                // Force the menu to recalculate the result slot to apply the new tuning!
+                fletchingMenu.slotsChanged(fletchingMenu.craftSlots);
+            }
+        });
     }
 }

@@ -31,7 +31,7 @@ public record FletchingTabPayload(int tabId) implements CustomPacketPayload {
             // If the player has the Fletching Menu open, change its tab and force a recipe check!
             if (player.containerMenu instanceof FletchingMenu menu) {
                 menu.activeTab = payload.tabId();
-                menu.slotsChanged(menu.getContainer()); // Re-evaluate recipes immediately
+                menu.slotsChanged(menu.craftSlots); // Re-evaluate recipes immediately
             }
         });
     }

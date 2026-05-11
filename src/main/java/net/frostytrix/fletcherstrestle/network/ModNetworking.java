@@ -17,7 +17,7 @@ public class ModNetworking {
         registrar.playToServer(
                 TuningPacket.TYPE,
                 TuningPacket.CODEC,
-                (payload, context) -> context.enqueueWork(() -> payload.handle(context.player()))
+                TuningPacket::handle
         );
 
         // Server → Client : sync shot list to the archery target GUI

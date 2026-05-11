@@ -12,6 +12,7 @@ import net.frostytrix.fletcherstrestle.item.ModCreativeModeTabs;
 import net.frostytrix.fletcherstrestle.item.ModItems;
 import net.frostytrix.fletcherstrestle.loot.ModLootModifiers;
 import net.frostytrix.fletcherstrestle.menu.ModMenuTypes;
+import net.frostytrix.fletcherstrestle.recipe.ModRecipes;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModContainer;
@@ -57,6 +58,9 @@ public class FletcherTrestle {
         // Register the item to a creative tab
         modEventBus.addListener(this::addCreative);
         modEventBus.addListener(this::registerEntityAttributes);
+
+        ModRecipes.SERIALIZERS.register(modEventBus);
+        ModRecipes.TYPES.register(modEventBus);
         // Register our mod's ModConfigSpec so that FML can create and load the config file for us
         modContainer.registerConfig(ModConfig.Type.COMMON, FletcherConfig.SPEC);
         modContainer.registerExtensionPoint(IConfigScreenFactory.class, ConfigurationScreen::new);
