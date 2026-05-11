@@ -1,0 +1,10 @@
+{
+  "type": "fletcherstrestle:steaming",
+  "ingredient": {
+    "item": "fletcherstrestle:rough_acacia_limb"
+  },
+  "result": {
+    "count": 1,
+    "id": "fletcherstrestle:pliable_acacia_limb"
+  }
+}

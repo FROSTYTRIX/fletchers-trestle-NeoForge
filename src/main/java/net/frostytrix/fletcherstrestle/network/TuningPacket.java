@@ -1,18 +1,13 @@
 package net.frostytrix.fletcherstrestle.network;
 
 import net.frostytrix.fletcherstrestle.FletcherTrestle;
-import net.frostytrix.fletcherstrestle.component.BowAssembly;
-import net.frostytrix.fletcherstrestle.component.ModDataComponents;
 import net.frostytrix.fletcherstrestle.menu.FletchingMenu;
-import net.frostytrix.fletcherstrestle.recipe.FletchingRecipeInput;
-import net.frostytrix.fletcherstrestle.recipe.ModRecipes;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 public record TuningPacket(float quality) implements CustomPacketPayload {

@@ -10,11 +10,12 @@ import net.neoforged.neoforge.items.ItemStackHandler;
 
 public class ShavingHorseBlockEntity extends BlockEntity {
 
+    public int currentShaves = 0;
+
     public final ItemStackHandler itemHandler = new ItemStackHandler(1) {
         @Override
         protected void onContentsChanged(int slot) {
             setChanged();
-
             if (level != null && !level.isClientSide()) {
                 level.sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), 3);
             }
@@ -50,6 +51,7 @@ public class ShavingHorseBlockEntity extends BlockEntity {
 
     protected CompoundTag saveCustomOnly(CompoundTag tag, HolderLookup.Provider registries) {
         tag.put("inventory", itemHandler.serializeNBT(registries));
+        tag.putInt("currentShaves", currentShaves);
         return tag;
     }
 
@@ -57,11 +59,13 @@ public class ShavingHorseBlockEntity extends BlockEntity {
     protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         super.saveAdditional(tag, registries);
         tag.put("inventory", itemHandler.serializeNBT(registries));
+        tag.putInt("currentShaves", currentShaves);
     }
 
     @Override
     protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         super.loadAdditional(tag, registries);
         itemHandler.deserializeNBT(registries, tag.getCompound("inventory"));
+        currentShaves = tag.getInt("currentShaves");
     }
 }

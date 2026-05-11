@@ -5,8 +5,6 @@ import net.frostytrix.fletcherstrestle.entity.client.HeavyDummyModel;
 import net.frostytrix.fletcherstrestle.entity.client.HeavyDummyRenderer;
 import net.frostytrix.fletcherstrestle.item.ModItems;
 import net.frostytrix.fletcherstrestle.item.custom.ModularBowItem;
-import net.minecraft.client.model.geom.ModelLayers;
-import net.minecraft.client.renderer.entity.HumanoidMobRenderer;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.resources.ResourceLocation;

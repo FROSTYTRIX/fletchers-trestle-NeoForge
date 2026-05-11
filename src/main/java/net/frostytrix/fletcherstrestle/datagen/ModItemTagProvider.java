@@ -61,6 +61,24 @@ public class ModItemTagProvider extends ItemTagsProvider {
                 .add(ModItems.FLAX_STRING.get())
                 ;
 
+        tag(ModTags.Items.ARROW_HEADS)
+                .add(Items.FLINT)
+                .add(Items.IRON_INGOT)
+                .add(Items.COPPER_INGOT)
+                .add(Items.IRON_NUGGET)
+                .add(Items.GOLD_INGOT)
+                .add(Items.ECHO_SHARD)
+                ;
+
+        tag(ModTags.Items.ARROW_FLETCHING)
+                .add(Items.FEATHER)
+                .add(Items.FLINT)
+                .add(Items.PHANTOM_MEMBRANE)
+                .add(Items.LEATHER)
+                .add(Items.VEX_ARMOR_TRIM_SMITHING_TEMPLATE)
+                .add(Items.FEATHER)
+        ;
+
         tag(ItemTags.ARROWS)
                 .add(ModItems.MODULAR_ARROW.get());
 

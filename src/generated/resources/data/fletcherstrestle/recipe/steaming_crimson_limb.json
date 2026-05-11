@@ -1,0 +1,10 @@
+{
+  "type": "fletcherstrestle:steaming",
+  "ingredient": {
+    "item": "fletcherstrestle:rough_crimson_limb"
+  },
+  "result": {
+    "count": 1,
+    "id": "fletcherstrestle:pliable_crimson_limb"
+  }
+}

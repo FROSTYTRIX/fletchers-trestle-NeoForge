@@ -1,14 +1,17 @@
 package net.frostytrix.fletcherstrestle.block.entity;
 
 import net.frostytrix.fletcherstrestle.block.custom.SteamBoxBlock;
-import net.frostytrix.fletcherstrestle.item.ModItems;
+import net.frostytrix.fletcherstrestle.recipe.ModRecipes;
+import net.frostytrix.fletcherstrestle.recipe.SteamingRecipe;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.SingleRecipeInput;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.CampfireBlock;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
@@ -37,7 +40,6 @@ public class SteamBoxBlockEntity extends BlockEntity {
     };
 
     public int[] cookingTimes = new int[16];
-    public final int maxProgress = 200;
 
     public SteamBoxBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.STEAM_BOX_BE.get(), pos, state);
@@ -47,36 +49,54 @@ public class SteamBoxBlockEntity extends BlockEntity {
         if (level == null || level.isClientSide()) return;
 
         BlockState blockBelow = level.getBlockState(pos.below());
-        boolean hasHeat = blockBelow.getBlock() instanceof CampfireBlock && blockBelow.getValue(CampfireBlock.LIT);
+
+        boolean hasHeat = false;
+        if (blockBelow.is(net.minecraft.tags.BlockTags.CAMPFIRES) && blockBelow.hasProperty(net.minecraft.world.level.block.CampfireBlock.LIT)) {
+            hasHeat = blockBelow.getValue(net.minecraft.world.level.block.CampfireBlock.LIT);
+        } else if (blockBelow.is(BlockTags.FIRE) || blockBelow.is(Blocks.MAGMA_BLOCK) || blockBelow.is(Blocks.LAVA) || blockBelow.is(Blocks.LAVA_CAULDRON)) {
+            hasHeat = true;
+        }
 
         updateWaterLevelState(level, pos, state);
 
-        if (!hasHeat || fluidTank.getFluidAmount() < 250) {
-            return;
-        }
+        if (!hasHeat) return; // Stop processing if fire goes out
 
         for (int i = 0; i < 16; i++) {
             ItemStack currentItem = itemHandler.getStackInSlot(i);
 
             if (!currentItem.isEmpty()) {
-                cookingTimes[i]++;
+                SingleRecipeInput input = new SingleRecipeInput(currentItem);
+                var recipeHolder = level.getRecipeManager().getRecipeFor(ModRecipes.STEAMING_TYPE.get(), input, level);
 
-                if (cookingTimes[i] >= maxProgress) {
+                if (recipeHolder.isPresent()) {
+                    SteamingRecipe recipe = recipeHolder.get().value();
+                    int requiredWater = recipe.getWaterAmount();
+                    int requiredTime = recipe.getProcessingTime();
 
-                    if (fluidTank.getFluidAmount() >= 250) {
+                    cookingTimes[i]++;
 
-                        fluidTank.drain(250, IFluidHandler.FluidAction.EXECUTE);
+                    if (cookingTimes[i] >= requiredTime) {
+                        if (fluidTank.getFluidAmount() >= requiredWater) {
+                            // Consume water
+                            fluidTank.drain(requiredWater, IFluidHandler.FluidAction.EXECUTE);
 
-                        ItemStack result = getPliableLimb(currentItem);
-                        itemHandler.extractItem(i, 1, false);
+                            // Get output from JSON and clear input slot
+                            ItemStack result = recipe.assemble(input, level.registryAccess());
+                            itemHandler.extractItem(i, 1, false);
 
-                        ItemEntity droppedItem = new ItemEntity(level, pos.getX() + 0.5, pos.getY() + 1.0, pos.getZ() + 0.5, result);
-                        level.addFreshEntity(droppedItem);
+                            // Drop item on top of the block
+                            ItemEntity droppedItem = new ItemEntity(level, pos.getX() + 0.5, pos.getY() + 1.0, pos.getZ() + 0.5, result);
+                            level.addFreshEntity(droppedItem);
 
-                        cookingTimes[i] = 0;
-                    } else {
-                        cookingTimes[i] = maxProgress - 1;
+                            cookingTimes[i] = 0;
+                        } else {
+                            // Pause progress just before finishing if waiting on water
+                            cookingTimes[i] = requiredTime - 1;
+                        }
                     }
+                } else {
+                    // Item in slot has no steaming recipe
+                    cookingTimes[i] = 0;
                 }
             } else {
                 cookingTimes[i] = 0;
@@ -98,23 +118,6 @@ public class SteamBoxBlockEntity extends BlockEntity {
         }
     }
 
-    private ItemStack getPliableLimb(ItemStack input) {
-        if (input.is(ModItems.ROUGH_OAK_LIMB.get())) return new ItemStack(ModItems.PLIABLE_OAK_LIMB.get());
-        if (input.is(ModItems.ROUGH_BIRCH_LIMB.get())) return new ItemStack(ModItems.PLIABLE_BIRCH_LIMB.get());
-        if (input.is(ModItems.ROUGH_SPRUCE_LIMB.get())) return new ItemStack(ModItems.PLIABLE_SPRUCE_LIMB.get());
-        if (input.is(ModItems.ROUGH_JUNGLE_LIMB.get())) return new ItemStack(ModItems.PLIABLE_JUNGLE_LIMB.get());
-        if (input.is(ModItems.ROUGH_ACACIA_LIMB.get())) return new ItemStack(ModItems.PLIABLE_ACACIA_LIMB.get());
-        if (input.is(ModItems.ROUGH_DARK_OAK_LIMB.get())) return new ItemStack(ModItems.PLIABLE_DARK_OAK_LIMB.get());
-        if (input.is(ModItems.ROUGH_MANGROVE_LIMB.get())) return new ItemStack(ModItems.PLIABLE_MANGROVE_LIMB.get());
-        if (input.is(ModItems.ROUGH_CRIMSON_LIMB.get())) return new ItemStack(ModItems.PLIABLE_CRIMSON_LIMB.get());
-        if (input.is(ModItems.ROUGH_WARPED_LIMB.get())) return new ItemStack(ModItems.PLIABLE_WARPED_LIMB.get());
-        if (input.is(ModItems.ROUGH_MANGROVE_LIMB.get())) return new ItemStack(ModItems.PLIABLE_MANGROVE_LIMB.get());
-        if (input.is(ModItems.ROUGH_CHERRY_LIMB.get())) return new ItemStack(ModItems.PLIABLE_CHERRY_LIMB.get());
-
-        // Fallback (just in case someone forces an item in via commands)
-        return new ItemStack(ModItems.PLIABLE_OAK_LIMB.get());
-    }
-
     @Override
     protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         super.saveAdditional(tag, registries);
@@ -129,6 +132,6 @@ public class SteamBoxBlockEntity extends BlockEntity {
         itemHandler.deserializeNBT(registries, tag.getCompound("inventory"));
         fluidTank.readFromNBT(registries, tag.getCompound("fluid"));
         cookingTimes = tag.getIntArray("cookingTimes");
-        if (cookingTimes.length != 16) cookingTimes = new int[16]; // Safety check
+        if (cookingTimes.length != 16) cookingTimes = new int[16];
     }
 }

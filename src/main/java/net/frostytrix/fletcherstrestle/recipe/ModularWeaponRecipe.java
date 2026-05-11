@@ -1,6 +1,5 @@
 package net.frostytrix.fletcherstrestle.recipe;
 
-import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.frostytrix.fletcherstrestle.component.BowAssembly;
@@ -138,4 +137,8 @@ public class ModularWeaponRecipe implements Recipe<FletchingRecipeInput> {
             ItemStack.STREAM_CODEC.encode(buf, recipe.result);
         }
     }
+
+    public net.minecraft.world.item.crafting.Ingredient getRiser() { return this.riser; }
+    public net.minecraft.world.item.crafting.Ingredient getLimbs() { return this.limbs; }
+    public net.minecraft.world.item.crafting.Ingredient getString() { return this.string; }
 }

@@ -3,17 +3,18 @@ package net.frostytrix.fletcherstrestle.block.custom;
 import com.mojang.serialization.MapCodec;
 import net.frostytrix.fletcherstrestle.block.entity.ShavingHorseBlockEntity;
 import net.frostytrix.fletcherstrestle.item.ModItems;
+import net.frostytrix.fletcherstrestle.recipe.ModRecipes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.tags.ItemTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.item.crafting.SingleRecipeInput;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseEntityBlock;
@@ -50,7 +51,6 @@ public class ShavingHorseBlock extends BaseEntityBlock {
         builder.add(FACING);
     }
 
-
     @Nullable
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
@@ -83,50 +83,52 @@ public class ShavingHorseBlock extends BaseEntityBlock {
             ItemStack storedLog = horse.itemHandler.getStackInSlot(0);
 
             // --- ACTION 1: USING THE DRAWKNIFE ---
-            // If the player holds a Drawknife AND there is a log stored inside
             if (stack.is(ModItems.DRAWKNIFE.get()) && !storedLog.isEmpty()) {
+                SingleRecipeInput input = new SingleRecipeInput(storedLog);
+                var recipeHolder = level.getRecipeManager().getRecipeFor(ModRecipes.SHAVING_TYPE.get(), input, level);
 
-                // 1. Get the rough limb based on the stored log
-                ItemStack roughLimb = getRoughLimbFromLog(storedLog);
+                if (recipeHolder.isPresent()) {
+                    horse.currentShaves++;
 
-                if (!roughLimb.isEmpty()) {
-                    // 2. Consume the log from the block
-                    horse.itemHandler.extractItem(0, 1, false);
-
-                    // 3. Drop the rough limb into the world
-                    ItemEntity droppedItem = new ItemEntity(level, pos.getX() + 0.5, pos.getY() + 1.0, pos.getZ() + 0.5, roughLimb);
-                    level.addFreshEntity(droppedItem);
-
-                    // 4. Damage the drawknife by 1 point!
                     stack.hurtAndBreak(1, player, Player.getSlotForHand(hand));
-
-                    // 5. Play carving sound
                     level.playSound(null, pos, SoundEvents.AXE_STRIP, SoundSource.BLOCKS, 1.0F, 1.0F);
+
+                    if (horse.currentShaves >= recipeHolder.get().value().getShavesRequired()) {
+                        ItemStack result = recipeHolder.get().value().assemble(input, level.registryAccess());
+
+                        horse.itemHandler.extractItem(0, 1, false);
+                        horse.currentShaves = 0;
+
+                        ItemEntity droppedItem = new ItemEntity(level, pos.getX() + 0.5, pos.getY() + 1.0, pos.getZ() + 0.5, result);
+                        level.addFreshEntity(droppedItem);
+                    }
                     return ItemInteractionResult.SUCCESS;
                 }
             }
 
-            // --- ACTION 2: STOCKING THE LOG ---
-            // If the player holds a Log AND the horse is currently empty
-            if (stack.is(ItemTags.LOGS) && storedLog.isEmpty()) {
-                // Insert 1 log
-                horse.itemHandler.insertItem(0, new ItemStack(stack.getItem(), 1), false);
-                horse.setChanged(); // Marque le bloc comme "modifié" pour la sauvegarde
-                level.sendBlockUpdated(pos, state, state, 3);
+            // --- ACTION 2: STOCKING THE BLOCK ---
+            if (storedLog.isEmpty() && !stack.isEmpty()) {
+                SingleRecipeInput input = new SingleRecipeInput(stack);
+                var recipeHolder = level.getRecipeManager().getRecipeFor(ModRecipes.SHAVING_TYPE.get(), input, level);
 
-                if (!player.isCreative()) {
-                    stack.shrink(1);
+                if (recipeHolder.isPresent()) {
+                    horse.itemHandler.insertItem(0, new ItemStack(stack.getItem(), 1), false);
+                    horse.currentShaves = 0;
+
+                    horse.setChanged();
+                    level.sendBlockUpdated(pos, state, state, 3);
+
+                    if (!player.isCreative()) stack.shrink(1);
+
+                    level.playSound(null, pos, SoundEvents.WOOD_PLACE, SoundSource.BLOCKS, 1.0F, 0.8F);
+                    return ItemInteractionResult.SUCCESS;
                 }
-
-                // Play a heavy wood placement sound
-                level.playSound(null, pos, SoundEvents.WOOD_PLACE, SoundSource.BLOCKS, 1.0F, 0.8F);
-                return ItemInteractionResult.SUCCESS;
             }
 
-            // --- ACTION 3: REMOVING THE LOG ---
-            // If they sneak-right-click with an empty hand, give the log back
+            // --- ACTION 3: REMOVING THE BLOCK ---
             if (stack.isEmpty() && player.isShiftKeyDown() && !storedLog.isEmpty()) {
                 ItemStack extracted = horse.itemHandler.extractItem(0, 1, false);
+                horse.currentShaves = 0;
                 player.addItem(extracted);
                 level.playSound(null, pos, SoundEvents.ITEM_PICKUP, SoundSource.BLOCKS, 0.5F, 1.2F);
                 return ItemInteractionResult.SUCCESS;
@@ -134,25 +136,5 @@ public class ShavingHorseBlock extends BaseEntityBlock {
         }
 
         return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
-    }
-
-    private ItemStack getRoughLimbFromLog(ItemStack log) {
-        String name = log.getItem().toString();
-
-        if (name.contains("dark_oak")) return new ItemStack(ModItems.ROUGH_DARK_OAK_LIMB.get());
-        if (name.contains("pale_oak")) return new ItemStack(ModItems.ROUGH_PALE_OAK_LIMB.get());
-        if (name.contains("oak")) return new ItemStack(ModItems.ROUGH_OAK_LIMB.get());
-
-        if (name.contains("birch")) return new ItemStack(ModItems.ROUGH_BIRCH_LIMB.get());
-        if (name.contains("spruce")) return new ItemStack(ModItems.ROUGH_SPRUCE_LIMB.get());
-        if (name.contains("jungle")) return new ItemStack(ModItems.ROUGH_JUNGLE_LIMB.get());
-        if (name.contains("acacia")) return new ItemStack(ModItems.ROUGH_ACACIA_LIMB.get());
-        if (name.contains("crimson")) return new ItemStack(ModItems.ROUGH_CRIMSON_LIMB.get());
-        if (name.contains("warped")) return new ItemStack(ModItems.ROUGH_WARPED_LIMB.get());
-        if (name.contains("mangrove")) return new ItemStack(ModItems.ROUGH_MANGROVE_LIMB.get());
-        if (name.contains("cherry")) return new ItemStack(ModItems.ROUGH_CHERRY_LIMB.get());
-
-        // If it's a modded log we don't support, return empty so nothing happens
-        return ItemStack.EMPTY;
     }
 }

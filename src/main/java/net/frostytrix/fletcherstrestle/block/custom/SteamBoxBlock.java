@@ -3,7 +3,7 @@ package net.frostytrix.fletcherstrestle.block.custom;
 import com.mojang.serialization.MapCodec;
 import net.frostytrix.fletcherstrestle.block.entity.ModBlockEntities;
 import net.frostytrix.fletcherstrestle.block.entity.SteamBoxBlockEntity;
-import net.frostytrix.fletcherstrestle.tags.ModTags;
+import net.frostytrix.fletcherstrestle.recipe.ModRecipes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -12,6 +12,7 @@ import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.SingleRecipeInput;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseEntityBlock;
@@ -83,30 +84,26 @@ public class SteamBoxBlock extends BaseEntityBlock {
                     if (!player.isCreative()) {
                         player.setItemInHand(hand, new ItemStack(Items.BUCKET));
                     }
-
-                    // PLAY WATER SOUND (Volume 1.0, Pitch 1.0)
                     level.playSound(null, pos, SoundEvents.BUCKET_EMPTY, SoundSource.BLOCKS, 1.0F, 1.0F);
-
                     return ItemInteractionResult.SUCCESS;
                 }
             }
 
-            // --- ACTION 2: INSERTING ROUGH LIMBS ---
-            if (stack.is(ModTags.Items.ROUGH_LIMBS)) {
+            // --- ACTION 2: INSERTING VALID RECIPE ITEMS ---
+            if (!stack.isEmpty()) {
+                SingleRecipeInput input = new SingleRecipeInput(stack);
+                var recipe = level.getRecipeManager().getRecipeFor(ModRecipes.STEAMING_TYPE.get(), input, level);
 
-                // Look for the first empty slot (0 through 15)
-                for (int i = 0; i < 16; i++) {
-                    if (steamBox.itemHandler.getStackInSlot(i).isEmpty()) {
+                if (recipe.isPresent()) {
+                    for (int i = 0; i < 16; i++) {
+                        if (steamBox.itemHandler.getStackInSlot(i).isEmpty()) {
+                            steamBox.itemHandler.insertItem(i, new ItemStack(stack.getItem(), 1), false);
 
-                        // Put exactly 1 item in this slot
-                        steamBox.itemHandler.insertItem(i, new ItemStack(stack.getItem(), 1), false);
+                            if (!player.isCreative()) stack.shrink(1);
 
-                        if (!player.isCreative()) {
-                            stack.shrink(1);
+                            level.playSound(null, pos, SoundEvents.DECORATED_POT_INSERT, SoundSource.BLOCKS, 1.0F, 0.8F);
+                            return ItemInteractionResult.SUCCESS;
                         }
-
-                        level.playSound(null, pos, SoundEvents.DECORATED_POT_INSERT, SoundSource.BLOCKS, 1.0F, 0.8F);
-                        return ItemInteractionResult.SUCCESS;
                     }
                 }
             }
@@ -116,10 +113,7 @@ public class SteamBoxBlock extends BaseEntityBlock {
                 ItemStack extracted = steamBox.itemHandler.extractItem(0, 1, false);
                 if (!extracted.isEmpty()) {
                     player.addItem(extracted);
-
-                    // PLAY A LIGHT "POP" SOUND FOR REMOVAL
                     level.playSound(null, pos, SoundEvents.ITEM_PICKUP, SoundSource.BLOCKS, 0.5F, 1.2F);
-
                     return ItemInteractionResult.SUCCESS;
                 }
             }
@@ -131,10 +125,7 @@ public class SteamBoxBlock extends BaseEntityBlock {
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> blockEntityType) {
-        if (level.isClientSide()) {
-            return null;
-        }
-
+        if (level.isClientSide()) return null;
         return createTickerHelper(blockEntityType, ModBlockEntities.STEAM_BOX_BE.get(),
                 (lvl, pos, st, blockEntity) -> blockEntity.tick(lvl, pos, st));
     }

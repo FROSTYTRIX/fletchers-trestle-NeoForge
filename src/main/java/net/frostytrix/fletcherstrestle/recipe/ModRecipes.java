@@ -23,4 +23,31 @@ public class ModRecipes {
                     return "modular_weapon_assembly";
                 }
             });
+
+    public static final Supplier<RecipeSerializer<ModularArrowRecipe>> MODULAR_ARROW_SERIALIZER =
+            SERIALIZERS.register("modular_arrow_assembly", ModularArrowRecipe.Serializer::new);
+
+    public static final Supplier<RecipeType<ModularArrowRecipe>> MODULAR_ARROW_TYPE =
+            TYPES.register("modular_arrow_assembly", () -> new RecipeType<ModularArrowRecipe>() {
+                @Override
+                public String toString() {
+                    return "modular_arrow_assembly";
+                }
+            });
+
+    public static final Supplier<RecipeSerializer<SteamingRecipe>> STEAMING_SERIALIZER =
+            SERIALIZERS.register("steaming", SteamingRecipe.Serializer::new);
+
+    public static final Supplier<RecipeType<SteamingRecipe>> STEAMING_TYPE =
+            TYPES.register("steaming", () -> new RecipeType<SteamingRecipe>() {
+                @Override public String toString() { return "steaming"; }
+            });
+
+    public static final Supplier<RecipeSerializer<ShavingHorseRecipe>> SHAVING_SERIALIZER =
+            SERIALIZERS.register("shaving", ShavingHorseRecipe.Serializer::new);
+
+    public static final Supplier<RecipeType<ShavingHorseRecipe>> SHAVING_TYPE =
+            TYPES.register("shaving", () -> new RecipeType<ShavingHorseRecipe>() {
+                @Override public String toString() { return "shaving"; }
+            });
 }

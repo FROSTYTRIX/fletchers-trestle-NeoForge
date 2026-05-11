@@ -13,6 +13,8 @@ public class ModTags {
         public static final TagKey<Item> BOW_RISERS = create("bow_risers");
         public static final TagKey<Item> BOW_STRINGS = create("bow_strings");
         public static final TagKey<Item> ROUGH_LIMBS = create("rough_limbs");
+        public static final TagKey<Item> ARROW_HEADS = create("arrow_heads");
+        public static final TagKey<Item> ARROW_FLETCHING = create("arrow_fletching");
 
         private static TagKey<Item> create(String name) {
             return TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, name));

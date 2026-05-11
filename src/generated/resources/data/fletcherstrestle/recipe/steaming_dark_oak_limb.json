@@ -1,0 +1,10 @@
+{
+  "type": "fletcherstrestle:steaming",
+  "ingredient": {
+    "item": "fletcherstrestle:rough_dark_oak_limb"
+  },
+  "result": {
+    "count": 1,
+    "id": "fletcherstrestle:pliable_dark_oak_limb"
+  }
+}

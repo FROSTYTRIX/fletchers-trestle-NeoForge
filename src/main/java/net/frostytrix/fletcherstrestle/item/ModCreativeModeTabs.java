@@ -2,6 +2,7 @@ package net.frostytrix.fletcherstrestle.item;
 
 import net.frostytrix.fletcherstrestle.FletcherTrestle;
 import net.frostytrix.fletcherstrestle.block.ModBlocks;
+import net.frostytrix.fletcherstrestle.component.ArrowAssembly;
 import net.frostytrix.fletcherstrestle.component.BowAssembly;
 import net.frostytrix.fletcherstrestle.component.ModDataComponents;
 import net.minecraft.core.registries.Registries;
@@ -77,11 +78,16 @@ public class ModCreativeModeTabs {
 
                         ItemStack modularBowDisplay = new ItemStack(ModItems.MODULAR_BOW.get());
                         ItemStack modularCrossowDisplay = new ItemStack(ModItems.MODULAR_CROSSBOW.get());
+                        ItemStack modularArrowDisplay = new ItemStack(ModItems.MODULAR_ARROW.get());
 
 
                         modularBowDisplay.set(ModDataComponents.BOW_ASSEMBLY.get(),
                                 new BowAssembly("oak", "wood", "spider", 1.0f));
                         output.accept(modularBowDisplay);
+
+                        modularArrowDisplay.set(ModDataComponents.ARROW_ASSEMBLY.get(),
+                                new ArrowAssembly("flint", "wood", "feather"));
+                        output.accept(modularArrowDisplay);
 
                         output.accept(ModItems.MECHANICAL_TRIGGER.get());
                         modularCrossowDisplay.set(ModDataComponents.BOW_ASSEMBLY.get(),

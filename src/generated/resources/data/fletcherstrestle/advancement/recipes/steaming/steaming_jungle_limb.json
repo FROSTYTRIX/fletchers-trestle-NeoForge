@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_rough_jungle_limb": {
+      "conditions": {
+        "items": [
+          {
+            "items": "fletcherstrestle:rough_jungle_limb"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "fletcherstrestle:steaming_jungle_limb"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_rough_jungle_limb"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "fletcherstrestle:steaming_jungle_limb"
+    ]
+  }
+}
