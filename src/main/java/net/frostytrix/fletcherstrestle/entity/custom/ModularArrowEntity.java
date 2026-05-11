@@ -7,14 +7,17 @@ import net.frostytrix.fletcherstrestle.entity.ModEntities;
 import net.frostytrix.fletcherstrestle.item.ModItems;
 import net.frostytrix.fletcherstrestle.item.custom.ModularArrowItem;
 import net.minecraft.core.Direction;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LightningBolt;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.item.ItemStack;
@@ -195,6 +198,26 @@ public class ModularArrowEntity extends AbstractArrow {
                     this.playSound(net.minecraft.sounds.SoundEvents.CHORUS_FRUIT_TELEPORT, 1.0f, 1.0f);
                 }
             }
+
+            if (this.getPersistentData().getBoolean("fletcherstrestle:conductive") && this.level().isThundering()) {
+                LightningBolt lightning = EntityType.LIGHTNING_BOLT.create(this.level());
+                if (lightning != null) {
+                    lightning.moveTo(target.position());
+                    this.level().addFreshEntity(lightning);
+                }
+            }
+
+            if (assembly != null && "bodkin_point".equals(assembly.head())) {
+                float armorValue = target.getArmorValue();
+                if (armorValue > 0) {
+                    // Calculate bonus damage manually since we are inside the impact call
+                    double baseDamage = this.getBaseDamage() * this.getDeltaMovement().length();
+                    float bonus = (armorValue * 0.25f) * ((float)baseDamage * 0.04f);
+
+                    // Temporarily increase damage for this specific hit
+                    this.setBaseDamage(this.getBaseDamage() + (bonus / this.getDeltaMovement().length()));
+                }
+            }
         }
     }
 
@@ -238,6 +261,17 @@ public class ModularArrowEntity extends AbstractArrow {
             if (this.resonanceTicks == 0 && this.resonanceTarget != null && this.resonanceTarget.isAlive()) {
                 // Apply 0.3x damage. In 1.21, use level().damageSources()
                 this.resonanceTarget.hurt(this.damageSources().arrow(this, this.getOwner()), this.resonanceDamage);
+            }
+        }
+
+        if (!this.level().isClientSide && this.isInWater()) {
+            if (this.getPersistentData().getBoolean("fletcherstrestle:amphibious")) {
+                this.setDeltaMovement(this.getDeltaMovement().scale(1.65D));
+
+                if (this.level() instanceof ServerLevel serverLevel) {
+                    serverLevel.sendParticles(ParticleTypes.BUBBLE_POP,
+                            this.getX(), this.getY(), this.getZ(), 1, 0.0, 0.0, 0.0, 0.0);
+                }
             }
         }
     }

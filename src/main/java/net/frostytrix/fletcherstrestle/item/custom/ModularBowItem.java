@@ -10,17 +10,77 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.AbstractArrow;
+import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.BowItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 public class ModularBowItem extends BowItem {
 
     public ModularBowItem(Properties properties) {
         super(properties);
+    }
+
+    @Override
+    protected Projectile createProjectile(Level level, LivingEntity shooter, ItemStack weapon, ItemStack ammo, boolean isCrit) {
+        // 1. Let vanilla create the base projectile first
+        Projectile projectile = super.createProjectile(level, shooter, weapon, ammo, isCrit);
+        BowAssembly assembly = weapon.get(ModDataComponents.BOW_ASSEMBLY.get());
+
+        if (assembly != null && projectile instanceof AbstractArrow arrow) {
+            LimbStats limb = LimbStats.fromString(assembly.limbMaterial());
+            RiserStats riser = RiserStats.fromString(assembly.riserMaterial());
+
+            // --- DAMAGE MODIFIER ---
+            arrow.setBaseDamage(arrow.getBaseDamage() * limb.getDamageMult());
+
+            // --- SPECIAL TRAITS ---
+            if (limb == LimbStats.CRIMSON) {
+                arrow.igniteForSeconds(100);
+            }
+            if (limb == LimbStats.WARPED) {
+                arrow.setNoGravity(true);
+            }
+
+            // --- PERSISTENT DATA TAGS ---
+            if (limb.isAmphibian()) {
+                arrow.getPersistentData().putBoolean("fletcherstrestle:amphibious", true);
+            }
+            if (limb.getMaterialName().equals("Spruce")) {
+                arrow.getPersistentData().putBoolean("fletcherstrestle:punch", true);
+            }
+            if (riser.getMaterialName().equalsIgnoreCase("Copper")) {
+                arrow.getPersistentData().putBoolean("fletcherstrestle:conductive", true);
+            }
+        }
+        return projectile;
+    }
+
+    @Override
+    protected void shootProjectile(LivingEntity shooter, Projectile projectile, int index, float velocity, float inaccuracy, float angle, @Nullable LivingEntity target) {
+        ItemStack bowStack = shooter.getUseItem();
+        if (bowStack.isEmpty()) bowStack = shooter.getMainHandItem(); // Fallback for edge cases
+
+        BowAssembly assembly = bowStack.get(ModDataComponents.BOW_ASSEMBLY.get());
+        float finalVelocity = velocity;
+        float finalInaccuracy = inaccuracy;
+
+        if (assembly != null) {
+            StringStats string = StringStats.fromString(assembly.stringMaterial());
+            RiserStats riser = RiserStats.fromString(assembly.riserMaterial());
+
+            // --- APPLY VELOCITY & INACCURACY ---
+            finalVelocity = velocity * string.getVelocityMult();
+            finalInaccuracy = inaccuracy * riser.getInnacuracyMult();
+        }
+
+        // Call super with our modified values
+        super.shootProjectile(shooter, projectile, index, finalVelocity, finalInaccuracy, angle, target);
     }
 
 
