@@ -1,8 +1,10 @@
 package net.frostytrix.fletcherstrestle.event;
 
+import net.frostytrix.fletcherstrestle.FletcherTrestle;
 import net.frostytrix.fletcherstrestle.block.ModBlocks;
 import net.frostytrix.fletcherstrestle.block.entity.ModBlockEntities;
 import net.frostytrix.fletcherstrestle.block.entity.renderer.ShavingHorseRenderer;
+import net.frostytrix.fletcherstrestle.client.model.ModularModelLoader;
 import net.frostytrix.fletcherstrestle.client.renderer.ModularArrowRenderer;
 import net.frostytrix.fletcherstrestle.component.ModDataComponents;
 import net.frostytrix.fletcherstrestle.entity.ModEntities;
@@ -12,15 +14,13 @@ import net.frostytrix.fletcherstrestle.item.custom.ModularCrossbowItem;
 import net.frostytrix.fletcherstrestle.network.FletchingTabPayload;
 import net.frostytrix.fletcherstrestle.network.QuiverSlotPacket;
 import net.minecraft.client.renderer.BiomeColors;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.neoforge.client.event.ComputeFovModifierEvent;
-import net.neoforged.neoforge.client.event.EntityRenderersEvent;
-import net.neoforged.neoforge.client.event.MovementInputUpdateEvent;
-import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
+import net.neoforged.neoforge.client.event.*;
 
 import static net.frostytrix.fletcherstrestle.FletcherTrestle.MOD_ID;
 
@@ -38,6 +38,11 @@ public class ModClientEvents {
         final net.neoforged.neoforge.network.registration.PayloadRegistrar registrar = event.registrar(MOD_ID);
         registrar.playToServer(FletchingTabPayload.TYPE, FletchingTabPayload.STREAM_CODEC, FletchingTabPayload::handleData);
         registrar.playToServer(QuiverSlotPacket.TYPE, QuiverSlotPacket.CODEC, QuiverSlotPacket::handle);
+    }
+
+    @SubscribeEvent
+    public static void registerGeometryLoaders(ModelEvent.RegisterGeometryLoaders event) {
+        event.register(ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "modular_loader"), ModularModelLoader.INSTANCE);
     }
 
     @SubscribeEvent

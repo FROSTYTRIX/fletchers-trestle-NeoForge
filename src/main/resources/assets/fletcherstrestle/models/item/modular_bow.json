@@ -1,0 +1,5 @@
+{
+  "loader": "fletcherstrestle:modular_loader",
+  "base_path": "item/modular_bow",
+  "gui_light": "front"
+}
