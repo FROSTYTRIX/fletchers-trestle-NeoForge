@@ -1,8 +1,0 @@
-{
-  "parent": "minecraft:item/generated",
-  "textures": {
-    "layer0": "fletcherstrestle:item/arrow/shafts/warped_shaft",
-    "layer1": "fletcherstrestle:item/arrow/fletchings/feather_fletching",
-    "layer2": "fletcherstrestle:item/arrow/heads/bodkin_point_head"
-  }
-}

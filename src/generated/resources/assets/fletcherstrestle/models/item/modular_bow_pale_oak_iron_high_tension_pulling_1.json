@@ -1,9 +1,0 @@
-{
-  "parent": "minecraft:item/bow",
-  "textures": {
-    "layer0": "fletcherstrestle:item/limbs/pale_oak_limb_pulling_1",
-    "layer1": "fletcherstrestle:item/risers/iron_riser",
-    "layer2": "fletcherstrestle:item/strings/high_tension_string_pulling_1",
-    "layer3": "fletcherstrestle:item/extras/arrow_pulling_1"
-  }
-}
