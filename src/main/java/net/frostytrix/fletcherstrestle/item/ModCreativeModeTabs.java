@@ -21,7 +21,7 @@ public class ModCreativeModeTabs {
             DeferredRegister.create(Registries.CREATIVE_MODE_TAB, FletcherTrestle.MOD_ID);
 
     public static final Supplier<CreativeModeTab> FLETCHERS_TRESTLE_TAB = CREATIVE_MODE_TAB.register("fletchers_trestle_tab",
-            () -> CreativeModeTab.builder().icon(() -> new ItemStack(Items.BOW))
+            () -> CreativeModeTab.builder().icon(() -> new ItemStack(ModItems.MODULAR_BOW.get()))
                     .withTabsBefore(ResourceLocation.fromNamespaceAndPath("minecraft","spawn_eggs"))
                     .title(Component.translatable("creative_tab.fletcherstrestle.fletchers_trestle_tab"))
                     .displayItems((itemDisplayParameters, output) -> {
