@@ -19,6 +19,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LightningBolt;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -32,11 +33,22 @@ import java.util.List;
 
 public class ModularArrowEntity extends AbstractArrow {
     private Vec3 startPos = null;
+
+    // Echo Shard Head
     private int resonanceTicks = -1;
     private Entity resonanceTarget = null;
     private float resonanceDamage = 0f;
+
+    //Jungle Shaft Bounces
     private int bounceCount = 0;
     private static final int MAX_BOUNCES = 3;
+
+    //Grappling
+    private int hookTicks = 0;
+    private static final int MAX_HOOK_DURATION = 100; // 5 seconds
+
+    private static final EntityDataAccessor<Boolean> IS_HOOKED =
+            SynchedEntityData.defineId(ModularArrowEntity.class, EntityDataSerializers.BOOLEAN);
 
     private static final EntityDataAccessor<ItemStack> SYNCED_ITEM =
             SynchedEntityData.defineId(ModularArrowEntity.class, EntityDataSerializers.ITEM_STACK);
@@ -57,6 +69,11 @@ public class ModularArrowEntity extends AbstractArrow {
         super.defineSynchedData(builder);
         // Register it with a default empty arrow
         builder.define(SYNCED_ITEM, new ItemStack(ModItems.MODULAR_ARROW.get()));
+        builder.define(IS_HOOKED, false);
+    }
+
+    public boolean isHooked() {
+        return this.entityData.get(IS_HOOKED);
     }
 
     public ItemStack getSyncedItemStack() {
@@ -274,12 +291,64 @@ public class ModularArrowEntity extends AbstractArrow {
                 }
             }
         }
+
+        if (this.isHooked() && !this.level().isClientSide) {
+            Entity owner = this.getOwner();
+
+            if (owner instanceof Player player && player.isAlive()) {
+                // 1. Calculate the distance vector
+                Vec3 arrowPos = this.position();
+                Vec3 playerPos = player.position();
+                Vec3 pullVec = arrowPos.subtract(playerPos);
+
+                double distance = pullVec.length();
+
+                // 2. Apply the pull if the player isn't right on top of the hook
+                if (distance > 1.5 && distance < 32) {
+                    double pullStrength = 0.15; // Tweak this for speed
+
+                    // Normalize the direction and multiply by strength
+                    Vec3 velocity = pullVec.normalize().scale(pullStrength);
+
+                    // Add vertical lift to prevent dragging on the floor
+                    double lift = 0.05;
+                    player.addDeltaMovement(new Vec3(velocity.x, velocity.y + lift, velocity.z));
+                    player.hurtMarked = true; // Forces the client to sync the new velocity
+
+                    this.hookTicks++;
+                } else {
+                    // Break the hook if we arrive or get too far
+                    this.breakHook();
+                }
+
+                // 3. Time-out safety
+                if (this.hookTicks > MAX_HOOK_DURATION) {
+                    this.breakHook();
+                }
+            } else {
+                this.breakHook();
+            }
+        }
+    }
+
+    private void breakHook() {
+        this.entityData.set(IS_HOOKED, false);
+        this.discard(); // Arrow breaks after use
     }
 
 
     @Override
     protected void onHitBlock(BlockHitResult result) {
         ArrowAssembly assembly = this.getAssembly();
+
+        if ("weighted_hook".equals(assembly.head())) {
+            this.entityData.set(IS_HOOKED, true);
+            this.setSoundEvent(SoundEvents.TRIPWIRE_ATTACH); // Mechanical "clink"
+            // We don't call super.onHitBlock yet if we want to keep it from "embedding" fully
+            this.setDeltaMovement(Vec3.ZERO);
+        } else {
+            super.onHitBlock(result);
+        }
 
         if (assembly != null && "jungle".equals(assembly.shaft()) && this.bounceCount < MAX_BOUNCES && this.random.nextFloat() < 0.85f) { // Keep at 1.0f for testing
 

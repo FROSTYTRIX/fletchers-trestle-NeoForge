@@ -229,5 +229,12 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                 .shavesRequired(4)
                 .unlockedBy("has_warped_stem", has(Items.WARPED_STEM))
                 .save(recipeOutput, ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "shaving_warped_stem"));
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, ModItems.WEIGHTED_HOOK.get())
+                .pattern("III")
+                .pattern(" S ")
+                .define('S', ModTags.Items.BOW_STRINGS)
+                .define('I', Items.IRON_INGOT)
+                .unlockedBy("has_arrow", has(ItemTags.ARROWS)).save(recipeOutput);
     }
 }

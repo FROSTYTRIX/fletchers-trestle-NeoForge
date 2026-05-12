@@ -14,6 +14,9 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
+import org.joml.Matrix4f;
 
 public class ModularArrowRenderer extends ArrowRenderer<ModularArrowEntity> {
 
@@ -46,6 +49,57 @@ public class ModularArrowRenderer extends ArrowRenderer<ModularArrowEntity> {
         renderPart(poseStack, buffer, packedLight, getTexture(assembly, "head"));
 
         poseStack.popPose();
+
+        if (entity.isHooked()) {
+            Entity owner = entity.getOwner();
+            if (owner instanceof Player player) {
+                renderGrapplingLine(entity, partialTicks, poseStack, buffer, player, packedLight);
+            }
+        }
+    }
+
+    // Added 'int packedLight' to the parameters
+    private void renderGrapplingLine(ModularArrowEntity arrow, float partialTicks, PoseStack poseStack, MultiBufferSource buffer, Player player, int packedLight) {
+        // 1. Get positions
+        double pX = Mth.lerp(partialTicks, player.xo, player.getX());
+        double pY = Mth.lerp(partialTicks, player.yo, player.getY()) + player.getBbHeight() * 0.5;
+        double pZ = Mth.lerp(partialTicks, player.zo, player.getZ());
+
+        double aX = Mth.lerp(partialTicks, arrow.xo, arrow.getX());
+        double aY = Mth.lerp(partialTicks, arrow.yo, arrow.getY());
+        double aZ = Mth.lerp(partialTicks, arrow.zo, arrow.getZ());
+
+        float dx = (float)(pX - aX);
+        float dy = (float)(pY - aY);
+        float dz = (float)(pZ - aZ);
+
+        VertexConsumer vertexConsumer = buffer.getBuffer(RenderType.leash());
+        Matrix4f matrix = poseStack.last().pose();
+
+        // 2. Brighter Rope Colors (Vanilla Lead/Rope Palette)
+        int r = 110, g = 85, b = 45; // Lighter brown
+        int r2 = 80, g2 = 60, b2 = 30; // Shaded side
+
+        // 3. Render with Width
+        // We add two vertices per segment to give the Triangle Strip area
+        for (int i = 0; i <= 24; ++i) {
+            float f = (float)i / 24.0F;
+
+            float x = dx * f;
+            float y = dy * f;
+            float z = dz * f;
+
+            // Vertex 1: The "Top/Left" side
+            vertexConsumer.addVertex(matrix, x, y, z)
+                    .setColor(r, g, b, 255)
+                    .setLight(packedLight);
+
+            // Vertex 2: The "Bottom/Right" side (offset by 0.05 for thickness)
+            // This offset gives the rope actual physical width on screen
+            vertexConsumer.addVertex(matrix, x + 0.035f, y + 0.035f, z)
+                    .setColor(r2, g2, b2, 255)
+                    .setLight(packedLight);
+        }
     }
 
     private void renderPart(PoseStack poseStack, MultiBufferSource buffer, int packedLight, ResourceLocation texture) {

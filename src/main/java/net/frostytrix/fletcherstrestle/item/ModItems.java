@@ -120,6 +120,9 @@ public class ModItems {
     public static final DeferredItem<Item> MODULAR_ARROW = ITEMS.register("modular_arrow",
             () -> new ModularArrowItem(new Item.Properties()));
 
+    public static final DeferredItem<Item> WEIGHTED_HOOK = ITEMS.register("weighted_hook",
+            () -> new Item(new Item.Properties()));
+
     public static final DeferredItem<Item> QUIVER = ITEMS.register("quiver",
             () -> new ModularQuiverItem(new Item.Properties().stacksTo(1)));
 

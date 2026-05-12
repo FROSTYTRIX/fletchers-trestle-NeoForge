@@ -65,5 +65,6 @@ public class ModItemModelProvider extends ItemModelProvider {
         basicItem(ModItems.QUIVER.get());
         basicItem(ModItems.MECHANICAL_TRIGGER.get());
         basicItem(ModItems.HEAVY_DUMMY_ITEM.get());
+        basicItem(ModItems.WEIGHTED_HOOK.get());
     }
 }

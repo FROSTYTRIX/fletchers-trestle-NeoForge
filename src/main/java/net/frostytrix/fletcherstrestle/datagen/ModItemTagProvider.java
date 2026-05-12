@@ -68,6 +68,7 @@ public class ModItemTagProvider extends ItemTagsProvider {
                 .add(Items.IRON_NUGGET)
                 .add(Items.GOLD_INGOT)
                 .add(Items.ECHO_SHARD)
+                .add(ModItems.WEIGHTED_HOOK.get())
                 ;
 
         tag(ModTags.Items.ARROW_FLETCHING)

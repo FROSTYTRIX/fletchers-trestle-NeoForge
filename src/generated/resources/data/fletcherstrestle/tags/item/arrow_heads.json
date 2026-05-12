@@ -5,6 +5,7 @@
     "minecraft:copper_ingot",
     "minecraft:iron_nugget",
     "minecraft:gold_ingot",
-    "minecraft:echo_shard"
+    "minecraft:echo_shard",
+    "fletcherstrestle:weighted_hook"
   ]
 }

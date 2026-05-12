@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "I": {
+      "item": "minecraft:iron_ingot"
+    },
+    "S": {
+      "tag": "fletcherstrestle:bow_strings"
+    }
+  },
+  "pattern": [
+    "III",
+    " S "
+  ],
+  "result": {
+    "count": 1,
+    "id": "fletcherstrestle:weighted_hook"
+  }
+}

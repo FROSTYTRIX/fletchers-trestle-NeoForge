@@ -88,6 +88,7 @@ public class ModCreativeModeTabs {
                         modularArrowDisplay.set(ModDataComponents.ARROW_ASSEMBLY.get(),
                                 new ArrowAssembly("flint", "oak", "feather"));
                         output.accept(modularArrowDisplay);
+                        output.accept(ModItems.WEIGHTED_HOOK.get());
 
                         output.accept(ModItems.MECHANICAL_TRIGGER.get());
                         modularCrossowDisplay.set(ModDataComponents.BOW_ASSEMBLY.get(),

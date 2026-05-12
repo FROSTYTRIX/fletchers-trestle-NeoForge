@@ -70,6 +70,7 @@ public class ModularArrowRecipe implements Recipe<ArrowRecipeInput> {
         if (stack.is(Items.ECHO_SHARD)) return "resonance_tip";
         if (stack.is(Items.IRON_NUGGET)) return "barbed_tip";
         if (stack.is(Items.GOLD_INGOT)) return "weighted_blunt";
+        if (stack.is(ModItems.WEIGHTED_HOOK)) return "weighted_hook";
         return null;
     }
 
