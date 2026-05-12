@@ -4,6 +4,8 @@ import net.frostytrix.fletcherstrestle.FletcherTrestle;
 import net.frostytrix.fletcherstrestle.block.ModBlocks;
 import net.frostytrix.fletcherstrestle.block.entity.ModBlockEntities;
 import net.frostytrix.fletcherstrestle.block.entity.renderer.ShavingHorseRenderer;
+import net.frostytrix.fletcherstrestle.client.ClientKeybinds;
+import net.frostytrix.fletcherstrestle.client.ClientState;
 import net.frostytrix.fletcherstrestle.client.model.ModularModelLoader;
 import net.frostytrix.fletcherstrestle.client.renderer.ModularArrowRenderer;
 import net.frostytrix.fletcherstrestle.component.ModDataComponents;
@@ -15,6 +17,7 @@ import net.frostytrix.fletcherstrestle.network.FletchingTabPayload;
 import net.frostytrix.fletcherstrestle.network.QuiverSlotPacket;
 import net.minecraft.client.renderer.BiomeColors;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.animal.horse.AbstractHorse;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.api.distmarker.Dist;
@@ -43,6 +46,38 @@ public class ModClientEvents {
     @SubscribeEvent
     public static void registerGeometryLoaders(ModelEvent.RegisterGeometryLoaders event) {
         event.register(ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "modular_loader"), ModularModelLoader.INSTANCE);
+    }
+
+    @SubscribeEvent
+    public static void onClientTick(ClientTickEvent.Post event) {
+        ClientState.isFreeLooking = ClientKeybinds.FREE_LOOK_KEY.isDown();
+
+        while (ClientKeybinds.GALLOP_LOCK_KEY.consumeClick()) {
+            ClientState.isGallopLocked = !ClientState.isGallopLocked;
+        }
+    }
+
+    @SubscribeEvent
+    public static void onMovementInput(MovementInputUpdateEvent event) {
+        Player player = event.getEntity();
+
+        // 1. Safety feature: Auto-disable if you jump off the horse
+        if (!player.isPassenger() && ClientState.isGallopLocked) {
+            ClientState.isGallopLocked = false;
+        }
+
+        // 2. The Cruise Control Logic
+        if (ClientState.isGallopLocked && player.getVehicle() instanceof AbstractHorse) {
+
+            // Force the game to think 'W' is being held down
+            event.getInput().up = true;
+            event.getInput().forwardImpulse = 1.0F;
+
+            // Optional quality of life: If you manually press 'S' (brake), turn off cruise control
+            if (event.getInput().down) {
+                ClientState.isGallopLocked = false;
+            }
+        }
     }
 
     @SubscribeEvent

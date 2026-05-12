@@ -1,9 +1,12 @@
 package net.frostytrix.fletcherstrestle.network;
 
 import net.frostytrix.fletcherstrestle.FletcherTrestle;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 
 @EventBusSubscriber(modid = FletcherTrestle.MOD_ID)
@@ -33,5 +36,31 @@ public class ModNetworking {
                 ClearShotsPacket.CODEC,
                 (payload, context) -> context.enqueueWork(() -> payload.handle(context.player()))
         );
+
+        registrar.playToServer(
+                MountSyncPayload.TYPE,
+                MountSyncPayload.CODEC,
+                ModNetworking::handleMountSync
+        );
+    }
+
+    public static void handleMountSync(final MountSyncPayload payload, final IPayloadContext context) {
+        context.enqueueWork(() -> {
+            // Find the player who sent the packet
+            Entity sender = context.player();
+            if (sender == null || sender.level() == null) return;
+
+            // Find the entity using the entityId we sent over
+            Entity entity = sender.level().getEntity(payload.entityId());
+
+            // 1. THE FIX: Check if it's a LivingEntity and cast it to 'mount'
+            if (entity instanceof LivingEntity mount && mount.hasPassenger(sender)) {
+
+                // Now Java knows 'mount' has a body and a head!
+                mount.setYRot(payload.yRot());
+                mount.yBodyRot = payload.yRot();
+                mount.yHeadRot = payload.yRot();
+            }
+        });
     }
 }

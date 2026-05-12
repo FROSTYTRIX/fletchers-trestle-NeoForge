@@ -92,3 +92,6 @@ description='''Fletcher's Trestle overhauls Minecraft?s archery by replacing the
 # stop your mod loading on the server for example.
 #[features.${mod_id}]
 #openGLVersion="[3.2,)"
+
+[[mixins]]
+config = "mixins.fletcherstrestle.client.json"

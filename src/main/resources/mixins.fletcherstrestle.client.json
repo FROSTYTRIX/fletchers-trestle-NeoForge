@@ -1,0 +1,13 @@
+{
+  "required": true,
+  "minVersion": "0.8.5",
+  "package": "net.frostytrix.fletcherstrestle.mixin.client",
+  "compatibilityLevel": "JAVA_21",
+  "client": [
+    "MountSteeringMixin",
+    "CameraMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
