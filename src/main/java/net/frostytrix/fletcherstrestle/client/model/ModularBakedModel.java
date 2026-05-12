@@ -123,17 +123,35 @@ public class ModularBakedModel implements BakedModel {
                 String riserMat = bow != null ? bow.riserMaterial().toLowerCase().replace(" ", "_") : "wood";
                 String stringMat = bow != null ? bow.stringMaterial().toLowerCase().replace(" ", "_") : "spider";
 
-                textures.add(basePath + "/limbs/" + limbMat + "_limb" + state);
+                textures.add(basePath + "/limbs/" + limbMat + "_limb");
                 textures.add(basePath + "/risers/" + riserMat + "_riser");
-                textures.add(basePath + "/strings/" + stringMat + "_string" + state);
 
+                String stringState = state.equals("_charged") ? "_pulling_2" : state;
+                textures.add(basePath + "/strings/" + stringMat + "_string" + stringState);
+
+                // We declare this outside the if-statement so the cacheKey can see it
+                String loadedProjectile = "";
+
+                // 3. Fix the Firework vs Arrow logic
                 if (state.equals("_charged")) {
                     ChargedProjectiles projectiles = stack.get(DataComponents.CHARGED_PROJECTILES);
                     if (projectiles != null && !projectiles.isEmpty()) {
-                        textures.add(basePath + "/" + (projectiles.contains(Items.FIREWORK_ROCKET) ? "firework" : "arrow"));
+
+                        boolean hasFirework = false;
+                        for (ItemStack projectile : projectiles.getItems()) {
+                            if (projectile.getItem() instanceof net.minecraft.world.item.FireworkRocketItem) {
+                                hasFirework = true;
+                                break;
+                            }
+                        }
+
+                        loadedProjectile = hasFirework ? "firework" : "arrow";
+                        textures.add(basePath + "/extras/" + loadedProjectile);
                     }
                 }
-                cacheKey = "xbow_" + limbMat + "_" + riserMat + "_" + stringMat + state;
+
+                // CACHE FIX: We append the loadedProjectile to the key!
+                cacheKey = "xbow_" + limbMat + "_" + riserMat + "_" + stringMat + state + "_" + loadedProjectile;
             }
             // --- 3. MODULAR ARROW ---
             else if (basePath.contains("arrow")) {

@@ -19,6 +19,8 @@ public class ModEnchantmentTagsProvider extends EnchantmentTagsProvider {
     @Override
     protected void addTags(HolderLookup.Provider provider) {
         this.tag(EnchantmentTags.IN_ENCHANTING_TABLE)
-                .add(ModEnchantments.PHOTOSYNTHESIS);
+                .add(ModEnchantments.PHOTOSYNTHESIS)
+                .add(ModEnchantments.BIOLUMINESCENCE)
+                .add(ModEnchantments.GALE_FORCE);
     }
 }

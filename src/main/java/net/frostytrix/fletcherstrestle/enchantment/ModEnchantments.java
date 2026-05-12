@@ -18,6 +18,16 @@ public class ModEnchantments {
             ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "photosynthesis")
     );
 
+    public static final ResourceKey<Enchantment> BIOLUMINESCENCE = ResourceKey.create(
+            Registries.ENCHANTMENT,
+            ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "bioluminescence")
+    );
+
+    public static final ResourceKey<Enchantment> GALE_FORCE = ResourceKey.create(
+            Registries.ENCHANTMENT,
+            ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "gale_force")
+    );
+
     public static void bootstrap(BootstrapContext<Enchantment> context) {
         HolderGetter<Item> items = context.lookup(Registries.ITEM);
 
@@ -33,5 +43,31 @@ public class ModEnchantments {
                         EquipmentSlotGroup.OFFHAND
                 )
         ).build(PHOTOSYNTHESIS.location())); // Just build it directly!
+
+        context.register(BIOLUMINESCENCE, Enchantment.enchantment(
+                Enchantment.definition(
+                        items.getOrThrow(ItemTags.BOW_ENCHANTABLE), // supported_items
+                        2, // weight
+                        1, // max_level
+                        Enchantment.dynamicCost(10, 5), // min_cost
+                        Enchantment.dynamicCost(20, 5), // max_cost
+                        1, // anvil_cost
+                        EquipmentSlotGroup.MAINHAND,
+                        EquipmentSlotGroup.OFFHAND
+                )
+        ).build(BIOLUMINESCENCE.location())); // Just build it directly!
+
+        context.register(GALE_FORCE, Enchantment.enchantment(
+                Enchantment.definition(
+                        items.getOrThrow(ItemTags.BOW_ENCHANTABLE),
+                        2, // weight
+                        3, // max_level (Level 1, 2, and 3 for bigger bursts!)
+                        Enchantment.dynamicCost(15, 10), // min_cost
+                        Enchantment.dynamicCost(65, 10), // max_cost
+                        4, // anvil_cost
+                        EquipmentSlotGroup.MAINHAND,
+                        EquipmentSlotGroup.OFFHAND
+                )
+        ).build(GALE_FORCE.location()));
     }
 }
