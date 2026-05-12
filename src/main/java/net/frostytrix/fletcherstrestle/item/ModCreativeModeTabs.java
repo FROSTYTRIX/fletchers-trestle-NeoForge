@@ -86,7 +86,7 @@ public class ModCreativeModeTabs {
                         output.accept(modularBowDisplay);
 
                         modularArrowDisplay.set(ModDataComponents.ARROW_ASSEMBLY.get(),
-                                new ArrowAssembly("flint", "wood", "feather"));
+                                new ArrowAssembly("flint", "oak", "feather"));
                         output.accept(modularArrowDisplay);
 
                         output.accept(ModItems.MECHANICAL_TRIGGER.get());

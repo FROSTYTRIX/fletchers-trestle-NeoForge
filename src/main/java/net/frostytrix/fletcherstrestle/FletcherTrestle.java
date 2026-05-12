@@ -25,6 +25,7 @@ import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent;
 import net.neoforged.neoforge.event.server.ServerStartingEvent;
+import net.neoforged.neoforge.registries.datamaps.RegisterDataMapTypesEvent;
 import org.slf4j.Logger;
 
 // The value here should match an entry in the META-INF/neoforge.mods.toml file
@@ -55,6 +56,7 @@ public class FletcherTrestle {
         ModEffects.register(modEventBus);
         ModLootModifiers.register(modEventBus);
 
+
         // Register the item to a creative tab
         modEventBus.addListener(this::addCreative);
         modEventBus.addListener(this::registerEntityAttributes);
@@ -76,6 +78,7 @@ public class FletcherTrestle {
     private void registerEntityAttributes(EntityAttributeCreationEvent event) {
         event.put(ModEntities.HEAVY_DUMMY.get(), HeavyDummyEntity.createAttributes().build());
     }
+
 
 
     // You can use SubscribeEvent and let the Event Bus discover methods to call

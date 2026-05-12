@@ -9,11 +9,15 @@ import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.frostytrix.fletcherstrestle.FletcherTrestle;
+import net.frostytrix.fletcherstrestle.component.BowAssembly;
+import net.frostytrix.fletcherstrestle.component.ModDataComponents;
 import net.frostytrix.fletcherstrestle.recipe.ModularWeaponRecipe;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Blocks;
+
+import java.util.List;
 
 public class FletchingRecipeCategory implements IRecipeCategory<ModularWeaponRecipe> {
     public static final ResourceLocation UID = ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "modular_weapon_assembly");
@@ -53,26 +57,46 @@ public class FletchingRecipeCategory implements IRecipeCategory<ModularWeaponRec
 
     @Override
     public void setRecipe(IRecipeLayoutBuilder builder, ModularWeaponRecipe recipe, IFocusGroup focuses) {
-        // JEI offsets the coordinates by exactly -10, -10 based on our background cut-out.
+        // 1. ADD ALL FOUR SLOTS EXPLICITLY
 
-        // 1. Riser Slot (Menu was 21, 35 -> JEI is 11, 25)
-        builder.addSlot(RecipeIngredientRole.INPUT, 11, 25)
-                .addIngredients(recipe.getRiser());
+        // Riser slot
+        builder.addSlot(RecipeIngredientRole.INPUT, 12, 25).addIngredients(recipe.getRiser());
+        // Top Limb slot (uses the limbs ingredient)
+        builder.addSlot(RecipeIngredientRole.INPUT, 34, 25-18).addIngredients(recipe.getLimbs());
 
-        // 2. Top Limb Slot (Menu was 45, 17 -> JEI is 35, 7)
-        builder.addSlot(RecipeIngredientRole.INPUT, 35, 7)
-                .addIngredients(recipe.getLimbs());
+        // Bottom Limb slot (uses the exact same limbs ingredient, but at a different Y coordinate)
+        builder.addSlot(RecipeIngredientRole.INPUT, 34, 25+18).addIngredients(recipe.getLimbs());
 
-        // 3. Bottom Limb Slot (Menu was 45, 53 -> JEI is 35, 43)
-        builder.addSlot(RecipeIngredientRole.INPUT, 35, 43)
-                .addIngredients(recipe.getLimbs());
+        // String slot
+        builder.addSlot(RecipeIngredientRole.INPUT, 58, 25).addIngredients(recipe.getString());
 
-        // 4. String Slot (Menu was 69, 35 -> JEI is 59, 25)
-        builder.addSlot(RecipeIngredientRole.INPUT, 59, 25)
-                .addIngredients(recipe.getString());
 
-        // 5. Output Slot (Menu was 124, 35 -> JEI is 114, 25)
-        builder.addSlot(RecipeIngredientRole.OUTPUT, 114, 25)
-                .addItemStack(recipe.getResultItem(null));
+        // 2. GENERATE DYNAMIC OUTPUT
+        List<ItemStack> outputPermutations = new java.util.ArrayList<>();
+
+        ItemStack[] risers = recipe.getRiser().getItems();
+        ItemStack[] limbs = recipe.getLimbs().getItems();
+        ItemStack[] strings = recipe.getString().getItems();
+
+        // Ensure we rotate through everything
+        int maxCombinations = Math.max(risers.length, Math.max(limbs.length, strings.length));
+
+        for (int i = 0; i < maxCombinations; i++) {
+            ItemStack currentRiser = risers[i % risers.length];
+            ItemStack currentLimb = limbs[i % limbs.length];
+            ItemStack currentString = strings[i % strings.length];
+
+            ItemStack out = recipe.getResultItem(null).copy();
+
+            String riserMat = ModularWeaponRecipe.getMaterialName(currentRiser);
+            String limbMat = ModularWeaponRecipe.getMaterialName(currentLimb);
+            String stringMat = ModularWeaponRecipe.getMaterialName(currentString);
+
+            out.set(ModDataComponents.BOW_ASSEMBLY.get(), new net.frostytrix.fletcherstrestle.component.BowAssembly(limbMat, riserMat, stringMat, 0.0f));
+            outputPermutations.add(out);
+        }
+
+        // 3. ADD OUTPUT SLOT
+        builder.addSlot(RecipeIngredientRole.OUTPUT, 114, 25).addItemStacks(outputPermutations);
     }
 }

@@ -2,7 +2,9 @@ package net.frostytrix.fletcherstrestle.item.custom;
 
 import net.frostytrix.fletcherstrestle.component.BowAssembly;
 import net.frostytrix.fletcherstrestle.component.ModDataComponents;
+import net.frostytrix.fletcherstrestle.enchantment.ModEnchantments;
 import net.minecraft.ChatFormatting;
+import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
@@ -15,6 +17,7 @@ import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.BowItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.Level;
 
 import javax.annotation.Nullable;
@@ -24,6 +27,33 @@ public class ModularBowItem extends BowItem {
 
     public ModularBowItem(Properties properties) {
         super(properties);
+    }
+
+    @Override
+    public boolean supportsEnchantment(ItemStack stack, Holder<Enchantment> enchantment) {
+        // If the game is asking about Photosynthesis, check our custom rules
+        if (enchantment.is(ModEnchantments.PHOTOSYNTHESIS)) {
+            BowAssembly assembly = stack.get(ModDataComponents.BOW_ASSEMBLY.get());
+
+            if (assembly != null) {
+                // Convert to lowercase to make checking easier (e.g., "Dark Oak" -> "dark oak")
+                String riser = assembly.riserMaterial().toLowerCase();
+                String limbs = assembly.limbMaterial().toLowerCase();
+
+                // 1. Riser MUST be wood (Update this list if you add Iron/Gold risers later)
+                // Assuming currently only "copper" is your non-wood riser.
+                boolean isWoodRiser = !riser.contains("copper") &&  !riser.contains("iron");
+
+                // 2. Limbs MUST NOT be Nether fungi
+                boolean isValidLimbs = !limbs.contains("crimson") && !limbs.contains("warped");
+
+                // It can only receive the enchantment if both are true
+                return isWoodRiser && isValidLimbs;
+            }
+        }
+
+        // For all other standard enchantments (Power, Punch, etc.), use default behavior
+        return super.supportsEnchantment(stack, enchantment);
     }
 
     @Override

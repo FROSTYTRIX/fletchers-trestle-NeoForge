@@ -58,18 +58,34 @@ public class ModularBakedModel implements BakedModel {
         this.context = context;
         this.basePath = basePath;
         this.overrides = new ModularItemOverrides();
-        this.transforms = createCustomTransforms();
+
+        // Update this line to pass the basePath!
+        this.transforms = createCustomTransforms(basePath);
     }
 
-    private ItemTransforms createCustomTransforms() {
+    private ItemTransforms createCustomTransforms(String basePath) {
         float f = 1 / 16.0f;
-        ItemTransform thirdPersonRight = new ItemTransform(new Vector3f(-80, 260, -40), new Vector3f(-1 * f, -2 * f, 2.5f * f), new Vector3f(0.9f, 0.9f, 0.9f));
-        ItemTransform thirdPersonLeft = new ItemTransform(new Vector3f(-80, -280, 40), new Vector3f(-1 * f, -2 * f, 2.5f * f), new Vector3f(0.9f, 0.9f, 0.9f));
-        ItemTransform firstPersonRight = new ItemTransform(new Vector3f(0, -90, 25), new Vector3f(1.13f * f, 3.2f * f, 1.13f * f), new Vector3f(0.68f, 0.68f, 0.68f));
-        ItemTransform firstPersonLeft = new ItemTransform(new Vector3f(0, 90, -25), new Vector3f(1.13f * f, 3.2f * f, 1.13f * f), new Vector3f(0.68f, 0.68f, 0.68f));
 
-        return new ItemTransforms(thirdPersonLeft, thirdPersonRight, firstPersonLeft, firstPersonRight,
-                ItemTransform.NO_TRANSFORM, ItemTransform.NO_TRANSFORM, ItemTransform.NO_TRANSFORM, ItemTransform.NO_TRANSFORM);
+        // If it's a crossbow, use the specific rotations and translations you provided
+        if (basePath != null && basePath.contains("crossbow")) {
+            ItemTransform thirdPersonRight = new ItemTransform(new Vector3f(-90, 0, -60), new Vector3f(2 * f, 0.1f * f, -3 * f), new Vector3f(0.9f, 0.9f, 0.9f));
+            ItemTransform thirdPersonLeft = new ItemTransform(new Vector3f(-90, 0, 30), new Vector3f(2 * f, 0.1f * f, -3 * f), new Vector3f(0.9f, 0.9f, 0.9f));
+            ItemTransform firstPersonRight = new ItemTransform(new Vector3f(-90, 0, -55), new Vector3f(1.13f * f, 3.2f * f, 1.13f * f), new Vector3f(0.68f, 0.68f, 0.68f));
+            ItemTransform firstPersonLeft = new ItemTransform(new Vector3f(-90, 0, 35), new Vector3f(1.13f * f, 3.2f * f, 1.13f * f), new Vector3f(0.68f, 0.68f, 0.68f));
+
+            return new ItemTransforms(thirdPersonLeft, thirdPersonRight, firstPersonLeft, firstPersonRight,
+                    ItemTransform.NO_TRANSFORM, ItemTransform.NO_TRANSFORM, ItemTransform.NO_TRANSFORM, ItemTransform.NO_TRANSFORM);
+        }
+        // Otherwise, fall back to the standard Bow transforms you already had
+        else {
+            ItemTransform thirdPersonRight = new ItemTransform(new Vector3f(-80, 260, -40), new Vector3f(-1 * f, -2 * f, 2.5f * f), new Vector3f(0.9f, 0.9f, 0.9f));
+            ItemTransform thirdPersonLeft = new ItemTransform(new Vector3f(-80, -280, 40), new Vector3f(-1 * f, -2 * f, 2.5f * f), new Vector3f(0.9f, 0.9f, 0.9f));
+            ItemTransform firstPersonRight = new ItemTransform(new Vector3f(0, -90, 25), new Vector3f(1.13f * f, 3.2f * f, 1.13f * f), new Vector3f(0.68f, 0.68f, 0.68f));
+            ItemTransform firstPersonLeft = new ItemTransform(new Vector3f(0, 90, -25), new Vector3f(1.13f * f, 3.2f * f, 1.13f * f), new Vector3f(0.68f, 0.68f, 0.68f));
+
+            return new ItemTransforms(thirdPersonLeft, thirdPersonRight, firstPersonLeft, firstPersonRight,
+                    ItemTransform.NO_TRANSFORM, ItemTransform.NO_TRANSFORM, ItemTransform.NO_TRANSFORM, ItemTransform.NO_TRANSFORM);
+        }
     }
 
     private class ModularItemOverrides extends ItemOverrides {
@@ -78,14 +94,20 @@ public class ModularBakedModel implements BakedModel {
             List<String> textures = new ArrayList<>();
             String cacheKey;
 
-            // --- 1. MODULAR BOW (Matches basePath: item/modular_bow) ---
+            // Grab components (they will be null if it's an unfinished/raw item)
             BowAssembly bow = stack.get(ModDataComponents.BOW_ASSEMBLY.get());
-            if (bow != null && basePath.contains("bow")) {
-                String pull = getPullSuffix(stack, entity, 20.0f);
-                String limbMat = bow.limbMaterial().toLowerCase().replace(" ", "_");
-                String riserMat = bow.riserMaterial().toLowerCase().replace(" ", "_");
-                String stringMat = bow.stringMaterial().toLowerCase().replace(" ", "_");
+            ArrowAssembly arrow = stack.get(ModDataComponents.ARROW_ASSEMBLY.get());
 
+            // --- 1. MODULAR BOW ---
+            if (basePath.contains("bow") && !basePath.contains("crossbow")) {
+                String pull = getPullSuffix(stack, entity, 20.0f);
+
+                // FALLBACK LOGIC: If bow is null, default to oak/spider.
+                String limbMat = bow != null ? bow.limbMaterial().toLowerCase().replace(" ", "_") : "oak";
+                String riserMat = bow != null ? bow.riserMaterial().toLowerCase().replace(" ", "_") : "wood";
+                String stringMat = bow != null ? bow.stringMaterial().toLowerCase().replace(" ", "_") : "spider";
+
+                // Properly using basePath and your subfolders!
                 textures.add(basePath + "/limbs/" + limbMat + "_limb" + pull);
                 textures.add(basePath + "/risers/" + riserMat + "_riser");
                 textures.add(basePath + "/strings/" + stringMat + "_string" + pull);
@@ -93,12 +115,13 @@ public class ModularBakedModel implements BakedModel {
 
                 cacheKey = "bow_" + limbMat + "_" + riserMat + "_" + stringMat + pull;
             }
-            // --- 2. MODULAR CROSSBOW (Matches basePath: item/modular_crossbow) ---
-            else if (bow != null && basePath.contains("crossbow")) {
+            // --- 2. MODULAR CROSSBOW ---
+            else if (basePath.contains("crossbow")) {
                 String state = getCrossbowStateSuffix(stack, entity);
-                String limbMat = bow.limbMaterial().toLowerCase().replace(" ", "_");
-                String riserMat = bow.riserMaterial().toLowerCase().replace(" ", "_");
-                String stringMat = bow.stringMaterial().toLowerCase().replace(" ", "_");
+
+                String limbMat = bow != null ? bow.limbMaterial().toLowerCase().replace(" ", "_") : "oak";
+                String riserMat = bow != null ? bow.riserMaterial().toLowerCase().replace(" ", "_") : "wood";
+                String stringMat = bow != null ? bow.stringMaterial().toLowerCase().replace(" ", "_") : "spider";
 
                 textures.add(basePath + "/limbs/" + limbMat + "_limb" + state);
                 textures.add(basePath + "/risers/" + riserMat + "_riser");
@@ -107,29 +130,26 @@ public class ModularBakedModel implements BakedModel {
                 if (state.equals("_charged")) {
                     ChargedProjectiles projectiles = stack.get(DataComponents.CHARGED_PROJECTILES);
                     if (projectiles != null && !projectiles.isEmpty()) {
-                        // Projectiles are in the root folder, not extras, per your ModItemModelProvider
                         textures.add(basePath + "/" + (projectiles.contains(Items.FIREWORK_ROCKET) ? "firework" : "arrow"));
                     }
                 }
                 cacheKey = "xbow_" + limbMat + "_" + riserMat + "_" + stringMat + state;
             }
-            // --- 3. MODULAR ARROW (Matches basePath: item/arrow) ---
+            // --- 3. MODULAR ARROW ---
+            else if (basePath.contains("arrow")) {
+                String headMat = arrow != null ? arrow.head().toLowerCase().replace(" ", "_") : "flint";
+                String shaftMat = arrow != null ? arrow.shaft().toLowerCase().replace(" ", "_") : "oak";
+                String fletchMat = arrow != null ? arrow.fletching().toLowerCase().replace(" ", "_") : "feather";
+
+                textures.add(basePath + "/shafts/" + shaftMat + "_shaft");
+                textures.add(basePath + "/fletchings/" + fletchMat + "_fletching");
+                textures.add(basePath + "/heads/" + headMat + "_head");
+
+                cacheKey = "arrow_" + headMat + "_" + shaftMat + "_" + fletchMat;
+            }
+            // --- CATCH ALL ---
             else {
-                ArrowAssembly arrow = stack.get(ModDataComponents.ARROW_ASSEMBLY.get());
-                if (arrow != null) {
-                    String headMat = arrow.head().toLowerCase().replace(" ", "_");
-                    String shaftMat = arrow.shaft().toLowerCase().replace(" ", "_");
-                    String fletchMat = arrow.fletching().toLowerCase().replace(" ", "_");
-
-                    // Ordering based on your ModItemModelProvider layers 0, 1, 2
-                    textures.add(basePath + "/shafts/" + shaftMat + "_shaft");
-                    textures.add(basePath + "/fletchings/" + fletchMat + "_fletching");
-                    textures.add(basePath + "/heads/" + headMat + "_head");
-
-                    cacheKey = "arrow_" + headMat + "_" + shaftMat + "_" + fletchMat;
-                } else {
-                    return originalModel;
-                }
+                return originalModel;
             }
 
             BakedModel cached = cache.getIfPresent(cacheKey);

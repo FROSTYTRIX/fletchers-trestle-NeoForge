@@ -58,7 +58,7 @@ public class ModularWeaponRecipe implements Recipe<FletchingRecipeInput> {
 
     // Helper method to extract your material names from the input items.
     // E.g., if the item is "copper_riser", return "copper"
-    private String getMaterialName(ItemStack stack) {
+    public static String getMaterialName(ItemStack stack) {
         if (stack.isEmpty()) return "Unknown";
 
         // Handle vanilla items that don't match your naming convention

@@ -1,0 +1,37 @@
+package net.frostytrix.fletcherstrestle.enchantment;
+
+import net.frostytrix.fletcherstrestle.FletcherTrestle;
+import net.minecraft.core.HolderGetter;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.data.worldgen.BootstrapContext;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.ItemTags;
+import net.minecraft.world.entity.EquipmentSlotGroup;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.enchantment.Enchantment;
+
+public class ModEnchantments {
+    // This ResourceKey links your Java code to the JSON file we will make next
+    public static final ResourceKey<Enchantment> PHOTOSYNTHESIS = ResourceKey.create(
+            Registries.ENCHANTMENT,
+            ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "photosynthesis")
+    );
+
+    public static void bootstrap(BootstrapContext<Enchantment> context) {
+        HolderGetter<Item> items = context.lookup(Registries.ITEM);
+
+        context.register(PHOTOSYNTHESIS, Enchantment.enchantment(
+                Enchantment.definition(
+                        items.getOrThrow(ItemTags.BOW_ENCHANTABLE), // supported_items
+                        2, // weight
+                        3, // max_level
+                        Enchantment.dynamicCost(10, 5), // min_cost
+                        Enchantment.dynamicCost(60, 5), // max_cost
+                        4, // anvil_cost
+                        EquipmentSlotGroup.MAINHAND,
+                        EquipmentSlotGroup.OFFHAND
+                )
+        ).build(PHOTOSYNTHESIS.location())); // Just build it directly!
+    }
+}
