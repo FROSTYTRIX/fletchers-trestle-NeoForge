@@ -40,7 +40,7 @@ public class ModularArrowEntity extends AbstractArrow {
 
     // Echo Shard Head
     private int resonanceTicks = -1;
-    private Entity resonanceTarget = null;
+    private int resonanceTargetId = -1;
     private float resonanceDamage = 0f;
 
     //Jungle Shaft Bounces
@@ -164,9 +164,16 @@ public class ModularArrowEntity extends AbstractArrow {
 
             // RESONANCE TIP: Setup the delayed echo hit
             if ("resonance_tip".equals(assembly.head())) {
-                this.resonanceTicks = 30; // 0.5 seconds
-                this.resonanceTarget = target;
-                this.resonanceDamage = (float) this.getBaseDamage() * 0.3f;
+                this.resonanceTicks = 20; // 1.0 second is usually 20 ticks. 30 is 1.5s.
+                this.resonanceTargetId = target.getId();
+
+                // Calculate 30% of the actual damage dealt (base * velocity)
+                double impactDamage = this.getBaseDamage() * this.getDeltaMovement().length();
+                this.resonanceDamage = (float) impactDamage * 0.3f;
+
+                // Visual: Play the initial echo sound
+                this.level().playSound(null, this.getX(), this.getY(), this.getZ(),
+                        SoundEvents.WARDEN_HEARTBEAT, this.getSoundSource(), 1.0f, 2.0f);
             }
 
             // BOUND (Fletching): 25% chance to drop the arrow on impact instead of breaking
@@ -325,9 +332,28 @@ public class ModularArrowEntity extends AbstractArrow {
         // RESONANCE TIP: Trigger delayed damage
         if (this.resonanceTicks > 0) {
             this.resonanceTicks--;
-            if (this.resonanceTicks == 0 && this.resonanceTarget != null && this.resonanceTarget.isAlive()) {
-                // Apply 0.3x damage. In 1.21, use level().damageSources()
-                this.resonanceTarget.hurt(this.damageSources().arrow(this, this.getOwner()), this.resonanceDamage);
+
+            // Visual: Trail of sonic particles from arrow to target
+            if (this.level() instanceof ServerLevel serverLevel && this.resonanceTicks % 2 == 0) {
+                Entity target = this.level().getEntity(this.resonanceTargetId);
+                if (target != null) {
+                    serverLevel.sendParticles(ParticleTypes.SONIC_BOOM,
+                            target.getX(), target.getY() + target.getBbHeight()/2, target.getZ(),
+                            1, 0, 0, 0, 0);
+                }
+            }
+
+            if (this.resonanceTicks == 0) {
+                Entity target = this.level().getEntity(this.resonanceTargetId);
+                if (target instanceof LivingEntity livingTarget && target.isAlive()) {
+                    // Apply the delayed damage
+                    livingTarget.hurt(this.damageSources().arrow(this, this.getOwner()), this.resonanceDamage);
+
+                    // Final Visual: The big blast
+                    this.level().playSound(null, target.getX(), target.getY(), target.getZ(),
+                            SoundEvents.WARDEN_SONIC_BOOM, this.getSoundSource(), 1.0f, 1.0f);
+                }
+                this.discard(); // Finally allow the arrow to vanish
             }
         }
 
@@ -379,6 +405,17 @@ public class ModularArrowEntity extends AbstractArrow {
                 this.breakHook();
             }
         }
+    }
+
+
+    @Override
+    public void remove(RemovalReason reason) {
+        // If we are currently "resonating," we refuse to be removed
+        // unless the world is closing or the entity is being discarded by a command.
+        if (this.resonanceTicks > 0 && reason == RemovalReason.DISCARDED) {
+            return;
+        }
+        super.remove(reason);
     }
 
     private void breakHook() {

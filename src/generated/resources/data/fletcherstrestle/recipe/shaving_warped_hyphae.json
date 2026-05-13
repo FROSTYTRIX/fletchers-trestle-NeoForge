@@ -1,0 +1,11 @@
+{
+  "type": "fletcherstrestle:shaving",
+  "ingredient": {
+    "item": "minecraft:warped_hyphae"
+  },
+  "result": {
+    "count": 1,
+    "id": "fletcherstrestle:rough_warped_limb"
+  },
+  "shaves_required": 4
+}

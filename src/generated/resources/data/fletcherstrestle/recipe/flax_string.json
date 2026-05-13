@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "fletcherstrestle:flax"
+    },
+    {
+      "item": "fletcherstrestle:flax"
+    },
+    {
+      "item": "fletcherstrestle:flax"
+    },
+    {
+      "item": "fletcherstrestle:flax"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "fletcherstrestle:flax_string"
+  }
+}
