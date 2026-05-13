@@ -1,11 +1,14 @@
 package net.frostytrix.fletcherstrestle.entity.custom;
 
+import net.frostytrix.fletcherstrestle.block.ModBlocks;
+import net.frostytrix.fletcherstrestle.block.custom.RopeBlock;
 import net.frostytrix.fletcherstrestle.component.ArrowAssembly;
 import net.frostytrix.fletcherstrestle.component.ModDataComponents;
 import net.frostytrix.fletcherstrestle.effect.ModEffects;
 import net.frostytrix.fletcherstrestle.entity.ModEntities;
 import net.frostytrix.fletcherstrestle.item.ModItems;
 import net.frostytrix.fletcherstrestle.item.custom.ModularArrowItem;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -23,6 +26,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
@@ -46,6 +50,12 @@ public class ModularArrowEntity extends AbstractArrow {
     //Grappling
     private int hookTicks = 0;
     private static final int MAX_HOOK_DURATION = 100; // 5 seconds
+
+    // Rope Deployment
+    private boolean isDeployingRope = false;
+    private int ropesPlaced = 0;
+    private BlockPos ropeAnchorPos = null;
+    private static final int MAX_ROPE_LENGTH = 20;
 
     private static final EntityDataAccessor<Boolean> IS_HOOKED =
             SynchedEntityData.defineId(ModularArrowEntity.class, EntityDataSerializers.BOOLEAN);
@@ -244,6 +254,46 @@ public class ModularArrowEntity extends AbstractArrow {
         super.tick();
         ArrowAssembly assembly = this.getAssembly();
 
+        if (this.isDeployingRope && !this.level().isClientSide) {
+
+            // Unspool 1 block every 2 game ticks (adjust this for faster/slower drops)
+            if (this.tickCount % 2 == 0) {
+
+                // Safety check in case the block breaks while deploying
+                if (this.ropeAnchorPos == null) {
+                    this.isDeployingRope = false;
+                    return;
+                }
+
+                // Find the coordinate for the next block down
+                BlockPos nextPos = this.ropeAnchorPos.below(this.ropesPlaced + 1);
+                BlockState currentState = this.level().getBlockState(nextPos);
+
+                // If the space is empty (or tall grass/water) AND we haven't hit the limit
+                if (currentState.canBeReplaced() && this.ropesPlaced < MAX_ROPE_LENGTH) {
+
+                    // We ALWAYS spawn the new block as the "Bottom" piece.
+                    // Because of the 'updateShape' method you wrote in RopeBlock earlier,
+                    // the block above this one will automatically realize it's no longer
+                    // the bottom and visually update its model instantly!
+                    BlockState ropeState = ModBlocks.ROPE.get().defaultBlockState()
+                            .setValue(RopeBlock.PERSISTENT, false)
+                            .setValue(RopeBlock.BOTTOM, true);
+
+                    // The '3' flag forces a block update to trigger the visual connections
+                    this.level().setBlock(nextPos, ropeState, 3);
+
+                    // Play a soft click for every block placed
+                    this.playSound(SoundEvents.WOOL_PLACE, 0.7F, 1.2F);
+
+                    this.ropesPlaced++;
+                } else {
+                    // We hit a solid floor or max length, stop deploying
+                    this.isDeployingRope = false;
+                }
+            }
+        }
+
         // Flight modifiers only apply when flying
         if (!this.inGround) {
             // ACACIA: Speed boost mid-flight (at 10 ticks)
@@ -348,6 +398,21 @@ public class ModularArrowEntity extends AbstractArrow {
             this.setDeltaMovement(Vec3.ZERO);
         } else {
             super.onHitBlock(result);
+        }
+
+        if ("trailing_rope".equals(assembly.head())) {
+
+            // We ONLY deploy if the arrow hits the underside of a block (the ceiling)
+            if (result.getDirection() == Direction.DOWN && !this.level().isClientSide) {
+                // Start the deployment sequence!
+                this.isDeployingRope = true;
+                this.ropesPlaced = 0;
+                this.ropeAnchorPos = result.getBlockPos();
+            }
+
+            // Let the arrow physically embed into the ceiling to act as the anchor
+            super.onHitBlock(result);
+            return;
         }
 
         if (assembly != null && "jungle".equals(assembly.shaft()) && this.bounceCount < MAX_BOUNCES && this.random.nextFloat() < 0.85f) { // Keep at 1.0f for testing

@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "block": "fletcherstrestle:rope",
+          "condition": "minecraft:block_state_property",
+          "properties": {
+            "persistent": "true"
+          }
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "fletcherstrestle:rope"
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "fletcherstrestle:blocks/rope"
+}

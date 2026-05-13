@@ -2,6 +2,7 @@ package net.frostytrix.fletcherstrestle.recipe;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.frostytrix.fletcherstrestle.block.ModBlocks;
 import net.frostytrix.fletcherstrestle.component.ArrowAssembly;
 import net.frostytrix.fletcherstrestle.component.ModDataComponents;
 import net.frostytrix.fletcherstrestle.item.ModItems;
@@ -71,6 +72,7 @@ public class ModularArrowRecipe implements Recipe<ArrowRecipeInput> {
         if (stack.is(Items.IRON_NUGGET)) return "barbed_tip";
         if (stack.is(Items.GOLD_INGOT)) return "weighted_blunt";
         if (stack.is(ModItems.WEIGHTED_HOOK)) return "weighted_hook";
+        if (stack.is(ModBlocks.ROPE.asItem())) return "trailing_rope";
         return null;
     }
 

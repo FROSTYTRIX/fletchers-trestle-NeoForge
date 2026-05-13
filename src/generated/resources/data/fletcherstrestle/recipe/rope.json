@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "F": {
+      "item": "fletcherstrestle:flax_string"
+    }
+  },
+  "pattern": [
+    "FF ",
+    "FF ",
+    "FF "
+  ],
+  "result": {
+    "count": 1,
+    "id": "fletcherstrestle:rope"
+  }
+}

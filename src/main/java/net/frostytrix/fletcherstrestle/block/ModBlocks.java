@@ -1,10 +1,7 @@
 package net.frostytrix.fletcherstrestle.block;
 
 import net.frostytrix.fletcherstrestle.FletcherTrestle;
-import net.frostytrix.fletcherstrestle.block.custom.ArcheryTargetBlock;
-import net.frostytrix.fletcherstrestle.block.custom.FlaxCropBlock;
-import net.frostytrix.fletcherstrestle.block.custom.ShavingHorseBlock;
-import net.frostytrix.fletcherstrestle.block.custom.SteamBoxBlock;
+import net.frostytrix.fletcherstrestle.block.custom.*;
 import net.frostytrix.fletcherstrestle.item.ModItems;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
@@ -39,6 +36,13 @@ public class ModBlocks {
                     .strength(1.0f)
                     .sound(SoundType.WOOD)
                     .noOcclusion()));
+
+    public static final DeferredBlock<Block> ROPE = registerBlock("rope",
+            () -> new RopeBlock(Block.Properties.of()
+                    .noCollission()
+                    .sound(SoundType.WOOL)
+                    .noOcclusion()
+                    .strength(0.6f)));
 
     private static <T extends Block> DeferredBlock<T> registerBlock(String name, Supplier<T> block){
         DeferredBlock<T> toReturn = BLOCKS.register(name, block);

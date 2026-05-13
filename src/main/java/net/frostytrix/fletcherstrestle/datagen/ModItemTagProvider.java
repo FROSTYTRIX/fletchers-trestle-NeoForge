@@ -1,11 +1,13 @@
 package net.frostytrix.fletcherstrestle.datagen;
 
 import net.frostytrix.fletcherstrestle.FletcherTrestle;
+import net.frostytrix.fletcherstrestle.block.ModBlocks;
 import net.frostytrix.fletcherstrestle.item.ModItems;
 import net.frostytrix.fletcherstrestle.tags.ModTags;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.ItemTagsProvider;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
@@ -69,6 +71,7 @@ public class ModItemTagProvider extends ItemTagsProvider {
                 .add(Items.GOLD_INGOT)
                 .add(Items.ECHO_SHARD)
                 .add(ModItems.WEIGHTED_HOOK.get())
+                .add(ModBlocks.ROPE.asItem())
                 ;
 
         tag(ModTags.Items.ARROW_FLETCHING)

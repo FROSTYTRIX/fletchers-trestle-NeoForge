@@ -236,5 +236,12 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                 .define('S', ModTags.Items.BOW_STRINGS)
                 .define('I', Items.IRON_INGOT)
                 .unlockedBy("has_arrow", has(ItemTags.ARROWS)).save(recipeOutput);
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, ModBlocks.ROPE.get())
+                .pattern("FF ")
+                .pattern("FF ")
+                .pattern("FF ")
+                .define('F', ModItems.FLAX_STRING)
+                .unlockedBy("has_flax", has(ModItems.FLAX_STRING)).save(recipeOutput);
     }
 }
