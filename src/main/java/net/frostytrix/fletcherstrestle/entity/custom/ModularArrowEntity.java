@@ -478,6 +478,8 @@ public class ModularArrowEntity extends AbstractArrow {
             this.setPos(hitPos.x, hitPos.y, hitPos.z);
 
             Direction face = result.getDirection();
+
+
             Vec3 motion = this.getDeltaMovement();
 
             // 2. HIGH DAMPENING: Arrows lose a lot of energy when bouncing. 30% retention is much more realistic.
