@@ -137,6 +137,7 @@ public class ModularArrowEntity extends AbstractArrow {
     @Override
     protected void onHitEntity(EntityHitResult result) {
         ArrowAssembly assembly = this.getAssembly();
+        double velocityOnImpact = this.getDeltaMovement().length();
 
         // WEIGHTED BLUNT: Calculate distance traveled and increase base damage before the hit resolves
         if ("weighted_blunt".equals(assembly.head()) && this.startPos != null) {
@@ -145,7 +146,24 @@ public class ModularArrowEntity extends AbstractArrow {
             this.setBaseDamage(this.getBaseDamage() * bonusMultiplier);
         }
 
+        if (result.getEntity() instanceof LivingEntity target) {
+            if ("resonance_tip".equals(assembly.head())) {
+                this.resonanceTicks = 20; // 40 ticks = 2 seconds
+                this.resonanceTargetId = target.getId();
 
+                // Calculate the echo damage
+                double impactDamage = this.getBaseDamage() * velocityOnImpact;
+                this.resonanceDamage = (float) impactDamage * 0.3f;
+
+                // Play the initial heartbeat
+                this.level().playSound(null, this.getX(), this.getY(), this.getZ(),
+                        SoundEvents.WARDEN_HEARTBEAT, this.getSoundSource(), 1.0f, 2.0f);
+
+                // Freeze the arrow in place so it doesn't fall to the floor while resonating
+                this.setDeltaMovement(Vec3.ZERO);
+                this.setNoGravity(true);
+            }
+        }
 
         // Resolve the hit
         super.onHitEntity(result);
@@ -160,20 +178,6 @@ public class ModularArrowEntity extends AbstractArrow {
 
             if (head.isArmorPiercing()) {
                 this.setBaseDamage(this.getBaseDamage() * 1.25);
-            }
-
-            // RESONANCE TIP: Setup the delayed echo hit
-            if ("resonance_tip".equals(assembly.head())) {
-                this.resonanceTicks = 20; // 1.0 second is usually 20 ticks. 30 is 1.5s.
-                this.resonanceTargetId = target.getId();
-
-                // Calculate 30% of the actual damage dealt (base * velocity)
-                double impactDamage = this.getBaseDamage() * this.getDeltaMovement().length();
-                this.resonanceDamage = (float) impactDamage * 0.3f;
-
-                // Visual: Play the initial echo sound
-                this.level().playSound(null, this.getX(), this.getY(), this.getZ(),
-                        SoundEvents.WARDEN_HEARTBEAT, this.getSoundSource(), 1.0f, 2.0f);
             }
 
             // BOUND (Fletching): 25% chance to drop the arrow on impact instead of breaking
@@ -333,27 +337,40 @@ public class ModularArrowEntity extends AbstractArrow {
         if (this.resonanceTicks > 0) {
             this.resonanceTicks--;
 
-            // Visual: Trail of sonic particles from arrow to target
-            if (this.level() instanceof ServerLevel serverLevel && this.resonanceTicks % 2 == 0) {
-                Entity target = this.level().getEntity(this.resonanceTargetId);
-                if (target != null) {
-                    serverLevel.sendParticles(ParticleTypes.SONIC_BOOM,
-                            target.getX(), target.getY() + target.getBbHeight()/2, target.getZ(),
-                            1, 0, 0, 0, 0);
-                }
+            Entity target = this.level().getEntity(this.resonanceTargetId);
+
+            // 1. STICK TO TARGET: If the target is alive, follow it!
+            if (target != null && target.isAlive()) {
+                // Snap the arrow to the center of the target's body
+                this.setPos(target.getX(), target.getY() + (target.getBbHeight() / 2.0), target.getZ());
+            } else if (!this.level().isClientSide) {
+                // Failsafe: If the target dies or vanishes before detonation, delete the arrow
+                this.discard();
+                return;
             }
 
+            // 2. DETONATION
             if (this.resonanceTicks == 0) {
-                Entity target = this.level().getEntity(this.resonanceTargetId);
-                if (target instanceof LivingEntity livingTarget && target.isAlive()) {
+                if (!this.level().isClientSide && target instanceof LivingEntity livingTarget) {
+
+                    // Strip the target's i-frames
+                    livingTarget.invulnerableTime = 0;
+
                     // Apply the delayed damage
                     livingTarget.hurt(this.damageSources().arrow(this, this.getOwner()), this.resonanceDamage);
-
+                    if (this.level() instanceof ServerLevel serverLevel && this.resonanceTicks % 2 == 0) {
+                        serverLevel.sendParticles(ParticleTypes.SONIC_BOOM,
+                                this.getX(), this.getY(), this.getZ(),
+                                1, 0, 0, 0, 0);
+                    }
                     // Final Visual: The big blast
-                    this.level().playSound(null, target.getX(), target.getY(), target.getZ(),
+                    this.level().playSound(null, this.getX(), this.getY(), this.getZ(),
                             SoundEvents.WARDEN_SONIC_BOOM, this.getSoundSource(), 1.0f, 1.0f);
                 }
-                this.discard(); // Finally allow the arrow to vanish
+
+                if (!this.level().isClientSide) {
+                    this.discard(); // Finally allow the arrow to vanish
+                }
             }
         }
 
@@ -410,6 +427,7 @@ public class ModularArrowEntity extends AbstractArrow {
 
     @Override
     public void remove(RemovalReason reason) {
+        ArrowAssembly assembly = this.getAssembly();
         // If we are currently "resonating," we refuse to be removed
         // unless the world is closing or the entity is being discarded by a command.
         if (this.resonanceTicks > 0 && reason == RemovalReason.DISCARDED) {
@@ -448,6 +466,7 @@ public class ModularArrowEntity extends AbstractArrow {
             }
 
             // Let the arrow physically embed into the ceiling to act as the anchor
+            this.pickup = AbstractArrow.Pickup.DISALLOWED;
             super.onHitBlock(result);
             return;
         }
