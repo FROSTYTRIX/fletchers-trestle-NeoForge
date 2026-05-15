@@ -71,7 +71,7 @@ public class ModularBowItem extends BowItem {
 
             // --- SPECIAL TRAITS ---
             if (limb == LimbStats.CRIMSON) {
-                arrow.igniteForSeconds(100);
+                arrow.igniteForSeconds(1000);
             }
             if (limb == LimbStats.WARPED) {
                 arrow.setNoGravity(true);
@@ -194,7 +194,7 @@ public class ModularBowItem extends BowItem {
         // --- 4. YOUR EXISTING CUSTOM EFFECTS ---
         if (assembly != null) {
             if (assembly.limbMaterial().equals("Acacia")) {
-                player.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 60, 0, false, false, true));
+                player.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 30, 1, false, false, true));
             }
             StringStats string = StringStats.fromString(assembly.stringMaterial());
             if (string.getDurabilityCost() > 1) {
