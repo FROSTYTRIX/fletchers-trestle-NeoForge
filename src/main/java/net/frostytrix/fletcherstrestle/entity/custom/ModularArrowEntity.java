@@ -148,7 +148,7 @@ public class ModularArrowEntity extends AbstractArrow {
 
         if (result.getEntity() instanceof LivingEntity target) {
             if ("resonance_tip".equals(assembly.head())) {
-                this.resonanceTicks = 20; // 40 ticks = 2 seconds
+                this.resonanceTicks = 20; // 20 ticks = 1 seconds
                 this.resonanceTargetId = target.getId();
 
                 // Calculate the echo damage

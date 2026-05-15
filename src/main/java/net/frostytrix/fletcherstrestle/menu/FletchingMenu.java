@@ -179,6 +179,7 @@ public class FletchingMenu extends AbstractContainerMenu {
             ItemStack stack = this.craftSlots.getItem(i);
             if (!stack.isEmpty()) stack.shrink(1);
         }
+        this.slotsChanged(this.craftSlots);
     }
 
     @Override
