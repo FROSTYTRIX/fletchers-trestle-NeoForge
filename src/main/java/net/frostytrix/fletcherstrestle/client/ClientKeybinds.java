@@ -16,8 +16,11 @@ import org.lwjgl.glfw.GLFW;
 public class ClientKeybinds {
     public static final KeyMapping CYCLE_LEFT = new KeyMapping("key.fletcherstrestle.quiver_left", GLFW.GLFW_KEY_LEFT, "key.categories.fletcherstrestle");
     public static final KeyMapping CYCLE_RIGHT = new KeyMapping("key.fletcherstrestle.quiver_right", GLFW.GLFW_KEY_RIGHT, "key.categories.fletcherstrestle");
+    public static final KeyMapping QUIVER_MODIFIER = new KeyMapping("key.fletcherstrestle.quiver_modifier", KeyConflictContext.IN_GAME, InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_X, "key.categories.fletcherstrestle");
+
     public static final KeyMapping FREE_LOOK_KEY = new KeyMapping("key.fletcherstrestle.free_look", KeyConflictContext.IN_GAME, InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_LEFT_ALT, "key.categories.fletcherstrestle");
     public static final KeyMapping GALLOP_LOCK_KEY = new KeyMapping("key.fletcherstrestle.gallop_lock_key", KeyConflictContext.IN_GAME, InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_G, "key.categories.fletcherstrestle");
+
 
     // Note: The bus = Bus.MOD is required for Registration events, but Bus.GAME is used for Tick events.
     @EventBusSubscriber(modid = FletcherTrestle.MOD_ID, value = Dist.CLIENT)

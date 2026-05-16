@@ -6,6 +6,7 @@ import net.frostytrix.fletcherstrestle.block.entity.ModBlockEntities;
 import net.frostytrix.fletcherstrestle.block.entity.renderer.ShavingHorseRenderer;
 import net.frostytrix.fletcherstrestle.client.ClientKeybinds;
 import net.frostytrix.fletcherstrestle.client.ClientState;
+import net.frostytrix.fletcherstrestle.client.QuiverHudOverlay;
 import net.frostytrix.fletcherstrestle.client.model.ModularModelLoader;
 import net.frostytrix.fletcherstrestle.client.renderer.ModularArrowRenderer;
 import net.frostytrix.fletcherstrestle.component.ModDataComponents;
@@ -13,10 +14,13 @@ import net.frostytrix.fletcherstrestle.entity.ModEntities;
 import net.frostytrix.fletcherstrestle.item.ModItems;
 import net.frostytrix.fletcherstrestle.item.custom.ModularBowItem;
 import net.frostytrix.fletcherstrestle.item.custom.ModularCrossbowItem;
+import net.frostytrix.fletcherstrestle.item.custom.ModularQuiverItem;
 import net.frostytrix.fletcherstrestle.network.FletchingTabPayload;
 import net.frostytrix.fletcherstrestle.network.QuiverSlotPacket;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BiomeColors;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.animal.horse.AbstractHorse;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -24,6 +28,7 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.*;
+import net.neoforged.neoforge.network.PacketDistributor;
 
 import static net.frostytrix.fletcherstrestle.FletcherTrestle.MOD_ID;
 
@@ -50,10 +55,71 @@ public class ModClientEvents {
 
     @SubscribeEvent
     public static void onClientTick(ClientTickEvent.Post event) {
+        // Horse Logic
         ClientState.isFreeLooking = ClientKeybinds.FREE_LOOK_KEY.isDown();
 
         while (ClientKeybinds.GALLOP_LOCK_KEY.consumeClick()) {
             ClientState.isGallopLocked = !ClientState.isGallopLocked;
+        }
+
+        //Quiver Logic
+        if (ClientKeybinds.QUIVER_MODIFIER.isDown()) {
+            QuiverHudOverlay.displayTicks = Math.max(QuiverHudOverlay.displayTicks, 10);
+        }
+
+        QuiverHudOverlay.slideProgressO = QuiverHudOverlay.slideProgress;
+
+        if (QuiverHudOverlay.displayTicks > 0) {
+            QuiverHudOverlay.displayTicks--;
+            if (QuiverHudOverlay.slideProgress < 10.0f) {
+                QuiverHudOverlay.slideProgress += 1.5f;
+            }
+        } else {
+            if (QuiverHudOverlay.slideProgress > 0.0f) {
+                QuiverHudOverlay.slideProgress -= 1.0f;
+            }
+        }
+        QuiverHudOverlay.slideProgress = Mth.clamp(QuiverHudOverlay.slideProgress, 0.0f, 10.0f);
+    }
+
+    @SubscribeEvent
+    public static void onMouseScroll(InputEvent.MouseScrollingEvent event) {
+        Minecraft mc = Minecraft.getInstance();
+        Player player = mc.player;
+
+        if (player == null) return;
+
+        // 1. Check if our modifier key is actively being held down
+        if (ClientKeybinds.QUIVER_MODIFIER.isDown()) {
+
+            // 2. Verify the player actually has a quiver in their inventory
+            boolean hasQuiver = false;
+            for (int i = 0; i < player.getInventory().getContainerSize(); i++) {
+                if (player.getInventory().getItem(i).getItem() instanceof ModularQuiverItem) {
+                    hasQuiver = true;
+                    break;
+                }
+            }
+
+            if (hasQuiver) {
+                // 3. CANCEL the vanilla event so the hotbar stops scrolling
+                event.setCanceled(true);
+
+                // 4. Calculate direction and fire the packet!
+                double delta = event.getScrollDeltaY();
+                if (delta != 0) {
+                    // Scrolling DOWN (negative delta) usually cycles right in the UI
+                    // Scrolling UP (positive delta) usually cycles left
+                    boolean cycleRight = delta < 0;
+
+                    // Dispatch the exact same packet you already wrote
+                    PacketDistributor.sendToServer(new QuiverSlotPacket(cycleRight));
+
+                    // 5. UX Polish: Force the Quiver HUD to pop open so the player sees the change!
+                    // (Assuming you have a tick counter in your QuiverHudOverlay)
+                    QuiverHudOverlay.displayTicks = 60; // Keep open for 3 seconds
+                }
+            }
         }
     }
 
