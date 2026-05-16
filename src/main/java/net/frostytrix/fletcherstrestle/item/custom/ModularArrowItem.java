@@ -75,7 +75,7 @@ public class ModularArrowItem extends ArrowItem {
 
     public enum HeadStats {
         FLINT("flint", 1.0f, false, false),
-        BROADHEAD("broadhead", 1.15f, false, false), // Applies Bleed
+        BROADHEAD("broadhead", 1.15f, true, false), // Applies Bleed
         BODKIN_POINT("bodkin_point", 1.0f, false, true),        // Armor Piercing
         RESONANCE_TIP("resonance_tip", 1.0f, false, false),
         BARBED_TIP("barbed_tip", 1.0f, true, false),
@@ -112,7 +112,7 @@ public class ModularArrowItem extends ArrowItem {
         SPRUCE("spruce", 1.0f, 1.1f),   // Drops slightly faster (heavy)
         BIRCH("birch", 1f, 0.9f),
         JUNGLE("jungle", 1f, 1.0f),
-        DARK_OAK("dark_oak", 1f, 01.0f),
+        DARK_OAK("dark_oak", 1f, 1.0f),
         ACACIA("acacia", 1f, 1.0f),
         MANGROVE("mangrove", 1f, 1.0f),
         CHERRY("cherry", 1f, 1.0f),
@@ -144,18 +144,18 @@ public class ModularArrowItem extends ArrowItem {
 
     public enum FletchingStats {
         FEATHER("feather", 1.0f),
-        RIGID("rigid", 1.2f),
-        TRAILING("trailing", 1.3f),
+        RIGID("rigid", 0.84f),
+        TRAILING("trailing", 0.75f),
         SERRATED("serrated", 1f),
         BOUND("bound", 1f),
         VEX("vex", 1f);
 
         private final String name;
-        private final float accuracyMult;
+        private final float inaccuracyMult;
 
         FletchingStats(String name, float accuracyMult) {
             this.name = name;
-            this.accuracyMult = accuracyMult;
+            this.inaccuracyMult = accuracyMult;
         }
 
         public static FletchingStats fromString(String name) {
@@ -165,6 +165,6 @@ public class ModularArrowItem extends ArrowItem {
             return FEATHER;
         }
 
-        public float getAccuracyMult() { return accuracyMult; }
+        public float getInaccuracyMult() { return inaccuracyMult; }
     }
 }

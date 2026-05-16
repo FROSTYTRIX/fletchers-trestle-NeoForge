@@ -142,7 +142,7 @@ public class ModularArrowEntity extends AbstractArrow {
         // WEIGHTED BLUNT: Calculate distance traveled and increase base damage before the hit resolves
         if ("weighted_blunt".equals(assembly.head()) && this.startPos != null) {
             double distance = this.position().distanceTo(this.startPos);
-            double bonusMultiplier = 1.0 + ((distance / 10.0) * 0.05);
+            double bonusMultiplier = 1.0 + ((distance / 100));
             this.setBaseDamage(this.getBaseDamage() * bonusMultiplier);
         }
 
@@ -172,7 +172,7 @@ public class ModularArrowEntity extends AbstractArrow {
 
         if (result.getEntity() instanceof LivingEntity target) {
             // BROADHEAD: Bleeding (Poison) for 3s (60 ticks)
-            if ("broadhead".equals(assembly.head())) {
+            if (head.causesBleed()) {
                 target.addEffect(new MobEffectInstance(ModEffects.BLEED_EFFECT, 60, 0));
             }
 
@@ -264,6 +264,7 @@ public class ModularArrowEntity extends AbstractArrow {
     public void tick() {
         super.tick();
         ArrowAssembly assembly = this.getAssembly();
+        ModularArrowItem.ShaftStats shaft = ModularArrowItem.ShaftStats.fromString(assembly.shaft());
 
         if (this.isDeployingRope && !this.level().isClientSide) {
 
@@ -313,10 +314,8 @@ public class ModularArrowEntity extends AbstractArrow {
                 this.hasImpulse = true; // Tell the server to sync the sudden movement
             }
 
-            // SPRUCE: Heavy/Stable (Adds extra gravity)
-            if ("spruce".equals(assembly.shaft())) {
-                this.setDeltaMovement(this.getDeltaMovement().add(0, -0.01, 0));
-            }
+            // Apply gravity Mult
+            this.setDeltaMovement(this.getDeltaMovement().add(0, -(shaft.getGravityMult()-1)/10, 0));
 
             // SERRATED: Magnetism (Subtle homing)
             if ("serrated".equals(assembly.fletching()) && this.tickCount > 2) {

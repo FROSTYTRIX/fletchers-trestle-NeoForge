@@ -1,5 +1,6 @@
 package net.frostytrix.fletcherstrestle.item.custom;
 
+import net.frostytrix.fletcherstrestle.component.ArrowAssembly;
 import net.frostytrix.fletcherstrestle.component.BowAssembly;
 import net.frostytrix.fletcherstrestle.component.ModDataComponents;
 import net.frostytrix.fletcherstrestle.enchantment.ModEnchantments;
@@ -97,16 +98,18 @@ public class ModularBowItem extends BowItem {
         if (bowStack.isEmpty()) bowStack = shooter.getMainHandItem(); // Fallback for edge cases
 
         BowAssembly assembly = bowStack.get(ModDataComponents.BOW_ASSEMBLY.get());
+        ArrowAssembly Assembly = projectile.getPickResult().get(ModDataComponents.ARROW_ASSEMBLY.get());
         float finalVelocity = velocity;
         float finalInaccuracy = inaccuracy;
 
         if (assembly != null) {
             StringStats string = StringStats.fromString(assembly.stringMaterial());
             RiserStats riser = RiserStats.fromString(assembly.riserMaterial());
+            ModularArrowItem.FletchingStats fletching = ModularArrowItem.FletchingStats.fromString(Assembly.fletching());
 
             // --- APPLY VELOCITY & INACCURACY ---
             finalVelocity = velocity * string.getVelocityMult();
-            finalInaccuracy = inaccuracy * riser.getInnacuracyMult();
+            finalInaccuracy = inaccuracy * riser.getInnacuracyMult() * fletching.getInaccuracyMult();
         }
 
         // Call super with our modified values

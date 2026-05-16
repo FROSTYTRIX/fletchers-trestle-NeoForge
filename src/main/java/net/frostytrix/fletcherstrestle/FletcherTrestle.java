@@ -64,7 +64,8 @@ public class FletcherTrestle {
         ModRecipes.SERIALIZERS.register(modEventBus);
         ModRecipes.TYPES.register(modEventBus);
         // Register our mod's ModConfigSpec so that FML can create and load the config file for us
-        modContainer.registerConfig(ModConfig.Type.COMMON, FletcherConfig.SPEC);
+        modContainer.registerConfig(ModConfig.Type.SERVER, FletcherConfig.SERVER_SPEC);
+        modContainer.registerConfig(ModConfig.Type.CLIENT, FletcherConfig.CLIENT_SPEC);
         modContainer.registerExtensionPoint(IConfigScreenFactory.class, ConfigurationScreen::new);
     }
 
