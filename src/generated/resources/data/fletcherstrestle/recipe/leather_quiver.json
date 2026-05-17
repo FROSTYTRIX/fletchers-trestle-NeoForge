@@ -5,9 +5,6 @@
     "C": {
       "item": "minecraft:chest"
     },
-    "I": {
-      "item": "minecraft:iron_ingot"
-    },
     "L": {
       "item": "minecraft:leather"
     },
@@ -18,10 +15,10 @@
   "pattern": [
     "SLS",
     "LCL",
-    "ILI"
+    "SLS"
   ],
   "result": {
     "count": 1,
-    "id": "fletcherstrestle:quiver"
+    "id": "fletcherstrestle:leather_quiver"
   }
 }

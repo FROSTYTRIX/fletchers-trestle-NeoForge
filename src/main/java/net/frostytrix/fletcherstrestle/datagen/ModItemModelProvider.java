@@ -3,14 +3,8 @@ package net.frostytrix.fletcherstrestle.datagen;
 import net.frostytrix.fletcherstrestle.FletcherTrestle;
 import net.frostytrix.fletcherstrestle.item.ModItems;
 import net.minecraft.data.PackOutput;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.ItemDisplayContext;
-import net.neoforged.neoforge.client.model.generators.ItemModelBuilder;
 import net.neoforged.neoforge.client.model.generators.ItemModelProvider;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
-
-import java.util.LinkedHashMap;
-import java.util.Map;
 
 public class ModItemModelProvider extends ItemModelProvider {
     public ModItemModelProvider(PackOutput output, ExistingFileHelper existingFileHelper) {
@@ -62,7 +56,8 @@ public class ModItemModelProvider extends ItemModelProvider {
         basicItem(ModItems.FLAX_STRING.get());
         handheldItem(ModItems.DRAWKNIFE.get());
 
-        basicItem(ModItems.QUIVER.get());
+        basicItem(ModItems.LEATHER_QUIVER.get());
+        basicItem(ModItems.IRON_QUIVER.get());
         basicItem(ModItems.MECHANICAL_TRIGGER.get());
         basicItem(ModItems.HEAVY_DUMMY_ITEM.get());
         basicItem(ModItems.WEIGHTED_HOOK.get());

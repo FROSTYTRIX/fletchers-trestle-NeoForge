@@ -29,11 +29,15 @@ public record QuiverSlotPacket(boolean cycleRight) implements CustomPacketPayloa
             for (int i = 0; i < player.getInventory().getContainerSize(); i++) {
                 ItemStack stack = player.getInventory().getItem(i);
                 if (stack.getItem() instanceof ModularQuiverItem) {
-                    int current = stack.getOrDefault(ModDataComponents.QUIVER_SELECTED_SLOT.get(), 0);
-                    int next = payload.cycleRight() ? (current + 1) % 9 : (current - 1 + 9) % 9;
-                    stack.set(ModDataComponents.QUIVER_SELECTED_SLOT.get(), next);
+                    // Read the max slots (default to 9 if the component is somehow missing)
+                    int maxSlots = stack.getOrDefault(ModDataComponents.MAX_QUIVER_SLOTS.get(), 9);
 
-                    //player.displayClientMessage(Component.literal("Quiver Slot: " + (next + 1)), true);
+                    int current = stack.getOrDefault(ModDataComponents.QUIVER_SELECTED_SLOT.get(), 0);
+
+                    // Dynamic modulo math to wrap around the specific size of this quiver tier!
+                    int next = payload.cycleRight() ? (current + 1) % maxSlots : (current - 1 + maxSlots) % maxSlots;
+
+                    stack.set(ModDataComponents.QUIVER_SELECTED_SLOT.get(), next);
                     break;
                 }
             }

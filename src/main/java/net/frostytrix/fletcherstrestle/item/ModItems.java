@@ -2,8 +2,8 @@ package net.frostytrix.fletcherstrestle.item;
 
 import net.frostytrix.fletcherstrestle.FletcherTrestle;
 import net.frostytrix.fletcherstrestle.block.ModBlocks;
+import net.frostytrix.fletcherstrestle.component.ModDataComponents;
 import net.frostytrix.fletcherstrestle.item.custom.*;
-import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemNameBlockItem;
 import net.neoforged.bus.api.IEventBus;
@@ -124,8 +124,14 @@ public class ModItems {
     public static final DeferredItem<Item> WEIGHTED_HOOK = ITEMS.register("weighted_hook",
             () -> new Item(new Item.Properties()));
 
-    public static final DeferredItem<Item> QUIVER = ITEMS.register("quiver",
-            () -> new ModularQuiverItem(new Item.Properties().stacksTo(1)));
+    public static final DeferredItem<Item> LEATHER_QUIVER = ITEMS.register("leather_quiver",
+            () -> new ModularQuiverItem(new Item.Properties().stacksTo(1)
+                    .component(ModDataComponents.MAX_QUIVER_SLOTS.get(), 3)));
+
+    public static final DeferredItem<Item> IRON_QUIVER = ITEMS.register("iron_quiver",
+            () -> new ModularQuiverItem(new Item.Properties().stacksTo(1)
+                    .component(ModDataComponents.MAX_QUIVER_SLOTS.get(), 5)));
+
 
     public static final DeferredItem<Item> FLETCHER_GUIDE = ITEMS.register("fletcher_guide",
             () -> new FletcherGuideItem(new Item.Properties().stacksTo(1)));

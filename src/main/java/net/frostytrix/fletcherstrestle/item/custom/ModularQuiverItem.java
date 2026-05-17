@@ -23,7 +23,6 @@ import net.minecraft.world.level.Level;
 import java.util.List;
 
 public class ModularQuiverItem extends Item {
-
     public ModularQuiverItem(Properties properties) {
         super(properties.stacksTo(1)); // Quivers shouldn't stack
     }
@@ -32,6 +31,8 @@ public class ModularQuiverItem extends Item {
     // --- BUNDLE STYLE: Clicking an item ONTO the Quiver ---
     @Override
     public boolean overrideOtherStackedOnMe(ItemStack quiver, ItemStack carriedStack, Slot slot, ClickAction action, Player player, SlotAccess access) {
+        int maxSlots = quiver.getOrDefault(ModDataComponents.MAX_QUIVER_SLOTS.get(), 9);
+
         if (action != ClickAction.SECONDARY || !slot.allowModification(player)) return false;
 
         List<ItemStack> list = getQuiverContents(quiver);
@@ -39,7 +40,9 @@ public class ModularQuiverItem extends Item {
         // Extracting from Quiver
         if (carriedStack.isEmpty()) {
             int selected = quiver.getOrDefault(ModDataComponents.QUIVER_SELECTED_SLOT.get(), 0);
-            if (!list.get(selected).isEmpty()) {
+
+            // Safety check in case the selected slot exceeds the list size
+            if (selected < list.size() && !list.get(selected).isEmpty()) {
                 access.set(list.get(selected).copy());
                 list.set(selected, ItemStack.EMPTY);
                 saveQuiverContents(quiver, list);
@@ -48,7 +51,14 @@ public class ModularQuiverItem extends Item {
         }
         // Inserting into Quiver
         else if (carriedStack.getItem() instanceof ArrowItem) {
-            for (int i = 0; i < 9; i++) {
+            // DYNAMIC UPDATE: Use maxSlots instead of 9
+            for (int i = 0; i < maxSlots; i++) {
+
+                // DYNAMIC UPDATE: Ensure the list has enough empty slots to prevent out-of-bounds errors
+                if (i >= list.size()) {
+                    list.add(ItemStack.EMPTY);
+                }
+
                 ItemStack inSlot = list.get(i);
                 if (inSlot.isEmpty()) {
                     list.set(i, carriedStack.copy());

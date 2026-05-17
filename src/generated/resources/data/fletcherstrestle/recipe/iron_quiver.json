@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "I": {
+      "item": "minecraft:iron_ingot"
+    },
+    "Q": {
+      "item": "fletcherstrestle:leather_quiver"
+    }
+  },
+  "pattern": [
+    " I ",
+    "IQI",
+    "III"
+  ],
+  "result": {
+    "count": 1,
+    "id": "fletcherstrestle:iron_quiver"
+  }
+}

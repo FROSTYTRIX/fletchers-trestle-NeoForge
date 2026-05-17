@@ -6,6 +6,7 @@ import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.neoforged.bus.api.IEventBus;
+import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
 import java.util.function.Supplier;
@@ -38,6 +39,14 @@ public class ModDataComponents {
                     .persistent(Codec.INT)
                     .networkSynchronized(ByteBufCodecs.INT)
                     .build());
+
+    // Inside ModDataComponents.java
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> MAX_QUIVER_SLOTS =
+            DATA_COMPONENT_TYPES.register("max_quiver_slots", () ->
+                    DataComponentType.<Integer>builder()
+                            .persistent(Codec.INT)// For saving to NBT/Disk
+                            .networkSynchronized(ByteBufCodecs.VAR_INT) // For syncing from Server -> Client
+                            .build());
 
     public static void register(IEventBus bus) {DATA_COMPONENT_TYPES.register(bus);}
 }

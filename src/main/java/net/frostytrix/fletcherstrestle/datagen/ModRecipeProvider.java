@@ -82,15 +82,22 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                 .define('I', Items.IRON_INGOT)
                 .unlockedBy("has_iron_ingot", has(Items.IRON_INGOT)).save(recipeOutput);
 
-        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModItems.QUIVER.get())
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModItems.LEATHER_QUIVER.get())
                 .pattern("SLS")
                 .pattern("LCL")
-                .pattern("ILI")
-                .define('I', Items.IRON_INGOT)
+                .pattern("SLS")
                 .define('S', ModTags.Items.BOW_STRINGS)
                 .define('L', Items.LEATHER)
                 .define('C', Blocks.CHEST)
                 .unlockedBy("has_arrow", has(ItemTags.ARROWS)).save(recipeOutput);
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModItems.IRON_QUIVER.get())
+                .pattern(" I ")
+                .pattern("IQI")
+                .pattern("III")
+                .define('I', Items.IRON_INGOT)
+                .define('Q', ModItems.LEATHER_QUIVER)
+                .unlockedBy("has_leather_quiver", has(ModItems.LEATHER_QUIVER)).save(recipeOutput);
 
         ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC,ModBlocks.ARCHERY_TARGET.get())
                 .requires(Blocks.WHITE_WOOL).requires(Items.BLACK_DYE).requires(Items.BLUE_DYE).requires(Items.RED_DYE).requires(Items.YELLOW_DYE)
