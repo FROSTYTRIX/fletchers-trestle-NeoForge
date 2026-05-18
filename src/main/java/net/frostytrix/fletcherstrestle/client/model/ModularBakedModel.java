@@ -66,6 +66,14 @@ public class ModularBakedModel implements BakedModel {
     private ItemTransforms createCustomTransforms(String basePath) {
         float f = 1 / 16.0f;
 
+        // NEW: Create a standard transform for when the item is dropped on the ground
+        // Rotation: 0, Translation: slightly up so it doesn't clip, Scale: 50% (0.5f)
+        ItemTransform groundTransform = new ItemTransform(
+                new Vector3f(0, 0, 0),
+                new Vector3f(0, 2 * f, 0),
+                new Vector3f(0.5f, 0.5f, 0.5f)
+        );
+
         // If it's a crossbow, use the specific rotations and translations you provided
         if (basePath != null && basePath.contains("crossbow")) {
             ItemTransform thirdPersonRight = new ItemTransform(new Vector3f(-90, 0, -60), new Vector3f(2 * f, 0.1f * f, -3 * f), new Vector3f(0.9f, 0.9f, 0.9f));
@@ -74,7 +82,7 @@ public class ModularBakedModel implements BakedModel {
             ItemTransform firstPersonLeft = new ItemTransform(new Vector3f(-90, 0, 35), new Vector3f(1.13f * f, 3.2f * f, 1.13f * f), new Vector3f(0.68f, 0.68f, 0.68f));
 
             return new ItemTransforms(thirdPersonLeft, thirdPersonRight, firstPersonLeft, firstPersonRight,
-                    ItemTransform.NO_TRANSFORM, ItemTransform.NO_TRANSFORM, ItemTransform.NO_TRANSFORM, ItemTransform.NO_TRANSFORM);
+                    ItemTransform.NO_TRANSFORM, ItemTransform.NO_TRANSFORM, groundTransform, ItemTransform.NO_TRANSFORM); // <-- Replaced ground argument
         }
         // Otherwise, fall back to the standard Bow transforms you already had
         else {
@@ -84,7 +92,7 @@ public class ModularBakedModel implements BakedModel {
             ItemTransform firstPersonLeft = new ItemTransform(new Vector3f(0, 90, -25), new Vector3f(1.13f * f, 3.2f * f, 1.13f * f), new Vector3f(0.68f, 0.68f, 0.68f));
 
             return new ItemTransforms(thirdPersonLeft, thirdPersonRight, firstPersonLeft, firstPersonRight,
-                    ItemTransform.NO_TRANSFORM, ItemTransform.NO_TRANSFORM, ItemTransform.NO_TRANSFORM, ItemTransform.NO_TRANSFORM);
+                    ItemTransform.NO_TRANSFORM, ItemTransform.NO_TRANSFORM, groundTransform, ItemTransform.NO_TRANSFORM); // <-- Replaced ground argument
         }
     }
 
