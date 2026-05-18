@@ -1,0 +1,8 @@
+{
+  "sources": [
+    {
+      "type": "single",
+      "resource": "fletcherstrestle:block/fluid_mask"
+    }
+  ]
+}

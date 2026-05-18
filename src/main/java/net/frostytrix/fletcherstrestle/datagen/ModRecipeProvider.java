@@ -2,6 +2,9 @@ package net.frostytrix.fletcherstrestle.datagen;
 
 import net.frostytrix.fletcherstrestle.FletcherTrestle;
 import net.frostytrix.fletcherstrestle.block.ModBlocks;
+import net.frostytrix.fletcherstrestle.datagen.recipeBuilders.DippingRecipeBuilder;
+import net.frostytrix.fletcherstrestle.datagen.recipeBuilders.ShavingRecipeBuilder;
+import net.frostytrix.fletcherstrestle.datagen.recipeBuilders.SteamingRecipeBuilder;
 import net.frostytrix.fletcherstrestle.item.ModItems;
 import net.frostytrix.fletcherstrestle.tags.ModTags;
 import net.minecraft.core.HolderLookup;
@@ -354,5 +357,15 @@ ShavingRecipeBuilder.shaving(Ingredient.of(Items.STRIPPED_WARPED_HYPHAE), ModIte
                 .pattern("FF ")
                 .define('F', ModItems.FLAX_STRING)
                 .unlockedBy("has_flax", has(ModItems.FLAX_STRING)).save(recipeOutput);
+
+        DippingRecipeBuilder.dipping(Ingredient.of(Items.ARROW), Items.TIPPED_ARROW, 16)
+                .inputCount(16)
+                .fluidAmount(1000)
+                .unlockedBy("has_arrow", has(Items.ARROW))
+                .save(recipeOutput, ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "arrow_dipping"));
+
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, ModBlocks.DIPPING_VAT.get())
+                .requires(Items.BUCKET).requires(Blocks.CAULDRON)
+                .unlockedBy("has_arrow", has(Items.ARROW)).save(recipeOutput);
     }
 }

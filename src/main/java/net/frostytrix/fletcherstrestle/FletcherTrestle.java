@@ -8,6 +8,8 @@ import net.frostytrix.fletcherstrestle.config.FletcherConfig;
 import net.frostytrix.fletcherstrestle.effect.ModEffects;
 import net.frostytrix.fletcherstrestle.entity.ModEntities;
 import net.frostytrix.fletcherstrestle.entity.custom.HeavyDummyEntity;
+import net.frostytrix.fletcherstrestle.fluid.ModFluidTypes;
+import net.frostytrix.fletcherstrestle.fluid.ModFluids;
 import net.frostytrix.fletcherstrestle.item.ModCreativeModeTabs;
 import net.frostytrix.fletcherstrestle.item.ModItems;
 import net.frostytrix.fletcherstrestle.loot.ModLootModifiers;
@@ -55,6 +57,8 @@ public class FletcherTrestle {
         ModEntities.register(modEventBus);
         ModEffects.register(modEventBus);
         ModLootModifiers.register(modEventBus);
+        ModFluidTypes.FLUID_TYPES.register(modEventBus);
+        ModFluids.FLUIDS.register(modEventBus);
 
 
         // Register the item to a creative tab

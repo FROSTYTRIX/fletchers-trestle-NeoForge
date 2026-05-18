@@ -96,6 +96,7 @@ public class ModCreativeModeTabs {
                         output.accept(modularCrossowDisplay);
 
 
+                        output.accept(ModItems.LEATHER_QUIVER.get());
                         output.accept(ModItems.IRON_QUIVER.get());
                         output.accept(ModItems.FLETCHER_GUIDE.get());
                         output.accept(ModItems.HEAVY_DUMMY_ITEM.get());

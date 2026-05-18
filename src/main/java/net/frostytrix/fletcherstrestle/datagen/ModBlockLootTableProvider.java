@@ -35,6 +35,7 @@ public class ModBlockLootTableProvider extends BlockLootSubProvider {
         dropSelf(ModBlocks.STEAM_BOX.get());
         dropSelf(ModBlocks.SHAVING_HORSE.get());
         dropSelf(ModBlocks.ARCHERY_TARGET.get());
+        dropSelf(ModBlocks.DIPPING_VAT.get());
 
         LootItemCondition.Builder lootitemcondition$builder = LootItemBlockStatePropertyCondition
                 .hasBlockStateProperties(ModBlocks.FLAX_CROP.get())

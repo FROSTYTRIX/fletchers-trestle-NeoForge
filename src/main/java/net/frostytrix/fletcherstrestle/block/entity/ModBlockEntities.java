@@ -31,7 +31,13 @@ public class ModBlockEntities {
                             .build(null)
             );
 
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<DippingVatBlockEntity>> DIPPING_VAT_BE =
+            BLOCK_ENTITIES.register("dipping_vat_be", () ->
+                    BlockEntityType.Builder.of(DippingVatBlockEntity::new, ModBlocks.DIPPING_VAT.get()).build(null)
+            );
+
     public static void register(IEventBus eventBus) {
+        System.out.println("====== FLETCHER'S TRESTLE: REGISTERING BLOCK ENTITIES NOW ======");
         BLOCK_ENTITIES.register(eventBus);
     }
 }

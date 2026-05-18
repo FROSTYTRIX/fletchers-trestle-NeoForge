@@ -1,4 +1,4 @@
-package net.frostytrix.fletcherstrestle.datagen;
+package net.frostytrix.fletcherstrestle.datagen.recipeBuilders;
 
 import net.frostytrix.fletcherstrestle.recipe.SteamingRecipe;
 import net.minecraft.advancements.Advancement;

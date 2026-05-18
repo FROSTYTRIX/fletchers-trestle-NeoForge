@@ -50,4 +50,12 @@ public class ModRecipes {
             TYPES.register("shaving", () -> new RecipeType<ShavingHorseRecipe>() {
                 @Override public String toString() { return "shaving"; }
             });
+
+    public static final Supplier<RecipeSerializer<DippingRecipe>> DIPPING_SERIALIZER =
+            SERIALIZERS.register("dipping", DippingRecipe.Serializer::new);
+
+    public static final Supplier<RecipeType<DippingRecipe>> DIPPING_TYPE =
+            TYPES.register("dipping", () -> new RecipeType<DippingRecipe>() {
+                @Override public String toString() { return "dipping"; }
+            });
 }

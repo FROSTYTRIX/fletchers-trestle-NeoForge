@@ -1,0 +1,12 @@
+{
+  "type": "fletcherstrestle:dipping",
+  "fluid_amount": 1000,
+  "ingredient": {
+    "item": "minecraft:arrow"
+  },
+  "input_count": 16,
+  "result": {
+    "count": 16,
+    "id": "minecraft:tipped_arrow"
+  }
+}

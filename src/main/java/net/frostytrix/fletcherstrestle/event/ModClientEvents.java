@@ -3,6 +3,7 @@ package net.frostytrix.fletcherstrestle.event;
 import net.frostytrix.fletcherstrestle.FletcherTrestle;
 import net.frostytrix.fletcherstrestle.block.ModBlocks;
 import net.frostytrix.fletcherstrestle.block.entity.ModBlockEntities;
+import net.frostytrix.fletcherstrestle.block.entity.renderer.DippingVatRenderer;
 import net.frostytrix.fletcherstrestle.block.entity.renderer.ShavingHorseRenderer;
 import net.frostytrix.fletcherstrestle.client.ClientKeybinds;
 import net.frostytrix.fletcherstrestle.client.ClientState;
@@ -39,6 +40,7 @@ public class ModClientEvents {
     public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
         event.registerBlockEntityRenderer(ModBlockEntities.SHAVING_HORSE_BE.get(), ShavingHorseRenderer::new);
         event.registerEntityRenderer(ModEntities.MODULAR_ARROW.get(), ModularArrowRenderer::new);
+        event.registerBlockEntityRenderer(ModBlockEntities.DIPPING_VAT_BE.get(), DippingVatRenderer::new);
     }
 
     @SubscribeEvent
