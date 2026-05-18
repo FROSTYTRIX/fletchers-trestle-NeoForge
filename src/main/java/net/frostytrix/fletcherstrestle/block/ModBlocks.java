@@ -45,7 +45,7 @@ public class ModBlocks {
                     .strength(0.6f)));
 
     public static final DeferredBlock<Block> DIPPING_VAT = registerBlock("dipping_vat",
-            () -> new DippingVatBlock(Block.Properties.of().noOcclusion()));
+            () -> new DippingVatBlock(Block.Properties.of().sound(SoundType.WOOD).noOcclusion()));
 
     private static <T extends Block> DeferredBlock<T> registerBlock(String name, Supplier<T> block){
         DeferredBlock<T> toReturn = BLOCKS.register(name, block);

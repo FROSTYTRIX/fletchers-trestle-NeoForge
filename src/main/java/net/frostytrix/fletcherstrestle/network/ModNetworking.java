@@ -16,7 +16,26 @@ public class ModNetworking {
     public static void register(final RegisterPayloadHandlersEvent event) {
         final PayloadRegistrar registrar = event.registrar(FletcherTrestle.MOD_ID);
 
+        // --- MISSING PACKETS ADDED HERE ---
+
         // Client → Server : change tab in the fletching menu
+        registrar.playToServer(
+                FletchingTabPayload.TYPE,
+                FletchingTabPayload.STREAM_CODEC,
+                FletchingTabPayload::handleData
+                // Note: If your handle method takes payload/context explicitly like below,
+                // use: (payload, context) -> context.enqueueWork(() -> payload.handle(context.player()))
+        );
+
+        // Client → Server : change active quiver slot
+        registrar.playToServer(
+                QuiverSlotPacket.TYPE,
+                QuiverSlotPacket.CODEC,
+                QuiverSlotPacket::handle
+        );
+
+        // ----------------------------------
+
         registrar.playToServer(
                 TuningPacket.TYPE,
                 TuningPacket.CODEC,
@@ -29,7 +48,6 @@ public class ModNetworking {
                 TargetSyncPacket.CODEC,
                 (payload, context) -> context.enqueueWork(() -> payload.handle(context.player()))
         );
-
 
         registrar.playToServer(
                 ClearShotsPacket.TYPE,

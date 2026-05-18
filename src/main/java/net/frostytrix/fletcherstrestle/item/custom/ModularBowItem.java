@@ -61,32 +61,36 @@ public class ModularBowItem extends BowItem {
     protected Projectile createProjectile(Level level, LivingEntity shooter, ItemStack weapon, ItemStack ammo, boolean isCrit) {
         // 1. Let vanilla create the base projectile first
         Projectile projectile = super.createProjectile(level, shooter, weapon, ammo, isCrit);
-        BowAssembly assembly = weapon.get(ModDataComponents.BOW_ASSEMBLY.get());
 
-        if (assembly != null && projectile instanceof AbstractArrow arrow) {
-            LimbStats limb = LimbStats.fromString(assembly.limbMaterial());
-            RiserStats riser = RiserStats.fromString(assembly.riserMaterial());
+        // FIX: Check if the weapon is physically null before calling .get()
+        if (weapon != null) {
+            BowAssembly assembly = weapon.get(ModDataComponents.BOW_ASSEMBLY.get());
 
-            // --- DAMAGE MODIFIER ---
-            arrow.setBaseDamage(arrow.getBaseDamage() * limb.getDamageMult());
+            if (assembly != null && projectile instanceof AbstractArrow arrow) {
+                LimbStats limb = LimbStats.fromString(assembly.limbMaterial());
+                RiserStats riser = RiserStats.fromString(assembly.riserMaterial());
 
-            // --- SPECIAL TRAITS ---
-            if (limb == LimbStats.CRIMSON) {
-                arrow.igniteForSeconds(1000);
-            }
-            if (limb == LimbStats.WARPED) {
-                arrow.setNoGravity(true);
-            }
+                // --- DAMAGE MODIFIER ---
+                arrow.setBaseDamage(arrow.getBaseDamage() * limb.getDamageMult());
 
-            // --- PERSISTENT DATA TAGS ---
-            if (limb.isAmphibian()) {
-                arrow.getPersistentData().putBoolean("fletcherstrestle:amphibious", true);
-            }
-            if (limb.getMaterialName().equals("Spruce")) {
-                arrow.getPersistentData().putBoolean("fletcherstrestle:punch", true);
-            }
-            if (riser.getMaterialName().equalsIgnoreCase("Copper")) {
-                arrow.getPersistentData().putBoolean("fletcherstrestle:conductive", true);
+                // --- SPECIAL TRAITS ---
+                if (limb == LimbStats.CRIMSON) {
+                    arrow.igniteForSeconds(100);
+                }
+                if (limb == LimbStats.WARPED) {
+                    arrow.setNoGravity(true);
+                }
+
+                // --- PERSISTENT DATA TAGS ---
+                if (limb.isAmphibian()) {
+                    arrow.getPersistentData().putBoolean("fletcherstrestle:amphibious", true);
+                }
+                if (limb.getMaterialName().equals("Spruce")) {
+                    arrow.getPersistentData().putBoolean("fletcherstrestle:punch", true);
+                }
+                if (riser.getMaterialName().equalsIgnoreCase("Copper")) {
+                    arrow.getPersistentData().putBoolean("fletcherstrestle:conductive", true);
+                }
             }
         }
         return projectile;

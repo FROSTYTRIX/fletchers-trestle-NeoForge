@@ -26,7 +26,8 @@ public class ModularArrowRenderer extends ArrowRenderer<ModularArrowEntity> {
 
     @Override
     public void render(ModularArrowEntity entity, float entityYaw, float partialTicks, PoseStack poseStack, MultiBufferSource buffer, int packedLight) {
-        ArrowAssembly assembly = entity.getSyncedItemStack().get(ModDataComponents.ARROW_ASSEMBLY.get());
+        // FIX 1: Use your custom safe helper method to protect against client packet lag
+        ArrowAssembly assembly = entity.getAssembly();
         if (assembly == null) return;
 
         // 1. Prepare the rotation and shake (Vanilla Logic)
@@ -43,7 +44,6 @@ public class ModularArrowRenderer extends ArrowRenderer<ModularArrowEntity> {
         poseStack.translate(-4.0D, 0.0D, 0.0D);
 
         // 2. Render the Layers
-        // We render three times: Shaft -> Fletching -> Head
         renderPart(poseStack, buffer, packedLight, getTexture(assembly, "shaft"));
         renderPart(poseStack, buffer, packedLight, getTexture(assembly, "fletching"));
         renderPart(poseStack, buffer, packedLight, getTexture(assembly, "head"));
@@ -55,6 +55,29 @@ public class ModularArrowRenderer extends ArrowRenderer<ModularArrowEntity> {
             if (owner instanceof Player player) {
                 renderGrapplingLine(entity, partialTicks, poseStack, buffer, player, packedLight);
             }
+        }
+    }
+
+    private void renderPart(PoseStack poseStack, MultiBufferSource buffer, int packedLight, ResourceLocation texture) {
+        VertexConsumer vertexConsumer = buffer.getBuffer(RenderType.entityCutout(texture));
+
+        // Loop 1: Core vertical body vanes (UV: 0.0, 0.0 to 0.5, 0.15625)
+        for(int j = 0; j < 4; ++j) {
+            poseStack.mulPose(Axis.XP.rotationDegrees(90.0F));
+            this.vertex(poseStack, vertexConsumer, -8, -2, 0, 0.0F, 0.0F, 0, 1, 0, packedLight);
+            this.vertex(poseStack, vertexConsumer, 8, -2, 0, 0.5F, 0.0F, 0, 1, 0, packedLight);
+            this.vertex(poseStack, vertexConsumer, 8, 2, 0, 0.5F, 0.15625F, 0, 1, 0, packedLight);
+            this.vertex(poseStack, vertexConsumer, -8, 2, 0, 0.0F, 0.15625F, 0, 1, 0, packedLight);
+        }
+
+        // FIX 2: Add Loop 2 from Vanilla ArrowRenderer to sample lower UV mapping details!
+        // This draws the matching cross-planes (UV: 0.0, 0.15625 to 0.5, 0.3125)
+        for(int j = 0; j < 4; ++j) {
+            poseStack.mulPose(Axis.XP.rotationDegrees(90.0F));
+            this.vertex(poseStack, vertexConsumer, -8, 0, -2, 0.0F, 0.15625F, 0, 0, 1, packedLight);
+            this.vertex(poseStack, vertexConsumer, 8, 0, -2, 0.5F, 0.15625F, 0, 0, 1, packedLight);
+            this.vertex(poseStack, vertexConsumer, 8, 0, 2, 0.5F, 0.3125F, 0, 0, 1, packedLight);
+            this.vertex(poseStack, vertexConsumer, -8, 0, 2, 0.0F, 0.3125F, 0, 0, 1, packedLight);
         }
     }
 
@@ -99,18 +122,6 @@ public class ModularArrowRenderer extends ArrowRenderer<ModularArrowEntity> {
             vertexConsumer.addVertex(matrix, x + 0.035f, y + 0.035f, z)
                     .setColor(r2, g2, b2, 255)
                     .setLight(packedLight);
-        }
-    }
-
-    private void renderPart(PoseStack poseStack, MultiBufferSource buffer, int packedLight, ResourceLocation texture) {
-        VertexConsumer vertexConsumer = buffer.getBuffer(RenderType.entityCutout(texture));
-        // Drawing the 4 vanes/sides of the arrow
-        for(int j = 0; j < 4; ++j) {
-            poseStack.mulPose(Axis.XP.rotationDegrees(90.0F));
-            this.vertex(poseStack, vertexConsumer, -8, -2, 0, 0.0F, 0.0F, 0, 1, 0, packedLight);
-            this.vertex(poseStack, vertexConsumer, 8, -2, 0, 0.5F, 0.0F, 0, 1, 0, packedLight);
-            this.vertex(poseStack, vertexConsumer, 8, 2, 0, 0.5F, 0.15625F, 0, 1, 0, packedLight);
-            this.vertex(poseStack, vertexConsumer, -8, 2, 0, 0.0F, 0.15625F, 0, 1, 0, packedLight);
         }
     }
 

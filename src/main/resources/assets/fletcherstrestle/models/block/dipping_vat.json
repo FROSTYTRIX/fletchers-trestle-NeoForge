@@ -4,7 +4,7 @@
 	"texture_size": [64, 64],
 	"textures": {
 		"0": "fletcherstrestle:block/dipping_vat",
-		"particle": "fletcherstrestle:block/dipping_vat"
+		"particle": "minecraft:block/barrel"
 	},
 	"elements": [
 		{

@@ -44,13 +44,6 @@ public class ModClientEvents {
     }
 
     @SubscribeEvent
-    public static void registerPayloads(final net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent event) {
-        final net.neoforged.neoforge.network.registration.PayloadRegistrar registrar = event.registrar(MOD_ID);
-        registrar.playToServer(FletchingTabPayload.TYPE, FletchingTabPayload.STREAM_CODEC, FletchingTabPayload::handleData);
-        registrar.playToServer(QuiverSlotPacket.TYPE, QuiverSlotPacket.CODEC, QuiverSlotPacket::handle);
-    }
-
-    @SubscribeEvent
     public static void registerGeometryLoaders(ModelEvent.RegisterGeometryLoaders event) {
         event.register(ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "modular_loader"), ModularModelLoader.INSTANCE);
     }

@@ -21,6 +21,7 @@ public class ModBlockTagProvider extends BlockTagsProvider {
         this.tag(BlockTags.MINEABLE_WITH_AXE)
                 .add(ModBlocks.SHAVING_HORSE.get())
                 .add(ModBlocks.STEAM_BOX.get())
+                .add(ModBlocks.DIPPING_VAT.get())
         ;
 
         this.tag(BlockTags.WOOL)
@@ -28,7 +29,7 @@ public class ModBlockTagProvider extends BlockTagsProvider {
                 .add(ModBlocks.ROPE.get())
                 ;
 
-        tag(BlockTags.CLIMBABLE)
+        this.tag(BlockTags.CLIMBABLE)
                 .add(ModBlocks.ROPE.get());
     }
 }
