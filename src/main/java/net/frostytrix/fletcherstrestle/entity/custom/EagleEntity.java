@@ -4,6 +4,8 @@ import net.frostytrix.fletcherstrestle.entity.ModEntities;
 import net.frostytrix.fletcherstrestle.sound.ModSounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -12,6 +14,7 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -57,6 +60,14 @@ public class EagleEntity extends TamableAnimal {
     // Hunt target — not synced, server-only logic
     @Nullable
     private LivingEntity huntTarget = null;
+
+    // Fetch inventory — 16 slots so the eagle can carry up to 16 arrows in
+    // a single trip, with room for up to 16 different arrow types (one type
+    // per slot if needed; matching types still stack). Capacity is enforced
+    // by total item count via hasFetchSpace(), not by full slots.
+    private static final int FETCH_INVENTORY_SIZE = 16;
+    private static final int FETCH_CAPACITY       = 16;
+    private final SimpleContainer fetchInventory = new SimpleContainer(FETCH_INVENTORY_SIZE);
 
     // Hysteresis counters for the IS_FLYING flag. With no gravity, the eagle
     // grazes the ground each tick and onGround() flickers true/false, which
@@ -179,13 +190,43 @@ public class EagleEntity extends TamableAnimal {
     @Override
     public void addAdditionalSaveData(CompoundTag tag) {
         super.addAdditionalSaveData(tag); // saves tame/owner data
-        tag.putInt("EagleState", this.getEagleState());
+        // Sanitize state on save. Transient states (FETCHING, RETURNING,
+        // HUNTING) depend on goal-local data (target arrow, hunt target) that
+        // doesn't survive a save/reload. Persisting them would leave the eagle
+        // "stuck" busy after a load with no goal actually running. Only the
+        // resting states are safe to persist.
+        int state = this.getEagleState();
+        boolean persistent = (state == STATE_IDLE || state == STATE_PERCHED);
+        tag.putInt("EagleState", persistent ? state : STATE_IDLE);
+
+        // Persist the fetch inventory so a save mid-fetch doesn't lose items.
+        ListTag items = new ListTag();
+        for (int i = 0; i < fetchInventory.getContainerSize(); i++) {
+            ItemStack stack = fetchInventory.getItem(i);
+            if (stack.isEmpty()) continue;
+            CompoundTag slotTag = new CompoundTag();
+            slotTag.putByte("Slot", (byte) i);
+            Tag saved = stack.save(this.registryAccess(), new CompoundTag());
+            if (saved instanceof CompoundTag c) slotTag.merge(c);
+            items.add(slotTag);
+        }
+        tag.put("FetchInventory", items);
     }
 
     @Override
     public void readAdditionalSaveData(CompoundTag tag) {
         super.readAdditionalSaveData(tag);
         this.setEagleState(tag.getInt("EagleState"));
+
+        fetchInventory.clearContent();
+        ListTag items = tag.getList("FetchInventory", Tag.TAG_COMPOUND);
+        for (int i = 0; i < items.size(); i++) {
+            CompoundTag slotTag = items.getCompound(i);
+            int slot = slotTag.getByte("Slot") & 0xFF;
+            if (slot >= fetchInventory.getContainerSize()) continue;
+            ItemStack.parse(this.registryAccess(), slotTag)
+                    .ifPresent(s -> fetchInventory.setItem(slot, s));
+        }
     }
 
     // ---------------------------------------------------------------
@@ -319,6 +360,20 @@ public class EagleEntity extends TamableAnimal {
         if (shouldFly != currentlyFlying) {
             this.entityData.set(IS_FLYING, shouldFly);
         }
+
+        // Watchdog: clear stale non-IDLE state when no goal is actually running.
+        // STATE_HUNTING is owned by the hunt goal; if huntTarget is gone, the
+        // state is dead. STATE_RETURNING with no inventory is similarly stale.
+        // STATE_FETCHING is harder to validate here (target lives on the goal)
+        // so we rely on the goal's own giveUpTimer + canContinueToUse to clear it.
+        if (!this.level().isClientSide) {
+            int curState = this.getEagleState();
+            if (curState == STATE_HUNTING && huntTarget == null) {
+                this.setEagleState(STATE_IDLE);
+            } else if (curState == STATE_RETURNING && isFetchInventoryEmpty()) {
+                this.setEagleState(STATE_IDLE);
+            }
+        }
     }
 
     // Returns true if the eagle's hitbox is within ~0.3 blocks of a solid
@@ -354,6 +409,65 @@ public class EagleEntity extends TamableAnimal {
 
     @Nullable
     public LivingEntity getHuntTarget() { return huntTarget; }
+
+    // ---------------------------------------------------------------
+    // Fetch inventory API — used by EagleFetchGoal.
+    // ---------------------------------------------------------------
+    // True while the eagle has carried fewer than FETCH_CAPACITY arrows.
+    // Capacity is enforced by total item count, not by slot, so 16 different
+    // types each occupy their own slot but still cap at 16 arrows total.
+    public boolean hasFetchSpace() {
+        return countFetchItems() < FETCH_CAPACITY;
+    }
+
+    private int countFetchItems() {
+        int total = 0;
+        for (int i = 0; i < fetchInventory.getContainerSize(); i++) {
+            total += fetchInventory.getItem(i).getCount();
+        }
+        return total;
+    }
+
+    public boolean isFetchInventoryEmpty() {
+        for (int i = 0; i < fetchInventory.getContainerSize(); i++) {
+            if (!fetchInventory.getItem(i).isEmpty()) return false;
+        }
+        return true;
+    }
+
+    // Returns leftover stack if the inventory couldn't hold it all.
+    public ItemStack addToFetchInventory(ItemStack stack) {
+        return fetchInventory.addItem(stack);
+    }
+
+    // Hand over everything in the inventory to the owner; whatever doesn't
+    // fit gets dropped at the owner's feet rather than disappearing.
+    public void depositFetchInventoryTo(Player owner) {
+        for (int i = 0; i < fetchInventory.getContainerSize(); i++) {
+            ItemStack stack = fetchInventory.getItem(i);
+            if (stack.isEmpty()) continue;
+            if (!owner.getInventory().add(stack)) {
+                owner.drop(stack, false);
+            }
+            fetchInventory.setItem(i, ItemStack.EMPTY);
+        }
+    }
+
+    // Drop the carried inventory at the eagle's feet — used on death.
+    public void dropFetchInventoryHere() {
+        for (int i = 0; i < fetchInventory.getContainerSize(); i++) {
+            ItemStack stack = fetchInventory.getItem(i);
+            if (stack.isEmpty()) continue;
+            this.spawnAtLocation(stack);
+            fetchInventory.setItem(i, ItemStack.EMPTY);
+        }
+    }
+
+    @Override
+    protected void dropEquipment() {
+        super.dropEquipment();
+        dropFetchInventoryHere();
+    }
 
     // ---------------------------------------------------------------
     // Required overrides
@@ -392,21 +506,20 @@ public class EagleEntity extends TamableAnimal {
     // ---------------------------------------------------------------
 
     /**
-     * EagleFetchGoal — scans for arrows on the ground near the owner
-     * and flies to pick them up, returning them to the owner's inventory.
+     * EagleFetchGoal — scans for arrows on the ground near the owner, flies
+     * out to grab them into the eagle's fetch inventory, then returns to the
+     * owner to deposit. With more than one slot the eagle chains pickups
+     * until the inventory is full or no more arrows are in range.
      */
     static class EagleFetchGoal extends Goal {
         private final EagleEntity eagle;
         @Nullable
         private net.minecraft.world.entity.projectile.AbstractArrow targetArrow;
-        // Stack the eagle is carrying back to the owner. Non-null while in
-        // the RETURNING phase. Null while flying out to grab an arrow.
-        @Nullable
-        private ItemStack carriedStack;
         // Throttle counter for path recomputation. Re-pathing every tick
         // makes FlyingPathNavigation stutter and never converge on a target.
         private int repathCooldown = 0;
-        // Watchdog: if we can't reach the arrow or owner in time, bail.
+        // Per-phase watchdog. Reset on FETCH→RETURN transitions and on
+        // chained pickups so each leg has a fresh budget.
         private int giveUpTimer = 0;
 
         EagleFetchGoal(EagleEntity eagle) {
@@ -417,29 +530,36 @@ public class EagleEntity extends TamableAnimal {
         @Override
         public boolean canUse() {
             if (!eagle.isTame() || eagle.isOrderedToSit()) return false;
-            if (eagle.getEagleState() != STATE_IDLE) return false;
             if (!(eagle.getOwner() instanceof Player owner) || !owner.isAlive()) return false;
+            // Owner in a different dimension — we can't path there, don't even try.
+            if (owner.level().dimension() != eagle.level().dimension()) return false;
 
-            double range = 24.0;
-            // inGround is the authoritative "stuck" signal — exposed via the
-            // mod's access transformer. Motion magnitude is unreliable
-            // because arrows retain small residual motion from sub-tick collision.
-            targetArrow = eagle.level().getEntitiesOfClass(
-                    net.minecraft.world.entity.projectile.AbstractArrow.class,
-                    owner.getBoundingBox().inflate(range),
-                    arrow -> arrow.tickCount > 5
-                            && arrow.inGround
-                            && arrow.getOwner() != null
-                            && arrow.getOwner().getUUID().equals(owner.getUUID())
-                            && eagle.level().isLoaded(arrow.blockPosition())
-            ).stream().findFirst().orElse(null);
+            int state = eagle.getEagleState();
 
+            // Cold-start return: if we have items in the inventory (e.g.,
+            // loaded mid-fetch from save, or an interrupted return), deliver
+            // them. This works from IDLE or a sanitized post-load state.
+            if (!eagle.isFetchInventoryEmpty() && state == STATE_IDLE) {
+                return true;
+            }
+
+            // Otherwise start a fresh fetch only when idle with room to carry.
+            if (state != STATE_IDLE) return false;
+            if (!eagle.hasFetchSpace()) return false;
+
+            targetArrow = findNearestArrow(eagle, owner);
             return targetArrow != null;
         }
 
         @Override
         public void start() {
-            eagle.setEagleState(STATE_FETCHING);
+            // Cold-start the return phase if we already have items; otherwise
+            // begin a fresh fetch.
+            if (!eagle.isFetchInventoryEmpty()) {
+                eagle.setEagleState(STATE_RETURNING);
+            } else {
+                eagle.setEagleState(STATE_FETCHING);
+            }
             repathCooldown = 0;
             giveUpTimer = 0;
         }
@@ -447,15 +567,15 @@ public class EagleEntity extends TamableAnimal {
         @Override
         public boolean canContinueToUse() {
             if (!eagle.isTame() || eagle.isOrderedToSit()) return false;
+            if (!(eagle.getOwner() instanceof Player owner) || !owner.isAlive()) return false;
+            if (owner.level().dimension() != eagle.level().dimension()) return false;
+
             int state = eagle.getEagleState();
             if (state == STATE_FETCHING) {
                 return targetArrow != null && targetArrow.isAlive();
             }
             if (state == STATE_RETURNING) {
-                // Carrying an arrow — keep running until we deliver to owner
-                return carriedStack != null
-                        && eagle.getOwner() instanceof Player owner
-                        && owner.isAlive();
+                return !eagle.isFetchInventoryEmpty();
             }
             return false;
         }
@@ -463,11 +583,11 @@ public class EagleEntity extends TamableAnimal {
         @Override
         public void tick() {
             giveUpTimer++;
-            // 20 seconds total for the whole fetch-and-return cycle.
+            // 20-second budget per phase. The timer resets when we transition
+            // FETCH→RETURN or chain to a new arrow, so a long full cycle is fine.
             if (giveUpTimer > 400) { stop(); return; }
 
             int state = eagle.getEagleState();
-
             if (state == STATE_FETCHING) {
                 tickFetch();
             } else if (state == STATE_RETURNING) {
@@ -477,15 +597,21 @@ public class EagleEntity extends TamableAnimal {
             }
         }
 
-        // Phase 1 — fly out to the arrow, grab it, then transition to returning.
+        // Phase 1 — fly out to the arrow, grab it, then either chain to the
+        // next nearby arrow or transition to RETURNING.
         private void tickFetch() {
-            if (targetArrow == null || !targetArrow.isAlive()) { stop(); return; }
-            // Refuse to path into unloaded chunks — the path planner can't
-            // reason about absent terrain and the eagle would just stall.
+            if (targetArrow == null || !targetArrow.isAlive()) {
+                // Lost the arrow. If we already collected something, head
+                // home with it; otherwise just stop.
+                if (!eagle.isFetchInventoryEmpty()) {
+                    transitionToReturn();
+                } else {
+                    stop();
+                }
+                return;
+            }
             if (!eagle.level().isLoaded(targetArrow.blockPosition())) { stop(); return; }
 
-            // Aim slightly above the arrow so descent settles onto it
-            // rather than clipping into the ground.
             double tx = targetArrow.getX();
             double ty = targetArrow.getY() + 0.3;
             double tz = targetArrow.getZ();
@@ -501,28 +627,48 @@ public class EagleEntity extends TamableAnimal {
 
                 ItemStack pickup = targetArrow.getPickupItemStackOrigin().copy();
                 if (pickup.isEmpty()) pickup = new ItemStack(Items.ARROW);
-                carriedStack = pickup;
+
+                ItemStack leftover = eagle.addToFetchInventory(pickup);
+                if (!leftover.isEmpty()) {
+                    // Shouldn't normally happen — canUse checked hasFetchSpace —
+                    // but drop anything that didn't fit so it's not lost.
+                    eagle.spawnAtLocation(leftover);
+                }
 
                 targetArrow.discard();
                 targetArrow = null;
 
-                // Transition to RETURNING — keep flying, but now back to owner.
-                eagle.setEagleState(STATE_RETURNING);
-                eagle.getNavigation().stop();
-                repathCooldown = 0;
+                // Decide whether to chain to another arrow or head home.
+                Player owner = (Player) eagle.getOwner();
+                net.minecraft.world.entity.projectile.AbstractArrow next =
+                        (eagle.hasFetchSpace() && owner != null)
+                                ? findNearestArrow(eagle, owner)
+                                : null;
+
+                if (next != null) {
+                    targetArrow = next;
+                    eagle.getNavigation().stop();
+                    repathCooldown = 0;
+                    giveUpTimer  = 0;
+                } else {
+                    transitionToReturn();
+                }
             }
         }
 
-        // Phase 2 — carry the arrow back to the owner, then deposit it.
+        private void transitionToReturn() {
+            eagle.setEagleState(STATE_RETURNING);
+            eagle.getNavigation().stop();
+            repathCooldown = 0;
+            giveUpTimer    = 0;
+        }
+
+        // Phase 2 — carry everything back to the owner and deposit it.
         private void tickReturn() {
-            if (carriedStack == null) { stop(); return; }
+            if (eagle.isFetchInventoryEmpty()) { stop(); return; }
             if (!(eagle.getOwner() instanceof Player owner) || !owner.isAlive()) { stop(); return; }
-            // If the owner walked into an unloaded area, hold position and
-            // retry next tick rather than thrashing the path planner.
             if (!eagle.level().isLoaded(owner.blockPosition())) return;
 
-            // Aim for slightly above the owner's head so the eagle approaches
-            // from above rather than barging into them at body level.
             double tx = owner.getX();
             double ty = owner.getY() + 1.2;
             double tz = owner.getZ();
@@ -533,30 +679,39 @@ public class EagleEntity extends TamableAnimal {
                 repathCooldown = 10;
             }
 
-            // Deliver radius: within 2.5 blocks of the owner.
             if (eagle.distanceToSqr(owner) < 6.25) {
                 eagle.playSound(ModSounds.EAGLE_FLAP.get(), 0.6f, 1.2f);
-                if (!owner.getInventory().add(carriedStack)) {
-                    owner.drop(carriedStack, false);
-                }
-                carriedStack = null;
+                eagle.depositFetchInventoryTo(owner);
                 eagle.setEagleState(STATE_IDLE);
             }
         }
 
         @Override
         public void stop() {
-            // If we were mid-return and got interrupted, drop the carried
-            // stack at the eagle's feet so the player isn't cheated.
-            if (carriedStack != null && !carriedStack.isEmpty()) {
-                eagle.spawnAtLocation(carriedStack);
-            }
+            // Keep any carried items in the inventory — next canUse cycle will
+            // re-attempt delivery (cold-start return). This avoids dropping
+            // items every time the eagle gets briefly interrupted (panic,
+            // sit, etc.). Death drops the inventory via dropEquipment.
             targetArrow = null;
-            carriedStack = null;
             int s = eagle.getEagleState();
             if (s == STATE_FETCHING || s == STATE_RETURNING) {
                 eagle.setEagleState(STATE_IDLE);
             }
+        }
+
+        private static net.minecraft.world.entity.projectile.AbstractArrow findNearestArrow(EagleEntity eagle, Player owner) {
+            double range = 24.0;
+            return eagle.level().getEntitiesOfClass(
+                    net.minecraft.world.entity.projectile.AbstractArrow.class,
+                    owner.getBoundingBox().inflate(range),
+                    arrow -> arrow.tickCount > 5
+                            && arrow.inGround
+                            && arrow.getOwner() != null
+                            && arrow.getOwner().getUUID().equals(owner.getUUID())
+                            && eagle.level().isLoaded(arrow.blockPosition())
+            ).stream()
+                    .min((a, b) -> Double.compare(eagle.distanceToSqr(a), eagle.distanceToSqr(b)))
+                    .orElse(null);
         }
     }
 
