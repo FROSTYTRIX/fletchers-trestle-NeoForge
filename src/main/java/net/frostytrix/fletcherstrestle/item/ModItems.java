@@ -3,9 +3,11 @@ package net.frostytrix.fletcherstrestle.item;
 import net.frostytrix.fletcherstrestle.FletcherTrestle;
 import net.frostytrix.fletcherstrestle.block.ModBlocks;
 import net.frostytrix.fletcherstrestle.component.ModDataComponents;
+import net.frostytrix.fletcherstrestle.entity.ModEntities;
 import net.frostytrix.fletcherstrestle.item.custom.*;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemNameBlockItem;
+import net.minecraft.world.item.SpawnEggItem;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -139,6 +141,9 @@ public class ModItems {
 
     public static final DeferredItem<Item> HEAVY_DUMMY_ITEM = ITEMS.register("heavy_dummy",
             () -> new HeavyDummyItem(new Item.Properties()));
+
+
+    public static final DeferredItem<Item> EAGLE_SPAWN_EGG = ITEMS.register("eagle_spawn_egg", () -> new SpawnEggItem(ModEntities.EAGLE.get(), 0x5C4033, 0xF5C842, new Item.Properties()));
 
 
 

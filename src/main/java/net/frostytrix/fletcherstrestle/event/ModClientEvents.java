@@ -12,6 +12,8 @@ import net.frostytrix.fletcherstrestle.client.model.ModularModelLoader;
 import net.frostytrix.fletcherstrestle.client.renderer.ModularArrowRenderer;
 import net.frostytrix.fletcherstrestle.component.ModDataComponents;
 import net.frostytrix.fletcherstrestle.entity.ModEntities;
+import net.frostytrix.fletcherstrestle.entity.client.EagleModel;
+import net.frostytrix.fletcherstrestle.entity.client.EagleRenderer;
 import net.frostytrix.fletcherstrestle.item.ModItems;
 import net.frostytrix.fletcherstrestle.item.custom.ModularBowItem;
 import net.frostytrix.fletcherstrestle.item.custom.ModularCrossbowItem;
@@ -41,6 +43,12 @@ public class ModClientEvents {
         event.registerBlockEntityRenderer(ModBlockEntities.SHAVING_HORSE_BE.get(), ShavingHorseRenderer::new);
         event.registerEntityRenderer(ModEntities.MODULAR_ARROW.get(), ModularArrowRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntities.DIPPING_VAT_BE.get(), DippingVatRenderer::new);
+        event.registerEntityRenderer(ModEntities.EAGLE.get(), EagleRenderer::new);
+    }
+
+    @SubscribeEvent
+    public static void registerLayerDefinitions(EntityRenderersEvent.RegisterLayerDefinitions event) {
+        event.registerLayerDefinition(EagleModel.LAYER_LOCATION, EagleModel::createBodyLayer);
     }
 
     @SubscribeEvent

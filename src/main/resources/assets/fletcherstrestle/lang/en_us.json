@@ -51,6 +51,9 @@
 "block.fletcherstrestle.steam_box": "Steam Box",
 "block.fletcherstrestle.dipping_vat": "Dipping Vat",
 
+"item.fletcherstrestle.eagle_spawn_egg": "Eagle Spawn Egg",
+"entity.fletcherstrestle.eagle": "Eagle",
+
 "creative_tab.fletcherstrestle.fletchers_trestle_tab": "Fletcher's Trestle",
 
 "enchantment.fletcherstrestle.photosynthesis": "Photosynthesis",
