@@ -45,8 +45,15 @@ public class ModularArrowRenderer extends ArrowRenderer<ModularArrowEntity> {
 
         // 2. Render the Layers
         // We render three times: Shaft -> Fletching -> Head
+// 2. Render the Layers
         renderPart(poseStack, buffer, packedLight, getTexture(assembly, "shaft"));
+
+// Scale up microscopically so fletching renders just outside the shaft
+        poseStack.scale(1.001F, 1.001F, 1.001F);
         renderPart(poseStack, buffer, packedLight, getTexture(assembly, "fletching"));
+
+// Scale up again for the head
+        poseStack.scale(1.001F, 1.001F, 1.001F);
         renderPart(poseStack, buffer, packedLight, getTexture(assembly, "head"));
 
         poseStack.popPose();

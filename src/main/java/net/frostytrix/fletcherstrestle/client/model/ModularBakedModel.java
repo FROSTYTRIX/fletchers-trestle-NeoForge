@@ -82,7 +82,7 @@ public class ModularBakedModel implements BakedModel {
             ItemTransform firstPersonLeft = new ItemTransform(new Vector3f(-90, 0, 35), new Vector3f(1.13f * f, 3.2f * f, 1.13f * f), new Vector3f(0.68f, 0.68f, 0.68f));
 
             return new ItemTransforms(thirdPersonLeft, thirdPersonRight, firstPersonLeft, firstPersonRight,
-                    ItemTransform.NO_TRANSFORM, ItemTransform.NO_TRANSFORM, groundTransform, ItemTransform.NO_TRANSFORM); // <-- Replaced ground argument
+                    ItemTransform.NO_TRANSFORM, ItemTransform.NO_TRANSFORM, groundTransform, ItemTransform.NO_TRANSFORM);
         }
         // Otherwise, fall back to the standard Bow transforms you already had
         else {
