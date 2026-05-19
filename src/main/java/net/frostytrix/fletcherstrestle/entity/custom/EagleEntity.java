@@ -50,6 +50,12 @@ public class EagleEntity extends TamableAnimal {
     private static final EntityDataAccessor<Boolean> IS_FLYING =
             SynchedEntityData.defineId(EagleEntity.class, EntityDataSerializers.BOOLEAN);
 
+    // Owner-toggled: when true, the eagle auto-fetches arrows shot by its
+    // owner. When false, the eagle stays idle / hunts on spyglass command
+    // but does not chase down arrows. Synced so a future HUD can show it.
+    private static final EntityDataAccessor<Boolean> FETCH_MODE_ENABLED =
+            SynchedEntityData.defineId(EagleEntity.class, EntityDataSerializers.BOOLEAN);
+
     // Eagle states (stored as int for sync simplicity)
     public static final int STATE_IDLE     = 0;
     public static final int STATE_PERCHED  = 1;
@@ -109,8 +115,9 @@ public class EagleEntity extends TamableAnimal {
     @Override
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
         super.defineSynchedData(builder); // TamableAnimal registers its own fields first
-        builder.define(EAGLE_STATE, STATE_IDLE);
-        builder.define(IS_FLYING,   false);
+        builder.define(EAGLE_STATE,         STATE_IDLE);
+        builder.define(IS_FLYING,           false);
+        builder.define(FETCH_MODE_ENABLED,  true);
     }
 
     // ---------------------------------------------------------------
@@ -171,12 +178,25 @@ public class EagleEntity extends TamableAnimal {
             return super.mobInteract(player, hand);
         }
 
-        // Step 8 — Sit/unsit toggle for owner with empty hand
+        // Owner empty-hand interactions:
+        //  - sneak + right-click → toggle fetch mode (auto-fetch on/off)
+        //  - right-click          → toggle sit
         if (this.isOwnedBy(player) && stack.isEmpty()) {
             if (!this.level().isClientSide) {
-                this.setOrderedToSit(!this.isOrderedToSit());
-                this.playSound(ModSounds.EAGLE_AMBIENT.get(), 0.6f,
-                        1.2f + this.random.nextFloat() * 0.4f);
+                if (player.isShiftKeyDown()) {
+                    boolean newMode = !this.isFetchModeEnabled();
+                    this.setFetchModeEnabled(newMode);
+                    player.displayClientMessage(
+                            net.minecraft.network.chat.Component.literal(
+                                    newMode ? "Eagle: fetch mode ON" : "Eagle: fetch mode OFF"),
+                            true);
+                    this.playSound(ModSounds.EAGLE_AMBIENT.get(), 0.5f,
+                            newMode ? 1.4f : 0.9f);
+                } else {
+                    this.setOrderedToSit(!this.isOrderedToSit());
+                    this.playSound(ModSounds.EAGLE_AMBIENT.get(), 0.6f,
+                            1.2f + this.random.nextFloat() * 0.4f);
+                }
             }
             return InteractionResult.sidedSuccess(this.level().isClientSide);
         }
@@ -211,12 +231,15 @@ public class EagleEntity extends TamableAnimal {
             items.add(slotTag);
         }
         tag.put("FetchInventory", items);
+        tag.putBoolean("FetchMode", this.isFetchModeEnabled());
     }
 
     @Override
     public void readAdditionalSaveData(CompoundTag tag) {
         super.readAdditionalSaveData(tag);
         this.setEagleState(tag.getInt("EagleState"));
+        // Default to true for eagles tamed before this field existed.
+        this.setFetchModeEnabled(tag.contains("FetchMode") ? tag.getBoolean("FetchMode") : true);
 
         fetchInventory.clearContent();
         ListTag items = tag.getList("FetchInventory", Tag.TAG_COMPOUND);
@@ -398,9 +421,11 @@ public class EagleEntity extends TamableAnimal {
     // ---------------------------------------------------------------
     // Public API used by goals and renderer
     // ---------------------------------------------------------------
-    public int getEagleState()               { return this.entityData.get(EAGLE_STATE); }
-    public void setEagleState(int state)     { this.entityData.set(EAGLE_STATE, state); }
-    public boolean isFlying()                { return this.entityData.get(IS_FLYING); }
+    public int getEagleState()                       { return this.entityData.get(EAGLE_STATE); }
+    public void setEagleState(int state)             { this.entityData.set(EAGLE_STATE, state); }
+    public boolean isFlying()                        { return this.entityData.get(IS_FLYING); }
+    public boolean isFetchModeEnabled()              { return this.entityData.get(FETCH_MODE_ENABLED); }
+    public void setFetchModeEnabled(boolean enabled) { this.entityData.set(FETCH_MODE_ENABLED, enabled); }
 
     public void setHuntTarget(@Nullable LivingEntity target) {
         this.huntTarget = target;
@@ -536,14 +561,14 @@ public class EagleEntity extends TamableAnimal {
 
             int state = eagle.getEagleState();
 
-            // Cold-start return: if we have items in the inventory (e.g.,
-            // loaded mid-fetch from save, or an interrupted return), deliver
-            // them. This works from IDLE or a sanitized post-load state.
+            // Cold-start return is always allowed, even with fetch mode OFF —
+            // this lets a mid-fetch abort still deliver what was already collected.
             if (!eagle.isFetchInventoryEmpty() && state == STATE_IDLE) {
                 return true;
             }
 
-            // Otherwise start a fresh fetch only when idle with room to carry.
+            // Fresh fetches require fetch mode to be on.
+            if (!eagle.isFetchModeEnabled()) return false;
             if (state != STATE_IDLE) return false;
             if (!eagle.hasFetchSpace()) return false;
 
@@ -572,9 +597,14 @@ public class EagleEntity extends TamableAnimal {
 
             int state = eagle.getEagleState();
             if (state == STATE_FETCHING) {
+                // Mode flipped off mid-fetch: abort the FETCH leg. If we've
+                // already collected items, stop() exits to IDLE and the next
+                // canUse cycle cold-starts a return so they aren't lost.
+                if (!eagle.isFetchModeEnabled()) return false;
                 return targetArrow != null && targetArrow.isAlive();
             }
             if (state == STATE_RETURNING) {
+                // Return always continues — deliver what we have even with mode off.
                 return !eagle.isFetchInventoryEmpty();
             }
             return false;
@@ -641,7 +671,7 @@ public class EagleEntity extends TamableAnimal {
                 // Decide whether to chain to another arrow or head home.
                 Player owner = (Player) eagle.getOwner();
                 net.minecraft.world.entity.projectile.AbstractArrow next =
-                        (eagle.hasFetchSpace() && owner != null)
+                        (eagle.isFetchModeEnabled() && eagle.hasFetchSpace() && owner != null)
                                 ? findNearestArrow(eagle, owner)
                                 : null;
 
@@ -720,9 +750,14 @@ public class EagleEntity extends TamableAnimal {
      * Activated externally via EagleEntity.setHuntTarget().
      */
     static class EagleHuntGoal extends Goal {
+        // Give-up timeout: if the player can't finish the target within this
+        // window, the eagle disengages so it isn't permanently locked.
+        private static final int HUNT_MAX_TICKS = 1200; // 60 seconds
+
         private final EagleEntity eagle;
         private int orbitTick = 0;
         private int repathCooldown = 0;
+        private int huntTicks = 0;
 
         EagleHuntGoal(EagleEntity eagle) {
             this.eagle = eagle;
@@ -748,6 +783,7 @@ public class EagleEntity extends TamableAnimal {
             eagle.setEagleState(STATE_HUNTING);
             orbitTick = 0;
             repathCooldown = 0;
+            huntTicks = 0;
         }
 
         @Override
@@ -757,6 +793,18 @@ public class EagleEntity extends TamableAnimal {
             // Skip orbit work if the target's chunk is unloaded — wait until
             // it comes back into range rather than pathing into nowhere.
             if (!eagle.level().isLoaded(target.blockPosition())) return;
+
+            // Hunt give-up: don't orbit forever if the kill never lands.
+            if (++huntTicks > HUNT_MAX_TICKS) {
+                if (eagle.getOwner() instanceof Player owner) {
+                    owner.displayClientMessage(
+                            net.minecraft.network.chat.Component.literal(
+                                    "Your eagle disengages."),
+                            true);
+                }
+                stop();
+                return;
+            }
 
             // Orbit 5 blocks above the target in a circle.
             orbitTick++;

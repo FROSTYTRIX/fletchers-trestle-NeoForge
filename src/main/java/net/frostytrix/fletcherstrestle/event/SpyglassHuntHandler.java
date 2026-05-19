@@ -37,9 +37,9 @@ public final class SpyglassHuntHandler {
     private SpyglassHuntHandler() {}
 
     // Tunables — kept here so they're easy to find when iterating on feel.
-    private static final int    LOCK_ON_TICKS  = 60;   // 3 seconds at 20 tps
-    private static final double RAY_RANGE      = 48.0; // blocks
-    private static final double EAGLE_RANGE    = 16.0; // owner -> eagle search radius
+    private static final int    LOCK_ON_TICKS  = 60;    // 3 seconds at 20 tps
+    private static final double RAY_RANGE      = 128.0; // blocks — spyglass-scale spotting range
+    private static final double EAGLE_RANGE    = 48.0;  // owner -> eagle search radius
 
     // Per-player lock-on state. Lives on the server only.
     private static final Map<UUID, LockOnData> LOCK_DATA = new HashMap<>();
@@ -130,7 +130,9 @@ public final class SpyglassHuntHandler {
     private static double occludingHitDistanceSqr(Level level, Vec3 eye, Vec3 end, Vec3 look, Player player) {
         Vec3 from = eye;
         // Safety cap on iterations so a degenerate setup can't loop forever.
-        for (int i = 0; i < 32; i++) {
+        // Sized to allow tracing through long stretches of non-occluding
+        // blocks (leaves/glass) at the full RAY_RANGE.
+        for (int i = 0; i < 64; i++) {
             BlockHitResult hit = level.clip(new ClipContext(
                     from, end, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, player));
             if (hit.getType() != HitResult.Type.BLOCK) {
