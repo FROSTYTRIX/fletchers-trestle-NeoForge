@@ -23,11 +23,14 @@ import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.pathfinder.PathType;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.EnumSet;
 
 public class EagleEntity extends TamableAnimal {
 
@@ -91,24 +94,17 @@ public class EagleEntity extends TamableAnimal {
     // ---------------------------------------------------------------
     @Override
     protected void registerGoals() {
-        // Priority 1: float above water so it doesn't drown
-        this.goalSelector.addGoal(1, new FloatGoal(this));
-
-        // Priority 2: obey sit command
+        this.goalSelector.addGoal(0, new FloatGoal(this));
+        this.goalSelector.addGoal(1, new PanicGoal(this, 1.25));
         this.goalSelector.addGoal(2, new SitWhenOrderedToGoal(this));
-
-        // Priority 3: fetch arrows (custom — Phase 2, Step 5)
         this.goalSelector.addGoal(3, new EagleFetchGoal(this));
-
-        // Priority 4: hunt mode (custom — Phase 2, Step 6, triggered externally)
         this.goalSelector.addGoal(4, new EagleHuntGoal(this));
-
-        // Priority 5: follow owner when not doing anything else
-        this.goalSelector.addGoal(5, new FollowOwnerGoal(this, 1.0, 10.0f, 2.0f));
-
-        // Priority 6 & 7: idle look behaviours
-        this.goalSelector.addGoal(6, new LookAtPlayerGoal(this, Player.class, 8.0f));
-        this.goalSelector.addGoal(7, new RandomLookAroundGoal(this));
+        this.goalSelector.addGoal(5, new TemptGoal(this, 1.0,
+                Ingredient.of(Items.RABBIT, Items.COD, Items.SALMON), false));
+        this.goalSelector.addGoal(6, new FollowOwnerGoal(this, 1.0, 10.0f, 2.0f));
+        this.goalSelector.addGoal(7, new WaterAvoidingRandomFlyingGoal(this, 1.0));
+        this.goalSelector.addGoal(8, new LookAtPlayerGoal(this, Player.class, 8.0f));
+        this.goalSelector.addGoal(9, new RandomLookAroundGoal(this));
     }
 
     // ---------------------------------------------------------------
@@ -280,6 +276,7 @@ public class EagleEntity extends TamableAnimal {
 
         EagleFetchGoal(EagleEntity eagle) {
             this.eagle = eagle;
+            this.setFlags(EnumSet.of(Flag.MOVE));
         }
 
         @Override
@@ -288,14 +285,18 @@ public class EagleEntity extends TamableAnimal {
             if (eagle.getEagleState() != STATE_IDLE) return false;
             if (!(eagle.getOwner() instanceof Player owner)) return false;
 
-            // Scan for arrows stuck in the ground within 24 blocks of owner
+            // Scan for arrows stuck (motion ~0) within 24 blocks of owner.
+            // Why not arrow.onGround()? AbstractArrow.inGround is protected and
+            // onGround() misses arrows lodged in walls/ceilings — but a stuck
+            // arrow always has its motion zeroed, so that's the reliable signal.
             double range = 24.0;
             targetArrow = eagle.level().getEntitiesOfClass(
                     net.minecraft.world.entity.projectile.AbstractArrow.class,
                     owner.getBoundingBox().inflate(range),
-                    arrow -> arrow.onGround() &&
-                            arrow.getOwner() != null &&
-                            arrow.getOwner().getUUID().equals(owner.getUUID())
+                    arrow -> arrow.tickCount > 5
+                            && arrow.getDeltaMovement().lengthSqr() < 1.0E-5
+                            && arrow.getOwner() != null
+                            && arrow.getOwner().getUUID().equals(owner.getUUID())
             ).stream().findFirst().orElse(null);
 
             return targetArrow != null;
@@ -362,6 +363,7 @@ public class EagleEntity extends TamableAnimal {
 
         EagleHuntGoal(EagleEntity eagle) {
             this.eagle = eagle;
+            this.setFlags(EnumSet.of(Flag.MOVE));
         }
 
         @Override
