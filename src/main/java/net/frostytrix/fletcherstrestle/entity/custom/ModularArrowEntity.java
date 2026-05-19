@@ -89,8 +89,7 @@ public class ModularArrowEntity extends AbstractArrow {
     public ArrowAssembly getAssembly() {
         ItemStack pickupItem = this.getPickupItem();
 
-        // FIX: Verify the item exists and isn't empty before checking components
-        if (pickupItem != null && !pickupItem.isEmpty() && pickupItem.has(ModDataComponents.ARROW_ASSEMBLY.get())) {
+        if (!pickupItem.isEmpty() && pickupItem.has(ModDataComponents.ARROW_ASSEMBLY.get())) {
             return pickupItem.get(ModDataComponents.ARROW_ASSEMBLY.get());
         }
 
@@ -98,15 +97,17 @@ public class ModularArrowEntity extends AbstractArrow {
     }
 
     private void applyFlightModifiers(ItemStack ammo) {
-        // FIX: Ensure the ammo stack physically exists before reading it
-        if (ammo == null || ammo.isEmpty()) return;
-
         ArrowAssembly assembly = ammo.get(ModDataComponents.ARROW_ASSEMBLY.get());
         if (assembly != null) {
+            // Read the enums
             ModularArrowItem.ShaftStats shaft = ModularArrowItem.ShaftStats.fromString(assembly.shaft());
             ModularArrowItem.HeadStats head = ModularArrowItem.HeadStats.fromString(assembly.head());
 
+            // Apply base damage multiplier from the head
             this.setBaseDamage(this.getBaseDamage() * head.getDamageMult());
+
+            // Note: Adjusting actual gravity and velocity happens differently in 1.21,
+            // but we can scale the motion here for the initial shot speed.
             this.setDeltaMovement(this.getDeltaMovement().scale(shaft.getVelocityMult()));
         }
     }
@@ -510,20 +511,12 @@ public class ModularArrowEntity extends AbstractArrow {
     }
 
     public ItemStack getSyncedItemStack() {
-        ItemStack stack = this.entityData.get(SYNCED_ITEM);
-        return stack == null ? ItemStack.EMPTY : stack;
+        return this.entityData.get(SYNCED_ITEM);
     }
 
     @Override
     protected ItemStack getPickupItem() {
-        ItemStack synced = this.getSyncedItemStack();
-        if (synced.isEmpty()) {
-            ItemStack defaultArrow = new ItemStack(ModItems.MODULAR_ARROW.get());
-            defaultArrow.set(ModDataComponents.ARROW_ASSEMBLY.get(),
-                    new ArrowAssembly("flint", "oak", "feather"));
-            return defaultArrow;
-        }
-        return synced;
+        return getSyncedItemStack();
     }
 
     @Override

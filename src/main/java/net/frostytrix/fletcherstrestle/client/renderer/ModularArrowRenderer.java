@@ -16,6 +16,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import org.joml.Matrix4f;
 
 public class ModularArrowRenderer extends ArrowRenderer<ModularArrowEntity> {
@@ -26,8 +27,7 @@ public class ModularArrowRenderer extends ArrowRenderer<ModularArrowEntity> {
 
     @Override
     public void render(ModularArrowEntity entity, float entityYaw, float partialTicks, PoseStack poseStack, MultiBufferSource buffer, int packedLight) {
-        // FIX 1: Use your custom safe helper method to protect against client packet lag
-        ArrowAssembly assembly = entity.getAssembly();
+        ArrowAssembly assembly = entity.getSyncedItemStack().get(ModDataComponents.ARROW_ASSEMBLY.get());
         if (assembly == null) return;
 
         // 1. Prepare the rotation and shake (Vanilla Logic)
@@ -44,6 +44,7 @@ public class ModularArrowRenderer extends ArrowRenderer<ModularArrowEntity> {
         poseStack.translate(-4.0D, 0.0D, 0.0D);
 
         // 2. Render the Layers
+        // We render three times: Shaft -> Fletching -> Head
         renderPart(poseStack, buffer, packedLight, getTexture(assembly, "shaft"));
         renderPart(poseStack, buffer, packedLight, getTexture(assembly, "fletching"));
         renderPart(poseStack, buffer, packedLight, getTexture(assembly, "head"));
@@ -60,8 +61,7 @@ public class ModularArrowRenderer extends ArrowRenderer<ModularArrowEntity> {
 
     private void renderPart(PoseStack poseStack, MultiBufferSource buffer, int packedLight, ResourceLocation texture) {
         VertexConsumer vertexConsumer = buffer.getBuffer(RenderType.entityCutout(texture));
-
-        // Loop 1: Core vertical body vanes (UV: 0.0, 0.0 to 0.5, 0.15625)
+        // Drawing the 4 vanes/sides of the arrow
         for(int j = 0; j < 4; ++j) {
             poseStack.mulPose(Axis.XP.rotationDegrees(90.0F));
             this.vertex(poseStack, vertexConsumer, -8, -2, 0, 0.0F, 0.0F, 0, 1, 0, packedLight);
@@ -69,21 +69,9 @@ public class ModularArrowRenderer extends ArrowRenderer<ModularArrowEntity> {
             this.vertex(poseStack, vertexConsumer, 8, 2, 0, 0.5F, 0.15625F, 0, 1, 0, packedLight);
             this.vertex(poseStack, vertexConsumer, -8, 2, 0, 0.0F, 0.15625F, 0, 1, 0, packedLight);
         }
-
-        // FIX 2: Add Loop 2 from Vanilla ArrowRenderer to sample lower UV mapping details!
-        // This draws the matching cross-planes (UV: 0.0, 0.15625 to 0.5, 0.3125)
-        for(int j = 0; j < 4; ++j) {
-            poseStack.mulPose(Axis.XP.rotationDegrees(90.0F));
-            this.vertex(poseStack, vertexConsumer, -8, 0, -2, 0.0F, 0.15625F, 0, 0, 1, packedLight);
-            this.vertex(poseStack, vertexConsumer, 8, 0, -2, 0.5F, 0.15625F, 0, 0, 1, packedLight);
-            this.vertex(poseStack, vertexConsumer, 8, 0, 2, 0.5F, 0.3125F, 0, 0, 1, packedLight);
-            this.vertex(poseStack, vertexConsumer, -8, 0, 2, 0.0F, 0.3125F, 0, 0, 1, packedLight);
-        }
     }
 
-    // Added 'int packedLight' to the parameters
     private void renderGrapplingLine(ModularArrowEntity arrow, float partialTicks, PoseStack poseStack, MultiBufferSource buffer, Player player, int packedLight) {
-        // 1. Get positions
         double pX = Mth.lerp(partialTicks, player.xo, player.getX());
         double pY = Mth.lerp(partialTicks, player.yo, player.getY()) + player.getBbHeight() * 0.5;
         double pZ = Mth.lerp(partialTicks, player.zo, player.getZ());
@@ -92,36 +80,23 @@ public class ModularArrowRenderer extends ArrowRenderer<ModularArrowEntity> {
         double aY = Mth.lerp(partialTicks, arrow.yo, arrow.getY());
         double aZ = Mth.lerp(partialTicks, arrow.zo, arrow.getZ());
 
-        float dx = (float)(pX - aX);
-        float dy = (float)(pY - aY);
-        float dz = (float)(pZ - aZ);
+        float dx = (float) (pX - aX);
+        float dy = (float) (pY - aY);
+        float dz = (float) (pZ - aZ);
 
         VertexConsumer vertexConsumer = buffer.getBuffer(RenderType.leash());
         Matrix4f matrix = poseStack.last().pose();
 
-        // 2. Brighter Rope Colors (Vanilla Lead/Rope Palette)
-        int r = 110, g = 85, b = 45; // Lighter brown
-        int r2 = 80, g2 = 60, b2 = 30; // Shaded side
+        int r = 110, g = 85, b = 45;
+        int r2 = 80, g2 = 60, b2 = 30;
 
-        // 3. Render with Width
-        // We add two vertices per segment to give the Triangle Strip area
         for (int i = 0; i <= 24; ++i) {
-            float f = (float)i / 24.0F;
-
+            float f = (float) i / 24.0F;
             float x = dx * f;
             float y = dy * f;
             float z = dz * f;
-
-            // Vertex 1: The "Top/Left" side
-            vertexConsumer.addVertex(matrix, x, y, z)
-                    .setColor(r, g, b, 255)
-                    .setLight(packedLight);
-
-            // Vertex 2: The "Bottom/Right" side (offset by 0.05 for thickness)
-            // This offset gives the rope actual physical width on screen
-            vertexConsumer.addVertex(matrix, x + 0.035f, y + 0.035f, z)
-                    .setColor(r2, g2, b2, 255)
-                    .setLight(packedLight);
+            vertexConsumer.addVertex(matrix, x, y, z).setColor(r, g, b, 255).setLight(packedLight);
+            vertexConsumer.addVertex(matrix, x + 0.035f, y + 0.035f, z).setColor(r2, g2, b2, 255).setLight(packedLight);
         }
     }
 
@@ -130,18 +105,16 @@ public class ModularArrowRenderer extends ArrowRenderer<ModularArrowEntity> {
             case "shaft" -> assembly.shaft().toLowerCase().replace(" ", "_");
             case "head" -> assembly.head().toLowerCase().replace(" ", "_");
             default -> assembly.fletching().toLowerCase().replace(" ", "_");
-        }; // Fixes Dark Oak -> dark_oak
-
+        };
         return ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "textures/entity/projectiles/" + part + "/" + name + ".png");
     }
 
-    // This is required by the parent class but ignored by our custom render
+
     @Override
     public ResourceLocation getTextureLocation(ModularArrowEntity entity) {
         return ResourceLocation.withDefaultNamespace("textures/entity/projectiles/arrow.png");
     }
 
-    // Helper for vertex construction
     public void vertex(PoseStack poseStack, VertexConsumer consumer, int x, int y, int z, float u, float v, int normalX, int normalZ, int normalY, int packedLight) {
         consumer.addVertex(poseStack.last().pose(), (float)x, (float)y, (float)z)
                 .setColor(255, 255, 255, 255)
