@@ -15,6 +15,7 @@ import net.frostytrix.fletcherstrestle.item.ModItems;
 import net.frostytrix.fletcherstrestle.loot.ModLootModifiers;
 import net.frostytrix.fletcherstrestle.menu.ModMenuTypes;
 import net.frostytrix.fletcherstrestle.recipe.ModRecipes;
+import net.frostytrix.fletcherstrestle.sound.ModSounds;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModContainer;
@@ -59,6 +60,7 @@ public class FletcherTrestle {
         ModLootModifiers.register(modEventBus);
         ModFluidTypes.FLUID_TYPES.register(modEventBus);
         ModFluids.FLUIDS.register(modEventBus);
+        ModSounds.register(modEventBus);
 
 
         // Register the item to a creative tab

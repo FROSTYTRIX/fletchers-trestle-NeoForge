@@ -291,19 +291,41 @@ public class EagleModel extends EntityModel<EagleEntity> {
     }
 
     private void animateIdle(float ageInTicks, float speed, float walkPos) {
-        // Subtle breathing bob on the body Y (done via neck tilt)
-        neck.xRot = -0.2f + (float) Math.sin(ageInTicks * 0.05f) * 0.04f;
+        // Perched bird posture: neck pulled in (head closer to body), slight
+        // breathing motion. The default neck xRot is -0.2 (forward tilt);
+        // we increase to -0.05 so the head sits more upright over the body.
+        neck.xRot = -0.05f + (float) Math.sin(ageInTicks * 0.05f) * 0.04f;
 
-        // Occasional slow head-turn (uses a slower sin cycle)
+        // Occasional slow head-turn left/right.
         head.yRot = (float) Math.sin(ageInTicks * 0.03f) * 0.15f;
 
-        // Wings fully folded against body (default PartPose handles this via resetParts)
-        // No extra rotation needed unless speed > 0 (walking animation)
+        // Wings folded DOWN along the body. Sign convention: model Y+ is
+        // visually DOWN, so positive zRot on the left wing rotates its tip
+        // UP (above horizontal). To drape the wing along the bird's side
+        // we need NEGATIVE zRot on the left and POSITIVE on the right.
+        leftWingUpper.zRot  = -1.4f;
+        rightWingUpper.zRot =  1.4f;
+        // The lower wing (primary feathers) tucks inward slightly. Same
+        // sign rule applies — small inward bend.
+        leftWingLower.zRot  = -0.3f;
+        rightWingLower.zRot =  0.3f;
+
+        // Tail relaxed downward instead of fanned out.
+        tail.xRot = 0.15f;
+
+        // Legs straight under the body — not angled like in flight.
+        leftLeg.xRot  = 0f;
+        rightLeg.xRot = 0f;
+
+        // Talons flat on the ground (default pose has them tilted forward
+        // for the in-flight grip-forward look).
+        leftTalon.xRot  = 0f;
+        rightTalon.xRot = 0f;
 
         if (speed > 0.01f) {
-            // Walking: legs swing forward/back like a bird waddling
-            leftLeg.xRot  =  (float) Math.sin(walkPos * 0.6662f)       * 0.5f * speed;
-            rightLeg.xRot = -(float) Math.sin(walkPos * 0.6662f + Math.PI) * 0.5f * speed;
+            // Walking waddle.
+            leftLeg.xRot  =  (float) Math.sin(walkPos * 0.6662f)            * 0.5f * speed;
+            rightLeg.xRot = -(float) Math.sin(walkPos * 0.6662f + Math.PI)  * 0.5f * speed;
         }
     }
 

@@ -1,0 +1,44 @@
+{
+  "eagle.ambient": {
+    "category": "neutral",
+    "subtitle": "subtitles.fletcherstrestle.eagle.ambient",
+    "sounds": [
+      { "name": "minecraft:entity.parrot.ambient", "type": "event" }
+    ]
+  },
+  "eagle.hurt": {
+    "category": "neutral",
+    "subtitle": "subtitles.fletcherstrestle.eagle.hurt",
+    "sounds": [
+      { "name": "minecraft:entity.parrot.hurt", "type": "event" }
+    ]
+  },
+  "eagle.death": {
+    "category": "neutral",
+    "subtitle": "subtitles.fletcherstrestle.eagle.death",
+    "sounds": [
+      { "name": "minecraft:entity.parrot.death", "type": "event" }
+    ]
+  },
+  "eagle.tame": {
+    "category": "neutral",
+    "subtitle": "subtitles.fletcherstrestle.eagle.tame",
+    "sounds": [
+      { "name": "minecraft:entity.parrot.ambient", "type": "event" }
+    ]
+  },
+  "eagle.flap": {
+    "category": "neutral",
+    "subtitle": "subtitles.fletcherstrestle.eagle.flap",
+    "sounds": [
+      { "name": "minecraft:entity.parrot.fly", "type": "event" }
+    ]
+  },
+  "eagle.dive": {
+    "category": "neutral",
+    "subtitle": "subtitles.fletcherstrestle.eagle.dive",
+    "sounds": [
+      { "name": "minecraft:entity.phantom.flap", "type": "event" }
+    ]
+  }
+}

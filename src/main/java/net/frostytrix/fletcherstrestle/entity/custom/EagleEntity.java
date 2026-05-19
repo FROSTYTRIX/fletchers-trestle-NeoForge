@@ -1,6 +1,7 @@
 package net.frostytrix.fletcherstrestle.entity.custom;
 
 import net.frostytrix.fletcherstrestle.entity.ModEntities;
+import net.frostytrix.fletcherstrestle.sound.ModSounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -27,6 +28,7 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.pathfinder.PathType;
+import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
@@ -56,10 +58,21 @@ public class EagleEntity extends TamableAnimal {
     @Nullable
     private LivingEntity huntTarget = null;
 
+    // Hysteresis counters for the IS_FLYING flag. With no gravity, the eagle
+    // grazes the ground each tick and onGround() flickers true/false, which
+    // would otherwise re-trigger the flying animation every frame.
+    private int groundedTicks = 0;
+    private int airborneTicks = 0;
+
     public EagleEntity(EntityType<? extends TamableAnimal> type, Level level) {
         super(type, level);
         // Use flying move control and allow path-finding in air
         this.moveControl = new FlyingMoveControl(this, 10, false);
+        // Phase 5 — gravity off; travel() and tick() handle all motion.
+        // A bird is always in control of its descent: when actively pathing
+        // it glides toward the target; when idle it settles gently via the
+        // descent term in tick(). Real birds don't drop like rocks.
+        this.setNoGravity(true);
         // Eagles never despawn once tamed
         this.setPersistenceRequired();
         this.setPathfindingMalus(PathType.DANGER_FIRE, -1f);
@@ -74,7 +87,7 @@ public class EagleEntity extends TamableAnimal {
         return Animal.createLivingAttributes()
                 .add(Attributes.MAX_HEALTH,     20.0)
                 .add(Attributes.MOVEMENT_SPEED, 0.3)
-                .add(Attributes.FLYING_SPEED,   0.6)
+                .add(Attributes.FLYING_SPEED,   0.17)
                 .add(Attributes.FOLLOW_RANGE,   32.0)
                 .add(Attributes.ATTACK_DAMAGE,  3.0);
     }
@@ -102,7 +115,20 @@ public class EagleEntity extends TamableAnimal {
         this.goalSelector.addGoal(5, new TemptGoal(this, 1.0,
                 Ingredient.of(Items.RABBIT, Items.COD, Items.SALMON), false));
         this.goalSelector.addGoal(6, new FollowOwnerGoal(this, 1.0, 10.0f, 2.0f));
-        this.goalSelector.addGoal(7, new WaterAvoidingRandomFlyingGoal(this, 1.0));
+        // Random flying: only active for UNTAMED eagles (so wild ones still
+        // wander), and rate-limited via a long base interval so even those
+        // don't constantly cycle through flight. Tamed eagles stay perched
+        // near their owner via FollowOwnerGoal.
+        this.goalSelector.addGoal(7, new WaterAvoidingRandomFlyingGoal(this, 1.0) {
+            @Override
+            public boolean canUse() {
+                if (EagleEntity.this.isTame()) return false;
+                // Throttle: ~5% chance per evaluation, vanilla checks at
+                // ~once-per-second so this means a wander attempt every ~20s.
+                if (EagleEntity.this.getRandom().nextInt(20) != 0) return false;
+                return super.canUse();
+            }
+        });
         this.goalSelector.addGoal(8, new LookAtPlayerGoal(this, Player.class, 8.0f));
         this.goalSelector.addGoal(9, new RandomLookAroundGoal(this));
     }
@@ -123,6 +149,7 @@ public class EagleEntity extends TamableAnimal {
                     if (this.random.nextInt(10) < 3) {
                         this.tame(player);
                         this.setOrderedToSit(false);
+                        this.playSound(ModSounds.EAGLE_TAME.get(), 0.8f, 1.0f);
                         this.level().broadcastEntityEvent(this, (byte) 7); // tame success particles
                     } else {
                         this.level().broadcastEntityEvent(this, (byte) 6); // tame fail smoke
@@ -137,7 +164,7 @@ public class EagleEntity extends TamableAnimal {
         if (this.isOwnedBy(player) && stack.isEmpty()) {
             if (!this.level().isClientSide) {
                 this.setOrderedToSit(!this.isOrderedToSit());
-                this.playSound(SoundEvents.PARROT_AMBIENT, 0.6f,
+                this.playSound(ModSounds.EAGLE_AMBIENT.get(), 0.6f,
                         1.2f + this.random.nextFloat() * 0.4f);
             }
             return InteractionResult.sidedSuccess(this.level().isClientSide);
@@ -189,23 +216,123 @@ public class EagleEntity extends TamableAnimal {
     }
 
     // ---------------------------------------------------------------
+    // Phase 5 — Travel & gravity suppression
+    // ---------------------------------------------------------------
+
+    // Birds are always in control of their own motion. Vanilla travel() applies
+    // a hardcoded gravity step that fights any flying nav we set up, which
+    // produced the "hop / fall / hop" pattern. We replace it entirely:
+    //   - moveRelative with FLYING_SPEED to translate AI input into motion
+    //   - move() to actually apply it (with collision)
+    //   - uniform 0.91 damping so motion bleeds off instead of locking
+    //   - when on ground or sitting, use a stronger ground friction
+    //
+    // No gravity term at all — the bird never "falls" passively. If it has
+    // nowhere to go (no path), it gently settles via the descent term in
+    // tick() rather than dropping like a rock.
+    @Override
+    public void travel(Vec3 input) {
+        if (this.isControlledByLocalInstance()) {
+            if (this.isInWater()) {
+                this.moveRelative(0.02f, input);
+                this.move(MoverType.SELF, this.getDeltaMovement());
+                this.setDeltaMovement(this.getDeltaMovement().scale(0.8));
+            } else if (this.isInLava()) {
+                this.moveRelative(0.02f, input);
+                this.move(MoverType.SELF, this.getDeltaMovement());
+                this.setDeltaMovement(this.getDeltaMovement().scale(0.5));
+            } else {
+                float speed = this.onGround() ? this.getSpeed() * 0.1f : this.getSpeed();
+                float damping = this.onGround() ? 0.6f : 0.91f;
+                this.moveRelative(speed, input);
+                this.move(MoverType.SELF, this.getDeltaMovement());
+                this.setDeltaMovement(this.getDeltaMovement().scale(damping));
+            }
+        }
+        this.calculateEntityAnimation(false);
+    }
+
+    // Use FLYING_SPEED rather than MOVEMENT_SPEED while airborne, so the
+    // FLYING_SPEED attribute actually does something.
+    @Override
+    protected float getFlyingSpeed() {
+        return (float) this.getAttributeValue(Attributes.FLYING_SPEED);
+    }
+
+    // ---------------------------------------------------------------
     // Tick — manage IS_FLYING synced flag
     // ---------------------------------------------------------------
     @Override
     public void tick() {
         super.tick();
-        // Keep IS_FLYING in sync so the renderer and model know which animation to use
-        boolean flying = !this.onGround() && !this.isOrderedToSit();
-        if (flying) {
-            Vec3 motion = this.getDeltaMovement();
-            if (motion.y < 0 && !this.getNavigation().isDone()) {
-                this.setDeltaMovement(motion.x, motion.y * 0.6, motion.z);
+
+        // Gravity stays off — travel() handles all motion. If a vanilla code
+        // path flipped it back on (rare but possible), force it off again.
+        if (!this.isNoGravity()) {
+            this.setNoGravity(true);
+        }
+
+        // Robust ground check: vanilla onGround() flickers because with no
+        // gravity the eagle barely loads against the block. We extend the
+        // bounding box ~0.15 blocks down and test for any collision —
+        // that's stable across FollowOwnerGoal nudges and other small Y jitter.
+        boolean grounded = isGroundedRobust();
+        boolean airborne = !grounded;
+
+        // Bird-like settling: if airborne with no active goal/path, apply a
+        // gentle downward drift so the eagle descends to land instead of
+        // hovering forever.
+        boolean idleAirborne = airborne
+                && !this.isOrderedToSit()
+                && this.getNavigation().isDone()
+                && this.huntTarget == null
+                && this.getEagleState() == STATE_IDLE;
+        if (idleAirborne) {
+            Vec3 m = this.getDeltaMovement();
+            if (m.y > -0.08) {
+                this.setDeltaMovement(m.x, m.y - 0.02, m.z);
             }
         }
 
-        if (flying != this.isFlying()) {
-            this.entityData.set(IS_FLYING, flying);
+        // Hysteresis on the IS_FLYING flag.
+        if (airborne) {
+            airborneTicks++;
+            groundedTicks = 0;
+        } else {
+            groundedTicks++;
+            airborneTicks = 0;
         }
+
+        boolean currentlyFlying = this.isFlying();
+        boolean shouldFly;
+        if (this.isOrderedToSit()) {
+            shouldFly = false;
+        } else if (currentlyFlying) {
+            // Was flying — only switch to "not flying" after 4+ ticks grounded
+            shouldFly = groundedTicks < 4;
+        } else {
+            // Was grounded — require 8+ ticks airborne before flipping to
+            // flying so a brief lift from FollowOwnerGoal doesn't trigger
+            // the flap animation while the eagle is essentially standing still.
+            shouldFly = airborneTicks >= 8;
+        }
+        if (shouldFly != currentlyFlying) {
+            this.entityData.set(IS_FLYING, shouldFly);
+        }
+    }
+
+    // Returns true if the eagle's hitbox is within ~0.3 blocks of a solid
+    // surface below it. More reliable than onGround() when gravity is off,
+    // because it doesn't depend on the entity having had downward motion
+    // that got capped on the same tick. The 0.3 buffer also tolerates the
+    // brief upward nudges FollowOwnerGoal applies near the ground.
+    private boolean isGroundedRobust() {
+        if (this.onGround()) return true;
+        net.minecraft.world.phys.AABB bb = this.getBoundingBox();
+        net.minecraft.world.phys.AABB probe = new net.minecraft.world.phys.AABB(
+                bb.minX, bb.minY - 0.3, bb.minZ,
+                bb.maxX, bb.minY,       bb.maxZ);
+        return !this.level().noCollision(this, probe);
     }
 
     @Override
@@ -244,18 +371,17 @@ public class EagleEntity extends TamableAnimal {
 
     @Override
     protected SoundEvent getAmbientSound() {
-        // Placeholder — replace with ModSounds.EAGLE_AMBIENT when you add sounds
-        return SoundEvents.PARROT_AMBIENT;
+        return ModSounds.EAGLE_AMBIENT.get();
     }
 
     @Override
     protected SoundEvent getHurtSound(DamageSource source) {
-        return SoundEvents.PARROT_HURT;
+        return ModSounds.EAGLE_HURT.get();
     }
 
     @Override
     protected SoundEvent getDeathSound() {
-        return SoundEvents.PARROT_DEATH;
+        return ModSounds.EAGLE_DEATH.get();
     }
 
     @Override
@@ -273,6 +399,15 @@ public class EagleEntity extends TamableAnimal {
         private final EagleEntity eagle;
         @Nullable
         private net.minecraft.world.entity.projectile.AbstractArrow targetArrow;
+        // Stack the eagle is carrying back to the owner. Non-null while in
+        // the RETURNING phase. Null while flying out to grab an arrow.
+        @Nullable
+        private ItemStack carriedStack;
+        // Throttle counter for path recomputation. Re-pathing every tick
+        // makes FlyingPathNavigation stutter and never converge on a target.
+        private int repathCooldown = 0;
+        // Watchdog: if we can't reach the arrow or owner in time, bail.
+        private int giveUpTimer = 0;
 
         EagleFetchGoal(EagleEntity eagle) {
             this.eagle = eagle;
@@ -283,20 +418,20 @@ public class EagleEntity extends TamableAnimal {
         public boolean canUse() {
             if (!eagle.isTame() || eagle.isOrderedToSit()) return false;
             if (eagle.getEagleState() != STATE_IDLE) return false;
-            if (!(eagle.getOwner() instanceof Player owner)) return false;
+            if (!(eagle.getOwner() instanceof Player owner) || !owner.isAlive()) return false;
 
-            // Scan for arrows stuck (motion ~0) within 24 blocks of owner.
-            // Why not arrow.onGround()? AbstractArrow.inGround is protected and
-            // onGround() misses arrows lodged in walls/ceilings — but a stuck
-            // arrow always has its motion zeroed, so that's the reliable signal.
             double range = 24.0;
+            // inGround is the authoritative "stuck" signal — exposed via the
+            // mod's access transformer. Motion magnitude is unreliable
+            // because arrows retain small residual motion from sub-tick collision.
             targetArrow = eagle.level().getEntitiesOfClass(
                     net.minecraft.world.entity.projectile.AbstractArrow.class,
                     owner.getBoundingBox().inflate(range),
                     arrow -> arrow.tickCount > 5
-                            && arrow.getDeltaMovement().lengthSqr() < 1.0E-5
+                            && arrow.inGround
                             && arrow.getOwner() != null
                             && arrow.getOwner().getUUID().equals(owner.getUUID())
+                            && eagle.level().isLoaded(arrow.blockPosition())
             ).stream().findFirst().orElse(null);
 
             return targetArrow != null;
@@ -305,49 +440,121 @@ public class EagleEntity extends TamableAnimal {
         @Override
         public void start() {
             eagle.setEagleState(STATE_FETCHING);
+            repathCooldown = 0;
+            giveUpTimer = 0;
         }
 
         @Override
         public boolean canContinueToUse() {
-            return targetArrow != null
-                    && targetArrow.isAlive()
-                    && eagle.getEagleState() == STATE_FETCHING
-                    && eagle.isTame()
-                    && !eagle.isOrderedToSit();
+            if (!eagle.isTame() || eagle.isOrderedToSit()) return false;
+            int state = eagle.getEagleState();
+            if (state == STATE_FETCHING) {
+                return targetArrow != null && targetArrow.isAlive();
+            }
+            if (state == STATE_RETURNING) {
+                // Carrying an arrow — keep running until we deliver to owner
+                return carriedStack != null
+                        && eagle.getOwner() instanceof Player owner
+                        && owner.isAlive();
+            }
+            return false;
         }
 
         @Override
         public void tick() {
-            if (targetArrow == null) { stop(); return; }
+            giveUpTimer++;
+            // 20 seconds total for the whole fetch-and-return cycle.
+            if (giveUpTimer > 400) { stop(); return; }
 
-            // Navigate toward the arrow
-            eagle.getNavigation().moveTo(
-                    targetArrow.getX(), targetArrow.getY(), targetArrow.getZ(), 1.2);
+            int state = eagle.getEagleState();
 
-            // Close enough — pick it up
-            if (eagle.distanceToSqr(targetArrow) < 2.25) { // 1.5 blocks squared
-                eagle.playSound(SoundEvents.PARROT_FLY, 0.5f, 1.4f);
+            if (state == STATE_FETCHING) {
+                tickFetch();
+            } else if (state == STATE_RETURNING) {
+                tickReturn();
+            } else {
+                stop();
+            }
+        }
 
-                // Give arrow item to owner or drop at their feet
-                if (eagle.getOwner() instanceof Player owner) {
-                    ItemStack pickup = targetArrow.getPickResult().copy();
-                    if (!owner.getInventory().add(pickup)) {
-                        // Inventory full — drop at owner feet
-                        owner.drop(pickup, false);
-                    }
-                }
+        // Phase 1 — fly out to the arrow, grab it, then transition to returning.
+        private void tickFetch() {
+            if (targetArrow == null || !targetArrow.isAlive()) { stop(); return; }
+            // Refuse to path into unloaded chunks — the path planner can't
+            // reason about absent terrain and the eagle would just stall.
+            if (!eagle.level().isLoaded(targetArrow.blockPosition())) { stop(); return; }
+
+            // Aim slightly above the arrow so descent settles onto it
+            // rather than clipping into the ground.
+            double tx = targetArrow.getX();
+            double ty = targetArrow.getY() + 0.3;
+            double tz = targetArrow.getZ();
+
+            eagle.getMoveControl().setWantedPosition(tx, ty, tz, 1.4);
+            if (--repathCooldown <= 0) {
+                eagle.getNavigation().moveTo(tx, ty, tz, 1.4);
+                repathCooldown = 10;
+            }
+
+            if (eagle.distanceToSqr(targetArrow) < 4.0) {
+                eagle.playSound(ModSounds.EAGLE_FLAP.get(), 0.5f, 1.4f);
+
+                ItemStack pickup = targetArrow.getPickupItemStackOrigin().copy();
+                if (pickup.isEmpty()) pickup = new ItemStack(Items.ARROW);
+                carriedStack = pickup;
+
                 targetArrow.discard();
                 targetArrow = null;
 
-                // Return to idle so the goal re-evaluates for more arrows
+                // Transition to RETURNING — keep flying, but now back to owner.
+                eagle.setEagleState(STATE_RETURNING);
+                eagle.getNavigation().stop();
+                repathCooldown = 0;
+            }
+        }
+
+        // Phase 2 — carry the arrow back to the owner, then deposit it.
+        private void tickReturn() {
+            if (carriedStack == null) { stop(); return; }
+            if (!(eagle.getOwner() instanceof Player owner) || !owner.isAlive()) { stop(); return; }
+            // If the owner walked into an unloaded area, hold position and
+            // retry next tick rather than thrashing the path planner.
+            if (!eagle.level().isLoaded(owner.blockPosition())) return;
+
+            // Aim for slightly above the owner's head so the eagle approaches
+            // from above rather than barging into them at body level.
+            double tx = owner.getX();
+            double ty = owner.getY() + 1.2;
+            double tz = owner.getZ();
+
+            eagle.getMoveControl().setWantedPosition(tx, ty, tz, 1.4);
+            if (--repathCooldown <= 0) {
+                eagle.getNavigation().moveTo(tx, ty, tz, 1.4);
+                repathCooldown = 10;
+            }
+
+            // Deliver radius: within 2.5 blocks of the owner.
+            if (eagle.distanceToSqr(owner) < 6.25) {
+                eagle.playSound(ModSounds.EAGLE_FLAP.get(), 0.6f, 1.2f);
+                if (!owner.getInventory().add(carriedStack)) {
+                    owner.drop(carriedStack, false);
+                }
+                carriedStack = null;
                 eagle.setEagleState(STATE_IDLE);
             }
         }
 
         @Override
         public void stop() {
+            // If we were mid-return and got interrupted, drop the carried
+            // stack at the eagle's feet so the player isn't cheated.
+            if (carriedStack != null && !carriedStack.isEmpty()) {
+                eagle.spawnAtLocation(carriedStack);
+            }
             targetArrow = null;
-            if (eagle.getEagleState() == STATE_FETCHING) {
+            carriedStack = null;
+            int s = eagle.getEagleState();
+            if (s == STATE_FETCHING || s == STATE_RETURNING) {
                 eagle.setEagleState(STATE_IDLE);
             }
         }
@@ -360,6 +567,7 @@ public class EagleEntity extends TamableAnimal {
     static class EagleHuntGoal extends Goal {
         private final EagleEntity eagle;
         private int orbitTick = 0;
+        private int repathCooldown = 0;
 
         EagleHuntGoal(EagleEntity eagle) {
             this.eagle = eagle;
@@ -384,14 +592,18 @@ public class EagleEntity extends TamableAnimal {
         public void start() {
             eagle.setEagleState(STATE_HUNTING);
             orbitTick = 0;
+            repathCooldown = 0;
         }
 
         @Override
         public void tick() {
             LivingEntity target = eagle.getHuntTarget();
             if (target == null) { stop(); return; }
+            // Skip orbit work if the target's chunk is unloaded — wait until
+            // it comes back into range rather than pathing into nowhere.
+            if (!eagle.level().isLoaded(target.blockPosition())) return;
 
-            // Orbit 5 blocks above the target in a circle
+            // Orbit 5 blocks above the target in a circle.
             orbitTick++;
             double angle  = orbitTick * 0.08; // radians per tick
             double radius = 5.0;
@@ -399,7 +611,13 @@ public class EagleEntity extends TamableAnimal {
             double orbitY = target.getY() + 5.0;
             double orbitZ = target.getZ() + Math.cos(angle) * radius;
 
-            eagle.getNavigation().moveTo(orbitX, orbitY, orbitZ, 1.0);
+            // Drive the move control every tick (the orbit point moves
+            // continuously), but re-issue pathfinding only periodically.
+            eagle.getMoveControl().setWantedPosition(orbitX, orbitY, orbitZ, 1.2);
+            if (--repathCooldown <= 0) {
+                eagle.getNavigation().moveTo(orbitX, orbitY, orbitZ, 1.2);
+                repathCooldown = 8;
+            }
         }
 
         @Override
