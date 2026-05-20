@@ -103,6 +103,7 @@ public class ModCreativeModeTabs {
                         output.accept(ModItems.HEAVY_DUMMY_ITEM.get());
 
                         output.accept(ModItems.EAGLE_SPAWN_EGG.get());
+                        output.accept(ModItems.EAGLE_WHISTLE.get());
 
                     })
                     .build());

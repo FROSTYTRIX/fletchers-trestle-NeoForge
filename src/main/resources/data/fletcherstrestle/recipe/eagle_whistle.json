@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "minecraft:iron_nugget",
+    "minecraft:bone",
+    "minecraft:string"
+  ],
+  "result": {
+    "id": "fletcherstrestle:eagle_whistle",
+    "count": 1
+  }
+}

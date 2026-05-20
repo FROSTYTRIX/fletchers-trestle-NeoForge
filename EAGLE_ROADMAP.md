@@ -9,8 +9,9 @@ Tracks the next major additions to the eagle companion system.
 - Smooth flight (custom `travel()`, no gravity, dynamic settling)
 - Fetch-and-return with 16-slot inventory and chained pickups
 - Spyglass lock-on hunt with 60s timeout, 128-block range
-- Sneak + right-click fetch-mode toggle *(temporary — will be replaced by the whistle in Phase A)*
+- Sneak + right-click fetch-mode toggle *(retained as a close-range fallback)*
 - Stuck-busy bug fix (state sanitization on save, cold-start return)
+- **Phase A — Eagle Whistle** ✅ (right-click toggles fetch, sneak+RC recalls, right-click on eagle binds, sneak+RC on eagle unbinds)
 
 ---
 

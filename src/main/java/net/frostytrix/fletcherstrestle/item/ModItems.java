@@ -145,6 +145,9 @@ public class ModItems {
 
     public static final DeferredItem<Item> EAGLE_SPAWN_EGG = ITEMS.register("eagle_spawn_egg", () -> new SpawnEggItem(ModEntities.EAGLE.get(), 0x5C4033, 0xF5C842, new Item.Properties()));
 
+    public static final DeferredItem<Item> EAGLE_WHISTLE = ITEMS.register("eagle_whistle",
+            () -> new EagleWhistleItem(new Item.Properties().stacksTo(1)));
+
 
 
     public static void register(IEventBus eventBus) {
