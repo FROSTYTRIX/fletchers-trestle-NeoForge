@@ -167,11 +167,21 @@ public class ModularBakedModel implements BakedModel {
                 String shaftMat = arrow != null ? arrow.shaft().toLowerCase().replace(" ", "_") : "oak";
                 String fletchMat = arrow != null ? arrow.fletching().toLowerCase().replace(" ", "_") : "feather";
 
-                textures.add(basePath + "/shafts/" + shaftMat + "_shaft");
-                textures.add(basePath + "/fletchings/" + fletchMat + "_fletching");
-                textures.add(basePath + "/heads/" + headMat + "_head");
+                textures.add(basePath + "/shafts/" + shaftMat + "_shaft");        // tint idx 0
+                textures.add(basePath + "/fletchings/" + fletchMat + "_fletching"); // tint idx 1
+                textures.add(basePath + "/heads/" + headMat + "_head");           // tint idx 2
 
-                cacheKey = "arrow_" + headMat + "_" + shaftMat + "_" + fletchMat;
+                // Glass-vial arrows that have been dipped get a fourth layer:
+                // the "liquid" silhouette tinted to the potion's color via the
+                // ItemColor handler registered in ModClientEvents.
+                boolean hasLiquid = "glass_vial".equals(headMat)
+                        && stack.get(DataComponents.POTION_CONTENTS) != null;
+                if (hasLiquid) {
+                    textures.add(basePath + "/heads/glass_vial_liquid");          // tint idx 3
+                }
+
+                cacheKey = "arrow_" + headMat + "_" + shaftMat + "_" + fletchMat
+                        + (hasLiquid ? "_potion" : "");
             }
             // --- CATCH ALL ---
             else {

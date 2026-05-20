@@ -7,6 +7,8 @@ import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
 import net.frostytrix.fletcherstrestle.FletcherTrestle;
 import net.frostytrix.fletcherstrestle.block.ModBlocks;
+import net.frostytrix.fletcherstrestle.component.ArrowAssembly;
+import net.frostytrix.fletcherstrestle.component.ModDataComponents;
 import net.frostytrix.fletcherstrestle.item.ModItems;
 import net.frostytrix.fletcherstrestle.recipe.*;
 import net.minecraft.client.Minecraft;
@@ -66,31 +68,41 @@ public class FletchersTrestleJeiPlugin implements IModPlugin {
         for (var holder : recipeManager.getAllRecipesFor(ModRecipes.DIPPING_TYPE.get())) {
             DippingRecipe recipe = holder.value();
 
-            // Si c'est notre recette générique de flèches (pas de potion fixe demandée et le résultat est une flèche)
-            if (recipe.requiredPotion.isEmpty() && recipe.output.is(Items.TIPPED_ARROW)) {
+            // Generic potion-arrow recipes (no required_potion, output is the
+            // generic "any tipped arrow / any modular potion arrow"): explode
+            // into one synthetic recipe per vanilla potion so JEI indexes them
+            // by their final item — searching "Jump Boost Arrow" finds the
+            // jump-boost-specific variant.
+            boolean isGenericTipped  = recipe.requiredPotion.isEmpty() && recipe.output.is(Items.TIPPED_ARROW);
+            boolean isGenericModular = recipe.requiredPotion.isEmpty() && recipe.output.is(ModItems.MODULAR_ARROW.get());
 
-                // On boucle sur toutes les potions du jeu
+            if (isGenericTipped || isGenericModular) {
                 BuiltInRegistries.POTION.holders().forEach(potionHolder -> {
                     String potionId = BuiltInRegistries.POTION.getKey(potionHolder.value()).toString();
+                    if (potionId.equals("minecraft:empty") || potionId.equals("minecraft:water")) return;
 
-                    if (!potionId.equals("minecraft:empty") && !potionId.equals("minecraft:water")) {
-
-                        // On fabrique l'objet de sortie avec l'effet précis
-                        ItemStack specificArrow = recipe.output.copy();
-                        specificArrow.set(DataComponents.POTION_CONTENTS, new net.minecraft.world.item.alchemy.PotionContents(potionHolder));
-
-                        // On ajoute une fausse recette FIXE dans JEI pour cette potion
-                        dippingRecipes.add(new DippingRecipe(
-                                recipe.inputItem,
-                                recipe.inputCount,
-                                java.util.Optional.of(potionId), // On fixe la potion !
-                                recipe.fluidAmount,
-                                specificArrow
-                        ));
+                    ItemStack specificArrow = recipe.output.copy();
+                    specificArrow.set(DataComponents.POTION_CONTENTS,
+                            new net.minecraft.world.item.alchemy.PotionContents(potionHolder));
+                    // For modular arrows, set a sample assembly so the model
+                    // renders the head as a glass vial (otherwise JEI shows
+                    // an "unfinished" arrow icon).
+                    if (isGenericModular) {
+                        specificArrow.set(ModDataComponents.ARROW_ASSEMBLY.get(),
+                                new ArrowAssembly("glass_vial", "oak", "feather"));
                     }
+
+                    dippingRecipes.add(new DippingRecipe(
+                            recipe.inputItem,
+                            recipe.inputCount,
+                            java.util.Optional.of(potionId),
+                            recipe.fluidAmount,
+                            specificArrow
+                    ));
                 });
             } else {
-                // Les recettes normales (comme la Pomme en Or) passent directement
+                // Recipes with a specific required_potion (e.g. golden apple
+                // dipping for some custom effect) pass through unchanged.
                 dippingRecipes.add(recipe);
             }
         }

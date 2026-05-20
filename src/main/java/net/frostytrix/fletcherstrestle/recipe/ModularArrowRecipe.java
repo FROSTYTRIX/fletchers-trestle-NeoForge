@@ -73,6 +73,7 @@ public class ModularArrowRecipe implements Recipe<ArrowRecipeInput> {
         if (stack.is(Items.GOLD_INGOT)) return "weighted_blunt";
         if (stack.is(ModItems.WEIGHTED_HOOK)) return "weighted_hook";
         if (stack.is(ModBlocks.ROPE.asItem())) return "trailing_rope";
+        if (stack.is(Items.GLASS_BOTTLE)) return "glass_vial";
         return null;
     }
 

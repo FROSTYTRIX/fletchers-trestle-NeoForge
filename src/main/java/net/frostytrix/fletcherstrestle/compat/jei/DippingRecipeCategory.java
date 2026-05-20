@@ -13,7 +13,10 @@ import mezz.jei.api.recipe.category.IRecipeCategory;
 import mezz.jei.api.neoforge.NeoForgeTypes;
 import net.frostytrix.fletcherstrestle.FletcherTrestle;
 import net.frostytrix.fletcherstrestle.block.ModBlocks;
+import net.frostytrix.fletcherstrestle.component.ArrowAssembly;
+import net.frostytrix.fletcherstrestle.component.ModDataComponents;
 import net.frostytrix.fletcherstrestle.fluid.ModFluids;
+import net.frostytrix.fletcherstrestle.item.ModItems;
 import net.frostytrix.fletcherstrestle.recipe.DippingRecipe;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
@@ -62,26 +65,40 @@ public class DippingRecipeCategory implements IRecipeCategory<DippingRecipe> {
     @Override
     public void setRecipe(IRecipeLayoutBuilder builder, DippingRecipe recipe, IFocusGroup focuses) {
 
-        // 1. SLOT D'ENTRÉE (Item)
+        // Special-case the modular potion-arrow recipe so JEI shows a real
+        // glass-vial arrow + sample potion + filled output instead of three
+        // empty modular_arrow icons. Detected via the output item.
+        boolean isModularPotion = recipe.output.is(ModItems.MODULAR_ARROW.get());
+
+        // ---- 1. INPUT SLOT ----
         List<ItemStack> inputStacks = new ArrayList<>();
         for (ItemStack stack : recipe.inputItem.getItems()) {
             ItemStack copy = stack.copy();
             copy.setCount(recipe.inputCount);
+            if (isModularPotion && copy.is(ModItems.MODULAR_ARROW.get())) {
+                // Empty glass-vial arrow (no potion yet) — visualizes what
+                // you'd put in the vat.
+                copy.set(ModDataComponents.ARROW_ASSEMBLY.get(),
+                        new ArrowAssembly("glass_vial", "oak", "feather"));
+            }
             inputStacks.add(copy);
         }
         builder.addSlot(RecipeIngredientRole.INPUT, 15, 22)
                 .addIngredients(VanillaTypes.ITEM_STACK, inputStacks);
 
-        // 2. SLOT DU FLUIDE (Au milieu)
-        // La potion est forcément définie maintenant (soit par la recette originale, soit par l'éclatement du Plugin)
-        FluidStack fluidToDisplay;
-        if (recipe.requiredPotion.isPresent()) {
+        // ---- 2. FLUID SLOT ----
+        // Pick a sample potion ID for the modular case so the fluid shows
+        // a real color and the tooltip names it. Defaults to regeneration
+        // because it's instantly recognisable pink.
+        String fluidPotionId = recipe.requiredPotion.orElse(
+                isModularPotion ? "minecraft:strong_regeneration" : null);
+
+        FluidStack fluidToDisplay = new FluidStack(
+                ModFluids.LIQUID_POTION_SOURCE.get(), recipe.fluidAmount);
+        if (fluidPotionId != null) {
             CompoundTag tag = new CompoundTag();
-            tag.putString("potion", recipe.requiredPotion.get());
-            fluidToDisplay = new FluidStack(ModFluids.LIQUID_POTION_SOURCE.get(), recipe.fluidAmount);
+            tag.putString("potion", fluidPotionId);
             fluidToDisplay.set(DataComponents.CUSTOM_DATA, CustomData.of(tag));
-        } else {
-            fluidToDisplay = new FluidStack(ModFluids.LIQUID_POTION_SOURCE.get(), recipe.fluidAmount);
         }
 
         builder.addSlot(RecipeIngredientRole.INPUT, 43, 22)
@@ -98,15 +115,38 @@ public class DippingRecipeCategory implements IRecipeCategory<DippingRecipe> {
                                 tooltip.clear(); // On vire le texte par défaut "Water"
                                 ItemStack dummyPotion = new ItemStack(Items.POTION);
                                 dummyPotion.set(DataComponents.POTION_CONTENTS, new PotionContents(potionHolder));
-                                tooltip.add(0, Component.literal("Fluid: ").append(dummyPotion.getHoverName()));
+                                // For modular arrows, the fluid is just an example —
+                                // any potion works. Make that clear in the tooltip.
+                                if (recipe.requiredPotion.isEmpty()) {
+                                    tooltip.add(0, Component.literal("Any potion (example: ")
+                                            .append(dummyPotion.getHoverName())
+                                            .append(Component.literal(")"))
+                                            .withStyle(ChatFormatting.AQUA));
+                                } else {
+                                    tooltip.add(0, Component.literal("Fluid: ").append(dummyPotion.getHoverName()));
+                                }
                                 tooltip.add(Component.literal(fluidStack.getAmount() + " mB").withStyle(ChatFormatting.GRAY));
                             }
                         }
                     });
                 });
 
-        // 3. SLOT DE SORTIE (Résultat final - Toujours statique désormais)
+        // ---- 3. OUTPUT SLOT ----
+        ItemStack outputDisplay = recipe.output.copy();
+        if (isModularPotion) {
+            // Show what a filled glass-vial arrow looks like: same assembly
+            // as the input + the example potion's effect contents.
+            outputDisplay.set(ModDataComponents.ARROW_ASSEMBLY.get(),
+                    new ArrowAssembly("glass_vial", "oak", "feather"));
+            if (fluidPotionId != null) {
+                BuiltInRegistries.POTION
+                        .getHolder(ResourceLocation.parse(fluidPotionId))
+                        .ifPresent(holder ->
+                                outputDisplay.set(DataComponents.POTION_CONTENTS,
+                                        new PotionContents(holder)));
+            }
+        }
         builder.addSlot(RecipeIngredientRole.OUTPUT, 101, 22)
-                .addItemStack(recipe.output);
+                .addItemStack(outputDisplay);
     }
 }

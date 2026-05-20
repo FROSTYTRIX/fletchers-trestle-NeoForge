@@ -72,6 +72,7 @@ public class ModItemTagProvider extends ItemTagsProvider {
                 .add(Items.ECHO_SHARD)
                 .add(ModItems.WEIGHTED_HOOK.get())
                 .add(ModBlocks.ROPE.asItem())
+                .add(Items.GLASS_BOTTLE)
                 ;
 
         tag(ModTags.Items.ARROW_FLETCHING)

@@ -4,7 +4,10 @@ import net.frostytrix.fletcherstrestle.component.ArrowAssembly;
 import net.frostytrix.fletcherstrestle.component.ModDataComponents;
 import net.frostytrix.fletcherstrestle.entity.custom.ModularArrowEntity;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.item.ArrowItem;
@@ -27,18 +30,31 @@ public class ModularArrowItem extends ArrowItem {
         super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
 
         ArrowAssembly assembly = stack.get(ModDataComponents.ARROW_ASSEMBLY.get());
+        PotionContents potion  = stack.get(DataComponents.POTION_CONTENTS);
 
-        if (assembly != null) {
-            String headName = capitalize(assembly.head());
-            String shaftName = capitalize(assembly.shaft());
-            String fletchingName = capitalize(assembly.fletching());
-
-            tooltipComponents.add(Component.literal("Arrow Parts:").withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD));
-            tooltipComponents.add(Component.literal("- Head: " + headName).withStyle(ChatFormatting.GRAY));
-            tooltipComponents.add(Component.literal("- Shaft: " + shaftName).withStyle(ChatFormatting.GRAY));
-            tooltipComponents.add(Component.literal("- Fletching: " + fletchingName).withStyle(ChatFormatting.GRAY));
-        } else {
+        if (assembly == null) {
             tooltipComponents.add(Component.literal("Unfinished Arrow").withStyle(ChatFormatting.RED, ChatFormatting.ITALIC));
+            return;
+        }
+
+        if (!Screen.hasShiftDown()) {
+            tooltipComponents.add(Component.literal("Hold Shift for details")
+                    .withStyle(ChatFormatting.DARK_GRAY, ChatFormatting.ITALIC));
+            return;
+        }
+
+        // Assembly parts
+        tooltipComponents.add(Component.literal("Arrow Parts:").withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD));
+        tooltipComponents.add(Component.literal("- Head: " + capitalize(assembly.head())).withStyle(ChatFormatting.GRAY));
+        tooltipComponents.add(Component.literal("- Shaft: " + capitalize(assembly.shaft())).withStyle(ChatFormatting.GRAY));
+        tooltipComponents.add(Component.literal("- Fletching: " + capitalize(assembly.fletching())).withStyle(ChatFormatting.GRAY));
+
+        // Potion contents (when present — for glass-vial arrows after dipping)
+        if (potion != null) {
+            tooltipComponents.add(Component.literal("Effects:").withStyle(ChatFormatting.LIGHT_PURPLE, ChatFormatting.BOLD));
+            // 1.0 durationFactor — full potion duration at impact center.
+            // Effects fall off by distance at hit-time (see applyGlassVialEffect).
+            potion.addPotionTooltip(tooltipComponents::add, 1.0F, 20.0F);
         }
     }
 
@@ -81,7 +97,8 @@ public class ModularArrowItem extends ArrowItem {
         BARBED_TIP("barbed_tip", 1.0f, true, false),
         WEIGHTED_BLUNT("weighted_blunt", 1.05f, false, false),
         WEIGHTED_HOOK("weighted_hook", 0.5f, false, false),
-        TRAILING_ROPE("trailing_rope", 0.3f, false, false);
+        TRAILING_ROPE("trailing_rope", 0.3f, false, false),
+        GLASS_VIAL("glass_vial", 0.4f, false, false);  // Fragile delivery — payload is in the potion
 
         private final String name;
         private final float damageMult;

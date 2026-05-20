@@ -149,6 +149,21 @@ public class ModClientEvents {
         }
     }
 
+    // Tints layer 3 of the modular arrow item model (the liquid overlay
+    // added by ModularBakedModel) with the potion's color. Layers 0-2 are
+    // the shaft / fletching / head — untouched.
+    @SubscribeEvent
+    public static void onItemColors(RegisterColorHandlersEvent.Item event) {
+        event.register((stack, tintIndex) -> {
+            if (tintIndex != 3) return 0xFFFFFFFF;
+            net.minecraft.world.item.alchemy.PotionContents pc =
+                    stack.get(net.minecraft.core.component.DataComponents.POTION_CONTENTS);
+            if (pc == null) return 0xFFFFFFFF;
+            // PotionContents.getColor() returns RGB; combine with full alpha.
+            return 0xFF000000 | (pc.getColor() & 0xFFFFFF);
+        }, ModItems.MODULAR_ARROW.get());
+    }
+
     @SubscribeEvent
     public static void onBlockColors(RegisterColorHandlersEvent.Block event) {
         event.register((state, level, pos, tintIndex) -> {

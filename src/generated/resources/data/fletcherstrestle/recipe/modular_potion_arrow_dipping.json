@@ -1,0 +1,12 @@
+{
+  "type": "fletcherstrestle:dipping",
+  "fluid_amount": 250,
+  "ingredient": {
+    "item": "fletcherstrestle:modular_arrow"
+  },
+  "input_count": 1,
+  "result": {
+    "count": 1,
+    "id": "fletcherstrestle:modular_arrow"
+  }
+}

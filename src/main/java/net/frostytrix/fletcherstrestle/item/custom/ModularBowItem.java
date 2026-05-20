@@ -5,6 +5,7 @@ import net.frostytrix.fletcherstrestle.component.BowAssembly;
 import net.frostytrix.fletcherstrestle.component.ModDataComponents;
 import net.frostytrix.fletcherstrestle.enchantment.ModEnchantments;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
@@ -127,17 +128,24 @@ public class ModularBowItem extends BowItem {
 
         BowAssembly assembly = stack.get(ModDataComponents.BOW_ASSEMBLY.get());
 
-        if (assembly != null) {
-            tooltipComponents.add(Component.literal("Assembly Parts:").withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD));
-            tooltipComponents.add(Component.literal("- Limbs: " + assembly.limbMaterial()).withStyle(ChatFormatting.GRAY));
-            tooltipComponents.add(Component.literal("- Riser: " + assembly.riserMaterial()).withStyle(ChatFormatting.GRAY));
-            tooltipComponents.add(Component.literal("- String: " + assembly.stringMaterial()).withStyle(ChatFormatting.GRAY));
-
-            int tuningPercent = (int) (assembly.tuning() * 100);
-            tooltipComponents.add(Component.literal("Tuning: " + tuningPercent + "%").withStyle(ChatFormatting.GREEN));
-        } else {
+        if (assembly == null) {
             tooltipComponents.add(Component.literal("Unfinished Bow").withStyle(ChatFormatting.RED, ChatFormatting.ITALIC));
+            return;
         }
+
+        if (!Screen.hasShiftDown()) {
+            tooltipComponents.add(Component.literal("Hold Shift for details")
+                    .withStyle(ChatFormatting.DARK_GRAY, ChatFormatting.ITALIC));
+            return;
+        }
+
+        tooltipComponents.add(Component.literal("Assembly Parts:").withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD));
+        tooltipComponents.add(Component.literal("- Limbs: " + assembly.limbMaterial()).withStyle(ChatFormatting.GRAY));
+        tooltipComponents.add(Component.literal("- Riser: " + assembly.riserMaterial()).withStyle(ChatFormatting.GRAY));
+        tooltipComponents.add(Component.literal("- String: " + assembly.stringMaterial()).withStyle(ChatFormatting.GRAY));
+
+        int tuningPercent = (int) (assembly.tuning() * 100);
+        tooltipComponents.add(Component.literal("Tuning: " + tuningPercent + "%").withStyle(ChatFormatting.GREEN));
     }
 
 

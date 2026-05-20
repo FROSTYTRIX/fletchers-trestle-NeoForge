@@ -3,6 +3,8 @@ package net.frostytrix.fletcherstrestle.recipe;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.frostytrix.fletcherstrestle.component.ArrowAssembly;
+import net.frostytrix.fletcherstrestle.component.ModDataComponents;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -37,6 +39,15 @@ public class DippingRecipe implements Recipe<DippingRecipeInput> {
             return false;
         }
 
+        // 1b. Modular arrows can only be dipped if their head is the
+        //     glass_vial type — the only head designed to hold a payload.
+        //     This stops e.g. broadhead arrows from accidentally being
+        //     converted into potion arrows.
+        ArrowAssembly assembly = input.item().get(ModDataComponents.ARROW_ASSEMBLY.get());
+        if (assembly != null && !"glass_vial".equals(assembly.head())) {
+            return false;
+        }
+
         // 2. NOUVEAU : Si la recette exige une potion spécifique, on vérifie !
         if (this.requiredPotion.isPresent()) {
             net.minecraft.world.item.component.CustomData customData = input.fluid().get(DataComponents.CUSTOM_DATA);
@@ -53,6 +64,14 @@ public class DippingRecipe implements Recipe<DippingRecipeInput> {
     @Override
     public ItemStack assemble(DippingRecipeInput input, HolderLookup.Provider registries) {
         ItemStack result = this.output.copy();
+
+        // Preserve the input's ArrowAssembly if present, so dipping a
+        // glass_vial-headed arrow gives back the same modular arrow (with
+        // its shaft + fletching choices) rather than a generic one.
+        ArrowAssembly assembly = input.item().get(ModDataComponents.ARROW_ASSEMBLY.get());
+        if (assembly != null) {
+            result.set(ModDataComponents.ARROW_ASSEMBLY.get(), assembly);
+        }
 
         // Si la recette demandait explicitement une potion, on ne transfère pas l'effet
         // (ex: une pomme en or reste une pomme en or, elle ne devient pas une "pomme en or de régénération")

@@ -364,6 +364,15 @@ ShavingRecipeBuilder.shaving(Ingredient.of(Items.STRIPPED_WARPED_HYPHAE), ModIte
                 .unlockedBy("has_arrow", has(Items.ARROW))
                 .save(recipeOutput, ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "arrow_dipping"));
 
+        // Modular potion-arrow dipping. DippingRecipe.matches() restricts
+        // the modular_arrow input to those with a glass_vial head, so this
+        // recipe doesn't accidentally affect e.g. broadhead arrows.
+        DippingRecipeBuilder.dipping(Ingredient.of(ModItems.MODULAR_ARROW.get()), ModItems.MODULAR_ARROW.get(), 1)
+                .inputCount(1)
+                .fluidAmount(250)
+                .unlockedBy("has_modular_arrow", has(ModItems.MODULAR_ARROW.get()))
+                .save(recipeOutput, ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "modular_potion_arrow_dipping"));
+
         ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, ModBlocks.DIPPING_VAT.get())
                 .requires(Items.BUCKET).requires(Blocks.CAULDRON)
                 .unlockedBy("has_arrow", has(Items.ARROW)).save(recipeOutput);

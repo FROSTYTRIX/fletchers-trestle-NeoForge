@@ -10,7 +10,9 @@ import net.frostytrix.fletcherstrestle.item.ModItems;
 import net.frostytrix.fletcherstrestle.item.custom.ModularArrowItem;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -128,6 +130,15 @@ public class ModularArrowEntity extends AbstractArrow {
     @Override
     protected void onHitEntity(EntityHitResult result) {
         ArrowAssembly assembly = this.getAssembly();
+
+        // Glass-vial arrows shatter on impact and splash whatever potion they
+        // were dipped in. Resolves before normal damage so it can't be combined
+        // with other head effects.
+        if ("glass_vial".equals(assembly.head())) {
+            applyGlassVialEffect(result.getLocation());
+            return;
+        }
+
         double velocityOnImpact = this.getDeltaMovement().length();
 
         // WEIGHTED BLUNT: Calculate distance traveled and increase base damage before the hit resolves
@@ -436,6 +447,11 @@ public class ModularArrowEntity extends AbstractArrow {
     protected void onHitBlock(BlockHitResult result) {
         ArrowAssembly assembly = this.getAssembly();
 
+        if ("glass_vial".equals(assembly.head())) {
+            applyGlassVialEffect(result.getLocation());
+            return;
+        }
+
         if ("weighted_hook".equals(assembly.head())) {
             this.entityData.set(IS_HOOKED, true);
             this.setSoundEvent(SoundEvents.TRIPWIRE_ATTACH); // Mechanical "clink"
@@ -503,6 +519,64 @@ public class ModularArrowEntity extends AbstractArrow {
         }
 
         super.onHitBlock(result);
+    }
+
+    // Splash potion behavior for glass-vial arrows. Mirrors vanilla
+    // ThrownPotion's distance-based dilution: full effect at impact point,
+    // weaker the further you are, no effect past the radius. Glass breaks
+    // regardless of whether the arrow held a potion.
+    private void applyGlassVialEffect(Vec3 hitPos) {
+        Level lvl = this.level();
+
+        // Glass shatter — sound + neutral water splash particles.
+        lvl.playSound(null, hitPos.x, hitPos.y, hitPos.z,
+                SoundEvents.GLASS_BREAK, this.getSoundSource(), 1.0f, 1.0f);
+
+        if (lvl instanceof ServerLevel sl) {
+            sl.sendParticles(ParticleTypes.SPLASH,
+                    hitPos.x, hitPos.y, hitPos.z,
+                    8, 0.3, 0.3, 0.3, 0.1);
+
+            // Pull POTION_CONTENTS off the synced pickup stack (the dipping
+            // recipe writes it there when dipping a glass-vial arrow).
+            PotionContents potion = getPickupItem().get(DataComponents.POTION_CONTENTS);
+            if (potion != null) {
+                final double radius = 4.0;
+                AABB area = new AABB(
+                        hitPos.x - radius, hitPos.y - radius, hitPos.z - radius,
+                        hitPos.x + radius, hitPos.y + radius, hitPos.z + radius);
+                final java.util.List<LivingEntity> entities =
+                        lvl.getEntitiesOfClass(LivingEntity.class, area);
+
+                for (LivingEntity entity : entities) {
+                    double d2 = entity.distanceToSqr(hitPos.x, hitPos.y, hitPos.z);
+                    if (d2 >= radius * radius) continue;
+                    final double intensity = 1.0 - Math.sqrt(d2) / radius;
+
+                    potion.forEachEffect(eff -> {
+                        int dur = Math.max(20, (int) (eff.getDuration() * intensity + 0.5));
+                        entity.addEffect(new MobEffectInstance(
+                                eff.getEffect(),
+                                eff.getEffect().value().isInstantenous() ? eff.getDuration() : dur,
+                                eff.getAmplifier(),
+                                eff.isAmbient(),
+                                eff.isVisible()), this.getOwner());
+                    });
+                }
+
+                // Coloured cloud at the impact site so the splash is visible.
+                int color = potion.getColor();
+                float r = ((color >> 16) & 0xFF) / 255f;
+                float g = ((color >>  8) & 0xFF) / 255f;
+                float b = ( color        & 0xFF) / 255f;
+                sl.sendParticles(new net.minecraft.core.particles.DustParticleOptions(
+                                new org.joml.Vector3f(r, g, b), 1.0f),
+                        hitPos.x, hitPos.y, hitPos.z,
+                        30, 1.0, 1.0, 1.0, 0.1);
+            }
+        }
+
+        this.discard();
     }
 
     @Override

@@ -12,7 +12,9 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.ArrowRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
@@ -56,6 +58,25 @@ public class ModularArrowRenderer extends ArrowRenderer<ModularArrowEntity> {
         poseStack.scale(1.001F, 1.001F, 1.001F);
         renderPart(poseStack, buffer, packedLight, getTexture(assembly, "head"));
 
+// Glass-vial arrows get a tinted "liquid" overlay on top of the head, using
+// the same head sprite layout. The texture should be a white silhouette of
+// just the liquid inside the vial — colour is applied at render time so any
+// potion can re-use the same texture.
+        if ("glass_vial".equals(assembly.head())) {
+            PotionContents potion = entity.getSyncedItemStack().get(DataComponents.POTION_CONTENTS);
+            if (potion != null) {
+                int color = potion.getColor();
+                int r = (color >> 16) & 0xFF;
+                int g = (color >>  8) & 0xFF;
+                int b =  color        & 0xFF;
+                poseStack.scale(1.001F, 1.001F, 1.001F);
+                ResourceLocation liquidTex = ResourceLocation.fromNamespaceAndPath(
+                        FletcherTrestle.MOD_ID,
+                        "textures/entity/projectiles/head/glass_vial_liquid.png");
+                renderPartTinted(poseStack, buffer, packedLight, liquidTex, r, g, b, 255);
+            }
+        }
+
         poseStack.popPose();
 
         if (entity.isHooked()) {
@@ -76,6 +97,34 @@ public class ModularArrowRenderer extends ArrowRenderer<ModularArrowEntity> {
             this.vertex(poseStack, vertexConsumer, 8, 2, 0, 0.5F, 0.15625F, 0, 1, 0, packedLight);
             this.vertex(poseStack, vertexConsumer, -8, 2, 0, 0.0F, 0.15625F, 0, 1, 0, packedLight);
         }
+    }
+
+    // Same geometry as renderPart but tints each vertex with the given RGBA.
+    // Uses entityCutout (NOT translucent) — the 4 vanes share the central axis,
+    // and translucent blending makes them z-fight against each other at the
+    // overlap. Cutout is binary (drawn or not), so it renders cleanly. Vanilla
+    // TippedArrow uses the same render type for its tip overlay.
+    private void renderPartTinted(PoseStack poseStack, MultiBufferSource buffer, int packedLight,
+                                  ResourceLocation texture, int r, int g, int b, int a) {
+        VertexConsumer vc = buffer.getBuffer(RenderType.entityCutout(texture));
+        for (int j = 0; j < 4; ++j) {
+            poseStack.mulPose(Axis.XP.rotationDegrees(90.0F));
+            this.vertexColored(poseStack, vc, -8, -2, 0, 0.0F,     0.0F,     0, 1, 0, packedLight, r, g, b, a);
+            this.vertexColored(poseStack, vc,  8, -2, 0, 0.5F,     0.0F,     0, 1, 0, packedLight, r, g, b, a);
+            this.vertexColored(poseStack, vc,  8,  2, 0, 0.5F,     0.15625F, 0, 1, 0, packedLight, r, g, b, a);
+            this.vertexColored(poseStack, vc, -8,  2, 0, 0.0F,     0.15625F, 0, 1, 0, packedLight, r, g, b, a);
+        }
+    }
+
+    private void vertexColored(PoseStack poseStack, VertexConsumer consumer, int x, int y, int z,
+                               float u, float v, int normalX, int normalZ, int normalY,
+                               int packedLight, int r, int g, int b, int a) {
+        consumer.addVertex(poseStack.last().pose(), (float)x, (float)y, (float)z)
+                .setColor(r, g, b, a)
+                .setUv(u, v)
+                .setOverlay(OverlayTexture.NO_OVERLAY)
+                .setLight(packedLight)
+                .setNormal(poseStack.last(), (float)normalX, (float)normalY, (float)normalZ);
     }
 
     private void renderGrapplingLine(ModularArrowEntity arrow, float partialTicks, PoseStack poseStack, MultiBufferSource buffer, Player player, int packedLight) {
