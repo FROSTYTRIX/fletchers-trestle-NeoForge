@@ -148,6 +148,9 @@ public class ModItems {
     public static final DeferredItem<Item> EAGLE_WHISTLE = ITEMS.register("eagle_whistle",
             () -> new EagleWhistleItem(new Item.Properties().stacksTo(1)));
 
+    public static final DeferredItem<Item> EAGLE_EGG = ITEMS.register("eagle_egg",
+            () -> new EagleEggItem(new Item.Properties().stacksTo(16)));
+
 
 
     public static void register(IEventBus eventBus) {

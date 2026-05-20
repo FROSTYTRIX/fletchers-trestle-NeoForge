@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " R ",
+    " S ",
+    "PPP"
+  ],
+  "key": {
+    "R": { "tag": "minecraft:logs" },
+    "S": { "item": "minecraft:stick" },
+    "P": { "tag": "minecraft:planks" }
+  },
+  "result": {
+    "id": "fletcherstrestle:eagle_perch",
+    "count": 1
+  }
+}

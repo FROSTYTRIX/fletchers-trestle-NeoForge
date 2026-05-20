@@ -53,6 +53,9 @@
 
 "item.fletcherstrestle.eagle_spawn_egg": "Eagle Spawn Egg",
 "item.fletcherstrestle.eagle_whistle": "Eagle Whistle",
+"block.fletcherstrestle.eagle_perch": "Eagle Perch",
+"block.fletcherstrestle.eagle_nest": "Eagle Nest",
+"item.fletcherstrestle.eagle_egg": "Eagle Egg",
 "entity.fletcherstrestle.eagle": "Eagle",
 
 "creative_tab.fletcherstrestle.fletchers_trestle_tab": "Fletcher's Trestle",

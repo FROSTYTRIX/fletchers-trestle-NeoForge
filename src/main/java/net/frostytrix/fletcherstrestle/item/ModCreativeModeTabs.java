@@ -102,6 +102,9 @@ public class ModCreativeModeTabs {
                         output.accept(ModItems.FLETCHER_GUIDE.get());
                         output.accept(ModItems.HEAVY_DUMMY_ITEM.get());
 
+                        output.accept(ModBlocks.EAGLE_PERCH);
+                        output.accept(ModBlocks.EAGLE_NEST);
+                        output.accept(ModItems.EAGLE_EGG.get());
                         output.accept(ModItems.EAGLE_SPAWN_EGG.get());
                         output.accept(ModItems.EAGLE_WHISTLE.get());
 

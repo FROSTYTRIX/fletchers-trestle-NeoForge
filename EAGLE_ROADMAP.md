@@ -12,6 +12,9 @@ Tracks the next major additions to the eagle companion system.
 - Sneak + right-click fetch-mode toggle *(retained as a close-range fallback)*
 - Stuck-busy bug fix (state sanitization on save, cold-start return)
 - **Phase A — Eagle Whistle** ✅ (right-click toggles fetch, sneak+RC recalls, right-click on eagle binds, sneak+RC on eagle unbinds)
+- **Phase B — Improved Spawning** ✅ (custom `has_eagle` biome tag, weight 2, altitude/sky/light predicate)
+- **Phase C — Perch Block** ✅ (claimable block, eagle binds to it, returns when owner is far/offline)
+- **Phase D — Nesting System** ✅ (nest block, egg item, breeding ritual, 20-min hatch → auto-tamed eaglet)
 
 ---
 

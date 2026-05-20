@@ -1,0 +1,61 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle":  "minecraft:block/oak_leaves",
+    "twigs":     "minecraft:block/jungle_log",
+    "twigs_top": "minecraft:block/jungle_log_top",
+    "lining":    "minecraft:block/dried_kelp_side"
+  },
+  "elements": [
+    { "name": "floor", "from": [3, 0, 3], "to": [13, 1, 13],
+      "faces": {
+        "north": { "uv": [3, 0, 13, 1], "texture": "#twigs" },
+        "east":  { "uv": [3, 0, 13, 1], "texture": "#twigs" },
+        "south": { "uv": [3, 0, 13, 1], "texture": "#twigs" },
+        "west":  { "uv": [3, 0, 13, 1], "texture": "#twigs" },
+        "up":    { "uv": [3, 3, 13, 13], "texture": "#lining" },
+        "down":  { "uv": [3, 3, 13, 13], "texture": "#twigs_top" }
+      }
+    },
+    { "name": "rim_n", "from": [2, 1, 2], "to": [14, 4,  4],
+      "faces": {
+        "north": { "uv": [2, 1, 14, 4], "texture": "#twigs" },
+        "east":  { "uv": [2, 1,  4, 4], "texture": "#twigs" },
+        "south": { "uv": [2, 1, 14, 4], "texture": "#twigs" },
+        "west":  { "uv": [2, 1,  4, 4], "texture": "#twigs" },
+        "up":    { "uv": [2, 2, 14, 4], "texture": "#twigs_top" },
+        "down":  { "uv": [2, 2, 14, 4], "texture": "#twigs_top" }
+      }
+    },
+    { "name": "rim_s", "from": [2, 1, 12], "to": [14, 4, 14],
+      "faces": {
+        "north": { "uv": [2, 1, 14, 4], "texture": "#twigs" },
+        "east":  { "uv": [2, 1,  4, 4], "texture": "#twigs" },
+        "south": { "uv": [2, 1, 14, 4], "texture": "#twigs" },
+        "west":  { "uv": [2, 1,  4, 4], "texture": "#twigs" },
+        "up":    { "uv": [2, 2, 14, 4], "texture": "#twigs_top" },
+        "down":  { "uv": [2, 2, 14, 4], "texture": "#twigs_top" }
+      }
+    },
+    { "name": "rim_w", "from": [2, 1, 4], "to": [ 4, 4, 12],
+      "faces": {
+        "north": { "uv": [2, 1,  4, 4], "texture": "#twigs" },
+        "east":  { "uv": [4, 1, 12, 4], "texture": "#twigs" },
+        "south": { "uv": [2, 1,  4, 4], "texture": "#twigs" },
+        "west":  { "uv": [4, 1, 12, 4], "texture": "#twigs" },
+        "up":    { "uv": [2, 4,  4, 12], "texture": "#twigs_top" },
+        "down":  { "uv": [2, 4,  4, 12], "texture": "#twigs_top" }
+      }
+    },
+    { "name": "rim_e", "from": [12, 1, 4], "to": [14, 4, 12],
+      "faces": {
+        "north": { "uv": [12, 1, 14, 4], "texture": "#twigs" },
+        "east":  { "uv": [ 4, 1, 12, 4], "texture": "#twigs" },
+        "south": { "uv": [12, 1, 14, 4], "texture": "#twigs" },
+        "west":  { "uv": [ 4, 1, 12, 4], "texture": "#twigs" },
+        "up":    { "uv": [12, 4, 14, 12], "texture": "#twigs_top" },
+        "down":  { "uv": [12, 4, 14, 12], "texture": "#twigs_top" }
+      }
+    }
+  ]
+}

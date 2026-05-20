@@ -36,6 +36,16 @@ public class ModBlockEntities {
                     BlockEntityType.Builder.of(DippingVatBlockEntity::new, ModBlocks.DIPPING_VAT.get()).build(null)
             );
 
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<EaglePerchBlockEntity>> EAGLE_PERCH_BE =
+            BLOCK_ENTITIES.register("eagle_perch_be", () ->
+                    BlockEntityType.Builder.of(EaglePerchBlockEntity::new, ModBlocks.EAGLE_PERCH.get()).build(null)
+            );
+
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<EagleNestBlockEntity>> EAGLE_NEST_BE =
+            BLOCK_ENTITIES.register("eagle_nest_be", () ->
+                    BlockEntityType.Builder.of(EagleNestBlockEntity::new, ModBlocks.EAGLE_NEST.get()).build(null)
+            );
+
     public static void register(IEventBus eventBus) {
         System.out.println("====== FLETCHER'S TRESTLE: REGISTERING BLOCK ENTITIES NOW ======");
         BLOCK_ENTITIES.register(eventBus);

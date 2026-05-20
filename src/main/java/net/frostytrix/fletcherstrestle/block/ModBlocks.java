@@ -47,6 +47,18 @@ public class ModBlocks {
     public static final DeferredBlock<Block> DIPPING_VAT = registerBlock("dipping_vat",
             () -> new DippingVatBlock(Block.Properties.of().sound(SoundType.WOOD).noOcclusion()));
 
+    public static final DeferredBlock<Block> EAGLE_PERCH = registerBlock("eagle_perch",
+            () -> new EaglePerchBlock(Block.Properties.of()
+                    .strength(1.5f)
+                    .sound(SoundType.WOOD)
+                    .noOcclusion()));
+
+    public static final DeferredBlock<Block> EAGLE_NEST = registerBlock("eagle_nest",
+            () -> new EagleNestBlock(Block.Properties.of()
+                    .strength(0.8f)
+                    .sound(SoundType.GRASS)
+                    .noOcclusion()));
+
     private static <T extends Block> DeferredBlock<T> registerBlock(String name, Supplier<T> block){
         DeferredBlock<T> toReturn = BLOCKS.register(name, block);
         registerBlockItem(name, toReturn);

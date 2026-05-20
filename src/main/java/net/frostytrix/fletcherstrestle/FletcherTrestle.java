@@ -7,6 +7,7 @@ import net.frostytrix.fletcherstrestle.component.ModDataComponents;
 import net.frostytrix.fletcherstrestle.config.FletcherConfig;
 import net.frostytrix.fletcherstrestle.effect.ModEffects;
 import net.frostytrix.fletcherstrestle.entity.ModEntities;
+import net.frostytrix.fletcherstrestle.entity.custom.EagleEntity;
 import net.frostytrix.fletcherstrestle.entity.custom.HeavyDummyEntity;
 import net.frostytrix.fletcherstrestle.fluid.ModFluidTypes;
 import net.frostytrix.fletcherstrestle.fluid.ModFluids;
@@ -27,6 +28,7 @@ import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent;
+import net.neoforged.neoforge.event.entity.RegisterSpawnPlacementsEvent;
 import net.neoforged.neoforge.event.server.ServerStartingEvent;
 import net.neoforged.neoforge.registries.datamaps.RegisterDataMapTypesEvent;
 import org.slf4j.Logger;
@@ -66,6 +68,7 @@ public class FletcherTrestle {
         // Register the item to a creative tab
         modEventBus.addListener(this::addCreative);
         modEventBus.addListener(this::registerEntityAttributes);
+        modEventBus.addListener(this::onRegisterSpawnPlacements);
 
         ModRecipes.SERIALIZERS.register(modEventBus);
         ModRecipes.TYPES.register(modEventBus);
@@ -83,6 +86,19 @@ public class FletcherTrestle {
 
     private void registerEntityAttributes(EntityAttributeCreationEvent event) {
         event.put(ModEntities.HEAVY_DUMMY.get(), HeavyDummyEntity.createAttributes().build());
+    }
+
+    // Phase B — Restrict where wild eagles spawn. The biome modifier already
+    // narrows them to the mountain-biome tag; this predicate adds altitude,
+    // sky-visibility, and sky-light checks so they only appear on exposed
+    // ridges in daylight, not under leaves at sea level.
+    private void onRegisterSpawnPlacements(RegisterSpawnPlacementsEvent event) {
+        event.register(
+                ModEntities.EAGLE.get(),
+                net.minecraft.world.entity.SpawnPlacementTypes.NO_RESTRICTIONS,
+                net.minecraft.world.level.levelgen.Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                EagleEntity::checkEagleSpawnRules,
+                RegisterSpawnPlacementsEvent.Operation.REPLACE);
     }
 
 

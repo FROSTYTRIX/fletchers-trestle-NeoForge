@@ -1,0 +1,53 @@
+{
+	"parent": "minecraft:block/block",
+	"credit": "Made with Blockbench",
+	"textures": {
+		"particle": "minecraft:block/oak_planks",
+		"planks":    "minecraft:block/oak_planks",
+		"post":      "minecraft:block/oak_log",
+		"post_end":  "minecraft:block/oak_log_top",
+		"branch":     "minecraft:block/stripped_oak_log",
+		"branch_end": "minecraft:block/stripped_oak_log_top"
+	},
+	"elements": [
+		{
+			"name": "base",
+			"from": [2, 0, 2],
+			"to":   [14, 2, 14],
+			"faces": {
+				"north": {"uv": [2, 0, 14, 2], "texture": "#planks"},
+				"east":  {"uv": [2, 0, 14, 2], "texture": "#planks"},
+				"south": {"uv": [2, 0, 14, 2], "texture": "#planks"},
+				"west":  {"uv": [2, 0, 14, 2], "texture": "#planks"},
+				"up":    {"uv": [2, 2, 14, 14], "texture": "#planks"},
+				"down":  {"uv": [2, 2, 14, 14], "texture": "#planks"}
+			}
+		},
+		{
+			"name": "pole",
+			"from": [6, 2, 6],
+			"to":   [10, 12, 10],
+			"faces": {
+				"north": {"uv": [6, 2, 10, 12], "texture": "#post"},
+				"east":  {"uv": [6, 2, 10, 12], "texture": "#post"},
+				"south": {"uv": [6, 2, 10, 12], "texture": "#post"},
+				"west":  {"uv": [6, 2, 10, 12], "texture": "#post"},
+				"up":    {"uv": [6, 6, 10, 10], "texture": "#post_end"},
+				"down":  {"uv": [6, 6, 10, 10], "texture": "#post_end"}
+			}
+		},
+		{
+			"name": "crossbar",
+			"from": [2, 12, 7],
+			"to":   [14, 14, 9],
+			"faces": {
+				"north": {"uv": [2, 12, 14, 14], "texture": "#branch"},
+				"east":  {"uv": [7, 12, 9, 14],  "texture": "#branch_end"},
+				"south": {"uv": [2, 12, 14, 14], "texture": "#branch"},
+				"west":  {"uv": [7, 12, 9, 14],  "texture": "#branch_end"},
+				"up":    {"uv": [2, 7, 14, 9],   "texture": "#branch"},
+				"down":  {"uv": [2, 7, 14, 9],   "texture": "#branch"}
+			}
+		}
+	]
+}

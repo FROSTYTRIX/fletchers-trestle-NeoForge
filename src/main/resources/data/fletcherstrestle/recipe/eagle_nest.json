@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "F F",
+    "SSS",
+    "LLL"
+  ],
+  "key": {
+    "F": { "item": "minecraft:feather" },
+    "S": { "item": "minecraft:stick" },
+    "L": { "tag": "minecraft:leaves" }
+  },
+  "result": {
+    "id": "fletcherstrestle:eagle_nest",
+    "count": 1
+  }
+}

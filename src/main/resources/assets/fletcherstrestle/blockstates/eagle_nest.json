@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "egg_count=0": { "model": "fletcherstrestle:block/eagle_nest_0" },
+    "egg_count=1": { "model": "fletcherstrestle:block/eagle_nest_1" },
+    "egg_count=2": { "model": "fletcherstrestle:block/eagle_nest_2" },
+    "egg_count=3": { "model": "fletcherstrestle:block/eagle_nest_3" }
+  }
+}

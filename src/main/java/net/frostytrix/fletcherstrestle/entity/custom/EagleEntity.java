@@ -1,5 +1,6 @@
 package net.frostytrix.fletcherstrestle.entity.custom;
 
+import net.frostytrix.fletcherstrestle.block.entity.EagleNestBlockEntity;
 import net.frostytrix.fletcherstrestle.entity.ModEntities;
 import net.frostytrix.fletcherstrestle.sound.ModSounds;
 import net.minecraft.core.BlockPos;
@@ -67,6 +68,16 @@ public class EagleEntity extends TamableAnimal {
     @Nullable
     private LivingEntity huntTarget = null;
 
+    // Position of the block this eagle is bound to as its "home perch".
+    // Server-side only; saved to NBT. Null when the eagle has no perch.
+    @Nullable
+    private BlockPos perchPos = null;
+
+    // Position of the nest this eagle considers its breeding ground.
+    // Server-side only; saved to NBT. Null when not bound to a nest.
+    @Nullable
+    private BlockPos nestPos = null;
+
     // Fetch inventory — 16 slots so the eagle can carry up to 16 arrows in
     // a single trip, with room for up to 16 different arrow types (one type
     // per slot if needed; matching types still stack). Capacity is enforced
@@ -95,6 +106,25 @@ public class EagleEntity extends TamableAnimal {
         this.setPathfindingMalus(PathType.DANGER_FIRE, -1f);
         this.setPathfindingMalus(PathType.WATER,        -1f);
         this.setPathfindingMalus(PathType.OPEN,          0f);
+    }
+
+    // ---------------------------------------------------------------
+    // Spawn rules — keeps wild eagles to high, sunlit mountain ridges
+    // rather than spawning under leaves at sea level. Wired up in
+    // FletcherTrestle.onRegisterSpawnPlacements.
+    // ---------------------------------------------------------------
+    public static boolean checkEagleSpawnRules(
+            EntityType<EagleEntity> type,
+            net.minecraft.world.level.LevelAccessor level,
+            net.minecraft.world.entity.MobSpawnType reason,
+            BlockPos pos,
+            net.minecraft.util.RandomSource random) {
+        // Bottom layers / cave biomes are off-limits regardless of biome tag.
+        if (pos.getY() < 80) return false;
+        if (!level.canSeeSky(pos)) return false;
+        // Daylight only — keeps them from popping in at night.
+        if (level.getBrightness(net.minecraft.world.level.LightLayer.SKY, pos) < 12) return false;
+        return true;
     }
 
     // ---------------------------------------------------------------
@@ -130,6 +160,8 @@ public class EagleEntity extends TamableAnimal {
         this.goalSelector.addGoal(2, new SitWhenOrderedToGoal(this));
         this.goalSelector.addGoal(3, new EagleFetchGoal(this));
         this.goalSelector.addGoal(4, new EagleHuntGoal(this));
+        this.goalSelector.addGoal(4, new EagleBreedGoal(this));
+        this.goalSelector.addGoal(5, new EaglePerchGoal(this));
         this.goalSelector.addGoal(5, new TemptGoal(this, 1.0,
                 Ingredient.of(Items.RABBIT, Items.COD, Items.SALMON), false));
         this.goalSelector.addGoal(6, new FollowOwnerGoal(this, 1.0, 10.0f, 2.0f));
@@ -232,6 +264,17 @@ public class EagleEntity extends TamableAnimal {
         }
         tag.put("FetchInventory", items);
         tag.putBoolean("FetchMode", this.isFetchModeEnabled());
+
+        if (perchPos != null) {
+            tag.putInt("PerchX", perchPos.getX());
+            tag.putInt("PerchY", perchPos.getY());
+            tag.putInt("PerchZ", perchPos.getZ());
+        }
+        if (nestPos != null) {
+            tag.putInt("NestX", nestPos.getX());
+            tag.putInt("NestY", nestPos.getY());
+            tag.putInt("NestZ", nestPos.getZ());
+        }
     }
 
     @Override
@@ -250,7 +293,26 @@ public class EagleEntity extends TamableAnimal {
             ItemStack.parse(this.registryAccess(), slotTag)
                     .ifPresent(s -> fetchInventory.setItem(slot, s));
         }
+
+        if (tag.contains("PerchX")) {
+            this.perchPos = new BlockPos(tag.getInt("PerchX"), tag.getInt("PerchY"), tag.getInt("PerchZ"));
+        } else {
+            this.perchPos = null;
+        }
+        if (tag.contains("NestX")) {
+            this.nestPos = new BlockPos(tag.getInt("NestX"), tag.getInt("NestY"), tag.getInt("NestZ"));
+        } else {
+            this.nestPos = null;
+        }
     }
+
+    @Nullable
+    public BlockPos getPerchPos() { return this.perchPos; }
+    public void setPerchPos(@Nullable BlockPos pos) { this.perchPos = pos; }
+
+    @Nullable
+    public BlockPos getNestPos() { return this.nestPos; }
+    public void setNestPos(@Nullable BlockPos pos) { this.nestPos = pos; }
 
     // ---------------------------------------------------------------
     // Step 12 — Flying navigation
@@ -384,6 +446,22 @@ public class EagleEntity extends TamableAnimal {
             this.entityData.set(IS_FLYING, shouldFly);
         }
 
+        // Auto-wake: if perched and the owner returns to close range, stand up
+        // so FollowOwnerGoal can take over. Without this the eagle would stay
+        // sitting forever and need a manual right-click to rejoin.
+        if (!this.level().isClientSide
+                && this.getEagleState() == STATE_PERCHED
+                && this.isOrderedToSit()) {
+            var owner = this.getOwner();
+            if (owner != null
+                    && owner.isAlive()
+                    && owner.level().dimension() == this.level().dimension()
+                    && this.distanceToSqr(owner) < 144.0) {  // 12 blocks
+                this.setOrderedToSit(false);
+                this.setEagleState(STATE_IDLE);
+            }
+        }
+
         // Watchdog: clear stale non-IDLE state when no goal is actually running.
         // STATE_HUNTING is owned by the hunt goal; if huntTarget is gone, the
         // state is dead. STATE_RETURNING with no inventory is similarly stale.
@@ -499,8 +577,28 @@ public class EagleEntity extends TamableAnimal {
     // ---------------------------------------------------------------
     @Override
     public @Nullable AgeableMob getBreedOffspring(ServerLevel level, AgeableMob otherParent) {
-        // Eagles don't breed in this mod — return null
+        // Eagles don't spawn a baby directly when breeding — instead the
+        // breeding ritual deposits an egg in their nest, and the egg later
+        // hatches into an eaglet. See EagleBreedGoal + EagleNestBlockEntity.
         return null;
+    }
+
+    // Only mate with another tamed eagle owned by the same player. Without
+    // this, any two in-love eagles in the world could breed.
+    @Override
+    public boolean canMate(Animal otherAnimal) {
+        if (otherAnimal == this) return false;
+        if (!(otherAnimal instanceof EagleEntity other)) return false;
+        if (!this.isTame() || !other.isTame()) return false;
+        if (this.getOwnerUUID() == null) return false;
+        if (!this.getOwnerUUID().equals(other.getOwnerUUID())) return false;
+        return this.isInLove() && other.isInLove();
+    }
+
+    // Babies are smaller — keeps eaglets visually distinct from adults.
+    @Override
+    public float getScale() {
+        return this.isBaby() ? 0.55f : 1.0f;
     }
 
     @Override
@@ -826,6 +924,328 @@ public class EagleEntity extends TamableAnimal {
         @Override
         public void stop() {
             eagle.setHuntTarget(null); // clears hunt target and resets state to IDLE
+        }
+    }
+
+    /**
+     * EaglePerchGoal — when the owner is far away (or offline / in another
+     * dimension), the eagle flies to its claimed perch block and settles there
+     * instead of hovering aimlessly. On arrival it enters STATE_PERCHED and
+     * sits, reusing the existing sit animation.
+     */
+    static class EaglePerchGoal extends Goal {
+        // Owner must be at least this far (or absent) for the eagle to leave
+        // their side and go home. Sits comfortably outside FollowOwnerGoal's
+        // 10-block follow distance so the two don't fight.
+        private static final double OWNER_FAR_THRESHOLD_SQR = 32.0 * 32.0;
+        // Y of the top of the crossbar in the perch model (14 / 16 of a block
+        // above the perch's base position). Eagle's feet should land here.
+        private static final double CROSSBAR_Y               = 14.0 / 16.0;
+        // Once within this radius of the exact landing spot, we stop using
+        // pathfinding and drive the eagle directly — flying nav can't path
+        // to a thin decorative crossbar.
+        private static final double APPROACH_RANGE_SQR       = 16.0;  // 4 blocks
+        // Inside this radius the eagle snaps to position and sits.
+        private static final double LAND_SNAP_RANGE_SQR      = 0.36;  // 0.6 blocks
+
+        private final EagleEntity eagle;
+        private int repathCooldown = 0;
+        // Set true after the snap; canContinueToUse uses this to release the
+        // goal cleanly without re-entering the landing logic.
+        private boolean landed = false;
+
+        EaglePerchGoal(EagleEntity eagle) {
+            this.eagle = eagle;
+            this.setFlags(EnumSet.of(Flag.MOVE));
+        }
+
+        @Override
+        public boolean canUse() {
+            if (!eagle.isTame() || eagle.isOrderedToSit()) return false;
+            if (eagle.getEagleState() != STATE_IDLE) return false;
+            BlockPos perch = eagle.getPerchPos();
+            if (perch == null) return false;
+            if (!eagle.level().isLoaded(perch)) return false;
+            // Stop pointing at a perch that's been broken.
+            if (!eagle.level().getBlockState(perch)
+                    .is(net.frostytrix.fletcherstrestle.block.ModBlocks.EAGLE_PERCH.get())) {
+                eagle.setPerchPos(null);
+                return false;
+            }
+            return ownerFarOrAbsent();
+        }
+
+        @Override
+        public boolean canContinueToUse() {
+            if (landed) return false;
+            if (!eagle.isTame() || eagle.isOrderedToSit()) return false;
+            BlockPos perch = eagle.getPerchPos();
+            if (perch == null) return false;
+            if (!eagle.level().isLoaded(perch)) return false;
+            // Owner came back — yield to FollowOwnerGoal mid-flight.
+            return ownerFarOrAbsent();
+        }
+
+        @Override
+        public void start() {
+            repathCooldown = 0;
+            landed = false;
+        }
+
+        @Override
+        public void tick() {
+            BlockPos perch = eagle.getPerchPos();
+            if (perch == null) return;
+
+            double landX = perch.getX() + 0.5;
+            double landY = perch.getY() + CROSSBAR_Y;
+            double landZ = perch.getZ() + 0.5;
+            double distSqr = eagle.distanceToSqr(landX, landY, landZ);
+
+            if (distSqr <= LAND_SNAP_RANGE_SQR) {
+                // Close enough to land — snap the eagle's position exactly
+                // onto the crossbar and put it to sleep.
+                eagle.moveTo(landX, landY, landZ, eagle.getYRot(), eagle.getXRot());
+                eagle.setDeltaMovement(net.minecraft.world.phys.Vec3.ZERO);
+                eagle.setEagleState(STATE_PERCHED);
+                eagle.setOrderedToSit(true);
+                eagle.getNavigation().stop();
+                landed = true;
+                return;
+            }
+
+            if (distSqr > APPROACH_RANGE_SQR) {
+                // Far — let FlyingPathNavigation get us close.
+                eagle.getMoveControl().setWantedPosition(landX, landY + 1.0, landZ, 1.2);
+                if (--repathCooldown <= 0) {
+                    eagle.getNavigation().moveTo(landX, landY + 1.0, landZ, 1.2);
+                    repathCooldown = 12;
+                }
+            } else {
+                // Close — pathfinding struggles with the thin crossbar target,
+                // so drive directly via move control instead.
+                eagle.getNavigation().stop();
+                eagle.getMoveControl().setWantedPosition(landX, landY, landZ, 0.8);
+            }
+        }
+
+        @Override
+        public void stop() {
+            // Landing side-effects happen in tick() now, so stop() is just
+            // cleanup. If the goal was aborted (owner came back, perch broken),
+            // we leave the eagle wherever it was — FollowOwnerGoal can take over.
+            eagle.getNavigation().stop();
+        }
+
+        // Owner is "far" if absent (offline / null) or in another dimension
+        // or beyond OWNER_FAR_THRESHOLD blocks. Inside that threshold,
+        // FollowOwnerGoal handles them.
+        private boolean ownerFarOrAbsent() {
+            var owner = eagle.getOwner();
+            if (owner == null) return true;
+            if (!owner.isAlive()) return true;
+            if (owner.level().dimension() != eagle.level().dimension()) return true;
+            return eagle.distanceToSqr(owner) > OWNER_FAR_THRESHOLD_SQR;
+        }
+    }
+
+    /**
+     * EagleBreedGoal — replaces vanilla BreedGoal for eagles. When two of the
+     * same owner's adult eagles enter love mode and a claimed nest is in
+     * range, both fly to the nest, perform a short ritual, and add an egg.
+     * The egg incubates inside the nest and hatches into a baby eagle.
+     *
+     * The "leader" eagle (the one with the lower UUID) is responsible for
+     * actually depositing the egg, so we don't double-lay when both partners
+     * arrive on the same tick.
+     */
+    static class EagleBreedGoal extends Goal {
+        private static final int RITUAL_TICKS_REQUIRED = 40;          // 2 seconds at the nest
+        private static final double NEST_SEARCH_RADIUS = 24.0;        // blocks
+        private static final double PARTNER_SEARCH_RADIUS = 24.0;     // blocks
+        private static final double NEST_ARRIVAL_DIST_SQR = 25.0;     // 5 blocks — generous so both birds count
+        private static final int AGE_COOLDOWN_AFTER_BREED = 6000;     // 5 minutes
+
+        // Cooldown applied to both birds if the ritual ends without an egg.
+        // Stops the player from spam-feeding the same pair every 30 seconds
+        // when the ritual can't complete (e.g., navigation problems).
+        private static final int FAILED_ATTEMPT_COOLDOWN_TICKS = 1200;  // 1 minute
+
+        private final EagleEntity eagle;
+        @Nullable private EagleEntity partner;
+        @Nullable private BlockPos nestPos;
+        private int ritualTicks = 0;
+        private int repathCooldown = 0;
+        private boolean eggLaid = false;
+
+        EagleBreedGoal(EagleEntity eagle) {
+            this.eagle = eagle;
+            this.setFlags(EnumSet.of(Flag.MOVE));
+        }
+
+        @Override
+        public boolean canUse() {
+            if (!eagle.isTame()) return false;
+            if (eagle.isOrderedToSit()) return false;
+            if (eagle.getEagleState() != STATE_IDLE) return false;
+            if (!eagle.isInLove()) return false;
+            if (eagle.isBaby()) return false;
+
+            partner = findPartner();
+            if (partner == null) return false;
+
+            nestPos = findNest();
+            return nestPos != null;
+        }
+
+        @Override
+        public void start() {
+            ritualTicks = 0;
+            repathCooldown = 0;
+            eggLaid = false;
+            if (nestPos != null) eagle.setNestPos(nestPos);
+        }
+
+        @Override
+        public boolean canContinueToUse() {
+            if (partner == null || !partner.isAlive()) return false;
+            if (nestPos == null) return false;
+            if (!eagle.isInLove() || !partner.isInLove()) return false;
+            if (!isValidNest(nestPos)) return false;
+            // Run until the ritual succeeds; tick() ends us via stop() on lay.
+            return ritualTicks < RITUAL_TICKS_REQUIRED;
+        }
+
+        @Override
+        public void tick() {
+            if (nestPos == null || partner == null) return;
+
+            // Stagger the two birds so they don't fight for the same point.
+            // UUID compare picks a deterministic side per bird.
+            boolean rightSide = eagle.getUUID().compareTo(partner.getUUID()) < 0;
+            double offsetX = rightSide ? 1.0 : -1.0;
+
+            double centerX = nestPos.getX() + 0.5;
+            double landY   = nestPos.getY() + 4.0 / 16.0;  // top of the nest rim
+            double centerZ = nestPos.getZ() + 0.5;
+            double navX    = centerX + offsetX;
+
+            eagle.getMoveControl().setWantedPosition(navX, landY, centerZ, 1.0);
+            if (--repathCooldown <= 0) {
+                // Aim slightly above so nav has a target it can reach.
+                eagle.getNavigation().moveTo(navX, landY + 0.5, centerZ, 1.0);
+                repathCooldown = 8;
+            }
+
+            boolean selfAtNest    = eagle.distanceToSqr(centerX, landY, centerZ)   < NEST_ARRIVAL_DIST_SQR;
+            boolean partnerAtNest = partner.distanceToSqr(centerX, landY, centerZ) < NEST_ARRIVAL_DIST_SQR;
+            if (selfAtNest && partnerAtNest) {
+                ritualTicks++;
+                if (ritualTicks >= RITUAL_TICKS_REQUIRED) {
+                    layEgg();
+                }
+            }
+        }
+
+        // Either partner can deposit. The early isInLove check prevents
+        // a double-lay because layEgg also resets both birds' love mode —
+        // the partner's next call short-circuits before adding a second egg.
+        private void layEgg() {
+            if (nestPos == null || partner == null) return;
+            if (!eagle.isInLove() || !partner.isInLove()) return;
+            if (!(eagle.level().getBlockEntity(nestPos) instanceof EagleNestBlockEntity nest)) return;
+            if (!nest.hasEggSpace()) return;
+
+            nest.addEgg(eagle.level().getGameTime());
+            nest.addBreedingEagle(eagle.getUUID());
+            nest.addBreedingEagle(partner.getUUID());
+
+            eagle.resetLove();
+            partner.resetLove();
+            eagle.setAge(AGE_COOLDOWN_AFTER_BREED);
+            partner.setAge(AGE_COOLDOWN_AFTER_BREED);
+            eggLaid = true;
+
+            if (eagle.getOwner() instanceof Player owner) {
+                owner.displayClientMessage(
+                        net.minecraft.network.chat.Component.literal("Your eagles laid an egg."),
+                        true);
+            }
+        }
+
+        @Override
+        public void stop() {
+            // Failed attempt: apply a short cooldown to both birds so the
+            // player can't just immediately spam-feed the same pair into
+            // another doomed ritual. Successful attempts already get the
+            // longer AGE_COOLDOWN_AFTER_BREED from layEgg.
+            if (!eggLaid) {
+                eagle.resetLove();
+                eagle.setAge(FAILED_ATTEMPT_COOLDOWN_TICKS);
+                if (partner != null && partner.isAlive()) {
+                    partner.resetLove();
+                    partner.setAge(FAILED_ATTEMPT_COOLDOWN_TICKS);
+                }
+            }
+            partner = null;
+            nestPos = null;
+            eagle.getNavigation().stop();
+        }
+
+        @Nullable
+        private EagleEntity findPartner() {
+            return eagle.level().getEntitiesOfClass(
+                            EagleEntity.class,
+                            eagle.getBoundingBox().inflate(PARTNER_SEARCH_RADIUS),
+                            e -> e != eagle
+                                    && e.isTame()
+                                    && !e.isBaby()
+                                    && e.isInLove()
+                                    && e.getOwnerUUID() != null
+                                    && e.getOwnerUUID().equals(eagle.getOwnerUUID()))
+                    .stream()
+                    .min((a, b) -> Double.compare(eagle.distanceToSqr(a), eagle.distanceToSqr(b)))
+                    .orElse(null);
+        }
+
+        @Nullable
+        private BlockPos findNest() {
+            // Prefer the eagle's bound nestPos if still valid.
+            if (eagle.getNestPos() != null && isValidNest(eagle.getNestPos())) {
+                return eagle.getNestPos();
+            }
+            // Otherwise scan a small box around the eagle for an owner-claimed nest.
+            int r = (int) NEST_SEARCH_RADIUS;
+            BlockPos.MutableBlockPos cursor = new BlockPos.MutableBlockPos();
+            BlockPos eaglePos = eagle.blockPosition();
+            BlockPos best = null;
+            double bestDistSqr = Double.MAX_VALUE;
+            for (int dy = -4; dy <= 4; dy++) {
+                for (int dx = -r; dx <= r; dx++) {
+                    for (int dz = -r; dz <= r; dz++) {
+                        cursor.set(eaglePos.getX() + dx, eaglePos.getY() + dy, eaglePos.getZ() + dz);
+                        if (isValidNest(cursor)) {
+                            double d = cursor.distSqr(eaglePos);
+                            if (d < bestDistSqr) {
+                                best = cursor.immutable();
+                                bestDistSqr = d;
+                            }
+                        }
+                    }
+                }
+            }
+            return best;
+        }
+
+        private boolean isValidNest(BlockPos pos) {
+            if (!eagle.level().isLoaded(pos)) return false;
+            if (!eagle.level().getBlockState(pos)
+                    .is(net.frostytrix.fletcherstrestle.block.ModBlocks.EAGLE_NEST.get())) return false;
+            if (!(eagle.level().getBlockEntity(pos) instanceof EagleNestBlockEntity nest)) return false;
+            if (!nest.isClaimed()) return false;
+            if (eagle.getOwnerUUID() == null) return false;
+            if (!eagle.getOwnerUUID().equals(nest.getOwnerUUID())) return false;
+            return nest.hasEggSpace();
         }
     }
 }
