@@ -71,14 +71,20 @@ public class EagleWhistleItem extends Item {
             return InteractionResult.PASS;
         }
         if (!player.level().isClientSide) {
+            // In creative mode, Player.interactOn substitutes the parameter
+            // `stack` with a copy before calling interactLivingEntity. Writing
+            // to that copy doesn't persist on the held item. Always mutate the
+            // actual held stack so the binding survives the interaction.
+            ItemStack held = player.getItemInHand(hand);
             if (player.isShiftKeyDown()) {
-                stack.remove(ModDataComponents.BOUND_EAGLE.get());
+                held.remove(ModDataComponents.BOUND_EAGLE.get());
                 player.displayClientMessage(
                         Component.literal("Whistle unbound."), true);
             } else {
-                stack.set(ModDataComponents.BOUND_EAGLE.get(), eagle.getUUID());
+                held.set(ModDataComponents.BOUND_EAGLE.get(), eagle.getUUID());
                 player.displayClientMessage(
-                        Component.literal("Whistle bound to this eagle."), true);
+                        Component.literal("Whistle bound to " + eagle.getName().getString() + "."),
+                        true);
             }
             player.level().playSound(null, player.getX(), player.getY(), player.getZ(),
                     SoundEvents.NOTE_BLOCK_FLUTE.value(), SoundSource.PLAYERS,
@@ -88,13 +94,16 @@ public class EagleWhistleItem extends Item {
     }
 
     // Returns the eagles the whistle should affect for this interaction:
-    //   - If bound: at most one eagle (the bound one, if present in the search radius)
+    //   - If bound: at most one eagle (the bound one, searched in a wide
+    //               radius so it works even when the eagle is on a far-off
+    //               perch or hunting at range)
     //   - Else:     all eagles owned by the player within SEARCH_RADIUS
     private List<EagleEntity> findTargets(ItemStack stack, Player player) {
         UUID bound = stack.get(ModDataComponents.BOUND_EAGLE.get());
+        double radius = (bound != null) ? 512.0 : SEARCH_RADIUS;
         return player.level().getEntitiesOfClass(
                 EagleEntity.class,
-                player.getBoundingBox().inflate(SEARCH_RADIUS),
+                player.getBoundingBox().inflate(radius),
                 e -> e.isOwnedBy(player)
                         && (bound == null || e.getUUID().equals(bound)));
     }

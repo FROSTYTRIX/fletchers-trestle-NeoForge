@@ -1,0 +1,6 @@
+{
+  "type": "neoforge:add_features",
+  "biomes": "#fletcherstrestle:has_eagle",
+  "features": "fletcherstrestle:eagle_nest",
+  "step": "vegetal_decoration"
+}

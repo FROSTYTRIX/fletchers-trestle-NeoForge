@@ -15,6 +15,7 @@ Tracks the next major additions to the eagle companion system.
 - **Phase B — Improved Spawning** ✅ (custom `has_eagle` biome tag, weight 2, altitude/sky/light predicate)
 - **Phase C — Perch Block** ✅ (claimable block, eagle binds to it, returns when owner is far/offline)
 - **Phase D — Nesting System** ✅ (nest block, egg item, breeding ritual, 20-min hatch → auto-tamed eaglet)
+- **Phase E — Natural nests** ✅ (worldgen Feature places nests on high sunlit ridges, seeds random eggs + wild patrolling eagles, replaces flat biome spawn rule)
 
 ---
 

@@ -165,22 +165,27 @@ public class EagleEntity extends TamableAnimal {
         this.goalSelector.addGoal(5, new TemptGoal(this, 1.0,
                 Ingredient.of(Items.RABBIT, Items.COD, Items.SALMON), false));
         this.goalSelector.addGoal(6, new FollowOwnerGoal(this, 1.0, 10.0f, 2.0f));
-        // Random flying: only active for UNTAMED eagles (so wild ones still
-        // wander), and rate-limited via a long base interval so even those
-        // don't constantly cycle through flight. Tamed eagles stay perched
+        // Wild nest patrol: untamed eagles bound to a nest (via worldgen)
+        // pick random points around the nest. Combines "stay near home" with
+        // "wander around" so they don't just hover on the same spot forever.
+        this.goalSelector.addGoal(7, new EagleNestPatrolGoal(this));
+        // Random flying fallback: only active for UNTAMED eagles WITHOUT a
+        // nest (e.g., spawn-egged in by an admin). Tamed eagles stay perched
         // near their owner via FollowOwnerGoal.
-        this.goalSelector.addGoal(7, new WaterAvoidingRandomFlyingGoal(this, 1.0) {
+        this.goalSelector.addGoal(8, new WaterAvoidingRandomFlyingGoal(this, 1.0) {
             @Override
             public boolean canUse() {
                 if (EagleEntity.this.isTame()) return false;
+                // Nest-bound eagles use the patrol goal instead.
+                if (EagleEntity.this.getNestPos() != null) return false;
                 // Throttle: ~5% chance per evaluation, vanilla checks at
                 // ~once-per-second so this means a wander attempt every ~20s.
                 if (EagleEntity.this.getRandom().nextInt(20) != 0) return false;
                 return super.canUse();
             }
         });
-        this.goalSelector.addGoal(8, new LookAtPlayerGoal(this, Player.class, 8.0f));
-        this.goalSelector.addGoal(9, new RandomLookAroundGoal(this));
+        this.goalSelector.addGoal(9, new LookAtPlayerGoal(this, Player.class, 8.0f));
+        this.goalSelector.addGoal(10, new RandomLookAroundGoal(this));
     }
 
     // ---------------------------------------------------------------
@@ -1246,6 +1251,88 @@ public class EagleEntity extends TamableAnimal {
             if (eagle.getOwnerUUID() == null) return false;
             if (!eagle.getOwnerUUID().equals(nest.getOwnerUUID())) return false;
             return nest.hasEggSpace();
+        }
+    }
+
+    /**
+     * EagleNestPatrolGoal — wild eagles that worldgen bound to a nest pick
+     * random points within a "territory" around the nest and fly to them.
+     * Combines "stay near home" with "wander around" so they don't just
+     * hover in one spot.
+     *
+     * Only active for UNTAMED eagles with a nestPos. Tamed eagles have their
+     * own perch/follow behaviors.
+     */
+    static class EagleNestPatrolGoal extends Goal {
+        // Territory radius. Eagles pick random patrol points inside this disc
+        // around their nest (XZ) with a small vertical range.
+        private static final double PATROL_RADIUS    = 20.0;
+        private static final double VERTICAL_RANGE   = 6.0;
+        // Ticks between picking new patrol points. Random within this range.
+        private static final int    MIN_REST_TICKS   = 80;   // 4 sec
+        private static final int    MAX_REST_TICKS   = 240;  // 12 sec
+
+        private final EagleEntity eagle;
+        private double tx, ty, tz;
+        private int restTicks = 0;
+        private int repathCooldown = 0;
+
+        EagleNestPatrolGoal(EagleEntity eagle) {
+            this.eagle = eagle;
+            this.setFlags(EnumSet.of(Flag.MOVE));
+        }
+
+        @Override
+        public boolean canUse() {
+            // Wild eagles only — tamed eagles use the perch/follow goals.
+            if (eagle.isTame()) return false;
+            if (eagle.isOrderedToSit()) return false;
+            if (eagle.getNestPos() == null) return false;
+            // Wait between patrol legs so they don't constantly recompute.
+            if (restTicks > 0) { restTicks--; return false; }
+            pickNextTarget();
+            return true;
+        }
+
+        @Override
+        public boolean canContinueToUse() {
+            if (eagle.isTame()) return false;
+            if (eagle.getNestPos() == null) return false;
+            // Reached the patrol point — let stop() reset rest timer.
+            return eagle.distanceToSqr(tx, ty, tz) > 9.0;  // 3 blocks
+        }
+
+        @Override
+        public void start() {
+            repathCooldown = 0;
+        }
+
+        @Override
+        public void tick() {
+            eagle.getMoveControl().setWantedPosition(tx, ty, tz, 1.0);
+            if (--repathCooldown <= 0) {
+                eagle.getNavigation().moveTo(tx, ty, tz, 1.0);
+                repathCooldown = 16;
+            }
+        }
+
+        @Override
+        public void stop() {
+            eagle.getNavigation().stop();
+            restTicks = MIN_REST_TICKS
+                    + eagle.getRandom().nextInt(MAX_REST_TICKS - MIN_REST_TICKS);
+        }
+
+        private void pickNextTarget() {
+            BlockPos nest = eagle.getNestPos();
+            if (nest == null) return;
+            double angle = eagle.getRandom().nextDouble() * Math.PI * 2.0;
+            double dist  = 3.0 + eagle.getRandom().nextDouble() * PATROL_RADIUS;
+            tx = nest.getX() + 0.5 + Math.cos(angle) * dist;
+            tz = nest.getZ() + 0.5 + Math.sin(angle) * dist;
+            // Patrol mostly above the nest with some altitude variation.
+            ty = nest.getY() + 2.0
+                    + eagle.getRandom().nextDouble() * VERTICAL_RANGE;
         }
     }
 }
