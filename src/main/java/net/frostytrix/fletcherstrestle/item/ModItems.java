@@ -6,7 +6,7 @@ import net.frostytrix.fletcherstrestle.component.ModDataComponents;
 import net.frostytrix.fletcherstrestle.entity.ModEntities;
 import net.frostytrix.fletcherstrestle.item.custom.*;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemNameBlockItem;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.SpawnEggItem;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredItem;
@@ -90,7 +90,9 @@ public class ModItems {
     // Flax
 
     public static final DeferredItem<Item> FLAX_SEEDS = ITEMS.register("flax_seeds",
-            () -> new ItemNameBlockItem(ModBlocks.FLAX_CROP.get(),new Item.Properties()));
+            // TODO(port-26.1): ItemNameBlockItem removed; use a BlockItem
+            // (the custom-name behavior is now driven by data components).
+            () -> new BlockItem(ModBlocks.FLAX_CROP.get(), new Item.Properties()));
 
     public static final DeferredItem<Item> FLAX = ITEMS.register("flax",
             () -> new Item(new Item.Properties()));
@@ -143,7 +145,12 @@ public class ModItems {
             () -> new HeavyDummyItem(new Item.Properties()));
 
 
-    public static final DeferredItem<Item> EAGLE_SPAWN_EGG = ITEMS.register("eagle_spawn_egg", () -> new SpawnEggItem(ModEntities.EAGLE.get(), 0x5C4033, 0xF5C842, new Item.Properties()));
+    // 26.1: SpawnEggItem(Properties) only. Entity type comes from
+    // Properties.spawnEgg(EntityType). Colors are no longer set in code —
+    // they live on the entity's TypedEntityData component (default tint
+    // until configured via data component).
+    public static final DeferredItem<Item> EAGLE_SPAWN_EGG = ITEMS.register("eagle_spawn_egg",
+            () -> new SpawnEggItem(new Item.Properties().spawnEgg(ModEntities.EAGLE.get())));
 
     public static final DeferredItem<Item> EAGLE_WHISTLE = ITEMS.register("eagle_whistle",
             () -> new EagleWhistleItem(new Item.Properties().stacksTo(1)));

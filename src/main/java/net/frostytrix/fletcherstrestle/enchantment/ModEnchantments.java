@@ -42,7 +42,7 @@ public class ModEnchantments {
                         EquipmentSlotGroup.MAINHAND,
                         EquipmentSlotGroup.OFFHAND
                 )
-        ).build(PHOTOSYNTHESIS.location())); // Just build it directly!
+        ).build(PHOTOSYNTHESIS.identifier())); // Just build it directly!
 
         context.register(BIOLUMINESCENCE, Enchantment.enchantment(
                 Enchantment.definition(
@@ -55,7 +55,7 @@ public class ModEnchantments {
                         EquipmentSlotGroup.MAINHAND,
                         EquipmentSlotGroup.OFFHAND
                 )
-        ).build(BIOLUMINESCENCE.location())); // Just build it directly!
+        ).build(BIOLUMINESCENCE.identifier())); // Just build it directly!
 
         context.register(GALE_FORCE, Enchantment.enchantment(
                 Enchantment.definition(
@@ -68,6 +68,6 @@ public class ModEnchantments {
                         EquipmentSlotGroup.MAINHAND,
                         EquipmentSlotGroup.OFFHAND
                 )
-        ).build(GALE_FORCE.location()));
+        ).build(GALE_FORCE.identifier()));
     }
 }

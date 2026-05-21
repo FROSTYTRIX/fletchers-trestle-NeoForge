@@ -156,32 +156,14 @@ public class ModClientEvents {
         }
     }
 
-    // Tints layer 3 of the modular arrow item model (the liquid overlay
-    // added by ModularBakedModel) with the potion's color. Layers 0-2 are
-    // the shaft / fletching / head — untouched.
-    @SubscribeEvent
-    public static void onItemColors(RegisterColorHandlersEvent.Item event) {
-        event.register((stack, tintIndex) -> {
-            if (tintIndex != 3) return 0xFFFFFFFF;
-            net.minecraft.world.item.alchemy.PotionContents pc =
-                    stack.get(net.minecraft.core.component.DataComponents.POTION_CONTENTS);
-            if (pc == null) return 0xFFFFFFFF;
-            // PotionContents.getColor() returns RGB; combine with full alpha.
-            return 0xFF000000 | (pc.getColor() & 0xFFFFFF);
-        }, ModItems.MODULAR_ARROW.get());
-    }
-
-    @SubscribeEvent
-    public static void onBlockColors(RegisterColorHandlersEvent.Block event) {
-        event.register((state, level, pos, tintIndex) -> {
-            if (tintIndex == 0 && level != null && pos != null) {
-                return BiomeColors.getAverageWaterColor(level, pos);
-            }
-
-            return 0x3F76E4;
-
-        }, ModBlocks.STEAM_BOX.get());
-    }
+    // TODO(port-26.1): RegisterColorHandlersEvent.Item / .Block inner-classes
+    // were removed in 26.1. Item and block tinting now happens through the new
+    // ItemModel JSON system (tint sources keyed off data components) for items,
+    // and BlockColors registration moved to a different event type for blocks.
+    //
+    // Lost effects until ported:
+    //  - Modular arrow layer 3 (potion overlay) potion-color tint.
+    //  - Steam box biome-water tint.
 
     @SubscribeEvent
     public static void onFovModify(ComputeFovModifierEvent event) {
