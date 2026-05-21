@@ -1,46 +1,26 @@
 package net.frostytrix.fletcherstrestle.trades;
 
-import net.frostytrix.fletcherstrestle.FletcherTrestle;
-import net.minecraft.world.entity.npc.VillagerProfession;
-import net.minecraft.world.item.trading.VillagerTrades;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.item.trading.ItemCost;
-import net.minecraft.world.item.trading.MerchantOffer;
-import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.neoforge.event.village.VillagerTradesEvent;
-
-import java.util.List;
-import java.util.Optional;
-
-@EventBusSubscriber(modid = FletcherTrestle.MOD_ID)
-public class ModVillagerTradesEvent {
-    @SubscribeEvent
-    public static void onVillagerTrades(VillagerTradesEvent event) {
-        // We only want to modify the Fletcher!
-        if (event.getType() == VillagerProfession.FLETCHER) {
-
-            // Get the list of possible trades for Novice (Level 1)
-            List<VillagerTrades.ItemListing> level1Trades = event.getTrades().get(1);
-
-            // 1. Nuke everything
-            level1Trades.clear();
-
-            // Vanilla Trades
-            level1Trades.add(new VillagerTrades.EmeraldForItems(Items.STICK, 32, 16, 2));
-
-            level1Trades.add((trader, random) -> new MerchantOffer(
-                    new ItemCost(Items.EMERALD, 1),               // Input 1: 1 Emerald
-                    Optional.of(new ItemCost(Items.GRAVEL, 10)),  // Input 2: 10 Gravel
-                    new ItemStack(Items.FLINT, 10),               // Output: 10 Flint
-                    16,                                           // Max uses before locking
-                    2,                                            // Villager XP gained
-                    0.05F                                         // Price multiplier
-            ));
-
-            // Custom Trade : Modular Arrows
-            level1Trades.add(new RandomModularArrowTrade(1, 12, 12, 1));
-        }
-    }
+// TODO(port-26.1): Villager trade system fully rewritten in 26.1.
+//
+//   - net.minecraft.world.entity.npc.VillagerProfession moved to
+//     net.minecraft.world.entity.npc.villager.VillagerProfession
+//   - VillagerTrades.ItemListing no longer exists. Trades are now
+//     ResourceKey<VillagerTrade> entries (data-driven), declared in
+//     datapack JSON or registered via a Bootstrap context.
+//   - net.neoforged.neoforge.event.village.VillagerTradesEvent removed.
+//     There's no longer an event hook to mutate trade lists at runtime.
+//
+// To restore the Fletcher trades:
+//   1. Define each desired trade as a data file in
+//        data/fletcherstrestle/villager_trade/fletcher/1/*.json
+//      (mimicking vanilla — see `data/minecraft/villager_trade/fletcher/`).
+//   2. For the random-modular-arrow trade, define a custom VillagerTrade
+//      subclass that produces a randomised ItemStack per pull.
+//   3. Wire it up via a tag entry in
+//        data/fletcherstrestle/tags/villager_trade/fletcher/level_1.json
+//
+// Until that's done, vanilla Fletcher trades work normally; the mod
+// just adds nothing extra.
+public final class ModVillagerTradesEvent {
+    private ModVillagerTradesEvent() {}
 }

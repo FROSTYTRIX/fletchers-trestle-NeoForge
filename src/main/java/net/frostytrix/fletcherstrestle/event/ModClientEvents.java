@@ -38,23 +38,30 @@ import static net.frostytrix.fletcherstrestle.FletcherTrestle.MOD_ID;
 @EventBusSubscriber(modid = MOD_ID, value = Dist.CLIENT)
 public class ModClientEvents {
 
-    @SubscribeEvent
-    public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
-        event.registerBlockEntityRenderer(ModBlockEntities.SHAVING_HORSE_BE.get(), ShavingHorseRenderer::new);
-        event.registerEntityRenderer(ModEntities.MODULAR_ARROW.get(), ModularArrowRenderer::new);
-        event.registerBlockEntityRenderer(ModBlockEntities.DIPPING_VAT_BE.get(), DippingVatRenderer::new);
-        event.registerEntityRenderer(ModEntities.EAGLE.get(), EagleRenderer::new);
-    }
-
-    @SubscribeEvent
-    public static void registerLayerDefinitions(EntityRenderersEvent.RegisterLayerDefinitions event) {
-        event.registerLayerDefinition(EagleModel.LAYER_LOCATION, EagleModel::createBodyLayer);
-    }
-
-    @SubscribeEvent
-    public static void registerGeometryLoaders(ModelEvent.RegisterGeometryLoaders event) {
-        event.register(Identifier.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "modular_loader"), ModularModelLoader.INSTANCE);
-    }
+    // TODO(port-26.1): all renderer registrations disabled until the new
+    // BlockEntityRenderer<T, S>/MobRenderer<T, S, M> API rewrites land.
+    // The stub renderer classes still exist (with TODOs) but they no
+    // longer extend any vanilla renderer, so they can't be registered.
+    //
+    //  @SubscribeEvent
+    //  public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
+    //      event.registerBlockEntityRenderer(ModBlockEntities.SHAVING_HORSE_BE.get(), ShavingHorseRenderer::new);
+    //      event.registerEntityRenderer(ModEntities.MODULAR_ARROW.get(), ModularArrowRenderer::new);
+    //      event.registerBlockEntityRenderer(ModBlockEntities.DIPPING_VAT_BE.get(), DippingVatRenderer::new);
+    //      event.registerEntityRenderer(ModEntities.EAGLE.get(), EagleRenderer::new);
+    //  }
+    //
+    //  @SubscribeEvent
+    //  public static void registerLayerDefinitions(EntityRenderersEvent.RegisterLayerDefinitions event) {
+    //      event.registerLayerDefinition(EagleModel.LAYER_LOCATION, EagleModel::createBodyLayer);
+    //  }
+    //
+    //  // RegisterGeometryLoaders event removed in 26.1; custom item models
+    //  // now register via the new ItemModel API.
+    //  @SubscribeEvent
+    //  public static void registerGeometryLoaders(ModelEvent.RegisterGeometryLoaders event) {
+    //      event.register(Identifier.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "modular_loader"), ModularModelLoader.INSTANCE);
+    //  }
 
     @SubscribeEvent
     public static void onClientTick(ClientTickEvent.Post event) {

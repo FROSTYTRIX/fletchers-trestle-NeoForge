@@ -100,6 +100,55 @@ These classes are *removed*, not renamed. Each needs reimplementation:
 ### Next-session prompt
 > "Let's continue the 26.1 port — start phase 2 with the BakedModel system rewrite"
 
+---
+
+## Stubbed-out subsystems
+
+Through phase 2 the following subsystems were **stubbed** (replaced with
+empty placeholder classes + migration TODOs) so the rest of the mod can
+compile. Each needs a real rewrite against the new 26.1 API:
+
+| File | Reason | What's lost |
+|---|---|---|
+| `client/renderer/ModularArrowRenderer.java` | `ArrowRenderer<T,S>` 2-param generic + extract/submit pattern | Custom modular-arrow layer rendering (shaft/fletching/head + potion overlay) |
+| `block/entity/renderer/DippingVatRenderer.java` | `BlockEntityRenderer<T,S>` 2-param generic | Custom dipping vat fluid + colour rendering |
+| `block/entity/renderer/ShavingHorseRenderer.java` | Same | Custom shaving horse rendering |
+| `entity/client/EagleRenderer.java` | `MobRenderer<T,S,M>` 3-param generic | Eagle uses default mob rendering — no custom model |
+| `entity/client/HeavyDummyRenderer.java` | `LivingEntityRenderer<T,S,M>` 3-param generic | Heavy dummy uses default rendering |
+| `client/model/ModularBakedModel.java` | `BakedModel`/`IUnbakedGeometry` etc. all removed; ItemModel API replaces them | Modular bow/crossbow texture overlays |
+| `client/model/ModularUnbakedGeometry.java` | Same | — |
+| `client/model/ModularModelLoader.java` | `RegisterGeometryLoaders` event gone | — |
+| `trades/RandomModularArrowTrade.java` | `VillagerTrades.ItemListing` removed; trades are now `ResourceKey<VillagerTrade>` datapack entries | Custom Fletcher villager trade |
+| `trades/ModVillagerTradesEvent.java` | `VillagerTradesEvent` removed | — |
+
+All registrations of these classes in `ModClientEvents.java` are also
+commented out with matching TODOs.
+
+## Remaining compile errors
+
+After the stubs and the mechanical work, **100 errors remain**, concentrated in:
+
+| Files | Count | Subsystem | What needs to happen |
+|---|---|---|---|
+| Custom `Recipe<*>` implementations (Dipping, ModularArrow, Steaming, Shaving, ModularWeapon) | ~50 | Recipe API | New abstract methods (`recipeBookCategory`, `placementInfo`, `showNotification`, `group`), `assemble()` lost its `HolderLookup.Provider` param, `getSerializer`/`getType` have stricter generic bounds |
+| Datagen providers (`Mod*Provider.java`) | ~20 | Datagen API | Provider classes restructured |
+| JEI compat (`compat/jei/*.java`) | ~15 | JEI 29 API | JEI itself moved many classes |
+| Misc | ~15 | Various | One-off fixes |
+
+The Recipe rewrite alone is probably another full session. Two
+honest options:
+
+1. **Stub recipes too** — the mod compiles but you can't craft modular
+   bows/arrows or use the steam box / dipping vat / shaving horse.
+   Eagles + arrows still work as items via vanilla recipes.
+2. **Keep porting properly** — fix each recipe class one at a time
+   over 2–3 more sessions.
+
+### Recommended approach when you next pick this up
+Ecosystem maturity matters. 26.1 is brand new (beta). Wait 1–2 weeks
+for someone to publish a comprehensive 1.21 → 26.1 migration guide and
+the actual port will be much faster.
+
 ### 2. `Screen` method renames
 
 Per the changelog:
