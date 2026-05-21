@@ -45,10 +45,10 @@ public class EagleWhistleItem extends Item {
     public InteractionResult use(Level level, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
 
-        if (!level.isClientSide) {
+        if (!level.isClientSide()) {
             List<EagleEntity> targets = findTargets(stack, player);
             if (targets.isEmpty()) {
-                player.displayClientMessage(
+                /* TODO(port-26.1) ServerPlayer.sendSystemMessage */ if (player instanceof net.minecraft.server.level.ServerPlayer __sp) __sp.sendSystemMessage(
                         Component.literal("No eagles in range."), true);
             } else if (player.isShiftKeyDown()) {
                 recall(targets, player);
@@ -77,11 +77,11 @@ public class EagleWhistleItem extends Item {
             ItemStack held = player.getItemInHand(hand);
             if (player.isShiftKeyDown()) {
                 held.remove(ModDataComponents.BOUND_EAGLE.get());
-                player.displayClientMessage(
+                /* TODO(port-26.1) ServerPlayer.sendSystemMessage */ if (player instanceof net.minecraft.server.level.ServerPlayer __sp) __sp.sendSystemMessage(
                         Component.literal("Whistle unbound."), true);
             } else {
                 held.set(ModDataComponents.BOUND_EAGLE.get(), eagle.getUUID());
-                player.displayClientMessage(
+                /* TODO(port-26.1) ServerPlayer.sendSystemMessage */ if (player instanceof net.minecraft.server.level.ServerPlayer __sp) __sp.sendSystemMessage(
                         Component.literal("Whistle bound to " + eagle.getName().getString() + "."),
                         true);
             }
@@ -113,7 +113,7 @@ public class EagleWhistleItem extends Item {
         // each eagle drifting to its own state.
         boolean newMode = !targets.get(0).isFetchModeEnabled();
         for (EagleEntity e : targets) e.setFetchModeEnabled(newMode);
-        player.displayClientMessage(
+        /* TODO(port-26.1) ServerPlayer.sendSystemMessage */ if (player instanceof net.minecraft.server.level.ServerPlayer __sp) __sp.sendSystemMessage(
                 Component.literal("Eagles: fetch " + (newMode ? "ON" : "OFF")), true);
     }
 
@@ -124,7 +124,7 @@ public class EagleWhistleItem extends Item {
             // above rather than colliding at body level.
             e.getNavigation().moveTo(player.getX(), player.getY() + 1.5, player.getZ(), 1.4);
         }
-        player.displayClientMessage(
+        /* TODO(port-26.1) ServerPlayer.sendSystemMessage */ if (player instanceof net.minecraft.server.level.ServerPlayer __sp) __sp.sendSystemMessage(
                 Component.literal("Eagles recalled."), true);
     }
 }

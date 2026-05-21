@@ -4,7 +4,7 @@ import net.frostytrix.fletcherstrestle.block.ModBlocks;
 import net.frostytrix.fletcherstrestle.block.custom.FlaxCropBlock;
 import net.frostytrix.fletcherstrestle.block.custom.RopeBlock;
 import net.frostytrix.fletcherstrestle.item.ModItems;
-import net.minecraft.advancements.critereon.StatePropertiesPredicate;
+import net.minecraft.advancements.criterion.StatePropertiesPredicate;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;

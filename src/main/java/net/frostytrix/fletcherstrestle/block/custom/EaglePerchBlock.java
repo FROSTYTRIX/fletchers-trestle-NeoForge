@@ -110,7 +110,7 @@ public class EaglePerchBlock extends BaseEntityBlock {
             if (perch.isClaimed() && player.getUUID().equals(perch.getOwnerUUID())) {
                 clearEaglePerchPos(level, perch.getEagleUUID());
                 perch.unclaim();
-                player.displayClientMessage(Component.literal("Perch unclaimed."), true);
+                /* TODO(port-26.1) ServerPlayer.sendSystemMessage */ if (player instanceof net.minecraft.server.level.ServerPlayer __sp) __sp.sendSystemMessage(Component.literal("Perch unclaimed."), true);
             }
             return InteractionResult.SUCCESS;
         }
@@ -118,7 +118,7 @@ public class EaglePerchBlock extends BaseEntityBlock {
         if (perch.isClaimed()) {
             // Show info
             String ownerLabel = perch.getOwnerName() != null ? perch.getOwnerName() : "unknown";
-            player.displayClientMessage(
+            /* TODO(port-26.1) ServerPlayer.sendSystemMessage */ if (player instanceof net.minecraft.server.level.ServerPlayer __sp) __sp.sendSystemMessage(
                     Component.literal("Perch claimed by " + ownerLabel + "."), true);
             return InteractionResult.SUCCESS;
         }
@@ -126,13 +126,13 @@ public class EaglePerchBlock extends BaseEntityBlock {
         // Unclaimed — try to claim using the nearest idle owned eagle.
         EagleEntity eagle = findClaimableEagle(level, player, pos);
         if (eagle == null) {
-            player.displayClientMessage(
+            /* TODO(port-26.1) ServerPlayer.sendSystemMessage */ if (player instanceof net.minecraft.server.level.ServerPlayer __sp) __sp.sendSystemMessage(
                     Component.literal("No idle eagle nearby to claim this perch."), true);
             return InteractionResult.SUCCESS;
         }
         perch.claim(player.getUUID(), player.getName().getString(), eagle.getUUID());
         eagle.setPerchPos(pos);
-        player.displayClientMessage(
+        /* TODO(port-26.1) ServerPlayer.sendSystemMessage */ if (player instanceof net.minecraft.server.level.ServerPlayer __sp) __sp.sendSystemMessage(
                 Component.literal("Eagle bound to this perch."), true);
         return InteractionResult.SUCCESS;
     }

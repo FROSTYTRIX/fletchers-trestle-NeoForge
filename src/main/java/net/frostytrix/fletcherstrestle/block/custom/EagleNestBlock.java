@@ -99,7 +99,7 @@ public class EagleNestBlock extends BaseEntityBlock {
         if (player.isShiftKeyDown()) {
             if (nest.isClaimed() && player.getUUID().equals(nest.getOwnerUUID())) {
                 nest.unclaim();
-                player.displayClientMessage(Component.literal("Nest unclaimed."), true);
+                /* TODO(port-26.1) ServerPlayer.sendSystemMessage */ if (player instanceof net.minecraft.server.level.ServerPlayer __sp) __sp.sendSystemMessage(Component.literal("Nest unclaimed."), true);
             }
             return InteractionResult.SUCCESS;
         }
@@ -107,14 +107,14 @@ public class EagleNestBlock extends BaseEntityBlock {
         if (nest.isClaimed()) {
             String label = nest.getOwnerName() != null ? nest.getOwnerName() : "unknown";
             int eggs = nest.eggCount();
-            player.displayClientMessage(
+            /* TODO(port-26.1) ServerPlayer.sendSystemMessage */ if (player instanceof net.minecraft.server.level.ServerPlayer __sp) __sp.sendSystemMessage(
                     Component.literal("Nest of " + label + " — " + eggs + " egg(s)."),
                     true);
             return InteractionResult.SUCCESS;
         }
 
         nest.claim(player.getUUID(), player.getName().getString());
-        player.displayClientMessage(
+        /* TODO(port-26.1) ServerPlayer.sendSystemMessage */ if (player instanceof net.minecraft.server.level.ServerPlayer __sp) __sp.sendSystemMessage(
                 Component.literal("You claimed this nest."), true);
         return InteractionResult.SUCCESS;
     }
@@ -127,7 +127,7 @@ public class EagleNestBlock extends BaseEntityBlock {
         if (!state.is(newState.getBlock())) {
             if (level.getBlockEntity(pos) instanceof EagleNestBlockEntity nest) {
                 int count = nest.eggCount();
-                if (count > 0 && !level.isClientSide) {
+                if (count > 0 && !level.isClientSide()) {
                     Block.popResource(level, pos,
                             new ItemStack(ModItems.EAGLE_EGG.get(), count));
                 }

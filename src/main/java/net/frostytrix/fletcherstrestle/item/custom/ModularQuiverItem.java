@@ -108,7 +108,7 @@ public class ModularQuiverItem extends Item {
     @Override
     public InteractionResult use(Level level, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
-        if (!level.isClientSide) {
+        if (!level.isClientSide()) {
             player.openMenu(new SimpleMenuProvider(
                     // We removed the 'hand' parameter here!
                     (id, inv, p) -> new QuiverMenu(id, inv),

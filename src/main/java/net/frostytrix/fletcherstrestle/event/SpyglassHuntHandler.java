@@ -175,7 +175,7 @@ public final class SpyglassHuntHandler {
             if (d < bestDistSqr) { chosen = nearby.get(i); bestDistSqr = d; }
         }
         chosen.setHuntTarget(target);
-        player.displayClientMessage(
+        /* TODO(port-26.1) ServerPlayer.sendSystemMessage */ if (player instanceof net.minecraft.server.level.ServerPlayer __sp) __sp.sendSystemMessage(
                 Component.literal("Your eagle locks onto " + target.getName().getString() + "."),
                 true);
     }

@@ -103,7 +103,7 @@ public class EagleEntity extends TamableAnimal {
         this.setNoGravity(true);
         // Eagles never despawn once tamed
         this.setPersistenceRequired();
-        this.setPathfindingMalus(PathType.DAMAGE_FIRE, -1f);
+        this.setPathfindingMalus(PathType.FIRE, -1f);
         this.setPathfindingMalus(PathType.WATER,        -1f);
         this.setPathfindingMalus(PathType.OPEN,          0f);
     }
@@ -223,10 +223,14 @@ public class EagleEntity extends TamableAnimal {
                 if (player.isShiftKeyDown()) {
                     boolean newMode = !this.isFetchModeEnabled();
                     this.setFetchModeEnabled(newMode);
-                    player.displayClientMessage(
-                            net.minecraft.network.chat.Component.literal(
-                                    newMode ? "Eagle: fetch mode ON" : "Eagle: fetch mode OFF"),
-                            true);
+                    // 26.1: Player.displayClientMessage removed. Use
+                    // ServerPlayer.sendSystemMessage(msg, true) for action-bar.
+                    if (player instanceof net.minecraft.server.level.ServerPlayer sp) {
+                        sp.sendSystemMessage(
+                                net.minecraft.network.chat.Component.literal(
+                                        newMode ? "Eagle: fetch mode ON" : "Eagle: fetch mode OFF"),
+                                true);
+                    }
                     this.playSound(ModSounds.EAGLE_AMBIENT.get(), 0.5f,
                             newMode ? 1.4f : 0.9f);
                 } else {
@@ -329,12 +333,12 @@ public class EagleEntity extends TamableAnimal {
         FlyingPathNavigation nav = new FlyingPathNavigation(this, level);
         nav.setCanOpenDoors(false);
         nav.setCanFloat(true);
-        nav.setCanPassDoors(false);
+        /* TODO(port-26.1): setCanPassDoors removed in 26.1 */
         return nav;
     }
 
     @Override
-    public boolean causeFallDamage(float fallDistance, float multiplier, DamageSource source) {
+    public boolean causeFallDamage(double fallDistance, float multiplier, DamageSource source) {
         return false; // Eagles don't take fall damage
     }
 
@@ -365,7 +369,7 @@ public class EagleEntity extends TamableAnimal {
     // tick() rather than dropping like a rock.
     @Override
     public void travel(Vec3 input) {
-        if (this.isControlledByLocalInstance()) {
+        if (this.isLocalInstanceAuthoritative()) {
             if (this.isInWater()) {
                 this.moveRelative(0.02f, input);
                 this.move(MoverType.SELF, this.getDeltaMovement());
@@ -564,18 +568,21 @@ public class EagleEntity extends TamableAnimal {
     }
 
     // Drop the carried inventory at the eagle's feet — used on death.
+    // 26.1: spawnAtLocation now requires ServerLevel + ItemStack overload.
     public void dropFetchInventoryHere() {
+        if (!(this.level() instanceof ServerLevel sl)) return;
         for (int i = 0; i < fetchInventory.getContainerSize(); i++) {
             ItemStack stack = fetchInventory.getItem(i);
             if (stack.isEmpty()) continue;
-            this.spawnAtLocation(stack);
+            this.spawnAtLocation(sl, stack);
             fetchInventory.setItem(i, ItemStack.EMPTY);
         }
     }
 
+    // 26.1: dropEquipment now takes ServerLevel.
     @Override
-    protected void dropEquipment() {
-        super.dropEquipment();
+    protected void dropEquipment(ServerLevel level) {
+        super.dropEquipment(level);
         dropFetchInventoryHere();
     }
 
@@ -597,16 +604,16 @@ public class EagleEntity extends TamableAnimal {
         if (otherAnimal == this) return false;
         if (!(otherAnimal instanceof EagleEntity other)) return false;
         if (!this.isTame() || !other.isTame()) return false;
-        if (this.getOwnerUUID() == null) return false;
-        if (!this.getOwnerUUID().equals(other.getOwnerUUID())) return false;
+        if ((this.getOwner() == null ? null : this.getOwner().getUUID()) == null) return false;
+        if (!(this.getOwner() == null ? null : this.getOwner().getUUID()).equals((other.getOwner() == null ? null : other.getOwner().getUUID()))) return false;
         return this.isInLove() && other.isInLove();
     }
 
-    // Babies are smaller — keeps eaglets visually distinct from adults.
-    @Override
-    public float getScale() {
-        return this.isBaby() ? 0.55f : 1.0f;
-    }
+    // TODO(port-26.1): LivingEntity.getScale() is final in 26.1. Baby
+    // scaling is now driven by an Attributes.SCALE attribute and/or
+    // setBaby() handling. The 0.55× shrink for eaglets is lost until
+    // re-implemented via the new path.
+    // @Override public float getScale() { return this.isBaby() ? 0.55f : 1.0f; }
 
     @Override
     public boolean isFood(ItemStack stack) {
@@ -764,10 +771,10 @@ public class EagleEntity extends TamableAnimal {
                 if (pickup.isEmpty()) pickup = new ItemStack(Items.ARROW);
 
                 ItemStack leftover = eagle.addToFetchInventory(pickup);
-                if (!leftover.isEmpty()) {
+                if (!leftover.isEmpty() && eagle.level() instanceof ServerLevel sl) {
                     // Shouldn't normally happen — canUse checked hasFetchSpace —
                     // but drop anything that didn't fit so it's not lost.
-                    eagle.spawnAtLocation(leftover);
+                    eagle.spawnAtLocation(sl, leftover);
                 }
 
                 targetArrow.discard();
@@ -840,7 +847,7 @@ public class EagleEntity extends TamableAnimal {
                     net.minecraft.world.entity.projectile.arrow.AbstractArrow.class,
                     owner.getBoundingBox().inflate(range),
                     arrow -> arrow.tickCount > 5
-                            && arrow.inGround
+                            && arrow.isInGround()
                             && arrow.getOwner() != null
                             && arrow.getOwner().getUUID().equals(owner.getUUID())
                             && eagle.level().isLoaded(arrow.blockPosition())
@@ -901,10 +908,9 @@ public class EagleEntity extends TamableAnimal {
 
             // Hunt give-up: don't orbit forever if the kill never lands.
             if (++huntTicks > HUNT_MAX_TICKS) {
-                if (eagle.getOwner() instanceof Player owner) {
-                    owner.displayClientMessage(
-                            net.minecraft.network.chat.Component.literal(
-                                    "Your eagle disengages."),
+                if (eagle.getOwner() instanceof net.minecraft.server.level.ServerPlayer sp) {
+                    sp.sendSystemMessage(
+                            net.minecraft.network.chat.Component.literal("Your eagle disengages."),
                             true);
                 }
                 stop();
@@ -1012,7 +1018,9 @@ public class EagleEntity extends TamableAnimal {
             if (distSqr <= LAND_SNAP_RANGE_SQR) {
                 // Close enough to land — snap the eagle's position exactly
                 // onto the crossbar and put it to sleep.
-                eagle.moveTo(landX, landY, landZ, eagle.getYRot(), eagle.getXRot());
+                // 26.1: Entity.moveTo(x,y,z,yaw,pitch) was removed; use setPos
+                // for the position and the existing rotation stays put.
+                eagle.setPos(landX, landY, landZ);
                 eagle.setDeltaMovement(net.minecraft.world.phys.Vec3.ZERO);
                 eagle.setEagleState(STATE_PERCHED);
                 eagle.setOrderedToSit(true);
@@ -1173,8 +1181,8 @@ public class EagleEntity extends TamableAnimal {
             partner.setAge(AGE_COOLDOWN_AFTER_BREED);
             eggLaid = true;
 
-            if (eagle.getOwner() instanceof Player owner) {
-                owner.displayClientMessage(
+            if (eagle.getOwner() instanceof net.minecraft.server.level.ServerPlayer sp) {
+                sp.sendSystemMessage(
                         net.minecraft.network.chat.Component.literal("Your eagles laid an egg."),
                         true);
             }
@@ -1208,8 +1216,9 @@ public class EagleEntity extends TamableAnimal {
                                     && e.isTame()
                                     && !e.isBaby()
                                     && e.isInLove()
-                                    && e.getOwnerUUID() != null
-                                    && e.getOwnerUUID().equals(eagle.getOwnerUUID()))
+                                    && (e.getOwner() == null ? null : e.getOwner().getUUID()) != null
+                                    && (e.getOwner() == null ? null : e.getOwner().getUUID())
+                                            .equals(eagle.getOwner() == null ? null : eagle.getOwner().getUUID()))
                     .stream()
                     .min((a, b) -> Double.compare(eagle.distanceToSqr(a), eagle.distanceToSqr(b)))
                     .orElse(null);
@@ -1250,8 +1259,9 @@ public class EagleEntity extends TamableAnimal {
                     .is(net.frostytrix.fletcherstrestle.block.ModBlocks.EAGLE_NEST.get())) return false;
             if (!(eagle.level().getBlockEntity(pos) instanceof EagleNestBlockEntity nest)) return false;
             if (!nest.isClaimed()) return false;
-            if (eagle.getOwnerUUID() == null) return false;
-            if (!eagle.getOwnerUUID().equals(nest.getOwnerUUID())) return false;
+            java.util.UUID ownerId = eagle.getOwner() == null ? null : eagle.getOwner().getUUID();
+            if (ownerId == null) return false;
+            if (!ownerId.equals(nest.getOwnerUUID())) return false;
             return nest.hasEggSpace();
         }
     }

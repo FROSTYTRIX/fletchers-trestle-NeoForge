@@ -1,8 +1,8 @@
 package net.frostytrix.fletcherstrestle.mixin.client;
 
 import net.frostytrix.fletcherstrestle.client.ClientState;
-import net.minecraft.Util;
 import net.minecraft.client.Camera;
+import net.minecraft.util.Util;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.animal.equine.AbstractHorse;
 import org.spongepowered.asm.mixin.Mixin;

@@ -30,7 +30,7 @@ public class EagleEggItem extends Item {
         if (player == null) return InteractionResult.PASS;
 
         if (!nest.hasEggSpace()) {
-            player.displayClientMessage(Component.literal("This nest is already full."), true);
+            /* TODO(port-26.1) ServerPlayer.sendSystemMessage */ if (player instanceof net.minecraft.server.level.ServerPlayer __sp) __sp.sendSystemMessage(Component.literal("This nest is already full."), true);
             return InteractionResult.CONSUME;
         }
         nest.addEgg(context.getLevel().getGameTime());

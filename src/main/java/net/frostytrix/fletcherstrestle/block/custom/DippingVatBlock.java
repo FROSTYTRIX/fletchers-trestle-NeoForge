@@ -37,7 +37,7 @@ public class DippingVatBlock extends BaseEntityBlock {
 
     @Override
     protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
-        if (!level.isClientSide) {
+        if (!level.isClientSide()) {
             if (level.getBlockEntity(pos) instanceof DippingVatBlockEntity vat) {
                 // On délègue tout le traitement logique au Block Entity
                 boolean success = vat.handlePlayerInteraction(player, player.getUsedItemHand());

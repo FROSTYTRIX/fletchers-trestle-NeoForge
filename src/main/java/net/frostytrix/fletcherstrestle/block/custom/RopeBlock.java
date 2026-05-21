@@ -136,7 +136,7 @@ public class RopeBlock extends Block implements SimpleWaterloggedBlock {
                 return InteractionResult.TRY_WITH_EMPTY_HAND;
             }
 
-            if (!level.isClientSide) {
+            if (!level.isClientSide()) {
                 // 2. Find the bottom of the current rope chain
                 BlockPos.MutableBlockPos searchPos = pos.mutable();
 

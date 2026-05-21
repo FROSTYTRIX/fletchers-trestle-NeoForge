@@ -30,7 +30,7 @@ public class FletcherGuideItem extends Item {
     public InteractionResult use(Level level, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
 
-        if (!level.isClientSide) {
+        if (!level.isClientSide()) {
             // Build a clickable underlined link styled like a tooltip URL.
             Component link = Component.literal(WIKI_URL)
                     .withStyle(s -> s
@@ -46,7 +46,7 @@ public class FletcherGuideItem extends Item {
                             .withStyle(ChatFormatting.GRAY))
                     .append(link);
 
-            player.displayClientMessage(message, false);
+            /* TODO(port-26.1) ServerPlayer.sendSystemMessage */ if (player instanceof net.minecraft.server.level.ServerPlayer __sp) __sp.sendSystemMessage(message, false);
 
             // Soft page-turn cue so the player gets feedback regardless of
             // whether they look at chat.
