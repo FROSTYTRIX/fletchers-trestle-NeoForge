@@ -91,7 +91,7 @@ public class EagleNestBlock extends BaseEntityBlock {
     @Override
     protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos,
                                                Player player, BlockHitResult hitResult) {
-        if (level.isClientSide) return InteractionResult.sidedSuccess(true);
+        if (level.isClientSide) return InteractionResult.SUCCESS;
         if (!(level.getBlockEntity(pos) instanceof EagleNestBlockEntity nest)) {
             return InteractionResult.PASS;
         }

@@ -8,13 +8,13 @@ import net.frostytrix.fletcherstrestle.entity.custom.EagleEntity;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.phys.Vec3;
 
 public class EagleRenderer extends MobRenderer<EagleEntity, EagleModel> {
 
-    private static final ResourceLocation TEXTURE =
-            ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID,
+    private static final Identifier TEXTURE =
+            Identifier.fromNamespaceAndPath(FletcherTrestle.MOD_ID,
                     "textures/entity/eagle/eagle.png");
 
     public EagleRenderer(EntityRendererProvider.Context context) {
@@ -24,7 +24,7 @@ public class EagleRenderer extends MobRenderer<EagleEntity, EagleModel> {
     }
 
     @Override
-    public ResourceLocation getTextureLocation(EagleEntity entity) {
+    public Identifier getTextureLocation(EagleEntity entity) {
         return TEXTURE;
     }
 

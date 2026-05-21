@@ -17,7 +17,7 @@ import net.minecraft.client.resources.model.ModelBaker;
 import net.minecraft.client.resources.model.ModelState;
 import net.minecraft.core.Direction;
 import net.minecraft.core.component.DataComponents;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.inventory.InventoryMenu;
@@ -220,7 +220,7 @@ public class ModularBakedModel implements BakedModel {
 
     private BakedModel bakeLayeredModel(List<String> texturePaths) {
         List<Material> materials = texturePaths.stream()
-                .map(path -> new Material(InventoryMenu.BLOCK_ATLAS, ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, path)))
+                .map(path -> new Material(InventoryMenu.BLOCK_ATLAS, Identifier.fromNamespaceAndPath(FletcherTrestle.MOD_ID, path)))
                 .toList();
         try {
             java.lang.reflect.Constructor<ItemLayerModel> ctor = ItemLayerModel.class.getDeclaredConstructor(

@@ -7,7 +7,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -43,7 +43,7 @@ public class EagleWhistleItem extends Item {
     }
 
     @Override
-    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+    public InteractionResult use(Level level, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
 
         if (!level.isClientSide) {
@@ -61,7 +61,7 @@ public class EagleWhistleItem extends Item {
                     SoundEvents.NOTE_BLOCK_FLUTE.value(), SoundSource.PLAYERS,
                     0.8f, 1.4f);
         }
-        return InteractionResultHolder.sidedSuccess(stack, level.isClientSide());
+        return InteractionResult.SUCCESS;
     }
 
     @Override
@@ -90,7 +90,7 @@ public class EagleWhistleItem extends Item {
                     SoundEvents.NOTE_BLOCK_FLUTE.value(), SoundSource.PLAYERS,
                     0.6f, 1.6f);
         }
-        return InteractionResult.sidedSuccess(player.level().isClientSide);
+        return InteractionResult.SUCCESS;
     }
 
     // Returns the eagles the whistle should affect for this interaction:

@@ -5,8 +5,8 @@ import net.frostytrix.fletcherstrestle.config.FletcherConfig;
 import net.frostytrix.fletcherstrestle.item.custom.ModularQuiverItem;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -20,10 +20,10 @@ public class QuiverHudOverlay {
     public static float slideProgress = 0; // The actual animation state (0 to 10)
     public static float slideProgressO = 0; // The "Old" state for smooth interpolation
 
-    private static final ResourceLocation HOTBAR_SPRITE = ResourceLocation.withDefaultNamespace("hud/hotbar");
-    private static final ResourceLocation HOTBAR_SELECTION_SPRITE = ResourceLocation.withDefaultNamespace("hud/hotbar_selection");
+    private static final Identifier HOTBAR_SPRITE = Identifier.withDefaultNamespace("hud/hotbar");
+    private static final Identifier HOTBAR_SELECTION_SPRITE = Identifier.withDefaultNamespace("hud/hotbar_selection");
 
-    public static void render(GuiGraphics guiGraphics, DeltaTracker deltaTracker) {
+    public static void render(GuiGraphicsExtractor guiGraphics, DeltaTracker deltaTracker) {
         // 1. Calculate the buttery smooth position using Partial Ticks
         float partialTick = deltaTracker.getGameTimeDeltaPartialTick(true);
         float smoothSlide = Mth.lerp(partialTick, slideProgressO, slideProgress) / 10.0f;

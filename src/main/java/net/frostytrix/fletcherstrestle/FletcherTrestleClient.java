@@ -7,7 +7,7 @@ import net.frostytrix.fletcherstrestle.item.ModItems;
 import net.frostytrix.fletcherstrestle.item.custom.ModularBowItem;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.core.component.DataComponents;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.CrossbowItem;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.component.ChargedProjectiles;
@@ -53,7 +53,7 @@ public class FletcherTrestleClient {
         event.enqueueWork(() -> {
 
             // This binds the "pull" animation to our custom draw speed!
-            ItemProperties.register(ModItems.MODULAR_BOW.get(), ResourceLocation.withDefaultNamespace("pull"),
+            ItemProperties.register(ModItems.MODULAR_BOW.get(), Identifier.withDefaultNamespace("pull"),
                     (stack, level, entity, seed) -> {
                         if (entity == null) {
                             return 0.0F;
@@ -68,12 +68,12 @@ public class FletcherTrestleClient {
                     });
 
             // We also need the "pulling" boolean so the game knows you are actively using it
-            ItemProperties.register(ModItems.MODULAR_BOW.get(), ResourceLocation.withDefaultNamespace("pulling"),
+            ItemProperties.register(ModItems.MODULAR_BOW.get(), Identifier.withDefaultNamespace("pulling"),
                     (stack, level, entity, seed) -> {
                         return entity != null && entity.isUsingItem() && entity.getUseItem() == stack ? 1.0F : 0.0F;
                     });
 
-            ItemProperties.register(ModItems.MODULAR_CROSSBOW.get(), ResourceLocation.withDefaultNamespace("pull"), (stack, level, entity, seed) -> {
+            ItemProperties.register(ModItems.MODULAR_CROSSBOW.get(), Identifier.withDefaultNamespace("pull"), (stack, level, entity, seed) -> {
                 if (entity == null) {
                     return 0.0F;
                 } else {
@@ -81,15 +81,15 @@ public class FletcherTrestleClient {
                 }
             });
 
-            ItemProperties.register(ModItems.MODULAR_CROSSBOW.get(), ResourceLocation.withDefaultNamespace("pulling"), (stack, level, entity, seed) -> {
+            ItemProperties.register(ModItems.MODULAR_CROSSBOW.get(), Identifier.withDefaultNamespace("pulling"), (stack, level, entity, seed) -> {
                 return entity != null && entity.isUsingItem() && entity.getUseItem() == stack && !CrossbowItem.isCharged(stack) ? 1.0F : 0.0F;
             });
 
-            ItemProperties.register(ModItems.MODULAR_CROSSBOW.get(), ResourceLocation.withDefaultNamespace("charged"), (stack, level, entity, seed) -> {
+            ItemProperties.register(ModItems.MODULAR_CROSSBOW.get(), Identifier.withDefaultNamespace("charged"), (stack, level, entity, seed) -> {
                 return entity != null && CrossbowItem.isCharged(stack) ? 1.0F : 0.0F;
             });
 
-            ItemProperties.register(ModItems.MODULAR_CROSSBOW.get(), ResourceLocation.withDefaultNamespace("firework"), (stack, level, entity, seed) -> {
+            ItemProperties.register(ModItems.MODULAR_CROSSBOW.get(), Identifier.withDefaultNamespace("firework"), (stack, level, entity, seed) -> {
                 if (entity != null && CrossbowItem.isCharged(stack)) {
                     ChargedProjectiles projectiles = stack.get(DataComponents.CHARGED_PROJECTILES);
                     if (projectiles != null && projectiles.contains(Items.FIREWORK_ROCKET)) {

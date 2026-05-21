@@ -32,7 +32,7 @@ public class DippingVatRenderer implements BlockEntityRenderer<DippingVatBlockEn
 
         // On récupère notre masque blanc pour le fond coloré (le fluid_mask fait un aplat parfait)
         TextureAtlasSprite whiteSprite = Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS)
-                .apply(net.minecraft.resources.ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "block/fluid_mask"));
+                .apply(net.minecraft.resources.Identifier.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "block/fluid_mask"));
 
         // 2. Calcul de la hauteur du fluide
         float minHeight = 0.125f;

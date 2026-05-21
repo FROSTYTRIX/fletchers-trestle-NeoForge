@@ -8,7 +8,7 @@ import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 import static net.frostytrix.fletcherstrestle.FletcherTrestle.MOD_ID;
 
@@ -26,7 +26,7 @@ import static net.frostytrix.fletcherstrestle.FletcherTrestle.MOD_ID;
 public class EagleModel extends EntityModel<EagleEntity> {
 
     public static final ModelLayerLocation LAYER_LOCATION =
-            new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(MOD_ID, "eagle"), "main");
+            new ModelLayerLocation(Identifier.fromNamespaceAndPath(MOD_ID, "eagle"), "main");
 
     // Part references (stored so setupAnim() can rotate them each frame)
     private final ModelPart root;

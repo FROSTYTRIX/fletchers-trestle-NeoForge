@@ -98,7 +98,7 @@ public class EaglePerchBlock extends BaseEntityBlock {
     protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos,
                                                Player player, BlockHitResult hitResult) {
         if (level.isClientSide) {
-            return InteractionResult.sidedSuccess(true);
+            return InteractionResult.SUCCESS;
         }
         if (!(level.getBlockEntity(pos) instanceof EaglePerchBlockEntity perch)) {
             return InteractionResult.PASS;

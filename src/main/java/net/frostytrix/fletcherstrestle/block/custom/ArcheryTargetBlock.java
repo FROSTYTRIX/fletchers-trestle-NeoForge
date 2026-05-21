@@ -96,7 +96,7 @@ public class ArcheryTargetBlock extends BaseEntityBlock {
             ));
         }
 
-        return InteractionResult.sidedSuccess(level.isClientSide());
+        return InteractionResult.SUCCESS;
     }
 
     @Override

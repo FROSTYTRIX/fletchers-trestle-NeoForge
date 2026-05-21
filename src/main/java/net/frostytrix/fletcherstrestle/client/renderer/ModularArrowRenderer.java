@@ -13,7 +13,7 @@ import net.minecraft.client.renderer.entity.ArrowRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.component.DataComponents;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
@@ -70,7 +70,7 @@ public class ModularArrowRenderer extends ArrowRenderer<ModularArrowEntity> {
                 int g = (color >>  8) & 0xFF;
                 int b =  color        & 0xFF;
                 poseStack.scale(1.001F, 1.001F, 1.001F);
-                ResourceLocation liquidTex = ResourceLocation.fromNamespaceAndPath(
+                Identifier liquidTex = Identifier.fromNamespaceAndPath(
                         FletcherTrestle.MOD_ID,
                         "textures/entity/projectiles/head/glass_vial_liquid.png");
                 renderPartTinted(poseStack, buffer, packedLight, liquidTex, r, g, b, 255);
@@ -87,7 +87,7 @@ public class ModularArrowRenderer extends ArrowRenderer<ModularArrowEntity> {
         }
     }
 
-    private void renderPart(PoseStack poseStack, MultiBufferSource buffer, int packedLight, ResourceLocation texture) {
+    private void renderPart(PoseStack poseStack, MultiBufferSource buffer, int packedLight, Identifier texture) {
         VertexConsumer vertexConsumer = buffer.getBuffer(RenderType.entityCutout(texture));
         // Drawing the 4 vanes/sides of the arrow
         for(int j = 0; j < 4; ++j) {
@@ -105,7 +105,7 @@ public class ModularArrowRenderer extends ArrowRenderer<ModularArrowEntity> {
     // overlap. Cutout is binary (drawn or not), so it renders cleanly. Vanilla
     // TippedArrow uses the same render type for its tip overlay.
     private void renderPartTinted(PoseStack poseStack, MultiBufferSource buffer, int packedLight,
-                                  ResourceLocation texture, int r, int g, int b, int a) {
+                                  Identifier texture, int r, int g, int b, int a) {
         VertexConsumer vc = buffer.getBuffer(RenderType.entityCutout(texture));
         for (int j = 0; j < 4; ++j) {
             poseStack.mulPose(Axis.XP.rotationDegrees(90.0F));
@@ -156,19 +156,19 @@ public class ModularArrowRenderer extends ArrowRenderer<ModularArrowEntity> {
         }
     }
 
-    private ResourceLocation getTexture(ArrowAssembly assembly, String part) {
+    private Identifier getTexture(ArrowAssembly assembly, String part) {
         String name = switch (part) {
             case "shaft" -> assembly.shaft().toLowerCase().replace(" ", "_");
             case "head" -> assembly.head().toLowerCase().replace(" ", "_");
             default -> assembly.fletching().toLowerCase().replace(" ", "_");
         };
-        return ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "textures/entity/projectiles/" + part + "/" + name + ".png");
+        return Identifier.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "textures/entity/projectiles/" + part + "/" + name + ".png");
     }
 
 
     @Override
-    public ResourceLocation getTextureLocation(ModularArrowEntity entity) {
-        return ResourceLocation.withDefaultNamespace("textures/entity/projectiles/arrow.png");
+    public Identifier getTextureLocation(ModularArrowEntity entity) {
+        return Identifier.withDefaultNamespace("textures/entity/projectiles/arrow.png");
     }
 
     public void vertex(PoseStack poseStack, VertexConsumer consumer, int x, int y, int z, float u, float v, int normalX, int normalZ, int normalY, int packedLight) {

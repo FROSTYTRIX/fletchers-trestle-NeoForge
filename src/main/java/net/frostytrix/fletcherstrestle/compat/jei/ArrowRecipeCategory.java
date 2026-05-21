@@ -11,13 +11,13 @@ import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.frostytrix.fletcherstrestle.FletcherTrestle;
 import net.frostytrix.fletcherstrestle.recipe.ModularArrowRecipe;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 
 public class ArrowRecipeCategory implements IRecipeCategory<ModularArrowRecipe> {
-    public static final ResourceLocation UID = ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "modular_arrow_assembly");
-    public static final ResourceLocation ARROW_TEXTURE = ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "textures/gui/fletching_table_arrow.png");
+    public static final Identifier UID = Identifier.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "modular_arrow_assembly");
+    public static final Identifier ARROW_TEXTURE = Identifier.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "textures/gui/fletching_table_arrow.png");
 
     public static final RecipeType<ModularArrowRecipe> ARROW_TYPE = new RecipeType<>(UID, ModularArrowRecipe.class);
 

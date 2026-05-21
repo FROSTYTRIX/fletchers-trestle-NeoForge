@@ -2,7 +2,7 @@ package net.frostytrix.fletcherstrestle.mixin.client;
 
 import net.frostytrix.fletcherstrestle.client.ClientState;
 import net.frostytrix.fletcherstrestle.network.MountSyncPayload;
-import net.minecraft.world.entity.animal.horse.AbstractHorse;
+import net.minecraft.world.entity.animal.equine.AbstractHorse;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.network.PacketDistributor;

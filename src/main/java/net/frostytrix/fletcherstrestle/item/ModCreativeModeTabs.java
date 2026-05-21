@@ -7,7 +7,7 @@ import net.frostytrix.fletcherstrestle.component.BowAssembly;
 import net.frostytrix.fletcherstrestle.component.ModDataComponents;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.bus.api.IEventBus;
@@ -21,7 +21,7 @@ public class ModCreativeModeTabs {
 
     public static final Supplier<CreativeModeTab> FLETCHERS_TRESTLE_TAB = CREATIVE_MODE_TAB.register("fletchers_trestle_tab",
             () -> CreativeModeTab.builder().icon(() -> new ItemStack(ModItems.MODULAR_BOW.get()))
-                    .withTabsBefore(ResourceLocation.fromNamespaceAndPath("minecraft","spawn_eggs"))
+                    .withTabsBefore(Identifier.fromNamespaceAndPath("minecraft","spawn_eggs"))
                     .title(Component.translatable("creative_tab.fletcherstrestle.fletchers_trestle_tab"))
                     .displayItems((itemDisplayParameters, output) -> {
                         output.accept(ModBlocks.STEAM_BOX);

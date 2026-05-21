@@ -7,14 +7,14 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Player;
 
 import java.util.List;
 
 public record TargetSyncPacket(int containerId, List<ShotRecord> shots) implements CustomPacketPayload {
     public static final Type<TargetSyncPacket> TYPE =
-            new Type<>(ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "target_sync"));
+            new Type<>(Identifier.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "target_sync"));
 
     @Override
     public Type<? extends CustomPacketPayload> type() {

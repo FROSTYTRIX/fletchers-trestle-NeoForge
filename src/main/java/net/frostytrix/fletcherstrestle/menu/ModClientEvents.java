@@ -6,7 +6,7 @@ import net.frostytrix.fletcherstrestle.component.BowAssembly;
 import net.frostytrix.fletcherstrestle.component.ModDataComponents;
 import net.frostytrix.fletcherstrestle.item.ModItems;
 import net.minecraft.client.renderer.item.ItemProperties;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModContainer;
@@ -34,7 +34,7 @@ public class ModClientEvents {
     public static void registerGuiOverlays(net.neoforged.neoforge.client.event.RegisterGuiLayersEvent event) {
         // This ensures the Quiver HUD renders perfectly on top of the screen
         event.registerAbove(net.neoforged.neoforge.client.gui.VanillaGuiLayers.HOTBAR,
-                ResourceLocation.fromNamespaceAndPath(MOD_ID, "quiver_hud"),
+                Identifier.fromNamespaceAndPath(MOD_ID, "quiver_hud"),
                 QuiverHudOverlay::render);
     }
 
@@ -49,16 +49,16 @@ public class ModClientEvents {
     public static void onClientSetup(FMLClientSetupEvent event) {
         event.enqueueWork(() -> {
             // 1. The Vanilla Pulling Properties
-            ItemProperties.register(ModItems.MODULAR_BOW.get(), ResourceLocation.withDefaultNamespace("pull"), (stack, level, entity, seed) -> {
+            ItemProperties.register(ModItems.MODULAR_BOW.get(), Identifier.withDefaultNamespace("pull"), (stack, level, entity, seed) -> {
                 if (entity == null) return 0.0F;
                 return entity.getUseItem() != stack ? 0.0F : (float) (stack.getUseDuration(entity) - entity.getUseItemRemainingTicks()) / 20.0F;
             });
-            ItemProperties.register(ModItems.MODULAR_BOW.get(), ResourceLocation.withDefaultNamespace("pulling"), (stack, level, entity, seed) -> {
+            ItemProperties.register(ModItems.MODULAR_BOW.get(), Identifier.withDefaultNamespace("pulling"), (stack, level, entity, seed) -> {
                 return entity != null && entity.isUsingItem() && entity.getUseItem() == stack ? 1.0F : 0.0F;
             });
 
             // 2. Our Custom Material Properties!
-            ItemProperties.register(ModItems.MODULAR_BOW.get(), ResourceLocation.fromNamespaceAndPath(MOD_ID, "limb"), (stack, level, entity, seed) -> {
+            ItemProperties.register(ModItems.MODULAR_BOW.get(), Identifier.fromNamespaceAndPath(MOD_ID, "limb"), (stack, level, entity, seed) -> {
                 var assembly = stack.get(ModDataComponents.BOW_ASSEMBLY.get());
                 if (assembly == null) return 0.0F; // Default
                 return switch (assembly.limbMaterial()) {
@@ -77,7 +77,7 @@ public class ModClientEvents {
                 };
             });
 
-            ItemProperties.register(ModItems.MODULAR_BOW.get(), ResourceLocation.fromNamespaceAndPath(MOD_ID, "riser"), (stack, level, entity, seed) -> {
+            ItemProperties.register(ModItems.MODULAR_BOW.get(), Identifier.fromNamespaceAndPath(MOD_ID, "riser"), (stack, level, entity, seed) -> {
                 var assembly = stack.get(ModDataComponents.BOW_ASSEMBLY.get());
                 if (assembly == null) return 0.0F;
                 return switch (assembly.riserMaterial()) {
@@ -88,7 +88,7 @@ public class ModClientEvents {
                 };
             });
 
-            ItemProperties.register(ModItems.MODULAR_BOW.get(), ResourceLocation.fromNamespaceAndPath(MOD_ID, "string"), (stack, level, entity, seed) -> {
+            ItemProperties.register(ModItems.MODULAR_BOW.get(), Identifier.fromNamespaceAndPath(MOD_ID, "string"), (stack, level, entity, seed) -> {
                 var assembly = stack.get(ModDataComponents.BOW_ASSEMBLY.get());
                 if (assembly == null) return 0.0F;
                 return switch (assembly.stringMaterial()) {
@@ -99,7 +99,7 @@ public class ModClientEvents {
                 };
             });
 
-            ItemProperties.register(ModItems.MODULAR_ARROW.get(), ResourceLocation.fromNamespaceAndPath(MOD_ID, "arrow_head"), (stack, level, entity, seed) -> {
+            ItemProperties.register(ModItems.MODULAR_ARROW.get(), Identifier.fromNamespaceAndPath(MOD_ID, "arrow_head"), (stack, level, entity, seed) -> {
                 var assembly = stack.get(ModDataComponents.ARROW_ASSEMBLY.get());
                 if (assembly == null) return 0.0F;
                 return switch (assembly.head()) {
@@ -113,7 +113,7 @@ public class ModClientEvents {
                 };
             });
 
-            ItemProperties.register(ModItems.MODULAR_ARROW.get(), ResourceLocation.fromNamespaceAndPath(MOD_ID, "arrow_shaft"), (stack, level, entity, seed) -> {
+            ItemProperties.register(ModItems.MODULAR_ARROW.get(), Identifier.fromNamespaceAndPath(MOD_ID, "arrow_shaft"), (stack, level, entity, seed) -> {
                 var assembly = stack.get(ModDataComponents.ARROW_ASSEMBLY.get());
                 if (assembly == null) return 0.0F;
                 return switch (assembly.shaft()) {
@@ -132,7 +132,7 @@ public class ModClientEvents {
                 };
             });
 
-            ItemProperties.register(ModItems.MODULAR_ARROW.get(), ResourceLocation.fromNamespaceAndPath(MOD_ID, "arrow_fletching"), (stack, level, entity, seed) -> {
+            ItemProperties.register(ModItems.MODULAR_ARROW.get(), Identifier.fromNamespaceAndPath(MOD_ID, "arrow_fletching"), (stack, level, entity, seed) -> {
                 var assembly = stack.get(ModDataComponents.ARROW_ASSEMBLY.get());
                 if (assembly == null) return 0.0F;
                 return switch (assembly.fletching()) {
@@ -147,7 +147,7 @@ public class ModClientEvents {
             });
         });
 
-        ItemProperties.register(ModItems.MODULAR_CROSSBOW.get(), ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "crossbow_limb"), (stack, level, entity, seed) -> {
+        ItemProperties.register(ModItems.MODULAR_CROSSBOW.get(), Identifier.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "crossbow_limb"), (stack, level, entity, seed) -> {
             BowAssembly assembly = stack.get(ModDataComponents.BOW_ASSEMBLY.get());
             if (assembly != null) {
                 return switch (assembly.limbMaterial().toLowerCase()) {
@@ -168,7 +168,7 @@ public class ModClientEvents {
             return 0.1f;
         });
 
-        ItemProperties.register(ModItems.MODULAR_CROSSBOW.get(), ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "crossbow_riser"), (stack, level, entity, seed) -> {
+        ItemProperties.register(ModItems.MODULAR_CROSSBOW.get(), Identifier.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "crossbow_riser"), (stack, level, entity, seed) -> {
             BowAssembly assembly = stack.get(ModDataComponents.BOW_ASSEMBLY.get());
             if (assembly != null) {
                 return switch (assembly.riserMaterial().toLowerCase()) {
@@ -181,7 +181,7 @@ public class ModClientEvents {
             return 0.1f;
         });
 
-        ItemProperties.register(ModItems.MODULAR_CROSSBOW.get(), ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "crossbow_string"), (stack, level, entity, seed) -> {
+        ItemProperties.register(ModItems.MODULAR_CROSSBOW.get(), Identifier.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "crossbow_string"), (stack, level, entity, seed) -> {
             BowAssembly assembly = stack.get(ModDataComponents.BOW_ASSEMBLY.get());
             if (assembly != null) {
                 return switch (assembly.stringMaterial().toLowerCase()) {

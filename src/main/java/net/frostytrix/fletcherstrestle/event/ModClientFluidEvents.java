@@ -4,7 +4,7 @@ import net.frostytrix.fletcherstrestle.FletcherTrestle;
 import net.frostytrix.fletcherstrestle.fluid.ModFluidTypes;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.alchemy.PotionContents;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -21,14 +21,14 @@ public class ModClientFluidEvents {
 
         // On enregistre nos extensions visuelles et on les lie à notre fluide (ModFluidTypes.LIQUID_POTION_TYPE)
         event.registerFluidType(new IClientFluidTypeExtensions() {
-            private static final ResourceLocation WATER_STILL = ResourceLocation.withDefaultNamespace("block/water_still");
-            private static final ResourceLocation WATER_FLOW = ResourceLocation.withDefaultNamespace("block/water_flow");
+            private static final Identifier WATER_STILL = Identifier.withDefaultNamespace("block/water_still");
+            private static final Identifier WATER_FLOW = Identifier.withDefaultNamespace("block/water_flow");
 
             @Override
-            public ResourceLocation getStillTexture() { return WATER_STILL; }
+            public Identifier getStillTexture() { return WATER_STILL; }
 
             @Override
-            public ResourceLocation getFlowingTexture() { return WATER_FLOW; }
+            public Identifier getFlowingTexture() { return WATER_FLOW; }
 
             // La magie de la couleur dynamique est ici
             @Override
@@ -36,7 +36,7 @@ public class ModClientFluidEvents {
                 net.minecraft.world.item.component.CustomData customData = stack.get(DataComponents.CUSTOM_DATA);
                 if (customData != null && customData.contains("potion")) {
                     String potionId = customData.copyTag().getString("potion");
-                    var potionHolder = BuiltInRegistries.POTION.getHolder(ResourceLocation.parse(potionId)).orElse(null);
+                    var potionHolder = BuiltInRegistries.POTION.getHolder(Identifier.parse(potionId)).orElse(null);
 
                     if (potionHolder != null) {
                         PotionContents contents = new PotionContents(potionHolder);

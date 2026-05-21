@@ -116,7 +116,7 @@ public class EagleEntity extends TamableAnimal {
     public static boolean checkEagleSpawnRules(
             EntityType<EagleEntity> type,
             net.minecraft.world.level.LevelAccessor level,
-            net.minecraft.world.entity.MobSpawnType reason,
+            net.minecraft.world.entity.EntitySpawnReason reason,
             BlockPos pos,
             net.minecraft.util.RandomSource random) {
         // Bottom layers / cave biomes are off-limits regardless of biome tag.
@@ -210,7 +210,7 @@ public class EagleEntity extends TamableAnimal {
                         this.level().broadcastEntityEvent(this, (byte) 6); // tame fail smoke
                     }
                 }
-                return InteractionResult.sidedSuccess(this.level().isClientSide);
+                return InteractionResult.SUCCESS;
             }
             return super.mobInteract(player, hand);
         }
@@ -235,7 +235,7 @@ public class EagleEntity extends TamableAnimal {
                             1.2f + this.random.nextFloat() * 0.4f);
                 }
             }
-            return InteractionResult.sidedSuccess(this.level().isClientSide);
+            return InteractionResult.SUCCESS;
         }
 
         return super.mobInteract(player, hand);
@@ -642,7 +642,7 @@ public class EagleEntity extends TamableAnimal {
     static class EagleFetchGoal extends Goal {
         private final EagleEntity eagle;
         @Nullable
-        private net.minecraft.world.entity.projectile.AbstractArrow targetArrow;
+        private net.minecraft.world.entity.projectile.arrow.AbstractArrow targetArrow;
         // Throttle counter for path recomputation. Re-pathing every tick
         // makes FlyingPathNavigation stutter and never converge on a target.
         private int repathCooldown = 0;
@@ -773,7 +773,7 @@ public class EagleEntity extends TamableAnimal {
 
                 // Decide whether to chain to another arrow or head home.
                 Player owner = (Player) eagle.getOwner();
-                net.minecraft.world.entity.projectile.AbstractArrow next =
+                net.minecraft.world.entity.projectile.arrow.AbstractArrow next =
                         (eagle.isFetchModeEnabled() && eagle.hasFetchSpace() && owner != null)
                                 ? findNearestArrow(eagle, owner)
                                 : null;
@@ -832,10 +832,10 @@ public class EagleEntity extends TamableAnimal {
             }
         }
 
-        private static net.minecraft.world.entity.projectile.AbstractArrow findNearestArrow(EagleEntity eagle, Player owner) {
+        private static net.minecraft.world.entity.projectile.arrow.AbstractArrow findNearestArrow(EagleEntity eagle, Player owner) {
             double range = 24.0;
             return eagle.level().getEntitiesOfClass(
-                    net.minecraft.world.entity.projectile.AbstractArrow.class,
+                    net.minecraft.world.entity.projectile.arrow.AbstractArrow.class,
                     owner.getBoundingBox().inflate(range),
                     arrow -> arrow.tickCount > 5
                             && arrow.inGround

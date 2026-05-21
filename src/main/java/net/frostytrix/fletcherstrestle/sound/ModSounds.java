@@ -2,7 +2,7 @@ package net.frostytrix.fletcherstrestle.sound;
 
 import net.frostytrix.fletcherstrestle.FletcherTrestle;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvent;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredHolder;
@@ -28,7 +28,7 @@ public final class ModSounds {
     public static final Supplier<SoundEvent> EAGLE_DIVE    = register("eagle.dive");
 
     private static DeferredHolder<SoundEvent, SoundEvent> register(String name) {
-        ResourceLocation id = ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, name);
+        Identifier id = Identifier.fromNamespaceAndPath(FletcherTrestle.MOD_ID, name);
         return SOUND_EVENTS.register(name, () -> SoundEvent.createVariableRangeEvent(id));
     }
 

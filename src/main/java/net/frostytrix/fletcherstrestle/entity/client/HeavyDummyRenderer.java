@@ -12,7 +12,7 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.layers.HumanoidArmorLayer;
 import net.minecraft.client.resources.DefaultPlayerSkin;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -20,10 +20,10 @@ import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
 public class HeavyDummyRenderer extends LivingEntityRenderer<HeavyDummyEntity, HeavyDummyModel<HeavyDummyEntity>> {
-    private static final ResourceLocation DEFAULT_TEXTURE =
-            ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "textures/entity/heavy_dummy.png");
+    private static final Identifier DEFAULT_TEXTURE =
+            Identifier.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "textures/entity/heavy_dummy.png");
 
-    private static final Map<UUID, ResourceLocation> SKIN_CACHE = new HashMap<>();
+    private static final Map<UUID, Identifier> SKIN_CACHE = new HashMap<>();
     private static final Map<UUID, Boolean> FETCHING = new HashMap<>();
 
     public HeavyDummyRenderer(EntityRendererProvider.Context context) {
@@ -35,7 +35,7 @@ public class HeavyDummyRenderer extends LivingEntityRenderer<HeavyDummyEntity, H
     }
 
     @Override
-    public ResourceLocation getTextureLocation(HeavyDummyEntity entity) {
+    public Identifier getTextureLocation(HeavyDummyEntity entity) {
         return entity.getSkinUUID()
                 .map(uuid -> {
                     if (SKIN_CACHE.containsKey(uuid)) {

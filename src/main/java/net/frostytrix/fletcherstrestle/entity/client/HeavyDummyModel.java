@@ -7,11 +7,11 @@ import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 public class HeavyDummyModel<T extends HeavyDummyEntity> extends HumanoidModel<T> {
 	public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(
-			ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "heavy_dummy"), "main");
+			Identifier.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "heavy_dummy"), "main");
 
 	// 1. We must define these fields manually since HumanoidModel doesn't have them
 	public final ModelPart jacket;

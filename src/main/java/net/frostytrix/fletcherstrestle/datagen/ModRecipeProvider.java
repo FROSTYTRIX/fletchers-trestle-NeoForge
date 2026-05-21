@@ -10,7 +10,7 @@ import net.frostytrix.fletcherstrestle.tags.ModTags;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.*;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -143,206 +143,206 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
 
         SteamingRecipeBuilder.steaming(Ingredient.of(ModItems.ROUGH_OAK_LIMB.get()), ModItems.PLIABLE_OAK_LIMB.get())
                 .unlockedBy("has_rough_oak_limb", has(ModItems.ROUGH_OAK_LIMB.get()))
-                .save(recipeOutput, ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "steaming_oak_limb"));
+                .save(recipeOutput, Identifier.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "steaming_oak_limb"));
 
         SteamingRecipeBuilder.steaming(Ingredient.of(ModItems.ROUGH_SPRUCE_LIMB.get()), ModItems.PLIABLE_SPRUCE_LIMB.get())
                 .unlockedBy("has_rough_spruce_limb", has(ModItems.ROUGH_SPRUCE_LIMB.get()))
-                .save(recipeOutput, ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "steaming_spruce_limb"));
+                .save(recipeOutput, Identifier.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "steaming_spruce_limb"));
 
         SteamingRecipeBuilder.steaming(Ingredient.of(ModItems.ROUGH_BIRCH_LIMB.get()), ModItems.PLIABLE_BIRCH_LIMB.get())
                 .unlockedBy("has_rough_birch_limb", has(ModItems.ROUGH_BIRCH_LIMB.get()))
-                .save(recipeOutput, ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "steaming_birch_limb"));
+                .save(recipeOutput, Identifier.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "steaming_birch_limb"));
 
         SteamingRecipeBuilder.steaming(Ingredient.of(ModItems.ROUGH_JUNGLE_LIMB.get()), ModItems.PLIABLE_JUNGLE_LIMB.get())
                 .unlockedBy("has_rough_jungle_limb", has(ModItems.ROUGH_JUNGLE_LIMB.get()))
-                .save(recipeOutput, ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "steaming_jungle_limb"));
+                .save(recipeOutput, Identifier.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "steaming_jungle_limb"));
 
         SteamingRecipeBuilder.steaming(Ingredient.of(ModItems.ROUGH_ACACIA_LIMB.get()), ModItems.PLIABLE_ACACIA_LIMB.get())
                 .unlockedBy("has_rough_acacia_limb", has(ModItems.ROUGH_ACACIA_LIMB.get()))
-                .save(recipeOutput, ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "steaming_acacia_limb"));
+                .save(recipeOutput, Identifier.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "steaming_acacia_limb"));
 
         SteamingRecipeBuilder.steaming(Ingredient.of(ModItems.ROUGH_DARK_OAK_LIMB.get()), ModItems.PLIABLE_DARK_OAK_LIMB.get())
                 .unlockedBy("has_rough_dark_oak_limb", has(ModItems.ROUGH_DARK_OAK_LIMB.get()))
-                .save(recipeOutput, ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "steaming_dark_oak_limb"));
+                .save(recipeOutput, Identifier.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "steaming_dark_oak_limb"));
 
         SteamingRecipeBuilder.steaming(Ingredient.of(ModItems.ROUGH_MANGROVE_LIMB.get()), ModItems.PLIABLE_MANGROVE_LIMB.get())
                 .unlockedBy("has_rough_mangrove_limb", has(ModItems.ROUGH_MANGROVE_LIMB.get()))
-                .save(recipeOutput, ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "steaming_mangrove_limb"));
+                .save(recipeOutput, Identifier.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "steaming_mangrove_limb"));
 
         SteamingRecipeBuilder.steaming(Ingredient.of(ModItems.ROUGH_CHERRY_LIMB.get()), ModItems.PLIABLE_CHERRY_LIMB.get())
                 .unlockedBy("has_rough_cherry_limb", has(ModItems.ROUGH_CHERRY_LIMB.get()))
-                .save(recipeOutput, ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "steaming_cherry_limb"));
+                .save(recipeOutput, Identifier.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "steaming_cherry_limb"));
 
         SteamingRecipeBuilder.steaming(Ingredient.of(ModItems.ROUGH_CRIMSON_LIMB.get()), ModItems.PLIABLE_CRIMSON_LIMB.get())
                 .unlockedBy("has_rough_crimson_limb", has(ModItems.ROUGH_CRIMSON_LIMB.get()))
-                .save(recipeOutput, ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "steaming_crimson_limb"));
+                .save(recipeOutput, Identifier.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "steaming_crimson_limb"));
 
         SteamingRecipeBuilder.steaming(Ingredient.of(ModItems.ROUGH_WARPED_LIMB.get()), ModItems.PLIABLE_WARPED_LIMB.get())
                 .unlockedBy("has_rough_warped_limb", has(ModItems.ROUGH_WARPED_LIMB.get()))
-                .save(recipeOutput, ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "steaming_warped_limb"));
+                .save(recipeOutput, Identifier.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "steaming_warped_limb"));
         //test craft
         SteamingRecipeBuilder.steaming(Ingredient.of(Items.POTATO), Items.BAKED_POTATO)
                 .unlockedBy("has_potato", has(Items.POTATO))
-                .save(recipeOutput, ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "test_potato"));
+                .save(recipeOutput, Identifier.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "test_potato"));
 
         ShavingRecipeBuilder.shaving(Ingredient.of(Items.STICK), ModItems.ROUGH_OAK_LIMB.get())
                 .shavesRequired(1)
                 .unlockedBy("has_stick_stem", has(Items.STICK))
-                .save(recipeOutput, ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "shaving_stick_stem"));
+                .save(recipeOutput, Identifier.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "shaving_stick_stem"));
 
         // Shaving Horse
 
         // Oak
         ShavingRecipeBuilder.shaving(Ingredient.of(Items.OAK_LOG), ModItems.ROUGH_OAK_LIMB.get())
                 .unlockedBy("has_oak_log", has(Items.OAK_LOG))
-                .save(recipeOutput, ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "shaving_oak_log"));
+                .save(recipeOutput, Identifier.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "shaving_oak_log"));
         ShavingRecipeBuilder.shaving(Ingredient.of(Items.OAK_WOOD), ModItems.ROUGH_OAK_LIMB.get())
                 .unlockedBy("has_oak_log", has(Items.OAK_LOG))
-                .save(recipeOutput, ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "shaving_oak_wood"));
+                .save(recipeOutput, Identifier.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "shaving_oak_wood"));
         ShavingRecipeBuilder.shaving(Ingredient.of(Items.STRIPPED_OAK_LOG), ModItems.ROUGH_OAK_LIMB.get())
                 .unlockedBy("has_oak_log", has(Items.OAK_LOG))
-                .save(recipeOutput, ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "shaving_stripped_oak_log"));
+                .save(recipeOutput, Identifier.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "shaving_stripped_oak_log"));
         ShavingRecipeBuilder.shaving(Ingredient.of(Items.STRIPPED_OAK_WOOD), ModItems.ROUGH_OAK_LIMB.get())
                 .unlockedBy("has_oak_log", has(Items.OAK_LOG))
-                .save(recipeOutput, ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "shaving_strippe_oak_wood"));
+                .save(recipeOutput, Identifier.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "shaving_strippe_oak_wood"));
 
         // Spruce
         ShavingRecipeBuilder.shaving(Ingredient.of(Items.SPRUCE_LOG), ModItems.ROUGH_SPRUCE_LIMB.get())
                 .unlockedBy("has_spruce_log", has(Items.SPRUCE_LOG))
-                .save(recipeOutput, ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "shaving_spruce_log"));
+                .save(recipeOutput, Identifier.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "shaving_spruce_log"));
         ShavingRecipeBuilder.shaving(Ingredient.of(Items.SPRUCE_WOOD), ModItems.ROUGH_SPRUCE_LIMB.get())
                 .unlockedBy("has_spruce_log", has(Items.SPRUCE_LOG))
-                .save(recipeOutput, ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "shaving_spruce_wood"));
+                .save(recipeOutput, Identifier.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "shaving_spruce_wood"));
         ShavingRecipeBuilder.shaving(Ingredient.of(Items.STRIPPED_SPRUCE_LOG), ModItems.ROUGH_SPRUCE_LIMB.get())
                 .unlockedBy("has_spruce_log", has(Items.SPRUCE_LOG))
-                .save(recipeOutput, ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "shaving_stripped_spruce_log"));
+                .save(recipeOutput, Identifier.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "shaving_stripped_spruce_log"));
         ShavingRecipeBuilder.shaving(Ingredient.of(Items.STRIPPED_SPRUCE_WOOD), ModItems.ROUGH_SPRUCE_LIMB.get())
                 .unlockedBy("has_spruce_log", has(Items.SPRUCE_LOG))
-                .save(recipeOutput, ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "shaving_stripped_spruce_wood"));
+                .save(recipeOutput, Identifier.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "shaving_stripped_spruce_wood"));
 
         // Birch
         ShavingRecipeBuilder.shaving(Ingredient.of(Items.BIRCH_LOG), ModItems.ROUGH_BIRCH_LIMB.get())
                 .unlockedBy("has_birch_log", has(Items.BIRCH_LOG))
-                .save(recipeOutput, ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "shaving_birch_log"));
+                .save(recipeOutput, Identifier.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "shaving_birch_log"));
 ShavingRecipeBuilder.shaving(Ingredient.of(Items.BIRCH_WOOD), ModItems.ROUGH_BIRCH_LIMB.get())
                 .unlockedBy("has_birch_log", has(Items.BIRCH_LOG))
-                .save(recipeOutput, ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "shaving_birch_wood"));
+                .save(recipeOutput, Identifier.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "shaving_birch_wood"));
 ShavingRecipeBuilder.shaving(Ingredient.of(Items.STRIPPED_BIRCH_LOG), ModItems.ROUGH_BIRCH_LIMB.get())
                 .unlockedBy("has_birch_log", has(Items.BIRCH_LOG))
-                .save(recipeOutput, ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "shaving_stripped_birch_log"));
+                .save(recipeOutput, Identifier.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "shaving_stripped_birch_log"));
 ShavingRecipeBuilder.shaving(Ingredient.of(Items.STRIPPED_BIRCH_WOOD), ModItems.ROUGH_BIRCH_LIMB.get())
                 .unlockedBy("has_birch_log", has(Items.BIRCH_LOG))
-                .save(recipeOutput, ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "shaving_stripped_birch_wood"));
+                .save(recipeOutput, Identifier.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "shaving_stripped_birch_wood"));
 
         // Jungle
         ShavingRecipeBuilder.shaving(Ingredient.of(Items.JUNGLE_LOG), ModItems.ROUGH_JUNGLE_LIMB.get())
                 .unlockedBy("has_jungle_log", has(Items.JUNGLE_LOG))
-                .save(recipeOutput, ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "shaving_jungle_log"));
+                .save(recipeOutput, Identifier.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "shaving_jungle_log"));
 ShavingRecipeBuilder.shaving(Ingredient.of(Items.JUNGLE_WOOD), ModItems.ROUGH_JUNGLE_LIMB.get())
                 .unlockedBy("has_jungle_log", has(Items.JUNGLE_LOG))
-                .save(recipeOutput, ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "shaving_jungle_wood"));
+                .save(recipeOutput, Identifier.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "shaving_jungle_wood"));
 ShavingRecipeBuilder.shaving(Ingredient.of(Items.STRIPPED_JUNGLE_LOG), ModItems.ROUGH_JUNGLE_LIMB.get())
                 .unlockedBy("has_jungle_log", has(Items.JUNGLE_LOG))
-                .save(recipeOutput, ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "shaving_stripped_jungle_log"));
+                .save(recipeOutput, Identifier.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "shaving_stripped_jungle_log"));
 ShavingRecipeBuilder.shaving(Ingredient.of(Items.STRIPPED_JUNGLE_WOOD), ModItems.ROUGH_JUNGLE_LIMB.get())
                 .unlockedBy("has_jungle_log", has(Items.JUNGLE_LOG))
-                .save(recipeOutput, ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "shaving_stripped_jungle_wood"));
+                .save(recipeOutput, Identifier.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "shaving_stripped_jungle_wood"));
 
         // Acacia
         ShavingRecipeBuilder.shaving(Ingredient.of(Items.ACACIA_LOG), ModItems.ROUGH_ACACIA_LIMB.get())
                 .unlockedBy("has_acacia_log", has(Items.ACACIA_LOG))
-                .save(recipeOutput, ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "shaving_acacia_log"));
+                .save(recipeOutput, Identifier.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "shaving_acacia_log"));
 ShavingRecipeBuilder.shaving(Ingredient.of(Items.ACACIA_WOOD), ModItems.ROUGH_ACACIA_LIMB.get())
                 .unlockedBy("has_acacia_log", has(Items.ACACIA_LOG))
-                .save(recipeOutput, ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "shaving_acacia_wood"));
+                .save(recipeOutput, Identifier.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "shaving_acacia_wood"));
 ShavingRecipeBuilder.shaving(Ingredient.of(Items.STRIPPED_ACACIA_LOG), ModItems.ROUGH_ACACIA_LIMB.get())
                 .unlockedBy("has_acacia_log", has(Items.ACACIA_LOG))
-                .save(recipeOutput, ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "shaving_stripped_acacia_log"));
+                .save(recipeOutput, Identifier.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "shaving_stripped_acacia_log"));
 ShavingRecipeBuilder.shaving(Ingredient.of(Items.STRIPPED_ACACIA_WOOD), ModItems.ROUGH_ACACIA_LIMB.get())
                 .unlockedBy("has_acacia_log", has(Items.ACACIA_LOG))
-                .save(recipeOutput, ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "shaving_stripped_acacia_wood"));
+                .save(recipeOutput, Identifier.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "shaving_stripped_acacia_wood"));
 
         // Dark Oak
         ShavingRecipeBuilder.shaving(Ingredient.of(Items.DARK_OAK_LOG), ModItems.ROUGH_DARK_OAK_LIMB.get())
                 .shavesRequired(5)
                 .unlockedBy("has_dark_oak_log", has(Items.DARK_OAK_LOG))
-                .save(recipeOutput, ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "shaving_dark_oak_log"));
+                .save(recipeOutput, Identifier.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "shaving_dark_oak_log"));
 ShavingRecipeBuilder.shaving(Ingredient.of(Items.DARK_OAK_WOOD), ModItems.ROUGH_DARK_OAK_LIMB.get())
                 .shavesRequired(5)
                 .unlockedBy("has_dark_oak_log", has(Items.DARK_OAK_LOG))
-                .save(recipeOutput, ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "shaving_dark_oak_wood"));
+                .save(recipeOutput, Identifier.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "shaving_dark_oak_wood"));
 ShavingRecipeBuilder.shaving(Ingredient.of(Items.STRIPPED_DARK_OAK_LOG), ModItems.ROUGH_DARK_OAK_LIMB.get())
                 .shavesRequired(5)
                 .unlockedBy("has_dark_oak_log", has(Items.DARK_OAK_LOG))
-                .save(recipeOutput, ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "shaving_stripped_dark_oak_log"));
+                .save(recipeOutput, Identifier.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "shaving_stripped_dark_oak_log"));
 ShavingRecipeBuilder.shaving(Ingredient.of(Items.STRIPPED_DARK_OAK_WOOD), ModItems.ROUGH_DARK_OAK_LIMB.get())
                 .shavesRequired(5)
                 .unlockedBy("has_dark_oak_log", has(Items.DARK_OAK_LOG))
-                .save(recipeOutput, ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "shaving_stripped_dark_oak_wood"));
+                .save(recipeOutput, Identifier.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "shaving_stripped_dark_oak_wood"));
 
         // Mangrove
         ShavingRecipeBuilder.shaving(Ingredient.of(Items.MANGROVE_LOG), ModItems.ROUGH_MANGROVE_LIMB.get())
                 .unlockedBy("has_mangrove_log", has(Items.MANGROVE_LOG))
-                .save(recipeOutput, ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "shaving_mangrove_log"));
+                .save(recipeOutput, Identifier.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "shaving_mangrove_log"));
 ShavingRecipeBuilder.shaving(Ingredient.of(Items.MANGROVE_LOG), ModItems.ROUGH_MANGROVE_LIMB.get())
                 .unlockedBy("has_mangrove_log", has(Items.MANGROVE_WOOD))
-                .save(recipeOutput, ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "shaving_mangrove_wood"));
+                .save(recipeOutput, Identifier.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "shaving_mangrove_wood"));
 ShavingRecipeBuilder.shaving(Ingredient.of(Items.MANGROVE_LOG), ModItems.ROUGH_MANGROVE_LIMB.get())
                 .unlockedBy("has_mangrove_log", has(Items.STRIPPED_MANGROVE_LOG))
-                .save(recipeOutput, ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "shaving_stripped_mangrove_log"));
+                .save(recipeOutput, Identifier.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "shaving_stripped_mangrove_log"));
 ShavingRecipeBuilder.shaving(Ingredient.of(Items.STRIPPED_MANGROVE_WOOD), ModItems.ROUGH_MANGROVE_LIMB.get())
                 .unlockedBy("has_mangrove_log", has(Items.MANGROVE_LOG))
-                .save(recipeOutput, ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "shaving_stripped_mangrove_wood"));
+                .save(recipeOutput, Identifier.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "shaving_stripped_mangrove_wood"));
 
         // Cherry
         ShavingRecipeBuilder.shaving(Ingredient.of(Items.CHERRY_LOG), ModItems.ROUGH_CHERRY_LIMB.get())
                 .unlockedBy("has_cherry_log", has(Items.CHERRY_LOG))
-                .save(recipeOutput, ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "shaving_cherry_log"));
+                .save(recipeOutput, Identifier.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "shaving_cherry_log"));
 ShavingRecipeBuilder.shaving(Ingredient.of(Items.CHERRY_WOOD), ModItems.ROUGH_CHERRY_LIMB.get())
                 .unlockedBy("has_cherry_log", has(Items.CHERRY_LOG))
-                .save(recipeOutput, ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "shaving_cherry_wood"));
+                .save(recipeOutput, Identifier.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "shaving_cherry_wood"));
 ShavingRecipeBuilder.shaving(Ingredient.of(Items.STRIPPED_CHERRY_LOG), ModItems.ROUGH_CHERRY_LIMB.get())
                 .unlockedBy("has_cherry_log", has(Items.CHERRY_LOG))
-                .save(recipeOutput, ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "shaving_stripped_cherry_log"));
+                .save(recipeOutput, Identifier.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "shaving_stripped_cherry_log"));
 ShavingRecipeBuilder.shaving(Ingredient.of(Items.STRIPPED_CHERRY_WOOD), ModItems.ROUGH_CHERRY_LIMB.get())
                 .unlockedBy("has_cherry_log", has(Items.CHERRY_LOG))
-                .save(recipeOutput, ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "shaving_stripped_cherry_wood"));
+                .save(recipeOutput, Identifier.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "shaving_stripped_cherry_wood"));
 
         // Crimson (Nether wood uses STEM instead of LOG)
         ShavingRecipeBuilder.shaving(Ingredient.of(Items.CRIMSON_STEM), ModItems.ROUGH_CRIMSON_LIMB.get())
                 .shavesRequired(4)
                 .unlockedBy("has_crimson_stem", has(Items.CRIMSON_STEM))
-                .save(recipeOutput, ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "shaving_crimson_stem"));
+                .save(recipeOutput, Identifier.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "shaving_crimson_stem"));
 ShavingRecipeBuilder.shaving(Ingredient.of(Items.CRIMSON_HYPHAE), ModItems.ROUGH_CRIMSON_LIMB.get())
                 .shavesRequired(4)
                 .unlockedBy("has_crimson_stem", has(Items.CRIMSON_STEM))
-                .save(recipeOutput, ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "shaving_crimson_hyphae"));
+                .save(recipeOutput, Identifier.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "shaving_crimson_hyphae"));
 ShavingRecipeBuilder.shaving(Ingredient.of(Items.CRIMSON_STEM), ModItems.ROUGH_CRIMSON_LIMB.get())
                 .shavesRequired(4)
                 .unlockedBy("has_crimson_stem", has(Items.STRIPPED_CRIMSON_STEM))
-                .save(recipeOutput, ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "shaving_stripped_crimson_stem"));
+                .save(recipeOutput, Identifier.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "shaving_stripped_crimson_stem"));
 ShavingRecipeBuilder.shaving(Ingredient.of(Items.CRIMSON_STEM), ModItems.ROUGH_CRIMSON_LIMB.get())
                 .shavesRequired(4)
                 .unlockedBy("has_crimson_stem", has(Items.STRIPPED_CRIMSON_HYPHAE))
-                .save(recipeOutput, ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "shaving_stripped_crimson_hyphae"));
+                .save(recipeOutput, Identifier.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "shaving_stripped_crimson_hyphae"));
 
         // Warped (Nether wood uses STEM instead of LOG)
         ShavingRecipeBuilder.shaving(Ingredient.of(Items.WARPED_STEM), ModItems.ROUGH_WARPED_LIMB.get())
                 .shavesRequired(4)
                 .unlockedBy("has_warped_stem", has(Items.WARPED_STEM))
-                .save(recipeOutput, ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "shaving_warped_stem"));
+                .save(recipeOutput, Identifier.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "shaving_warped_stem"));
 ShavingRecipeBuilder.shaving(Ingredient.of(Items.WARPED_HYPHAE), ModItems.ROUGH_WARPED_LIMB.get())
                 .shavesRequired(4)
                 .unlockedBy("has_warped_stem", has(Items.WARPED_STEM))
-                .save(recipeOutput, ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "shaving_warped_hyphae"));
+                .save(recipeOutput, Identifier.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "shaving_warped_hyphae"));
 ShavingRecipeBuilder.shaving(Ingredient.of(Items.STRIPPED_WARPED_STEM), ModItems.ROUGH_WARPED_LIMB.get())
                 .shavesRequired(4)
                 .unlockedBy("has_warped_stem", has(Items.WARPED_STEM))
-                .save(recipeOutput, ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "shaving_stripped_warped_stem"));
+                .save(recipeOutput, Identifier.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "shaving_stripped_warped_stem"));
 ShavingRecipeBuilder.shaving(Ingredient.of(Items.STRIPPED_WARPED_HYPHAE), ModItems.ROUGH_WARPED_LIMB.get())
                 .shavesRequired(4)
                 .unlockedBy("has_warped_stem", has(Items.WARPED_STEM))
-                .save(recipeOutput, ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "shaving_stripped_warped_hyphae"));
+                .save(recipeOutput, Identifier.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "shaving_stripped_warped_hyphae"));
 
         ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, ModItems.WEIGHTED_HOOK.get())
                 .pattern("III")
@@ -362,7 +362,7 @@ ShavingRecipeBuilder.shaving(Ingredient.of(Items.STRIPPED_WARPED_HYPHAE), ModIte
                 .inputCount(16)
                 .fluidAmount(1000)
                 .unlockedBy("has_arrow", has(Items.ARROW))
-                .save(recipeOutput, ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "arrow_dipping"));
+                .save(recipeOutput, Identifier.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "arrow_dipping"));
 
         // Modular potion-arrow dipping. DippingRecipe.matches() restricts
         // the modular_arrow input to those with a glass_vial head, so this
@@ -371,7 +371,7 @@ ShavingRecipeBuilder.shaving(Ingredient.of(Items.STRIPPED_WARPED_HYPHAE), ModIte
                 .inputCount(1)
                 .fluidAmount(250)
                 .unlockedBy("has_modular_arrow", has(ModItems.MODULAR_ARROW.get()))
-                .save(recipeOutput, ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "modular_potion_arrow_dipping"));
+                .save(recipeOutput, Identifier.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "modular_potion_arrow_dipping"));
 
         ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, ModBlocks.DIPPING_VAT.get())
                 .requires(Items.BUCKET).requires(Blocks.CAULDRON)

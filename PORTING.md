@@ -47,23 +47,58 @@ packages. A first `./gradlew compileJava` run against the real
 
 ### Practical workflow
 
-This isn't a quick port — realistically 2–4 sessions of incremental work.
-Suggested order to minimise context-switching:
+Multi-session port. Status:
 
-1. **Phase 1 — Mechanical import renames**: AbstractArrow, VillagerTrades,
-   GuiGraphics, Util, ResourceLocation. ~30 minutes once we know all the
-   new paths. Mostly `Edit` + `Bash` rename loops.
-2. **Phase 2 — Screen API**: rename `render` → `extractRenderState` etc.
-   in the three `AbstractContainerScreen` subclasses. Verify signatures.
-3. **Phase 3 — Recipes**: convert any `ItemStack` fields in recipe
-   classes to `ItemStackTemplate` where required by the new codec.
-4. **Phase 4 — Capabilities / deprecated APIs**: migrate FluidTank,
-   ItemStackHandler etc. to their non-deprecated replacements.
-5. **Phase 5 — Runtime test**: `./gradlew runClient`, fix anything that
-   compiles but crashes at runtime.
+#### ✅ Phase 1 — Mechanical renames (done)
+Applied via sed across 60 files. Compile dropped 100 → 200 errors (the
+first crash masked many more).
 
-Want to tackle this incrementally? Just say "let's do phase 1" in a
-fresh session and I'll work through the imports systematically.
+| Old | New |
+|---|---|
+| `world.entity.projectile.AbstractArrow` | `.projectile.arrow.AbstractArrow` |
+| `world.entity.npc.VillagerTrades` | `world.item.trading.VillagerTrades` |
+| `world.entity.animal.horse.AbstractHorse` | `.animal.equine.AbstractHorse` |
+| `client.gui.GuiGraphics` | `client.gui.GuiGraphicsExtractor` |
+| `resources.ResourceLocation` | `resources.Identifier` |
+| `world.entity.MobSpawnType` | `world.entity.EntitySpawnReason` |
+| `world.InteractionResultHolder<ItemStack>` | `world.InteractionResult` (drop generic) |
+
+`InteractionResultHolder.fail(stack)` / `.consume(stack)` / `.sidedSuccess(...)`
+all replaced by the enum-style constants `InteractionResult.FAIL` / `.CONSUME` /
+`.SUCCESS`. `Item.use(...)` return type changed from `InteractionResultHolder<ItemStack>`
+to `InteractionResult`.
+
+#### 🔴 Phase 2 — Rewritten subsystems (next session)
+These classes are *removed*, not renamed. Each needs reimplementation:
+
+- **Item-model overlay system** (`ItemProperties`, `BakedModel`, `BakedQuad`,
+  `ItemOverrides`, `ItemLayerModel`, `IUnbakedGeometry`, `IGeometryLoader`,
+  `IGeometryBakingContext`, `ConfiguredModel`, `ItemTransforms`, `Material`,
+  `ModelState`, `RegisterGeometryLoaders`) — the bow/crossbow pull predicates
+  and the modular arrow's custom baked model need rewriting against the new
+  item-model API. **This is the biggest chunk of work.**
+- **Datagen** (`ItemTagsProvider`, `BlockStateProvider`, `ItemModelProvider`,
+  `ExistingFileHelper`, `IConditionBuilder`, `ConfiguredModel`) — every
+  `datagen/*Provider.java` will need updates.
+- **Villager system** (`VillagerProfession`, `VillagerTradesEvent`,
+  `VillagerTrades.ItemListing`) — `RandomModularArrowTrade` +
+  `ModVillagerTradesEvent` need rewrites.
+- **`ItemInteractionResult`** folded into `InteractionResult.ItemContext`.
+- **`ArmorItem`**, **`ItemNameBlockItem`** — folded into `Item` + data
+  components. Affects a few datagen references only.
+- **`net.minecraft.Util`** — moved to `net.minecraft.util.Util`. Trivial fix.
+
+#### 🟡 Phase 3 — API-shape tweaks
+- `Screen#render` → `Screen#extractRenderState`, `Screen#renderBackground`
+  → `Screen#extractBackground`
+- Recipe `ItemStack` → `ItemStackTemplate` where built at registry-load
+- Deprecated capability migrations (`FluidTank`, `ItemStackHandler`, `FluidUtil`)
+
+#### 🟢 Phase 4 — Runtime
+`./gradlew runClient`, fix what crashes at runtime.
+
+### Next-session prompt
+> "Let's continue the 26.1 port — start phase 2 with the BakedModel system rewrite"
 
 ### 2. `Screen` method renames
 

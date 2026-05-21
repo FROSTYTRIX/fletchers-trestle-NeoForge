@@ -13,15 +13,15 @@ import net.frostytrix.fletcherstrestle.component.BowAssembly;
 import net.frostytrix.fletcherstrestle.component.ModDataComponents;
 import net.frostytrix.fletcherstrestle.recipe.ModularWeaponRecipe;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Blocks;
 
 import java.util.List;
 
 public class FletchingRecipeCategory implements IRecipeCategory<ModularWeaponRecipe> {
-    public static final ResourceLocation UID = ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "modular_weapon_assembly");
-    public static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "textures/gui/fletching_table.png");
+    public static final Identifier UID = Identifier.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "modular_weapon_assembly");
+    public static final Identifier TEXTURE = Identifier.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "textures/gui/fletching_table.png");
 
     // This creates the "Type" identifier JEI uses internally
     public static final RecipeType<ModularWeaponRecipe> FLETCHING_TYPE = new RecipeType<>(UID, ModularWeaponRecipe.class);

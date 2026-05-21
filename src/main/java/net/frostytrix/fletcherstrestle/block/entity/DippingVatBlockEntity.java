@@ -101,14 +101,14 @@ public class DippingVatBlockEntity extends BlockEntity {
                         net.minecraft.world.item.component.CustomData customData = currentFluid.get(DataComponents.CUSTOM_DATA);
                         if (customData != null && customData.contains("potion")) {
                             String potionId = customData.copyTag().getString("potion");
-                            var potionHolder = net.minecraft.core.registries.BuiltInRegistries.POTION.getHolder(net.minecraft.resources.ResourceLocation.parse(potionId)).orElse(null);
+                            var potionHolder = net.minecraft.core.registries.BuiltInRegistries.POTION.getHolder(net.minecraft.resources.Identifier.parse(potionId)).orElse(null);
                             if (potionHolder != null) {
                                 filledBottle.set(DataComponents.POTION_CONTENTS, new net.minecraft.world.item.alchemy.PotionContents(potionHolder));
                             }
                         }
                     } else {
                         // Cas où le joueur a mis de l'eau pure via un tuyau ou un seau
-                        var waterHolder = net.minecraft.core.registries.BuiltInRegistries.POTION.getHolder(net.minecraft.resources.ResourceLocation.parse("minecraft:water")).orElse(null);
+                        var waterHolder = net.minecraft.core.registries.BuiltInRegistries.POTION.getHolder(net.minecraft.resources.Identifier.parse("minecraft:water")).orElse(null);
                         if (waterHolder != null) {
                             filledBottle.set(DataComponents.POTION_CONTENTS, new net.minecraft.world.item.alchemy.PotionContents(waterHolder));
                         }

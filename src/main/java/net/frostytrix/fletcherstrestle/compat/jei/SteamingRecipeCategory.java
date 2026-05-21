@@ -13,15 +13,15 @@ import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.frostytrix.fletcherstrestle.FletcherTrestle;
 import net.frostytrix.fletcherstrestle.block.ModBlocks;
 import net.frostytrix.fletcherstrestle.recipe.SteamingRecipe;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.material.Fluids;
 
 public class SteamingRecipeCategory implements IRecipeCategory<SteamingRecipe> {
-    public static final ResourceLocation UID = ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "steaming");
+    public static final Identifier UID = Identifier.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "steaming");
     public static final RecipeType<SteamingRecipe> STEAMING_TYPE = new RecipeType<>(UID, SteamingRecipe.class);
 
     private final IDrawable background;
@@ -33,7 +33,7 @@ public class SteamingRecipeCategory implements IRecipeCategory<SteamingRecipe> {
         this.background = helper.createBlankDrawable(110, 60);
         this.icon = helper.createDrawableIngredient(VanillaTypes.ITEM_STACK, new ItemStack(ModBlocks.STEAM_BOX.get()));
 
-        IDrawableStatic staticArrow = helper.createDrawable(ResourceLocation.withDefaultNamespace("textures/gui/container/furnace.png"), 79, 34, 24, 17);
+        IDrawableStatic staticArrow = helper.createDrawable(Identifier.withDefaultNamespace("textures/gui/container/furnace.png"), 79, 34, 24, 17);
         this.arrow = helper.createAnimatedDrawable(staticArrow, 200, IDrawableAnimated.StartDirection.LEFT, false);
     }
 
@@ -43,7 +43,7 @@ public class SteamingRecipeCategory implements IRecipeCategory<SteamingRecipe> {
     @Override public IDrawable getIcon() { return this.icon; }
 
     @Override
-    public void draw(SteamingRecipe recipe, mezz.jei.api.gui.ingredient.IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics, double mouseX, double mouseY) {
+    public void draw(SteamingRecipe recipe, mezz.jei.api.gui.ingredient.IRecipeSlotsView recipeSlotsView, GuiGraphicsExtractor guiGraphics, double mouseX, double mouseY) {
         // Shifted the arrow down to Y: 22
         this.arrow.draw(guiGraphics, 45, 22);
     }

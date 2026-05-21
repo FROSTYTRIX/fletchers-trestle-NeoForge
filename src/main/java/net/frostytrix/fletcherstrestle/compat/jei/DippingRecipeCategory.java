@@ -19,12 +19,12 @@ import net.frostytrix.fletcherstrestle.fluid.ModFluids;
 import net.frostytrix.fletcherstrestle.item.ModItems;
 import net.frostytrix.fletcherstrestle.recipe.DippingRecipe;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.PotionContents;
@@ -36,7 +36,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DippingRecipeCategory implements IRecipeCategory<DippingRecipe> {
-    public static final ResourceLocation UID = ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "dipping");
+    public static final Identifier UID = Identifier.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "dipping");
     public static final RecipeType<DippingRecipe> DIPPING_TYPE = new RecipeType<>(UID, DippingRecipe.class);
 
     private final IDrawable background;
@@ -47,7 +47,7 @@ public class DippingRecipeCategory implements IRecipeCategory<DippingRecipe> {
         this.background = helper.createBlankDrawable(135, 60);
         this.icon = helper.createDrawableIngredient(VanillaTypes.ITEM_STACK, new ItemStack(ModBlocks.DIPPING_VAT.get()));
 
-        IDrawableStatic staticArrow = helper.createDrawable(ResourceLocation.withDefaultNamespace("textures/gui/container/furnace.png"), 79, 34, 24, 17);
+        IDrawableStatic staticArrow = helper.createDrawable(Identifier.withDefaultNamespace("textures/gui/container/furnace.png"), 79, 34, 24, 17);
         this.arrow = helper.createAnimatedDrawable(staticArrow, 200, IDrawableAnimated.StartDirection.LEFT, false);
     }
 
@@ -57,7 +57,7 @@ public class DippingRecipeCategory implements IRecipeCategory<DippingRecipe> {
     @Override public IDrawable getIcon() { return this.icon; }
 
     @Override
-    public void draw(DippingRecipe recipe, mezz.jei.api.gui.ingredient.IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics, double mouseX, double mouseY) {
+    public void draw(DippingRecipe recipe, mezz.jei.api.gui.ingredient.IRecipeSlotsView recipeSlotsView, GuiGraphicsExtractor guiGraphics, double mouseX, double mouseY) {
         this.arrow.draw(guiGraphics, 69, 22);
     }
 
@@ -109,7 +109,7 @@ public class DippingRecipeCategory implements IRecipeCategory<DippingRecipe> {
                         net.minecraft.world.item.component.CustomData data = fluidStack.get(DataComponents.CUSTOM_DATA);
                         if (data != null && data.contains("potion")) {
                             String potionId = data.copyTag().getString("potion");
-                            var potionHolder = BuiltInRegistries.POTION.getHolder(ResourceLocation.parse(potionId)).orElse(null);
+                            var potionHolder = BuiltInRegistries.POTION.getHolder(Identifier.parse(potionId)).orElse(null);
 
                             if (potionHolder != null) {
                                 tooltip.clear(); // On vire le texte par défaut "Water"
@@ -140,7 +140,7 @@ public class DippingRecipeCategory implements IRecipeCategory<DippingRecipe> {
                     new ArrowAssembly("glass_vial", "oak", "feather"));
             if (fluidPotionId != null) {
                 BuiltInRegistries.POTION
-                        .getHolder(ResourceLocation.parse(fluidPotionId))
+                        .getHolder(Identifier.parse(fluidPotionId))
                         .ifPresent(holder ->
                                 outputDisplay.set(DataComponents.POTION_CONTENTS,
                                         new PotionContents(holder)));

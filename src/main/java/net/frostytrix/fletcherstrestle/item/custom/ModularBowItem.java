@@ -9,12 +9,12 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.projectile.AbstractArrow;
+import net.minecraft.world.entity.projectile.arrow.AbstractArrow;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.BowItem;
 import net.minecraft.world.item.ItemStack;
@@ -271,7 +271,7 @@ public class ModularBowItem extends BowItem {
     }
 
     @Override
-    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+    public InteractionResult use(Level level, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
 
         // 1. Check if the player has a normal arrow in their open inventory
@@ -295,11 +295,11 @@ public class ModularBowItem extends BowItem {
 
         // 3. If they are in Survival and have NO ammo anywhere, block the shot.
         if (!player.getAbilities().instabuild && !hasNormalArrow && !hasQuiverArrow) {
-            return InteractionResultHolder.fail(stack);
+            return InteractionResult.FAIL;
         } else {
             // Otherwise, allow them to start pulling the bow!
             player.startUsingItem(hand);
-            return InteractionResultHolder.consume(stack);
+            return InteractionResult.CONSUME;
         }
     }
 

@@ -15,7 +15,7 @@ import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.projectile.AbstractArrow;
+import net.minecraft.world.entity.projectile.arrow.AbstractArrow;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -121,7 +121,7 @@ public class HeavyDummyEntity extends LivingEntity {
             }
 
             this.level().playSound(null, this.blockPosition(), SoundEvents.ARMOR_EQUIP_GENERIC.value(), SoundSource.PLAYERS, 1.0F, 1.0F);
-            return InteractionResult.sidedSuccess(this.level().isClientSide);
+            return InteractionResult.SUCCESS;
         }
 
         // 2. Unequip Armor (Shift-Right-Click with empty hand)
@@ -133,7 +133,7 @@ public class HeavyDummyEntity extends LivingEntity {
                     player.getInventory().placeItemBackInInventory(stack.copy());
                     this.armorItems.set(i, ItemStack.EMPTY);
                     this.level().playSound(null, this.blockPosition(), SoundEvents.ITEM_PICKUP, SoundSource.PLAYERS, 1.0F, 1.0F);
-                    return InteractionResult.sidedSuccess(this.level().isClientSide);
+                    return InteractionResult.SUCCESS;
                 }
             }
         }
@@ -201,7 +201,7 @@ public class HeavyDummyEntity extends LivingEntity {
 
             if (projectile instanceof AbstractArrow arrow) {
                 // Check if the arrow is a standard "pickable" arrow (not from Creative mode)
-                if (arrow.pickup == net.minecraft.world.entity.projectile.AbstractArrow.Pickup.ALLOWED) {
+                if (arrow.pickup == net.minecraft.world.entity.projectile.arrow.AbstractArrow.Pickup.ALLOWED) {
                     // Drop the arrow item at the dummy's location
                     this.spawnAtLocation(arrow.getPickResult());
                 }

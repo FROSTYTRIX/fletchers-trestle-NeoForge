@@ -14,13 +14,13 @@ import net.frostytrix.fletcherstrestle.block.ModBlocks;
 import net.frostytrix.fletcherstrestle.item.ModItems;
 import net.frostytrix.fletcherstrestle.recipe.ShavingHorseRecipe;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 
 public class ShavingRecipeCategory implements IRecipeCategory<ShavingHorseRecipe> {
-    public static final ResourceLocation UID = ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "shaving");
+    public static final Identifier UID = Identifier.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "shaving");
     public static final RecipeType<ShavingHorseRecipe> SHAVING_TYPE = new RecipeType<>(UID, ShavingHorseRecipe.class);
 
     private final IDrawable background;
@@ -30,7 +30,7 @@ public class ShavingRecipeCategory implements IRecipeCategory<ShavingHorseRecipe
     public ShavingRecipeCategory(IGuiHelper helper) {
         this.background = helper.createBlankDrawable(110, 40);
         this.icon = helper.createDrawableIngredient(VanillaTypes.ITEM_STACK, new ItemStack(ModBlocks.SHAVING_HORSE.get()));
-        this.arrow = helper.createDrawable(ResourceLocation.withDefaultNamespace("textures/gui/container/furnace.png"), 79, 34, 24, 17);
+        this.arrow = helper.createDrawable(Identifier.withDefaultNamespace("textures/gui/container/furnace.png"), 79, 34, 24, 17);
     }
 
     @Override public RecipeType<ShavingHorseRecipe> getRecipeType() { return SHAVING_TYPE; }
@@ -39,7 +39,7 @@ public class ShavingRecipeCategory implements IRecipeCategory<ShavingHorseRecipe
     @Override public IDrawable getIcon() { return this.icon; }
 
     @Override
-    public void draw(ShavingHorseRecipe recipe, mezz.jei.api.gui.ingredient.IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics, double mouseX, double mouseY) {
+    public void draw(ShavingHorseRecipe recipe, mezz.jei.api.gui.ingredient.IRecipeSlotsView recipeSlotsView, GuiGraphicsExtractor guiGraphics, double mouseX, double mouseY) {
         this.arrow.draw(guiGraphics, 45, 12);
 
         // Draw the required clicks text just below the arrow!

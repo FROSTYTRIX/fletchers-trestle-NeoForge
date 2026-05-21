@@ -3,11 +3,11 @@ package net.frostytrix.fletcherstrestle.menu;
 import net.frostytrix.fletcherstrestle.FletcherTrestle;
 import net.frostytrix.fletcherstrestle.block.entity.ShotRecord;
 import net.frostytrix.fletcherstrestle.network.ClearShotsPacket;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.world.entity.player.Inventory;
 import net.neoforged.neoforge.network.PacketDistributor;
@@ -17,7 +17,7 @@ import java.util.List;
 
 public class ArcheryTargetScreen extends AbstractContainerScreen<ArcheryTargetMenu> {
 
-    private static final ResourceLocation GUI_TEXTURE = ResourceLocation.fromNamespaceAndPath(
+    private static final Identifier GUI_TEXTURE = Identifier.fromNamespaceAndPath(
             FletcherTrestle.MOD_ID, "textures/gui/archery_target_gui.png");
 
     private static final int GUI_W = 256;
@@ -93,7 +93,7 @@ public class ArcheryTargetScreen extends AbstractContainerScreen<ArcheryTargetMe
     }
 
     @Override
-    protected void renderBg(GuiGraphics g, float partialTick, int mx, int my) {
+    protected void renderBg(GuiGraphicsExtractor g, float partialTick, int mx, int my) {
         g.blit(GUI_TEXTURE, leftPos, topPos, 0, 0, GUI_W, GUI_H, 256, 256);
         renderTargetCanvas(g, mx, my);
         renderShotList(g, mx, my);
@@ -103,7 +103,7 @@ public class ArcheryTargetScreen extends AbstractContainerScreen<ArcheryTargetMe
 
     // ── Target canvas ────────────────────────────────────────────────────
 
-    private void renderTargetCanvas(GuiGraphics g, int mx, int my) {
+    private void renderTargetCanvas(GuiGraphicsExtractor g, int mx, int my) {
         int ox = leftPos + TC_X;
         int oy = topPos  + TC_Y;
         int cx = ox + TC_W / 2;
@@ -122,7 +122,7 @@ public class ArcheryTargetScreen extends AbstractContainerScreen<ArcheryTargetMe
 
     // ── Shot list ─────────────────────────────────────────────────────────
 
-    private void renderShotList(GuiGraphics g, int mx, int my) {
+    private void renderShotList(GuiGraphicsExtractor g, int mx, int my) {
         List<ShotRecord> shots = menu.getShots();
         int ox = leftPos + LIST_X;
         int oy = topPos  + LIST_Y;
@@ -148,7 +148,7 @@ public class ArcheryTargetScreen extends AbstractContainerScreen<ArcheryTargetMe
 
     // ── Info box ──────────────────────────────────────────────────────────
 
-    private void renderInfoBox(GuiGraphics g) {
+    private void renderInfoBox(GuiGraphicsExtractor g) {
         int ox = leftPos + INFO_X;
         int oy = topPos  + INFO_Y;
 
@@ -171,7 +171,7 @@ public class ArcheryTargetScreen extends AbstractContainerScreen<ArcheryTargetMe
 
     // ── Scrollbar ─────────────────────────────────────────────────────────
 
-    private void renderScrollbar(GuiGraphics g) {
+    private void renderScrollbar(GuiGraphicsExtractor g) {
         List<ShotRecord> shots = menu.getShots();
         int visibleRows = LIST_H / ROW_H;
         if (shots.size() <= visibleRows) return;
@@ -227,7 +227,7 @@ public class ArcheryTargetScreen extends AbstractContainerScreen<ArcheryTargetMe
     // Screen#extractBackground. Verify exact signatures against the 26.1
     // sources once the SDK is available locally, then rename here.
     @Override
-    public void render(GuiGraphics g, int mx, int my, float pt) {
+    public void render(GuiGraphicsExtractor g, int mx, int my, float pt) {
         renderBackground(g, mx, my, pt);
         super.render(g, mx, my, pt);
 
@@ -254,7 +254,7 @@ public class ArcheryTargetScreen extends AbstractContainerScreen<ArcheryTargetMe
     }
 
     @Override
-    protected void renderLabels(GuiGraphics g, int mx, int my) {
+    protected void renderLabels(GuiGraphicsExtractor g, int mx, int my) {
         // No default labels
     }
 }

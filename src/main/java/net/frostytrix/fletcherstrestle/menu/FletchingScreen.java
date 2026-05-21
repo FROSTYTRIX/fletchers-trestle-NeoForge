@@ -6,18 +6,18 @@ import net.frostytrix.fletcherstrestle.item.ModItems;
 import net.frostytrix.fletcherstrestle.network.FletchingTabPayload;
 import net.frostytrix.fletcherstrestle.network.TuningPacket;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.network.PacketDistributor;
 
 public class FletchingScreen extends AbstractContainerScreen<FletchingMenu> {
-    private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "textures/gui/fletching_table.png");
-    private static final ResourceLocation ARROW_TEXTURE = ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "textures/gui/fletching_table_arrow.png");
-    private static final ResourceLocation MINIGAME_TEXTURE = ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "textures/gui/minigame.png");
+    private static final Identifier TEXTURE = Identifier.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "textures/gui/fletching_table.png");
+    private static final Identifier ARROW_TEXTURE = Identifier.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "textures/gui/fletching_table_arrow.png");
+    private static final Identifier MINIGAME_TEXTURE = Identifier.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "textures/gui/minigame.png");
 
     private boolean isTuning = false;
     private float barPosition = 0.0f;
@@ -60,7 +60,7 @@ public class FletchingScreen extends AbstractContainerScreen<FletchingMenu> {
     }
 
     @Override
-    protected void renderBg(GuiGraphics guiGraphics, float partialTick, int mouseX, int mouseY) {
+    protected void renderBg(GuiGraphicsExtractor guiGraphics, float partialTick, int mouseX, int mouseY) {
         int x = (width - imageWidth) / 2;
         int y = (height - imageHeight) / 2;
 
@@ -92,7 +92,7 @@ public class FletchingScreen extends AbstractContainerScreen<FletchingMenu> {
     // TODO(port-26.1): Screen#render → extractRenderState,
     // Screen#renderBackground → extractBackground per NeoForge 26.1 changelog.
     @Override
-    public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
+    public void render(GuiGraphicsExtractor guiGraphics, int mouseX, int mouseY, float partialTick) {
         this.renderBackground(guiGraphics, mouseX, mouseY, partialTick);
         super.render(guiGraphics, mouseX, mouseY, partialTick);
         this.renderTooltip(guiGraphics, mouseX, mouseY);
@@ -142,7 +142,7 @@ public class FletchingScreen extends AbstractContainerScreen<FletchingMenu> {
         }
     }
 
-    private void renderTuningBar(GuiGraphics guiGraphics) {
+    private void renderTuningBar(GuiGraphicsExtractor guiGraphics) {
         int barWidth = 128;
         int x = getGuiLeft() + (imageWidth - barWidth) / 2;
         int y = getGuiTop() + 75;

@@ -7,7 +7,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Player;
 
 import java.util.Collections;
@@ -15,7 +15,7 @@ import java.util.Collections;
 public record ClearShotsPacket(BlockPos pos, int containerId) implements CustomPacketPayload {
 
     public static final Type<ClearShotsPacket> TYPE =
-            new Type<>(ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "clear_shots"));
+            new Type<>(Identifier.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "clear_shots"));
 
     public static final StreamCodec<FriendlyByteBuf, ClearShotsPacket> CODEC = StreamCodec.of(
             (buf, pkt) -> { buf.writeBlockPos(pkt.pos()); buf.writeInt(pkt.containerId()); },

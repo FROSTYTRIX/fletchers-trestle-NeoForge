@@ -5,7 +5,7 @@ import net.minecraft.core.HolderGetter;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.item.Item;
@@ -15,17 +15,17 @@ public class ModEnchantments {
     // This ResourceKey links your Java code to the JSON file we will make next
     public static final ResourceKey<Enchantment> PHOTOSYNTHESIS = ResourceKey.create(
             Registries.ENCHANTMENT,
-            ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "photosynthesis")
+            Identifier.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "photosynthesis")
     );
 
     public static final ResourceKey<Enchantment> BIOLUMINESCENCE = ResourceKey.create(
             Registries.ENCHANTMENT,
-            ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "bioluminescence")
+            Identifier.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "bioluminescence")
     );
 
     public static final ResourceKey<Enchantment> GALE_FORCE = ResourceKey.create(
             Registries.ENCHANTMENT,
-            ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "gale_force")
+            Identifier.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "gale_force")
     );
 
     public static void bootstrap(BootstrapContext<Enchantment> context) {

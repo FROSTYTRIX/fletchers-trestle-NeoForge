@@ -10,7 +10,7 @@ import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
@@ -81,7 +81,7 @@ public class DippingRecipe implements Recipe<DippingRecipeInput> {
             if (customData != null && customData.contains("potion")) {
                 String potionId = customData.copyTag().getString("potion");
                 var potionHolder = net.minecraft.core.registries.BuiltInRegistries.POTION
-                        .getHolder(ResourceLocation.parse(potionId)).orElse(null);
+                        .getHolder(Identifier.parse(potionId)).orElse(null);
 
                 if (potionHolder != null) {
                     result.set(DataComponents.POTION_CONTENTS, new net.minecraft.world.item.alchemy.PotionContents(potionHolder));
