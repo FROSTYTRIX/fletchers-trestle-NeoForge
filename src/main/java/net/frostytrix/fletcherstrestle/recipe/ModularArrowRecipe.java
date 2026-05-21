@@ -6,15 +6,11 @@ import net.frostytrix.fletcherstrestle.block.ModBlocks;
 import net.frostytrix.fletcherstrestle.component.ArrowAssembly;
 import net.frostytrix.fletcherstrestle.component.ModDataComponents;
 import net.frostytrix.fletcherstrestle.item.ModItems;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.item.crafting.Recipe;
-import net.minecraft.world.item.crafting.RecipeSerializer;
-import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
 
 public class ModularArrowRecipe implements Recipe<ArrowRecipeInput> {
@@ -31,7 +27,6 @@ public class ModularArrowRecipe implements Recipe<ArrowRecipeInput> {
         this.result = result;
     }
 
-    // Getters for JEI
     public Ingredient getHead() { return head; }
     public Ingredient getShaft() { return shaft; }
     public Ingredient getFletching() { return fletching; }
@@ -39,31 +34,24 @@ public class ModularArrowRecipe implements Recipe<ArrowRecipeInput> {
     @Override
     public boolean matches(ArrowRecipeInput input, Level level) {
         if (input.isEmpty()) return false;
-        return this.head.test(input.head()) &&
-                this.shaft.test(input.shaft()) &&
-                this.fletching.test(input.fletching());
+        return this.head.test(input.head())
+                && this.shaft.test(input.shaft())
+                && this.fletching.test(input.fletching());
     }
 
     @Override
-    public ItemStack assemble(ArrowRecipeInput input, HolderLookup.Provider provider) {
+    public ItemStack assemble(ArrowRecipeInput input) {
         ItemStack output = this.result.copy();
-
         String headName = getArrowHead(input.head());
         String shaftName = getArrowShaft(input.shaft());
         String fletchName = getArrowFletching(input.fletching());
-
-        // Fallbacks just in case
         if (headName == null) headName = "flint";
         if (shaftName == null) shaftName = "oak";
         if (fletchName == null) fletchName = "feather";
-
-        ArrowAssembly assembly = new ArrowAssembly(headName, shaftName, fletchName);
-        output.set(ModDataComponents.ARROW_ASSEMBLY.get(), assembly);
-
+        output.set(ModDataComponents.ARROW_ASSEMBLY.get(), new ArrowAssembly(headName, shaftName, fletchName));
         return output;
     }
 
-    // Your exact mappings moved here!
     private String getArrowHead(ItemStack stack) {
         if (stack.is(Items.FLINT)) return "flint";
         if (stack.is(Items.IRON_INGOT)) return "broadhead";
@@ -104,46 +92,49 @@ public class ModularArrowRecipe implements Recipe<ArrowRecipeInput> {
     }
 
     @Override
-    public boolean canCraftInDimensions(int width, int height) { return true; }
+    public RecipeSerializer<? extends Recipe<ArrowRecipeInput>> getSerializer() {
+        return ModRecipes.MODULAR_ARROW_SERIALIZER.get();
+    }
 
     @Override
-    public ItemStack getResultItem(HolderLookup.Provider provider) { return this.result; }
+    public RecipeType<? extends Recipe<ArrowRecipeInput>> getType() {
+        return ModRecipes.MODULAR_ARROW_TYPE.get();
+    }
 
-    @Override
-    public RecipeSerializer<?> getSerializer() { return ModRecipes.MODULAR_ARROW_SERIALIZER.get(); }
+    @Override public RecipeBookCategory recipeBookCategory() { return RecipeBookCategories.CRAFTING_MISC; }
+    @Override public PlacementInfo placementInfo()           { return PlacementInfo.NOT_PLACEABLE; }
+    @Override public boolean showNotification()              { return false; }
+    @Override public String group()                          { return ""; }
 
-    @Override
-    public RecipeType<?> getType() { return ModRecipes.MODULAR_ARROW_TYPE.get(); }
+    // 26.1: RecipeSerializer is a record(MapCodec, StreamCodec); we expose
+    // the codecs as static fields and a factory method.
+    public static final MapCodec<ModularArrowRecipe> CODEC = RecordCodecBuilder.mapCodec(inst -> inst.group(
+            Ingredient.CODEC.fieldOf("head").forGetter(r -> r.head),
+            Ingredient.CODEC.fieldOf("shaft").forGetter(r -> r.shaft),
+            Ingredient.CODEC.fieldOf("fletching").forGetter(r -> r.fletching),
+            ItemStack.CODEC.fieldOf("result").forGetter(r -> r.result)
+    ).apply(inst, ModularArrowRecipe::new));
 
-    public static class Serializer implements RecipeSerializer<ModularArrowRecipe> {
-        public static final MapCodec<ModularArrowRecipe> CODEC = RecordCodecBuilder.mapCodec(inst -> inst.group(
-                Ingredient.CODEC_NONEMPTY.fieldOf("head").forGetter(r -> r.head),
-                Ingredient.CODEC_NONEMPTY.fieldOf("shaft").forGetter(r -> r.shaft),
-                Ingredient.CODEC_NONEMPTY.fieldOf("fletching").forGetter(r -> r.fletching),
-                ItemStack.STRICT_CODEC.fieldOf("result").forGetter(r -> r.result)
-        ).apply(inst, ModularArrowRecipe::new));
+    public static final StreamCodec<RegistryFriendlyByteBuf, ModularArrowRecipe> STREAM_CODEC = StreamCodec.of(
+            ModularArrowRecipe::toNetwork, ModularArrowRecipe::fromNetwork);
 
-        public static final StreamCodec<RegistryFriendlyByteBuf, ModularArrowRecipe> STREAM_CODEC = StreamCodec.of(
-                ModularArrowRecipe.Serializer::toNetwork, ModularArrowRecipe.Serializer::fromNetwork
+    public static RecipeSerializer<ModularArrowRecipe> serializer() {
+        return new RecipeSerializer<>(CODEC, STREAM_CODEC);
+    }
+
+    private static void toNetwork(RegistryFriendlyByteBuf buf, ModularArrowRecipe recipe) {
+        Ingredient.CONTENTS_STREAM_CODEC.encode(buf, recipe.head);
+        Ingredient.CONTENTS_STREAM_CODEC.encode(buf, recipe.shaft);
+        Ingredient.CONTENTS_STREAM_CODEC.encode(buf, recipe.fletching);
+        ItemStack.STREAM_CODEC.encode(buf, recipe.result);
+    }
+
+    private static ModularArrowRecipe fromNetwork(RegistryFriendlyByteBuf buf) {
+        return new ModularArrowRecipe(
+                Ingredient.CONTENTS_STREAM_CODEC.decode(buf),
+                Ingredient.CONTENTS_STREAM_CODEC.decode(buf),
+                Ingredient.CONTENTS_STREAM_CODEC.decode(buf),
+                ItemStack.STREAM_CODEC.decode(buf)
         );
-
-        @Override public MapCodec<ModularArrowRecipe> codec() { return CODEC; }
-        @Override public StreamCodec<RegistryFriendlyByteBuf, ModularArrowRecipe> streamCodec() { return STREAM_CODEC; }
-
-        private static ModularArrowRecipe fromNetwork(RegistryFriendlyByteBuf buf) {
-            return new ModularArrowRecipe(
-                    Ingredient.CONTENTS_STREAM_CODEC.decode(buf),
-                    Ingredient.CONTENTS_STREAM_CODEC.decode(buf),
-                    Ingredient.CONTENTS_STREAM_CODEC.decode(buf),
-                    ItemStack.STREAM_CODEC.decode(buf)
-            );
-        }
-
-        private static void toNetwork(RegistryFriendlyByteBuf buf, ModularArrowRecipe recipe) {
-            Ingredient.CONTENTS_STREAM_CODEC.encode(buf, recipe.head);
-            Ingredient.CONTENTS_STREAM_CODEC.encode(buf, recipe.shaft);
-            Ingredient.CONTENTS_STREAM_CODEC.encode(buf, recipe.fletching);
-            ItemStack.STREAM_CODEC.encode(buf, recipe.result);
-        }
     }
 }

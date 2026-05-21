@@ -14,7 +14,7 @@ public class ModRecipes {
             DeferredRegister.create(Registries.RECIPE_TYPE, "fletcherstrestle");
 
     public static final Supplier<RecipeSerializer<ModularWeaponRecipe>> MODULAR_WEAPON_SERIALIZER =
-            SERIALIZERS.register("modular_weapon_assembly", ModularWeaponRecipe.Serializer::new);
+            SERIALIZERS.register("modular_weapon_assembly", ModularWeaponRecipe::serializer);
 
     public static final Supplier<RecipeType<ModularWeaponRecipe>> MODULAR_WEAPON_TYPE =
             TYPES.register("modular_weapon_assembly", () -> new RecipeType<ModularWeaponRecipe>() {
@@ -25,7 +25,7 @@ public class ModRecipes {
             });
 
     public static final Supplier<RecipeSerializer<ModularArrowRecipe>> MODULAR_ARROW_SERIALIZER =
-            SERIALIZERS.register("modular_arrow_assembly", ModularArrowRecipe.Serializer::new);
+            SERIALIZERS.register("modular_arrow_assembly", ModularArrowRecipe::serializer);
 
     public static final Supplier<RecipeType<ModularArrowRecipe>> MODULAR_ARROW_TYPE =
             TYPES.register("modular_arrow_assembly", () -> new RecipeType<ModularArrowRecipe>() {
@@ -36,7 +36,7 @@ public class ModRecipes {
             });
 
     public static final Supplier<RecipeSerializer<SteamingRecipe>> STEAMING_SERIALIZER =
-            SERIALIZERS.register("steaming", SteamingRecipe.Serializer::new);
+            SERIALIZERS.register("steaming", SteamingRecipe::serializer);
 
     public static final Supplier<RecipeType<SteamingRecipe>> STEAMING_TYPE =
             TYPES.register("steaming", () -> new RecipeType<SteamingRecipe>() {
@@ -44,7 +44,7 @@ public class ModRecipes {
             });
 
     public static final Supplier<RecipeSerializer<ShavingHorseRecipe>> SHAVING_SERIALIZER =
-            SERIALIZERS.register("shaving", ShavingHorseRecipe.Serializer::new);
+            SERIALIZERS.register("shaving", ShavingHorseRecipe::serializer);
 
     public static final Supplier<RecipeType<ShavingHorseRecipe>> SHAVING_TYPE =
             TYPES.register("shaving", () -> new RecipeType<ShavingHorseRecipe>() {
@@ -52,7 +52,7 @@ public class ModRecipes {
             });
 
     public static final Supplier<RecipeSerializer<DippingRecipe>> DIPPING_SERIALIZER =
-            SERIALIZERS.register("dipping", DippingRecipe.Serializer::new);
+            SERIALIZERS.register("dipping", DippingRecipe::serializer);
 
     public static final Supplier<RecipeType<DippingRecipe>> DIPPING_TYPE =
             TYPES.register("dipping", () -> new RecipeType<DippingRecipe>() {

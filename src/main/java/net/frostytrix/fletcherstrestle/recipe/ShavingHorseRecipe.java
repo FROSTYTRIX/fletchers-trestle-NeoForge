@@ -3,7 +3,6 @@ package net.frostytrix.fletcherstrestle.recipe;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
@@ -14,7 +13,7 @@ import net.minecraft.world.level.Level;
 public class ShavingHorseRecipe implements Recipe<SingleRecipeInput> {
     private final Ingredient input;
     private final ItemStack result;
-    private final int shavesRequired; // Number of drawknife clicks
+    private final int shavesRequired;
 
     public ShavingHorseRecipe(Ingredient input, ItemStack result, int shavesRequired) {
         this.input = input;
@@ -31,48 +30,49 @@ public class ShavingHorseRecipe implements Recipe<SingleRecipeInput> {
     }
 
     @Override
-    public ItemStack assemble(SingleRecipeInput input, HolderLookup.Provider provider) {
+    public ItemStack assemble(SingleRecipeInput input) {
         return this.result.copy();
     }
 
     @Override
-    public boolean canCraftInDimensions(int width, int height) { return true; }
+    public RecipeSerializer<? extends Recipe<SingleRecipeInput>> getSerializer() {
+        return ModRecipes.SHAVING_SERIALIZER.get();
+    }
 
     @Override
-    public ItemStack getResultItem(HolderLookup.Provider provider) { return this.result; }
+    public RecipeType<? extends Recipe<SingleRecipeInput>> getType() {
+        return ModRecipes.SHAVING_TYPE.get();
+    }
 
-    @Override
-    public RecipeSerializer<?> getSerializer() { return ModRecipes.SHAVING_SERIALIZER.get(); }
+    @Override public RecipeBookCategory recipeBookCategory() { return RecipeBookCategories.CRAFTING_MISC; }
+    @Override public PlacementInfo placementInfo()           { return PlacementInfo.NOT_PLACEABLE; }
+    @Override public boolean showNotification()              { return false; }
+    @Override public String group()                          { return ""; }
 
-    @Override
-    public RecipeType<?> getType() { return ModRecipes.SHAVING_TYPE.get(); }
+    public static final MapCodec<ShavingHorseRecipe> CODEC = RecordCodecBuilder.mapCodec(inst -> inst.group(
+            Ingredient.CODEC.fieldOf("ingredient").forGetter(r -> r.input),
+            ItemStack.CODEC.fieldOf("result").forGetter(r -> r.result),
+            Codec.INT.optionalFieldOf("shaves_required", 3).forGetter(r -> r.shavesRequired)
+    ).apply(inst, ShavingHorseRecipe::new));
 
-    public static class Serializer implements RecipeSerializer<ShavingHorseRecipe> {
-        public static final MapCodec<ShavingHorseRecipe> CODEC = RecordCodecBuilder.mapCodec(inst -> inst.group(
-                Ingredient.CODEC_NONEMPTY.fieldOf("ingredient").forGetter(r -> r.input),
-                ItemStack.STRICT_CODEC.fieldOf("result").forGetter(r -> r.result),
-                Codec.INT.optionalFieldOf("shaves_required", 3).forGetter(r -> r.shavesRequired) // Defaults to 3 clicks!
-        ).apply(inst, ShavingHorseRecipe::new));
+    public static final StreamCodec<RegistryFriendlyByteBuf, ShavingHorseRecipe> STREAM_CODEC = StreamCodec.of(
+            ShavingHorseRecipe::toNetwork, ShavingHorseRecipe::fromNetwork);
 
-        public static final StreamCodec<RegistryFriendlyByteBuf, ShavingHorseRecipe> STREAM_CODEC = StreamCodec.of(
-                ShavingHorseRecipe.Serializer::toNetwork, ShavingHorseRecipe.Serializer::fromNetwork
+    public static RecipeSerializer<ShavingHorseRecipe> serializer() {
+        return new RecipeSerializer<>(CODEC, STREAM_CODEC);
+    }
+
+    private static void toNetwork(RegistryFriendlyByteBuf buf, ShavingHorseRecipe recipe) {
+        Ingredient.CONTENTS_STREAM_CODEC.encode(buf, recipe.input);
+        ItemStack.STREAM_CODEC.encode(buf, recipe.result);
+        ByteBufCodecs.INT.encode(buf, recipe.shavesRequired);
+    }
+
+    private static ShavingHorseRecipe fromNetwork(RegistryFriendlyByteBuf buf) {
+        return new ShavingHorseRecipe(
+                Ingredient.CONTENTS_STREAM_CODEC.decode(buf),
+                ItemStack.STREAM_CODEC.decode(buf),
+                ByteBufCodecs.INT.decode(buf)
         );
-
-        @Override public MapCodec<ShavingHorseRecipe> codec() { return CODEC; }
-        @Override public StreamCodec<RegistryFriendlyByteBuf, ShavingHorseRecipe> streamCodec() { return STREAM_CODEC; }
-
-        private static ShavingHorseRecipe fromNetwork(RegistryFriendlyByteBuf buf) {
-            return new ShavingHorseRecipe(
-                    Ingredient.CONTENTS_STREAM_CODEC.decode(buf),
-                    ItemStack.STREAM_CODEC.decode(buf),
-                    ByteBufCodecs.INT.decode(buf)
-            );
-        }
-
-        private static void toNetwork(RegistryFriendlyByteBuf buf, ShavingHorseRecipe recipe) {
-            Ingredient.CONTENTS_STREAM_CODEC.encode(buf, recipe.input);
-            ItemStack.STREAM_CODEC.encode(buf, recipe.result);
-            ByteBufCodecs.INT.encode(buf, recipe.shavesRequired);
-        }
     }
 }

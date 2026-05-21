@@ -5,7 +5,6 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.frostytrix.fletcherstrestle.component.ArrowAssembly;
 import net.frostytrix.fletcherstrestle.component.ModDataComponents;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
@@ -20,7 +19,7 @@ import java.util.Optional;
 public class DippingRecipe implements Recipe<DippingRecipeInput> {
     public final Ingredient inputItem;
     public final int inputCount;
-    public final Optional<String> requiredPotion; // NOUVEAU : Optionnel !
+    public final Optional<String> requiredPotion;
     public final int fluidAmount;
     public final ItemStack output;
 
@@ -34,57 +33,42 @@ public class DippingRecipe implements Recipe<DippingRecipeInput> {
 
     @Override
     public boolean matches(DippingRecipeInput input, Level level) {
-        // 1. Est-ce que l'item et la quantité de fluide matchent ?
         if (!this.inputItem.test(input.item()) || input.fluid().getAmount() < this.fluidAmount) {
             return false;
         }
-
-        // 1b. Modular arrows can only be dipped if their head is the
-        //     glass_vial type — the only head designed to hold a payload.
-        //     This stops e.g. broadhead arrows from accidentally being
-        //     converted into potion arrows.
         ArrowAssembly assembly = input.item().get(ModDataComponents.ARROW_ASSEMBLY.get());
         if (assembly != null && !"glass_vial".equals(assembly.head())) {
             return false;
         }
-
-        // 2. NOUVEAU : Si la recette exige une potion spécifique, on vérifie !
         if (this.requiredPotion.isPresent()) {
             net.minecraft.world.item.component.CustomData customData = input.fluid().get(DataComponents.CUSTOM_DATA);
             if (customData == null || !customData.contains("potion")) {
-                return false; // Pas de potion du tout dans le fluide
+                return false;
             }
-            String potionInTank = customData.copyTag().getString("potion");
-            return potionInTank.equals(this.requiredPotion.get()); // Doit être EXACTEMENT la potion demandée
+            String potionInTank = customData.copyTag().getString("potion").orElse("");
+            return potionInTank.equals(this.requiredPotion.get());
         }
-
-        return true; // Si pas de requiredPotion, on accepte n'importe laquelle !
+        return true;
     }
 
     @Override
-    public ItemStack assemble(DippingRecipeInput input, HolderLookup.Provider registries) {
+    public ItemStack assemble(DippingRecipeInput input) {
         ItemStack result = this.output.copy();
-
-        // Preserve the input's ArrowAssembly if present, so dipping a
-        // glass_vial-headed arrow gives back the same modular arrow (with
-        // its shaft + fletching choices) rather than a generic one.
         ArrowAssembly assembly = input.item().get(ModDataComponents.ARROW_ASSEMBLY.get());
         if (assembly != null) {
             result.set(ModDataComponents.ARROW_ASSEMBLY.get(), assembly);
         }
-
-        // Si la recette demandait explicitement une potion, on ne transfère pas l'effet
-        // (ex: une pomme en or reste une pomme en or, elle ne devient pas une "pomme en or de régénération")
-        // Mais si c'est générique (requiredPotion est vide, ex: les flèches), on applique la magie :
         if (this.requiredPotion.isEmpty()) {
             net.minecraft.world.item.component.CustomData customData = input.fluid().get(DataComponents.CUSTOM_DATA);
             if (customData != null && customData.contains("potion")) {
-                String potionId = customData.copyTag().getString("potion");
-                var potionHolder = net.minecraft.core.registries.BuiltInRegistries.POTION
-                        .getHolder(Identifier.parse(potionId)).orElse(null);
-
-                if (potionHolder != null) {
-                    result.set(DataComponents.POTION_CONTENTS, new net.minecraft.world.item.alchemy.PotionContents(potionHolder));
+                String potionId = customData.copyTag().getString("potion").orElse("");
+                if (!potionId.isEmpty()) {
+                    // Registry.get(Identifier) replaces getHolder in 26.1
+                    net.minecraft.core.registries.BuiltInRegistries.POTION
+                            .get(Identifier.parse(potionId))
+                            .ifPresent(potionHolder -> result.set(
+                                    DataComponents.POTION_CONTENTS,
+                                    new net.minecraft.world.item.alchemy.PotionContents(potionHolder)));
                 }
             }
         }
@@ -92,69 +76,68 @@ public class DippingRecipe implements Recipe<DippingRecipeInput> {
     }
 
     @Override
-    public boolean canCraftInDimensions(int width, int height) {
-        return true;
-    }
-
-    @Override
-    public ItemStack getResultItem(HolderLookup.Provider registries) {
-        return this.output;
-    }
-
-    @Override
-    public RecipeSerializer<?> getSerializer() {
+    public RecipeSerializer<? extends Recipe<DippingRecipeInput>> getSerializer() {
         return ModRecipes.DIPPING_SERIALIZER.get();
     }
 
     @Override
-    public RecipeType<?> getType() {
+    public RecipeType<? extends Recipe<DippingRecipeInput>> getType() {
         return ModRecipes.DIPPING_TYPE.get();
     }
 
-    // --- LE SERIALIZER MIS À JOUR POUR LIRE L'OPTION ---
-    public static class Serializer implements RecipeSerializer<DippingRecipe> {
+    @Override
+    public RecipeBookCategory recipeBookCategory() {
+        return RecipeBookCategories.CRAFTING_MISC;
+    }
 
-        public static final MapCodec<DippingRecipe> CODEC = RecordCodecBuilder.mapCodec(inst -> inst.group(
-                Ingredient.CODEC_NONEMPTY.fieldOf("ingredient").forGetter(r -> r.inputItem),
-                Codec.INT.fieldOf("input_count").orElse(1).forGetter(r -> r.inputCount),
-                Codec.STRING.optionalFieldOf("required_potion").forGetter(r -> r.requiredPotion), // NOUVEAU
-                Codec.INT.fieldOf("fluid_amount").forGetter(r -> r.fluidAmount),
-                ItemStack.CODEC.fieldOf("result").forGetter(r -> r.output)
-        ).apply(inst, DippingRecipe::new));
+    @Override
+    public PlacementInfo placementInfo() {
+        return PlacementInfo.NOT_PLACEABLE;
+    }
 
-        public static final StreamCodec<RegistryFriendlyByteBuf, DippingRecipe> STREAM_CODEC = StreamCodec.of(
-                Serializer::toNetwork, Serializer::fromNetwork
+    @Override
+    public boolean showNotification() {
+        return false;
+    }
+
+    @Override
+    public String group() {
+        return "";
+    }
+
+    // In 26.1, RecipeSerializer is a `record(MapCodec<T> codec, StreamCodec<...> streamCodec)`,
+    // not an interface. So we just expose static codec instances and a factory
+    // method to build the RecipeSerializer record at registration time.
+    public static final MapCodec<DippingRecipe> CODEC = RecordCodecBuilder.mapCodec(inst -> inst.group(
+            Ingredient.CODEC.fieldOf("ingredient").forGetter(r -> r.inputItem),
+            Codec.INT.fieldOf("input_count").orElse(1).forGetter(r -> r.inputCount),
+            Codec.STRING.optionalFieldOf("required_potion").forGetter(r -> r.requiredPotion),
+            Codec.INT.fieldOf("fluid_amount").forGetter(r -> r.fluidAmount),
+            ItemStack.CODEC.fieldOf("result").forGetter(r -> r.output)
+    ).apply(inst, DippingRecipe::new));
+
+    public static final StreamCodec<RegistryFriendlyByteBuf, DippingRecipe> STREAM_CODEC = StreamCodec.of(
+            DippingRecipe::toNetwork, DippingRecipe::fromNetwork);
+
+    public static RecipeSerializer<DippingRecipe> serializer() {
+        return new RecipeSerializer<>(CODEC, STREAM_CODEC);
+    }
+
+    private static void toNetwork(RegistryFriendlyByteBuf buf, DippingRecipe recipe) {
+        Ingredient.CONTENTS_STREAM_CODEC.encode(buf, recipe.inputItem);
+        buf.writeInt(recipe.inputCount);
+        ByteBufCodecs.optional(ByteBufCodecs.STRING_UTF8).encode(buf, recipe.requiredPotion);
+        buf.writeInt(recipe.fluidAmount);
+        ItemStack.STREAM_CODEC.encode(buf, recipe.output);
+    }
+
+    private static DippingRecipe fromNetwork(RegistryFriendlyByteBuf buf) {
+        return new DippingRecipe(
+                Ingredient.CONTENTS_STREAM_CODEC.decode(buf),
+                buf.readInt(),
+                ByteBufCodecs.optional(ByteBufCodecs.STRING_UTF8).decode(buf),
+                buf.readInt(),
+                ItemStack.STREAM_CODEC.decode(buf)
         );
-
-        @Override
-        public MapCodec<DippingRecipe> codec() {
-            return CODEC;
-        }
-
-        @Override
-        public StreamCodec<RegistryFriendlyByteBuf, DippingRecipe> streamCodec() {
-            return STREAM_CODEC;
-        }
-
-        private static void toNetwork(RegistryFriendlyByteBuf buf, DippingRecipe recipe) {
-            Ingredient.CONTENTS_STREAM_CODEC.encode(buf, recipe.inputItem);
-            buf.writeInt(recipe.inputCount);
-
-            // Écriture de l'Optional sur le réseau
-            ByteBufCodecs.optional(ByteBufCodecs.STRING_UTF8).encode(buf, recipe.requiredPotion);
-
-            buf.writeInt(recipe.fluidAmount);
-            ItemStack.STREAM_CODEC.encode(buf, recipe.output);
-        }
-
-        private static DippingRecipe fromNetwork(RegistryFriendlyByteBuf buf) {
-            return new DippingRecipe(
-                    Ingredient.CONTENTS_STREAM_CODEC.decode(buf),
-                    buf.readInt(),
-                    ByteBufCodecs.optional(ByteBufCodecs.STRING_UTF8).decode(buf), // Lecture de l'Optional
-                    buf.readInt(),
-                    ItemStack.STREAM_CODEC.decode(buf)
-            );
-        }
     }
 }
