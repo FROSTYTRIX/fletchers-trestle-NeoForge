@@ -21,14 +21,49 @@ https://neoforged.net/news/26.1release/
 
 ## What still needs to be done
 
-These need the actual NeoForge 26.1 SDK locally to verify exact signatures —
-just run `./gradlew compileJava` and chip through whatever it complains about.
+NeoForge 26.1 includes a sweeping refactor of foundational Minecraft
+packages. A first `./gradlew compileJava` run against the real
+26.1.2.63-beta SDK surfaced **100 errors across ~30 files**.
 
-### 1. Confirm the exact NeoForge 26.1 version
+### Confirmed package moves (need find-and-replace + import updates)
 
-`gradle.properties` currently says `neo_version=26.1.0`. Look up the published
-26.1.x build on https://projects.neoforged.net/neoforged/neoforge and replace
-with the latest (e.g. `26.1.5` or whatever the latest patch is).
+| Old import | New import | Files affected (rough) |
+|---|---|---|
+| `net.minecraft.world.entity.projectile.AbstractArrow` | `net.minecraft.world.entity.projectile.arrow.AbstractArrow` | ~5 |
+| `net.minecraft.world.entity.npc.VillagerTrades` | `net.minecraft.world.item.trading.VillagerTrades` | 1 (RandomModularArrowTrade) |
+| `net.minecraft.world.entity.animal.horse.AbstractHorse` | TBD — package renamed/removed; check `entity/animal/horse` → `entity/animal/equine`? | 2 mixins |
+| `net.minecraft.client.gui.GuiGraphics` | `net.minecraft.client.gui.GuiGraphicsExtractor` | Many (every renderer + screen) |
+| `net.minecraft.Util` | `net.minecraft.util.Util` | a few |
+| `net.minecraft.resources.ResourceLocation` | TBD — may have moved into `util` namespace | Many |
+| `net.minecraft.world.InteractionResultHolder` | Removed or renamed — probably folded into `InteractionResult` | A few |
+| `net.minecraft.world.item.ArmorItem` | TBD — armor system likely refactored | a few |
+| `net.minecraft.world.item.ItemNameBlockItem` | TBD | a few |
+
+### Other code-level changes
+- `Screen#render` → `Screen#extractRenderState`
+- `Screen#renderBackground` → `Screen#extractBackground`
+- `ItemStackTemplate` for recipes that construct stacks at registry-load time
+- `IFluidHandler`, `ItemStackHandler`, `FluidTank`, `FluidUtil` are **deprecated for removal** — migrate before they're gone in 26.2
+
+### Practical workflow
+
+This isn't a quick port — realistically 2–4 sessions of incremental work.
+Suggested order to minimise context-switching:
+
+1. **Phase 1 — Mechanical import renames**: AbstractArrow, VillagerTrades,
+   GuiGraphics, Util, ResourceLocation. ~30 minutes once we know all the
+   new paths. Mostly `Edit` + `Bash` rename loops.
+2. **Phase 2 — Screen API**: rename `render` → `extractRenderState` etc.
+   in the three `AbstractContainerScreen` subclasses. Verify signatures.
+3. **Phase 3 — Recipes**: convert any `ItemStack` fields in recipe
+   classes to `ItemStackTemplate` where required by the new codec.
+4. **Phase 4 — Capabilities / deprecated APIs**: migrate FluidTank,
+   ItemStackHandler etc. to their non-deprecated replacements.
+5. **Phase 5 — Runtime test**: `./gradlew runClient`, fix anything that
+   compiles but crashes at runtime.
+
+Want to tackle this incrementally? Just say "let's do phase 1" in a
+fresh session and I'll work through the imports systematically.
 
 ### 2. `Screen` method renames
 
