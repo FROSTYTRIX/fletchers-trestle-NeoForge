@@ -7,7 +7,6 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -70,7 +69,7 @@ public class EagleWhistleItem extends Item {
         if (!(target instanceof EagleEntity eagle) || !eagle.isOwnedBy(player)) {
             return InteractionResult.PASS;
         }
-        if (!player.level().isClientSide) {
+        if (!player.level().isClientSide()) {
             // In creative mode, Player.interactOn substitutes the parameter
             // `stack` with a copy before calling interactLivingEntity. Writing
             // to that copy doesn't persist on the held item. Always mutate the

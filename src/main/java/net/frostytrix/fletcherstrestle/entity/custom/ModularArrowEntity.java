@@ -203,9 +203,10 @@ public class ModularArrowEntity extends AbstractArrow {
             }
 
             // BOUND (Fletching): 25% chance to drop the arrow on impact instead of breaking
-            if ("bound".equals(assembly.fletching()) && this.random.nextFloat() < 0.25f) {
-                this.spawnAtLocation(this.getPickupItem());
-                this.discard(); // Remove the entity so it doesn't get stuck in the target
+            if ("bound".equals(assembly.fletching()) && this.random.nextFloat() < 0.25f
+                    && this.level() instanceof ServerLevel boundSl) {
+                this.spawnAtLocation(boundSl, this.getPickupItem());
+                this.discard();
             }
 
             // CRIMSON: Executioner (+50% damage if target is below half health)
@@ -259,10 +260,14 @@ public class ModularArrowEntity extends AbstractArrow {
                 }
             }
 
-            if (this.getPersistentData().getBoolean("fletcherstrestle:conductive").orElse(false) && this.level().isThundering()) {
-                LightningBolt lightning = EntityType.LIGHTNING_BOLT.create(this.level());
+            if (this.getPersistentData().getBoolean("fletcherstrestle:conductive").orElse(false)
+                    && this.level().isThundering()
+                    && this.level() instanceof ServerLevel lightningSl) {
+                LightningBolt lightning = EntityType.LIGHTNING_BOLT.create(
+                        lightningSl, net.minecraft.world.entity.EntitySpawnReason.TRIGGERED);
                 if (lightning != null) {
-                    lightning.moveTo(target.position());
+                    Vec3 tp = target.position();
+                    lightning.setPos(tp.x, tp.y, tp.z);
                     this.level().addFreshEntity(lightning);
                 }
             }
@@ -288,7 +293,7 @@ public class ModularArrowEntity extends AbstractArrow {
         ArrowAssembly assembly = this.getAssembly();
         ModularArrowItem.ShaftStats shaft = ModularArrowItem.ShaftStats.fromString(assembly.shaft());
 
-        if (this.isDeployingRope && !this.level().isClientSide) {
+        if (this.isDeployingRope && !this.level().isClientSide()) {
 
             // Unspool 1 block every 2 game ticks (adjust this for faster/slower drops)
             if (this.tickCount % 2 == 0) {
@@ -329,11 +334,11 @@ public class ModularArrowEntity extends AbstractArrow {
         }
 
         // Flight modifiers only apply when flying
-        if (!this.inGround) {
+        if (!this.isInGround()) {
             // ACACIA: Speed boost mid-flight (at 10 ticks)
             if ("acacia".equals(assembly.shaft()) && this.tickCount == 10) {
                 this.setDeltaMovement(this.getDeltaMovement().scale(1.4));
-                this.hasImpulse = true; // Tell the server to sync the sudden movement
+                /* hasImpulse removed in 26.1 */; // Tell the server to sync the sudden movement
             }
 
             // Apply gravity Mult
@@ -364,7 +369,7 @@ public class ModularArrowEntity extends AbstractArrow {
             if (target != null && target.isAlive()) {
                 // Snap the arrow to the center of the target's body
                 this.setPos(target.getX(), target.getY() + (target.getBbHeight() / 2.0), target.getZ());
-            } else if (!this.level().isClientSide) {
+            } else if (!this.level().isClientSide()) {
                 // Failsafe: If the target dies or vanishes before detonation, delete the arrow
                 this.discard();
                 return;
@@ -372,7 +377,7 @@ public class ModularArrowEntity extends AbstractArrow {
 
             // 2. DETONATION
             if (this.resonanceTicks == 0) {
-                if (!this.level().isClientSide && target instanceof LivingEntity livingTarget) {
+                if (!this.level().isClientSide() && target instanceof LivingEntity livingTarget) {
 
                     // Strip the target's i-frames
                     livingTarget.invulnerableTime = 0;
@@ -389,13 +394,13 @@ public class ModularArrowEntity extends AbstractArrow {
                             SoundEvents.WARDEN_SONIC_BOOM, this.getSoundSource(), 1.0f, 1.0f);
                 }
 
-                if (!this.level().isClientSide) {
+                if (!this.level().isClientSide()) {
                     this.discard(); // Finally allow the arrow to vanish
                 }
             }
         }
 
-        if (!this.level().isClientSide && this.isInWater()) {
+        if (!this.level().isClientSide() && this.isInWater()) {
             if (this.getPersistentData().getBoolean("fletcherstrestle:amphibious").orElse(false)) {
                 this.setDeltaMovement(this.getDeltaMovement().scale(1.65D));
 
@@ -406,7 +411,7 @@ public class ModularArrowEntity extends AbstractArrow {
             }
         }
 
-        if (this.isHooked() && !this.level().isClientSide) {
+        if (this.isHooked() && !this.level().isClientSide()) {
             Entity owner = this.getOwner();
 
             if (owner instanceof Player player && player.isAlive()) {
@@ -505,7 +510,7 @@ public class ModularArrowEntity extends AbstractArrow {
         if ("trailing_rope".equals(assembly.head())) {
 
             // We ONLY deploy if the arrow hits the underside of a block (the ceiling)
-            if (result.getDirection() == Direction.DOWN && !this.level().isClientSide) {
+            if (result.getDirection() == Direction.DOWN && !this.level().isClientSide()) {
                 // Start the deployment sequence!
                 this.isDeployingRope = true;
                 this.ropesPlaced = 0;
@@ -551,7 +556,7 @@ public class ModularArrowEntity extends AbstractArrow {
             this.xRotO = this.getXRot();
             this.setCritArrow(false); // Stop the critical hit particles after it bounces
 
-            this.hasImpulse = true;
+            /* hasImpulse removed in 26.1 */;
             this.bounceCount++;
 
             this.playSound(net.minecraft.sounds.SoundEvents.SLIME_BLOCK_FALL, 1.0F, 1.2F / (this.random.nextFloat() * 0.2F + 0.9F));
@@ -594,6 +599,7 @@ public class ModularArrowEntity extends AbstractArrow {
                     if (d2 >= radius * radius) continue;
                     final double intensity = 1.0 - Math.sqrt(d2) / radius;
 
+                    // 26.1: forEachEffect now takes a duration scale param.
                     potion.forEachEffect(eff -> {
                         int dur = Math.max(20, (int) (eff.getDuration() * intensity + 0.5));
                         entity.addEffect(new MobEffectInstance(
@@ -602,16 +608,13 @@ public class ModularArrowEntity extends AbstractArrow {
                                 eff.getAmplifier(),
                                 eff.isAmbient(),
                                 eff.isVisible()), this.getOwner());
-                    });
+                    }, 1.0F);
                 }
 
                 // Coloured cloud at the impact site so the splash is visible.
+                // 26.1: DustParticleOptions takes (int color, float scale).
                 int color = potion.getColor();
-                float r = ((color >> 16) & 0xFF) / 255f;
-                float g = ((color >>  8) & 0xFF) / 255f;
-                float b = ( color        & 0xFF) / 255f;
-                sl.sendParticles(new net.minecraft.core.particles.DustParticleOptions(
-                                new org.joml.Vector3f(r, g, b), 1.0f),
+                sl.sendParticles(new net.minecraft.core.particles.DustParticleOptions(color, 1.0f),
                         hitPos.x, hitPos.y, hitPos.z,
                         30, 1.0, 1.0, 1.0, 0.1);
             }

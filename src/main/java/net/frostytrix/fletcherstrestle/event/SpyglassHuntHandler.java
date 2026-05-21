@@ -58,7 +58,7 @@ public final class SpyglassHuntHandler {
     public static void onPlayerTick(PlayerTickEvent.Post event) {
         Player player = event.getEntity();
         // Server side only — we never trust client input for entity targeting.
-        if (player.level().isClientSide) return;
+        if (player.level().isClientSide()) return;
         if (!(player instanceof ServerPlayer)) return;
 
         LockOnData data = LOCK_DATA.computeIfAbsent(player.getUUID(), id -> new LockOnData());

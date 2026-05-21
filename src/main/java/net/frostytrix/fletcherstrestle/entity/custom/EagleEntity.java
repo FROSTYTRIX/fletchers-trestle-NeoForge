@@ -198,7 +198,7 @@ public class EagleEntity extends TamableAnimal {
         if (!this.isTame()) {
             // Only raw rabbit or fish can tame
             if (stack.is(Items.RABBIT) || stack.is(Items.COD) || stack.is(Items.SALMON)) {
-                if (!this.level().isClientSide) {
+                if (!this.level().isClientSide()) {
                     stack.consume(1, player);
                     // 30% chance to tame (same as vanilla wolf)
                     if (this.random.nextInt(10) < 3) {
@@ -219,7 +219,7 @@ public class EagleEntity extends TamableAnimal {
         //  - sneak + right-click → toggle fetch mode (auto-fetch on/off)
         //  - right-click          → toggle sit
         if (this.isOwnedBy(player) && stack.isEmpty()) {
-            if (!this.level().isClientSide) {
+            if (!this.level().isClientSide()) {
                 if (player.isShiftKeyDown()) {
                     boolean newMode = !this.isFetchModeEnabled();
                     this.setFetchModeEnabled(newMode);
@@ -472,7 +472,7 @@ public class EagleEntity extends TamableAnimal {
         // state is dead. STATE_RETURNING with no inventory is similarly stale.
         // STATE_FETCHING is harder to validate here (target lives on the goal)
         // so we rely on the goal's own giveUpTimer + canContinueToUse to clear it.
-        if (!this.level().isClientSide) {
+        if (!this.level().isClientSide()) {
             int curState = this.getEagleState();
             if (curState == STATE_HUNTING && huntTarget == null) {
                 this.setEagleState(STATE_IDLE);

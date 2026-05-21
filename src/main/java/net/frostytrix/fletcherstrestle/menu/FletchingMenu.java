@@ -189,7 +189,7 @@ public class FletchingMenu extends AbstractContainerMenu {
     public void removed(@NotNull Player player) {
         super.removed(player);
         this.resultSlots.clearContent(); // Prevents ghost items dropping
-        if (!player.level().isClientSide) {
+        if (!player.level().isClientSide()) {
             this.clearContainer(player, this.craftSlots);
         }
     }
