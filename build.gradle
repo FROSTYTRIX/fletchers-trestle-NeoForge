@@ -75,14 +75,21 @@ neoForge {
             systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
         }
 
-        data {
-            data()
+        // 26.1: the single `data` run was split into `clientData` and `serverData`.
+        // Use clientData here — it covers all client-side datagen (block/item
+        // models, tags, recipes that don't need a server-only generator).
+        clientData {
+            clientData()
+            programArguments.addAll '--mod', project.mod_id, '--all',
+                    '--output', file('src/generated/resources/').getAbsolutePath(),
+                    '--existing', file('src/main/resources/').getAbsolutePath()
+        }
 
-            // example of overriding the workingDirectory set in configureEach above, uncomment if you want to use it
-            // gameDirectory = project.file('run-data')
-
-            // Specify the modid for data generation, where to output the resulting resource, and where to look for existing resources.
-            programArguments.addAll '--mod', project.mod_id, '--all', '--output', file('src/generated/resources/').getAbsolutePath(), '--existing', file('src/main/resources/').getAbsolutePath()
+        serverData {
+            serverData()
+            programArguments.addAll '--mod', project.mod_id, '--all',
+                    '--output', file('src/generated/resources/').getAbsolutePath(),
+                    '--existing', file('src/main/resources/').getAbsolutePath()
         }
 
         // applies to all the run configs above

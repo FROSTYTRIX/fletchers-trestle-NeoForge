@@ -103,7 +103,7 @@ public class EagleEntity extends TamableAnimal {
         this.setNoGravity(true);
         // Eagles never despawn once tamed
         this.setPersistenceRequired();
-        this.setPathfindingMalus(PathType.DANGER_FIRE, -1f);
+        this.setPathfindingMalus(PathType.DAMAGE_FIRE, -1f);
         this.setPathfindingMalus(PathType.WATER,        -1f);
         this.setPathfindingMalus(PathType.OPEN,          0f);
     }
@@ -243,72 +243,74 @@ public class EagleEntity extends TamableAnimal {
 
     // ---------------------------------------------------------------
     // Step 9 — Save/Load
+    // 26.1: Entity save API uses ValueOutput / ValueInput instead of
+    // CompoundTag. Primitive helpers exist; for items we use the Codec
+    // dispatch (output.store / input.read).
     // ---------------------------------------------------------------
     @Override
-    public void addAdditionalSaveData(CompoundTag tag) {
-        super.addAdditionalSaveData(tag); // saves tame/owner data
-        // Sanitize state on save. Transient states (FETCHING, RETURNING,
-        // HUNTING) depend on goal-local data (target arrow, hunt target) that
-        // doesn't survive a save/reload. Persisting them would leave the eagle
-        // "stuck" busy after a load with no goal actually running. Only the
-        // resting states are safe to persist.
+    public void addAdditionalSaveData(net.minecraft.world.level.storage.ValueOutput output) {
+        super.addAdditionalSaveData(output);
+
+        // Sanitize state on save; transient states (FETCHING etc.) depend on
+        // goal-local data that doesn't survive a reload.
         int state = this.getEagleState();
         boolean persistent = (state == STATE_IDLE || state == STATE_PERCHED);
-        tag.putInt("EagleState", persistent ? state : STATE_IDLE);
+        output.putInt("EagleState", persistent ? state : STATE_IDLE);
+        output.putBoolean("FetchMode", this.isFetchModeEnabled());
 
-        // Persist the fetch inventory so a save mid-fetch doesn't lose items.
-        ListTag items = new ListTag();
+        // Fetch inventory: store via Codec list. Empty stacks dropped so
+        // the saved blob stays tight.
+        var inv = output.list("FetchInventory", SlotStack.CODEC);
         for (int i = 0; i < fetchInventory.getContainerSize(); i++) {
             ItemStack stack = fetchInventory.getItem(i);
-            if (stack.isEmpty()) continue;
-            CompoundTag slotTag = new CompoundTag();
-            slotTag.putByte("Slot", (byte) i);
-            Tag saved = stack.save(this.registryAccess(), new CompoundTag());
-            if (saved instanceof CompoundTag c) slotTag.merge(c);
-            items.add(slotTag);
+            if (!stack.isEmpty()) inv.add(new SlotStack(i, stack));
         }
-        tag.put("FetchInventory", items);
-        tag.putBoolean("FetchMode", this.isFetchModeEnabled());
 
         if (perchPos != null) {
-            tag.putInt("PerchX", perchPos.getX());
-            tag.putInt("PerchY", perchPos.getY());
-            tag.putInt("PerchZ", perchPos.getZ());
+            output.putInt("PerchX", perchPos.getX());
+            output.putInt("PerchY", perchPos.getY());
+            output.putInt("PerchZ", perchPos.getZ());
         }
         if (nestPos != null) {
-            tag.putInt("NestX", nestPos.getX());
-            tag.putInt("NestY", nestPos.getY());
-            tag.putInt("NestZ", nestPos.getZ());
+            output.putInt("NestX", nestPos.getX());
+            output.putInt("NestY", nestPos.getY());
+            output.putInt("NestZ", nestPos.getZ());
         }
     }
 
     @Override
-    public void readAdditionalSaveData(CompoundTag tag) {
-        super.readAdditionalSaveData(tag);
-        this.setEagleState(tag.getInt("EagleState"));
-        // Default to true for eagles tamed before this field existed.
-        this.setFetchModeEnabled(tag.contains("FetchMode") ? tag.getBoolean("FetchMode") : true);
+    public void readAdditionalSaveData(net.minecraft.world.level.storage.ValueInput input) {
+        super.readAdditionalSaveData(input);
+
+        this.setEagleState(input.getInt("EagleState").orElse(STATE_IDLE));
+        this.setFetchModeEnabled(input.getBooleanOr("FetchMode", true));
 
         fetchInventory.clearContent();
-        ListTag items = tag.getList("FetchInventory", Tag.TAG_COMPOUND);
-        for (int i = 0; i < items.size(); i++) {
-            CompoundTag slotTag = items.getCompound(i);
-            int slot = slotTag.getByte("Slot") & 0xFF;
-            if (slot >= fetchInventory.getContainerSize()) continue;
-            ItemStack.parse(this.registryAccess(), slotTag)
-                    .ifPresent(s -> fetchInventory.setItem(slot, s));
-        }
+        input.list("FetchInventory", SlotStack.CODEC).ifPresent(list -> {
+            for (SlotStack ss : list) {
+                if (ss.slot() >= 0 && ss.slot() < fetchInventory.getContainerSize()) {
+                    fetchInventory.setItem(ss.slot(), ss.stack());
+                }
+            }
+        });
 
-        if (tag.contains("PerchX")) {
-            this.perchPos = new BlockPos(tag.getInt("PerchX"), tag.getInt("PerchY"), tag.getInt("PerchZ"));
-        } else {
-            this.perchPos = null;
-        }
-        if (tag.contains("NestX")) {
-            this.nestPos = new BlockPos(tag.getInt("NestX"), tag.getInt("NestY"), tag.getInt("NestZ"));
-        } else {
-            this.nestPos = null;
-        }
+        java.util.Optional<Integer> px = input.getInt("PerchX");
+        java.util.Optional<Integer> nx = input.getInt("NestX");
+        this.perchPos = px.<BlockPos>map(x -> new BlockPos(x,
+                input.getInt("PerchY").orElse(0),
+                input.getInt("PerchZ").orElse(0))).orElse(null);
+        this.nestPos = nx.<BlockPos>map(x -> new BlockPos(x,
+                input.getInt("NestY").orElse(0),
+                input.getInt("NestZ").orElse(0))).orElse(null);
+    }
+
+    // Helper record so we can serialise the inventory via Codec.list().
+    private record SlotStack(int slot, ItemStack stack) {
+        static final com.mojang.serialization.Codec<SlotStack> CODEC =
+                com.mojang.serialization.codecs.RecordCodecBuilder.create(inst -> inst.group(
+                        com.mojang.serialization.Codec.INT.fieldOf("Slot").forGetter(SlotStack::slot),
+                        ItemStack.CODEC.fieldOf("Stack").forGetter(SlotStack::stack)
+                ).apply(inst, SlotStack::new));
     }
 
     @Nullable
@@ -454,7 +456,7 @@ public class EagleEntity extends TamableAnimal {
         // Auto-wake: if perched and the owner returns to close range, stand up
         // so FollowOwnerGoal can take over. Without this the eagle would stay
         // sitting forever and need a manual right-click to rejoin.
-        if (!this.level().isClientSide
+        if (!this.level().isClientSide()
                 && this.getEagleState() == STATE_PERCHED
                 && this.isOrderedToSit()) {
             var owner = this.getOwner();
