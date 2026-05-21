@@ -94,7 +94,7 @@ public class ModularArrowItem extends ArrowItem {
         BROADHEAD("broadhead", 1.15f, true, false), // Applies Bleed
         BODKIN_POINT("bodkin_point", 1.0f, false, true),        // Armor Piercing
         RESONANCE_TIP("resonance_tip", 1.0f, false, false),
-        BARBED_TIP("barbed_tip", 1.0f, true, false),
+        BARBED_TIP("barbed_tip", 1.0f, false, false),  // Pulls the target toward the shooter on hit
         WEIGHTED_BLUNT("weighted_blunt", 1.05f, false, false),
         WEIGHTED_HOOK("weighted_hook", 0.5f, false, false),
         TRAILING_ROPE("trailing_rope", 0.3f, false, false),

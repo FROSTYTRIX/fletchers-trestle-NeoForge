@@ -18,7 +18,9 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -48,6 +50,9 @@ public class ModularArrowEntity extends AbstractArrow {
     //Jungle Shaft Bounces
     private int bounceCount = 0;
     private static final int MAX_BOUNCES = 3;
+
+    // Vex Fletching — pass through one block of cover, once per arrow.
+    private boolean hasPhased = false;
 
     //Grappling
     private int hookTicks = 0;
@@ -101,16 +106,17 @@ public class ModularArrowEntity extends AbstractArrow {
     private void applyFlightModifiers(ItemStack ammo) {
         ArrowAssembly assembly = ammo.get(ModDataComponents.ARROW_ASSEMBLY.get());
         if (assembly != null) {
-            // Read the enums
             ModularArrowItem.ShaftStats shaft = ModularArrowItem.ShaftStats.fromString(assembly.shaft());
             ModularArrowItem.HeadStats head = ModularArrowItem.HeadStats.fromString(assembly.head());
 
-            // Apply base damage multiplier from the head
             this.setBaseDamage(this.getBaseDamage() * head.getDamageMult());
-
-            // Note: Adjusting actual gravity and velocity happens differently in 1.21,
-            // but we can scale the motion here for the initial shot speed.
             this.setDeltaMovement(this.getDeltaMovement().scale(shaft.getVelocityMult()));
+
+            // Dark-oak shaft: piercing I — passes through one entity before
+            // stopping. Vanilla AbstractArrow handles the bookkeeping.
+            if ("dark_oak".equals(assembly.shaft())) {
+                this.setPierceLevel((byte) 1);
+            }
         }
     }
 
@@ -173,9 +179,23 @@ public class ModularArrowEntity extends AbstractArrow {
         ModularArrowItem.HeadStats head = ModularArrowItem.HeadStats.fromString(assembly.head());
 
         if (result.getEntity() instanceof LivingEntity target) {
-            // BROADHEAD: Bleeding (Poison) for 3s (60 ticks)
+            // BROADHEAD: Bleeding for 3s (60 ticks).
             if (head.causesBleed()) {
                 target.addEffect(new MobEffectInstance(ModEffects.BLEED_EFFECT, 60, 0));
+            }
+
+            // BARBED TIP: yank the target toward the shooter on hit. A small
+            // upward lift keeps them from getting caught on terrain mid-pull.
+            if ("barbed_tip".equals(assembly.head()) && this.getOwner() != null) {
+                Vec3 toShooter = this.getOwner().position()
+                        .subtract(target.position())
+                        .normalize()
+                        .scale(0.75);
+                target.setDeltaMovement(toShooter.x,
+                        Math.max(0.25, toShooter.y),
+                        toShooter.z);
+                target.hurtMarked = true;
+                this.playSound(SoundEvents.LEASH_KNOT_PLACE, 1.0f, 1.6f);
             }
 
             if (head.isArmorPiercing()) {
@@ -447,6 +467,27 @@ public class ModularArrowEntity extends AbstractArrow {
     protected void onHitBlock(BlockHitResult result) {
         ArrowAssembly assembly = this.getAssembly();
 
+        // VEX FLETCHING: phase through one block of cover. Skips the impact
+        // entirely the first time we hit a block; subsequent hits behave normally.
+        // Bypasses every other head/shaft interaction with the surface.
+        if (!this.hasPhased && "vex".equals(assembly.fletching())) {
+            this.hasPhased = true;
+            if (this.level() instanceof ServerLevel sl) {
+                sl.sendParticles(ParticleTypes.SOUL,
+                        this.getX(), this.getY(), this.getZ(),
+                        6, 0.1, 0.1, 0.1, 0.04);
+            }
+            this.playSound(SoundEvents.CHORUS_FRUIT_TELEPORT, 0.4f, 1.6f);
+            // Step the arrow forward past the block so it doesn't immediately
+            // re-collide on the next tick. ~0.6 of a block in the direction
+            // of motion is enough for any 1-block obstacle.
+            Vec3 dir = this.getDeltaMovement().normalize();
+            this.setPos(this.getX() + dir.x * 0.6,
+                        this.getY() + dir.y * 0.6,
+                        this.getZ() + dir.z * 0.6);
+            return;
+        }
+
         if ("glass_vial".equals(assembly.head())) {
             applyGlassVialEffect(result.getLocation());
             return;
@@ -577,6 +618,28 @@ public class ModularArrowEntity extends AbstractArrow {
         }
 
         this.discard();
+    }
+
+    // Spruce limb's "built-in Punch I": add an extra knockback impulse on
+    // top of whatever vanilla applies. Uses the same formula vanilla uses
+    // for arrow knockback (horizontal-velocity-based + KB resistance),
+    // scaled to roughly match enchantment Punch I.
+    @Override
+    protected void doKnockback(LivingEntity entity, DamageSource damageSource) {
+        super.doKnockback(entity, damageSource);
+
+        if (!this.getPersistentData().getBoolean("fletcherstrestle:punch")) return;
+
+        double resistance = Math.max(0.0,
+                1.0 - entity.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE));
+        Vec3 push = this.getDeltaMovement()
+                .multiply(1.0, 0.0, 1.0)
+                .normalize()
+                .scale(0.6 * 0.6 * resistance);  // strength 0.6 * vanilla's 0.6 scale
+        if (push.lengthSqr() > 0) {
+            entity.push(push.x, 0.1, push.z);
+            entity.hurtMarked = true;
+        }
     }
 
     @Override

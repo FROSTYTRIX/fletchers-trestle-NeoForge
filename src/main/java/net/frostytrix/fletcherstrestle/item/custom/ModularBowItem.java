@@ -86,6 +86,9 @@ public class ModularBowItem extends BowItem {
                 if (limb.isAmphibian()) {
                     arrow.getPersistentData().putBoolean("fletcherstrestle:amphibious", true);
                 }
+                // Spruce limb: built-in Punch I. The arrow entity reads this
+                // flag in doKnockback() to apply an extra knockback impulse,
+                // since AbstractArrow.setKnockback no longer exists in 1.21.
                 if (limb.getMaterialName().equals("Spruce")) {
                     arrow.getPersistentData().putBoolean("fletcherstrestle:punch", true);
                 }

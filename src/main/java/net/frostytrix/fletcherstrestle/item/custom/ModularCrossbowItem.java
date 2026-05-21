@@ -157,6 +157,11 @@ public class ModularCrossbowItem extends CrossbowItem {
                 arrow.setRemainingFireTicks(100);
             }
 
+            // --- SPRUCE: Built-in Punch I (read by ModularArrowEntity.doKnockback) ---
+            if (assembly.limbMaterial().equalsIgnoreCase("Spruce")) {
+                arrow.getPersistentData().putBoolean("fletcherstrestle:punch", true);
+            }
+
 
             // --- MANGROVE: Amphibious ---
             // If you have a custom arrow entity that handles water physics,
