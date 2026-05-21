@@ -31,41 +31,20 @@ public class ShavingHorseBlockEntity extends BlockEntity {
         super(ModBlockEntities.SHAVING_HORSE_BE.get(), pos, state);
     }
 
+    // TODO(port-26.1): packet/sync + inventory save stubbed.
+    // ItemStackHandler.serializeNBT/deserializeNBT signature changed;
+    // getUpdateTag/getUpdatePacket/onDataPacket also use ValueOutput now.
+    // Only the simple int counter persists for now.
+
     @Override
-    public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
-        return saveCustomOnly(new CompoundTag(), registries);
+    protected void saveAdditional(net.minecraft.world.level.storage.ValueOutput output) {
+        super.saveAdditional(output);
+        output.putInt("currentShaves", currentShaves);
     }
 
     @Override
-    public ClientboundBlockEntityDataPacket getUpdatePacket() {
-        return ClientboundBlockEntityDataPacket.create(this);
-    }
-
-    @Override
-    public void onDataPacket(net.minecraft.network.Connection net, net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket pkt, HolderLookup.Provider registries) {
-        CompoundTag tag = pkt.getTag();
-        if (tag != null) {
-            this.loadAdditional(tag, registries);
-        }
-    }
-
-    protected CompoundTag saveCustomOnly(CompoundTag tag, HolderLookup.Provider registries) {
-        tag.put("inventory", itemHandler.serializeNBT(registries));
-        tag.putInt("currentShaves", currentShaves);
-        return tag;
-    }
-
-    @Override
-    protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
-        super.saveAdditional(tag, registries);
-        tag.put("inventory", itemHandler.serializeNBT(registries));
-        tag.putInt("currentShaves", currentShaves);
-    }
-
-    @Override
-    protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
-        super.loadAdditional(tag, registries);
-        itemHandler.deserializeNBT(registries, tag.getCompound("inventory"));
-        currentShaves = tag.getInt("currentShaves");
+    protected void loadAdditional(net.minecraft.world.level.storage.ValueInput input) {
+        super.loadAdditional(input);
+        currentShaves = input.getIntOr("currentShaves", 0);
     }
 }

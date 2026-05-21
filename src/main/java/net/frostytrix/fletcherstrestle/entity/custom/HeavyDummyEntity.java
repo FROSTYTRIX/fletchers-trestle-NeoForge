@@ -15,6 +15,8 @@ import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 
 // TODO(port-26.1): Big entity-API rewrite needed.
 //
@@ -98,14 +100,15 @@ public class HeavyDummyEntity extends LivingEntity {
 
     public String getSkinName() { return this.entityData.get(DATA_SKIN_NAME); }
 
+
     @Override
-    public void addAdditionalSaveData(CompoundTag compound) {
+    public void addAdditionalSaveData(ValueOutput compound) {
         super.addAdditionalSaveData(compound);
         compound.putString("SkinName", this.getSkinName());
     }
 
     @Override
-    public void readAdditionalSaveData(CompoundTag compound) {
+    public void readAdditionalSaveData(ValueInput compound) {
         super.readAdditionalSaveData(compound);
         // CompoundTag.getString returns Optional<String> in 26.1
         this.setSkin(compound.getString("SkinName").orElse(""));

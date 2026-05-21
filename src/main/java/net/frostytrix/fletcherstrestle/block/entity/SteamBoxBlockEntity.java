@@ -118,20 +118,21 @@ public class SteamBoxBlockEntity extends BlockEntity {
         }
     }
 
+    // TODO(port-26.1): save/load stubbed — full migration needs:
+    //   - ItemStackHandler.serializeNBT/deserializeNBT signatures changed
+    //   - FluidTank.writeToNBT/readFromNBT likewise
+    //   - tag.getIntArray returns Optional now (input.getIntArray same)
+    // Until ported, the steam box loses state across saves but compiles.
     @Override
-    protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
-        super.saveAdditional(tag, registries);
-        tag.put("inventory", itemHandler.serializeNBT(registries));
-        tag.put("fluid", fluidTank.writeToNBT(registries, new CompoundTag()));
-        tag.putIntArray("cookingTimes", cookingTimes);
+    protected void saveAdditional(net.minecraft.world.level.storage.ValueOutput output) {
+        super.saveAdditional(output);
+        output.putIntArray("cookingTimes", cookingTimes);
     }
 
     @Override
-    protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
-        super.loadAdditional(tag, registries);
-        itemHandler.deserializeNBT(registries, tag.getCompound("inventory"));
-        fluidTank.readFromNBT(registries, tag.getCompound("fluid"));
-        cookingTimes = tag.getIntArray("cookingTimes");
+    protected void loadAdditional(net.minecraft.world.level.storage.ValueInput input) {
+        super.loadAdditional(input);
+        cookingTimes = input.getIntArray("cookingTimes").orElse(new int[16]);
         if (cookingTimes.length != 16) cookingTimes = new int[16];
     }
 }

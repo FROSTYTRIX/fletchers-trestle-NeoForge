@@ -8,6 +8,7 @@ import net.frostytrix.fletcherstrestle.entity.ModEntities;
 import net.frostytrix.fletcherstrestle.entity.custom.EagleEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
@@ -96,7 +97,7 @@ public class EagleNestFeature extends Feature<NoneFeatureConfiguration> {
     }
 
     private static void spawnWildEagle(WorldGenLevel level, BlockPos nestPos, RandomSource random) {
-        EagleEntity eagle = ModEntities.EAGLE.get().create(level.getLevel());
+        EagleEntity eagle = ModEntities.EAGLE.get().create(level.getLevel(), EntitySpawnReason.STRUCTURE);
         if (eagle == null) return;
 
         // Place each eagle in a small ring around (and above) the nest.

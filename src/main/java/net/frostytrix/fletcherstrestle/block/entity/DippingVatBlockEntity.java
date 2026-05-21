@@ -48,25 +48,23 @@ public class DippingVatBlockEntity extends BlockEntity {
     }
 
     // --- DATA SAVING ---
+    // TODO(port-26.1): FluidTank persistence stubbed. The 1.21.1 form was
+    // tag.put("Fluid", fluidTank.writeToNBT(registries, new CompoundTag()))
+    // but writeToNBT and the BE save signature both changed. Vat starts
+    // empty after every reload until ported properly.
     @Override
-    protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
-        super.saveAdditional(tag, registries);
-        tag.put("Fluid", fluidTank.writeToNBT(registries, new CompoundTag()));
+    protected void saveAdditional(net.minecraft.world.level.storage.ValueOutput output) {
+        super.saveAdditional(output);
     }
 
     @Override
-    protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
-        super.loadAdditional(tag, registries);
-        fluidTank.readFromNBT(registries, tag.getCompound("Fluid"));
+    protected void loadAdditional(net.minecraft.world.level.storage.ValueInput input) {
+        super.loadAdditional(input);
     }
 
-    // --- NETWORK SYNC FOR THE RENDERER ---
-    @Override
-    public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
-        CompoundTag tag = super.getUpdateTag(registries);
-        saveAdditional(tag, registries);
-        return tag;
-    }
+    // TODO(port-26.1): getUpdateTag(HolderLookup.Provider) is gone — sync
+    // now happens via packet handling that uses the new ValueOutput too.
+    // Stubbed; vat's fluid state won't render-sync to clients yet.
 
     // 3. On expédie le paquet au client
     @Override

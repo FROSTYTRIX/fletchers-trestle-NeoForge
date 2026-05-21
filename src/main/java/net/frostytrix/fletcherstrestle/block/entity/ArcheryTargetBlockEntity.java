@@ -51,45 +51,20 @@ public class ArcheryTargetBlockEntity extends BlockEntity {
 
     // --- NBT Save / Load ---
 
+    // TODO(port-26.1): shot list save + packet sync stubbed.
+    // ShotRecord.toNBT/fromNBT needs migrating to a Codec, and the
+    // getUpdateTag/getUpdatePacket/onDataPacket trio uses ValueOutput now.
+    // Until ported, shots are lost on save/reload and don't sync to the
+    // client GUI (which is also stubbed).
+
     @Override
-    protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
-        super.saveAdditional(tag, registries);
-        ListTag list = new ListTag();
-        for (ShotRecord shot : shots) {
-            list.add(shot.toNBT());
-        }
-        tag.put("shots", list);
+    protected void saveAdditional(net.minecraft.world.level.storage.ValueOutput output) {
+        super.saveAdditional(output);
     }
 
     @Override
-    protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
-        super.loadAdditional(tag, registries);
+    protected void loadAdditional(net.minecraft.world.level.storage.ValueInput input) {
+        super.loadAdditional(input);
         shots.clear();
-        if (tag.contains("shots", Tag.TAG_LIST)) {
-            ListTag list = tag.getList("shots", Tag.TAG_COMPOUND);
-            for (int i = 0; i < list.size(); i++) {
-                shots.add(ShotRecord.fromNBT(list.getCompound(i)));
-            }
-        }
-    }
-
-    // --- Sync client <-> server (for GUI) ---
-
-    @Override
-    public ClientboundBlockEntityDataPacket getUpdatePacket() {
-        return ClientboundBlockEntityDataPacket.create(this);
-    }
-
-    @Override
-    public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
-        return saveWithoutMetadata(registries);
-    }
-
-    @Override
-    public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt, HolderLookup.Provider registries) {
-        CompoundTag tag = pkt.getTag();
-        if (tag != null) {
-            loadAdditional(tag, registries);
-        }
     }
 }
