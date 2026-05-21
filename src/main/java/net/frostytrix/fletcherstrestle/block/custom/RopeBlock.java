@@ -9,7 +9,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.ItemInteractionResult;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -127,13 +127,13 @@ public class RopeBlock extends Block implements SimpleWaterloggedBlock {
     }
 
     @Override
-    protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
+    protected InteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
         // 1. Only react if the player is holding the Rope item
         if (stack.is(this.asItem())) {
 
             // If the player is sneaking, we let them place it normally (against the side/top)
             if (player.isSecondaryUseActive()) {
-                return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+                return InteractionResult.TRY_WITH_EMPTY_HAND;
             }
 
             if (!level.isClientSide) {
@@ -146,7 +146,7 @@ public class RopeBlock extends Block implements SimpleWaterloggedBlock {
 
                     // Safety: Stop if we go outside the world
                     if (level.isOutsideBuildHeight(searchPos)) {
-                        return ItemInteractionResult.FAIL;
+                        return InteractionResult.FAIL;
                     }
                 }
 
@@ -169,14 +169,14 @@ public class RopeBlock extends Block implements SimpleWaterloggedBlock {
                         stack.shrink(1);
                     }
 
-                    return ItemInteractionResult.SUCCESS;
+                    return InteractionResult.SUCCESS;
                 }
             } else {
-                return ItemInteractionResult.SUCCESS;
+                return InteractionResult.SUCCESS;
             }
         }
 
-        return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+        return InteractionResult.TRY_WITH_EMPTY_HAND;
     }
 
     // --- WATERLOGGING & DATA ---

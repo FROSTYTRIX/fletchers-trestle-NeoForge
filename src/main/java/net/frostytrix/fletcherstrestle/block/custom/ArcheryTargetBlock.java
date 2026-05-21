@@ -17,7 +17,8 @@ import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.core.Direction;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -26,8 +27,8 @@ import javax.annotation.Nullable;
 
 public class ArcheryTargetBlock extends BaseEntityBlock {
 
-    public static final DirectionProperty FACING = DirectionProperty.create("facing",
-            Direction.NORTH, Direction.SOUTH, Direction.EAST, Direction.WEST);
+    public static final EnumProperty<Direction> FACING =
+            net.minecraft.world.level.block.state.properties.BlockStateProperties.HORIZONTAL_FACING;
 
     private static final VoxelShape SHAPE_SOUTH = Block.box(2.0D, 2.0D, 0.0D, 14.0D, 14.0D, 2.0D);
     private static final VoxelShape SHAPE_NORTH = Block.box(2.0D, 2.0D, 14.0D, 14.0D, 14.0D, 16.0D);

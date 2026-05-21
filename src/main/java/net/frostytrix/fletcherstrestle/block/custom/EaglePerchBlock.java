@@ -17,7 +17,8 @@ import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.core.Direction;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.BooleanOp;
@@ -42,8 +43,8 @@ import java.util.UUID;
 public class EaglePerchBlock extends BaseEntityBlock {
 
     public static final MapCodec<EaglePerchBlock> CODEC = simpleCodec(EaglePerchBlock::new);
-    public static final DirectionProperty FACING = DirectionProperty.create("facing",
-            Direction.NORTH, Direction.SOUTH, Direction.EAST, Direction.WEST);
+    public static final EnumProperty<Direction> FACING =
+            net.minecraft.world.level.block.state.properties.BlockStateProperties.HORIZONTAL_FACING;
 
     // Collision = just base + pole. The crossbar is decorative so the
     // player doesn't catch on it while walking past.
