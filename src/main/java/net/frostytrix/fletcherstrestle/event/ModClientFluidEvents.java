@@ -1,51 +1,9 @@
-package net.frostytrix.fletcherstrestle.event; // Ajuste selon ton package
+package net.frostytrix.fletcherstrestle.event;
 
-import net.frostytrix.fletcherstrestle.FletcherTrestle;
-import net.frostytrix.fletcherstrestle.fluid.ModFluidTypes;
-import net.minecraft.core.component.DataComponents;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.Identifier;
-import net.minecraft.world.item.alchemy.PotionContents;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
-import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
-import net.neoforged.neoforge.fluids.FluidStack;
-
-@EventBusSubscriber(modid = FletcherTrestle.MOD_ID, value = Dist.CLIENT)
-public class ModClientFluidEvents {
-
-    @SubscribeEvent
-    public static void onClientExtensions(RegisterClientExtensionsEvent event) {
-
-        // On enregistre nos extensions visuelles et on les lie à notre fluide (ModFluidTypes.LIQUID_POTION_TYPE)
-        event.registerFluidType(new IClientFluidTypeExtensions() {
-            private static final Identifier WATER_STILL = Identifier.withDefaultNamespace("block/water_still");
-            private static final Identifier WATER_FLOW = Identifier.withDefaultNamespace("block/water_flow");
-
-            @Override
-            public Identifier getStillTexture() { return WATER_STILL; }
-
-            @Override
-            public Identifier getFlowingTexture() { return WATER_FLOW; }
-
-            // La magie de la couleur dynamique est ici
-            @Override
-            public int getTintColor(FluidStack stack) {
-                net.minecraft.world.item.component.CustomData customData = stack.get(DataComponents.CUSTOM_DATA);
-                if (customData != null && customData.contains("potion")) {
-                    String potionId = customData.copyTag().getString("potion");
-                    var potionHolder = BuiltInRegistries.POTION.getHolder(Identifier.parse(potionId)).orElse(null);
-
-                    if (potionHolder != null) {
-                        PotionContents contents = new PotionContents(potionHolder);
-                        return contents.getColor() | 0xFF000000;
-                    }
-                }
-                return 0xFF385DC6; // Bleu par défaut si aucune potion n'est détectée
-            }
-        }, ModFluidTypes.LIQUID_POTION_TYPE.get());
-
-    }
+// TODO(port-26.1): IClientFluidTypeExtensions/ClientExtensionsEvent rewrite.
+// 1.21.1: registered a fluid tint that read the potion id off CustomData and
+// returned the potion's color. 26.1: Registry.getHolder(Identifier) removed,
+// CompoundTag.getString returns Optional, fluid extension overrides changed.
+public final class ModClientFluidEvents {
+    private ModClientFluidEvents() {}
 }
