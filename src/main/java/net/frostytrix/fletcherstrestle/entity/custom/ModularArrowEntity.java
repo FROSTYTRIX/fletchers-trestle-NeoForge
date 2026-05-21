@@ -109,7 +109,7 @@ public class ModularArrowEntity extends AbstractArrow {
             ModularArrowItem.ShaftStats shaft = ModularArrowItem.ShaftStats.fromString(assembly.shaft());
             ModularArrowItem.HeadStats head = ModularArrowItem.HeadStats.fromString(assembly.head());
 
-            this.setBaseDamage(this.getBaseDamage() * head.getDamageMult());
+            this.setBaseDamage(this.baseDamage * head.getDamageMult());
             this.setDeltaMovement(this.getDeltaMovement().scale(shaft.getVelocityMult()));
 
             // Dark-oak shaft: piercing I — passes through one entity before
@@ -151,7 +151,7 @@ public class ModularArrowEntity extends AbstractArrow {
         if ("weighted_blunt".equals(assembly.head()) && this.startPos != null) {
             double distance = this.position().distanceTo(this.startPos);
             double bonusMultiplier = 1.0 + ((distance / 100));
-            this.setBaseDamage(this.getBaseDamage() * bonusMultiplier);
+            this.setBaseDamage(this.baseDamage * bonusMultiplier);
         }
 
         if (result.getEntity() instanceof LivingEntity target) {
@@ -160,7 +160,7 @@ public class ModularArrowEntity extends AbstractArrow {
                 this.resonanceTargetId = target.getId();
 
                 // Calculate the echo damage
-                double impactDamage = this.getBaseDamage() * velocityOnImpact;
+                double impactDamage = this.baseDamage * velocityOnImpact;
                 this.resonanceDamage = (float) impactDamage * 0.3f;
 
                 // Play the initial heartbeat
@@ -195,11 +195,11 @@ public class ModularArrowEntity extends AbstractArrow {
                         Math.max(0.25, toShooter.y),
                         toShooter.z);
                 target.hurtMarked = true;
-                this.playSound(SoundEvents.LEASH_KNOT_PLACE, 1.0f, 1.6f);
+                this.playSound(SoundEvents.WOOL_PLACE, 1.0f, 1.6f);
             }
 
             if (head.isArmorPiercing()) {
-                this.setBaseDamage(this.getBaseDamage() * 1.25);
+                this.setBaseDamage(this.baseDamage * 1.25);
             }
 
             // BOUND (Fletching): 25% chance to drop the arrow on impact instead of breaking
@@ -211,7 +211,7 @@ public class ModularArrowEntity extends AbstractArrow {
             // CRIMSON: Executioner (+50% damage if target is below half health)
             if ("crimson".equals(assembly.shaft())) {
                 if (target.getHealth() < target.getMaxHealth() * 0.5f) {
-                    this.setBaseDamage(this.getBaseDamage() * 1.5);
+                    this.setBaseDamage(this.baseDamage * 1.5);
                 }
             }
 
@@ -221,7 +221,7 @@ public class ModularArrowEntity extends AbstractArrow {
                 Vec3 arrowDir = this.getDeltaMovement().normalize();
                 // If dot product is > 0.5, they are looking in the same direction = Backstab
                 if (targetView.dot(arrowDir) > 0.5) {
-                    this.setBaseDamage(this.getBaseDamage() * 1.4);
+                    this.setBaseDamage(this.baseDamage * 1.4);
                     // Play a ghostly sound
                     this.level().playSound(null, this.getX(), this.getY(), this.getZ(), SoundEvents.BREEZE_WIND_CHARGE_BURST, this.getSoundSource(), 1.0f, 1.5f);
                 }
@@ -229,7 +229,7 @@ public class ModularArrowEntity extends AbstractArrow {
 
             // MANGROVE: Slowness III for 1 second
             if ("mangrove".equals(assembly.shaft())) {
-                target.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 80, 2));
+                target.addEffect(new MobEffectInstance(MobEffects.SLOWNESS, 80, 2));
             }
 
             // CHERRY: Petal Burst (Heal shooter 1 heart)
@@ -259,7 +259,7 @@ public class ModularArrowEntity extends AbstractArrow {
                 }
             }
 
-            if (this.getPersistentData().getBoolean("fletcherstrestle:conductive") && this.level().isThundering()) {
+            if (this.getPersistentData().getBoolean("fletcherstrestle:conductive").orElse(false) && this.level().isThundering()) {
                 LightningBolt lightning = EntityType.LIGHTNING_BOLT.create(this.level());
                 if (lightning != null) {
                     lightning.moveTo(target.position());
@@ -271,11 +271,11 @@ public class ModularArrowEntity extends AbstractArrow {
                 float armorValue = target.getArmorValue();
                 if (armorValue > 0) {
                     // Calculate bonus damage manually since we are inside the impact call
-                    double baseDamage = this.getBaseDamage() * this.getDeltaMovement().length();
+                    double baseDamage = this.baseDamage * this.getDeltaMovement().length();
                     float bonus = (armorValue * 0.25f) * ((float)baseDamage * 0.04f);
 
                     // Temporarily increase damage for this specific hit
-                    this.setBaseDamage(this.getBaseDamage() + (bonus / this.getDeltaMovement().length()));
+                    this.setBaseDamage(this.baseDamage + (bonus / this.getDeltaMovement().length()));
                 }
             }
         }
@@ -396,7 +396,7 @@ public class ModularArrowEntity extends AbstractArrow {
         }
 
         if (!this.level().isClientSide && this.isInWater()) {
-            if (this.getPersistentData().getBoolean("fletcherstrestle:amphibious")) {
+            if (this.getPersistentData().getBoolean("fletcherstrestle:amphibious").orElse(false)) {
                 this.setDeltaMovement(this.getDeltaMovement().scale(1.65D));
 
                 if (this.level() instanceof ServerLevel serverLevel) {
@@ -628,7 +628,7 @@ public class ModularArrowEntity extends AbstractArrow {
     protected void doKnockback(LivingEntity entity, DamageSource damageSource) {
         super.doKnockback(entity, damageSource);
 
-        if (!this.getPersistentData().getBoolean("fletcherstrestle:punch")) return;
+        if (!this.getPersistentData().getBoolean("fletcherstrestle:punch").orElse(false)) return;
 
         double resistance = Math.max(0.0,
                 1.0 - entity.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE));

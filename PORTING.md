@@ -149,6 +149,64 @@ Ecosystem maturity matters. 26.1 is brand new (beta). Wait 1–2 weeks
 for someone to publish a comprehensive 1.21 → 26.1 migration guide and
 the actual port will be much faster.
 
+---
+
+## Phase 2b — recipes (✅ done)
+
+All 5 custom recipes (DippingRecipe, ModularArrowRecipe, ModularWeaponRecipe,
+SteamingRecipe, ShavingHorseRecipe) ported to the new 26.1 API.
+
+**The recipe migration pattern** (apply to any other Recipe<T> impls):
+1. `RecipeSerializer` is now a **record** `(MapCodec<T>, StreamCodec<...>)`, not an interface.
+   Replace inner `static class Serializer implements RecipeSerializer<T>` with:
+   - Static `MapCodec<T> CODEC` and `StreamCodec<...> STREAM_CODEC` fields at top level
+   - `public static RecipeSerializer<T> serializer() { return new RecipeSerializer<>(CODEC, STREAM_CODEC); }`
+   - Update `ModRecipes` to use `RecipeName::serializer` instead of `Serializer::new`
+2. Add 4 new abstract methods: `recipeBookCategory()`, `placementInfo()`,
+   `showNotification()`, `group()`. For station recipes:
+   `return RecipeBookCategories.CRAFTING_MISC` / `PlacementInfo.NOT_PLACEABLE` / `false` / `""`.
+3. Drop the `HolderLookup.Provider` param from `assemble()`.
+4. Update `getSerializer()`/`getType()` to use bounded generics
+   `<? extends Recipe<TInputType>>`.
+5. Remove `canCraftInDimensions()` and `getResultItem()`.
+6. `Ingredient.CODEC_NONEMPTY` → `Ingredient.CODEC`.
+7. `ItemStack.STRICT_CODEC` → `ItemStack.CODEC`.
+8. `CompoundTag.getString()` returns `Optional<String>` — add `.orElse("")`.
+9. `Registry.getHolder(Identifier)` → `Registry.get(Identifier)` (also returns `Optional`).
+
+## Phase 2c — partial: AbstractArrow API changes
+
+AT updated for the new `world.entity.projectile.arrow.AbstractArrow` package:
+- `inGround` field exposed
+- `setPierceLevel(B)V` exposed
+- `baseDamage` field exposed (replaces removed `getBaseDamage()`)
+
+Sed renames applied across codebase:
+- `.getBaseDamage()` → `.baseDamage`
+- `MobEffects.MOVEMENT_SLOWDOWN` → `MobEffects.SLOWNESS`
+- `SoundEvents.LEASH_KNOT_PLACE` → `SoundEvents.WOOL_PLACE`
+- `.level().isClientSide` (field) → `.level().isClientSide()` (method)
+- `getPersistentData().getBoolean("...")` → `...getBoolean("...").orElse(false)`
+
+### What's still broken in ModularArrowEntity (~6 specific call sites)
+- `spawnAtLocation(ItemStack)` → now `spawnAtLocation(ServerLevel, ItemLike)`
+- `EntityType.LIGHTNING_BOLT.create(Level)` → new signature
+  `create(ServerLevel, Consumer<T>, BlockPos, EntitySpawnReason, boolean, boolean)`
+- `lightning.moveTo(Vec3)` → only `moveTo(double, double, double, float, float)` exists
+- `this.inGround` access from within ModularArrowEntity (subclass) — should
+  work via AT but isn't yet, may need a clean rebuild to pick up
+
+## Next session
+
+Pick whichever feels right:
+- **`ModularArrowEntity` finish** — ~6 specific call-site fixes; gameplay-critical
+- **JEI compat layer** (~24 errors across `compat/jei/*`) — broken-but-not-blocking
+- **Datagen providers** (~15 errors) — only runs at `runData`, doesn't block runtime
+- **`ModEvents` enchantment events** (~11 errors) — affects custom enchantments
+
+Recipe migration pattern in this doc above is the best reference for
+applying the same approach to any remaining Recipe-like subsystems.
+
 ### 2. `Screen` method renames
 
 Per the changelog:

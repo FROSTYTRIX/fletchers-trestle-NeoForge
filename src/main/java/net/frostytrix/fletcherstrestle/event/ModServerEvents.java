@@ -69,7 +69,7 @@ public class ModServerEvents {
         v = Math.max(0.0F, Math.min(1.0F, v));
 
         float speed = (float) arrow.getDeltaMovement().length();
-        float estimatedDamage = (float) (arrow.getBaseDamage() * Math.max(0.25D, speed));
+        float estimatedDamage = (float) (arrow.baseDamage * Math.max(0.25D, speed));
 
         target.addShot(new ShotRecord(
                 localX, localY, localZ, u, v, estimatedDamage, speed,

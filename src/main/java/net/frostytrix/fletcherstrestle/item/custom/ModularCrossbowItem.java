@@ -145,7 +145,7 @@ public class ModularCrossbowItem extends CrossbowItem {
             // --- DAMAGE MODIFIER ---
             // Vanilla arrows calculate final damage as (velocity * baseDamage).
             // We apply the Limb's damage multiplier directly to the base damage here.
-            arrow.setBaseDamage(arrow.getBaseDamage() * limb.getDamageMult());
+            arrow.setBaseDamage(arrow.baseDamage * limb.getDamageMult());
 
             // --- WARPED: No Gravity ---
             if (assembly.limbMaterial().equalsIgnoreCase("Warped")) {

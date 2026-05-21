@@ -72,7 +72,7 @@ public class ModularBowItem extends BowItem {
                 RiserStats riser = RiserStats.fromString(assembly.riserMaterial());
 
                 // --- DAMAGE MODIFIER ---
-                arrow.setBaseDamage(arrow.getBaseDamage() * limb.getDamageMult());
+                arrow.setBaseDamage(arrow.baseDamage * limb.getDamageMult());
 
                 // --- SPECIAL TRAITS ---
                 if (limb == LimbStats.CRIMSON) {
