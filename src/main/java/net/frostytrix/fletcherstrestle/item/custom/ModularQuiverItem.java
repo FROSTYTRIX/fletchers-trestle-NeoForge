@@ -80,15 +80,15 @@ public class ModularQuiverItem extends Item {
 
     // --- TOOLTIP: Show Selected Arrow ---
     @Override
-    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+    public void appendHoverText(ItemStack stack, TooltipContext context, net.minecraft.world.item.component.TooltipDisplay display, java.util.function.Consumer<Component> tooltipComponents, TooltipFlag tooltipFlag) {
         int selected = stack.getOrDefault(ModDataComponents.QUIVER_SELECTED_SLOT.get(), 0);
-        tooltipComponents.add(Component.literal("Selected Slot: " + (selected + 1)).withStyle(ChatFormatting.GOLD));
+        tooltipComponents.accept(Component.literal("Selected Slot: " + (selected + 1)).withStyle(ChatFormatting.GOLD));
 
         List<ItemStack> list = getQuiverContents(stack);
         if (!list.get(selected).isEmpty()) {
-            tooltipComponents.add(Component.literal("Loaded: ").withStyle(ChatFormatting.GRAY).append(list.get(selected).getHoverName()));
+            tooltipComponents.accept(Component.literal("Loaded: ").withStyle(ChatFormatting.GRAY).append(list.get(selected).getHoverName()));
         } else {
-            tooltipComponents.add(Component.literal("Loaded: Empty").withStyle(ChatFormatting.DARK_GRAY));
+            tooltipComponents.accept(Component.literal("Loaded: Empty").withStyle(ChatFormatting.DARK_GRAY));
         }
     }
 

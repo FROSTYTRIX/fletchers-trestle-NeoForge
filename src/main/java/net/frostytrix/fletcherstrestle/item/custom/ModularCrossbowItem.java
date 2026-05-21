@@ -28,29 +28,29 @@ public class ModularCrossbowItem extends CrossbowItem {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
-        super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
+    public void appendHoverText(ItemStack stack, TooltipContext context, net.minecraft.world.item.component.TooltipDisplay display, java.util.function.Consumer<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+        super.appendHoverText(stack, context, display, tooltipComponents, tooltipFlag);
 
         BowAssembly assembly = stack.get(ModDataComponents.BOW_ASSEMBLY.get());
 
         if (assembly == null) {
-            tooltipComponents.add(Component.literal("Unfinished Crossbow").withStyle(ChatFormatting.RED, ChatFormatting.ITALIC));
+            tooltipComponents.accept(Component.literal("Unfinished Crossbow").withStyle(ChatFormatting.RED, ChatFormatting.ITALIC));
             return;
         }
 
-        if (!Screen.hasShiftDown()) {
-            tooltipComponents.add(Component.literal("Hold Shift for details")
+        if (!false /* TODO(port-26.1): Screen.hasShiftDown gone */) {
+            tooltipComponents.accept(Component.literal("Hold Shift for details")
                     .withStyle(ChatFormatting.DARK_GRAY, ChatFormatting.ITALIC));
             return;
         }
 
-        tooltipComponents.add(Component.literal("Assembly Parts:").withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD));
-        tooltipComponents.add(Component.literal("- Limbs: " + assembly.limbMaterial()).withStyle(ChatFormatting.GRAY));
-        tooltipComponents.add(Component.literal("- Riser: " + assembly.riserMaterial()).withStyle(ChatFormatting.GRAY));
-        tooltipComponents.add(Component.literal("- String: " + assembly.stringMaterial()).withStyle(ChatFormatting.GRAY));
+        tooltipComponents.accept(Component.literal("Assembly Parts:").withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD));
+        tooltipComponents.accept(Component.literal("- Limbs: " + assembly.limbMaterial()).withStyle(ChatFormatting.GRAY));
+        tooltipComponents.accept(Component.literal("- Riser: " + assembly.riserMaterial()).withStyle(ChatFormatting.GRAY));
+        tooltipComponents.accept(Component.literal("- String: " + assembly.stringMaterial()).withStyle(ChatFormatting.GRAY));
 
         int tuningPercent = (int) (assembly.tuning() * 100);
-        tooltipComponents.add(Component.literal("Tuning: " + tuningPercent + "%").withStyle(ChatFormatting.GREEN));
+        tooltipComponents.accept(Component.literal("Tuning: " + tuningPercent + "%").withStyle(ChatFormatting.GREEN));
     }
 
     // --- 1. CHARGING TIME LOGIC ---
@@ -257,7 +257,7 @@ public class ModularCrossbowItem extends CrossbowItem {
 
                 // Acacia Movement Buff WHILE pulling the crossbow
                 if (assembly.limbMaterial().equals("Acacia")) {
-                    player.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 5, 0, false, false, false));
+                    player.addEffect(new MobEffectInstance(MobEffects.SPEED, 5, 0, false, false, false));
                 }
 
                 if (limb.isGivesSlowFalling() && !player.onGround()) {

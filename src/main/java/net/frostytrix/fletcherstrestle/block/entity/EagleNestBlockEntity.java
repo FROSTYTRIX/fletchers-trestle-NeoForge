@@ -112,7 +112,7 @@ public class EagleNestBlockEntity extends BlockEntity {
                 worldPosition.getX() + 0.5,
                 worldPosition.getY() + 1.0,
                 worldPosition.getZ() + 0.5,
-                level.random.nextFloat() * 360f,
+                level.getRandom().nextFloat() * 360f,
                 0f);
         eaglet.setAge(-24000); // baby, ~20 minutes to grow up
         // Auto-tame to nest owner so the eaglet immediately belongs to them.
