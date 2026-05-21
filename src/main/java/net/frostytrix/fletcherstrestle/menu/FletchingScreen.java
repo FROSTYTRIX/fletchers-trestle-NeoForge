@@ -89,6 +89,8 @@ public class FletchingScreen extends AbstractContainerScreen<FletchingMenu> {
         guiGraphics.renderItem(new ItemStack(ModItems.MODULAR_ARROW.get()), x - 17, arrowTabY + 8);
     }
 
+    // TODO(port-26.1): Screen#render → extractRenderState,
+    // Screen#renderBackground → extractBackground per NeoForge 26.1 changelog.
     @Override
     public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
         this.renderBackground(guiGraphics, mouseX, mouseY, partialTick);

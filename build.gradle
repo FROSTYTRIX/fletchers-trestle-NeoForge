@@ -1,6 +1,7 @@
 plugins {
     id 'java-library'
     id 'maven-publish'
+    // ModDevGradle 2.0.141+ required for NeoForge 26.1
     id 'net.neoforged.moddev' version '2.0.141'
     id 'idea'
 }
@@ -37,17 +38,15 @@ repositories {
     }
 }
 
-// Mojang ships Java 21 to end users in 1.21.1, so mods should target Java 21.
-java.toolchain.languageVersion = JavaLanguageVersion.of(21)
+// MC 26.1 requires Java 25.
+java.toolchain.languageVersion = JavaLanguageVersion.of(25)
 
 neoForge {
     // Specify the version of NeoForge to use.
     version = project.neo_version
 
-    parchment {
-        mappingsVersion = project.parchment_mappings_version
-        minecraftVersion = project.parchment_minecraft_version
-    }
+    // Parchment removed — Mojang dropped obfuscation in 26.1, parameter
+    // names are now official and ship with the deobfuscated jar.
 
     // This line is optional. Access Transformers are automatically detected
     // accessTransformers = project.files('src/main/resources/META-INF/accesstransformer.cfg')

@@ -222,6 +222,10 @@ public class ArcheryTargetScreen extends AbstractContainerScreen<ArcheryTargetMe
         return super.mouseClicked(mx, my, button);
     }
 
+    // TODO(port-26.1): per NeoForge 26.1 changelog, Screen#render was renamed
+    // to Screen#extractRenderState and Screen#renderBackground to
+    // Screen#extractBackground. Verify exact signatures against the 26.1
+    // sources once the SDK is available locally, then rename here.
     @Override
     public void render(GuiGraphics g, int mx, int my, float pt) {
         renderBackground(g, mx, my, pt);
