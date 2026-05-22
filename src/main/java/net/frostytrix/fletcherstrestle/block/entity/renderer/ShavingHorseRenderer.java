@@ -8,7 +8,6 @@ import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.blockentity.state.BlockEntityRenderState;
-import net.minecraft.client.renderer.feature.ItemFeatureRenderer;
 import net.minecraft.client.renderer.feature.ModelFeatureRenderer;
 import net.minecraft.client.renderer.item.ItemModelResolver;
 import net.minecraft.client.renderer.state.level.CameraRenderState;
@@ -80,8 +79,11 @@ public class ShavingHorseRenderer implements BlockEntityRenderer<ShavingHorseBlo
         pose.scale(0.9F, 0.9F, 0.9F);
         pose.translate(0.0, -0.25, 0.0);
 
-        state.item.submit(pose, coll, state.lightCoords, OverlayTexture.NO_OVERLAY,
-                ItemFeatureRenderer.NO_TINT);
+        // 5th int is OUTLINE color, not tint. ItemFeatureRenderer.NO_TINT
+        // (-1) requests the white-outline-overlay-everywhere look used for
+        // glowing entities, which is why the log was rendering on top of
+        // blocks as a solid white silhouette. 0 = no outline.
+        state.item.submit(pose, coll, state.lightCoords, OverlayTexture.NO_OVERLAY, 0);
 
         pose.popPose();
     }

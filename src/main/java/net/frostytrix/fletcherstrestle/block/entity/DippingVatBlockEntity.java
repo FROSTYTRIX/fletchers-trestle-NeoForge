@@ -81,21 +81,19 @@ public class DippingVatBlockEntity extends BlockEntity {
     public boolean handlePlayerInteraction(Player player, InteractionHand hand) {
         ItemStack itemInHand = player.getItemInHand(hand);
 
-        // --- SEAUX ET CONTENANTS OFFICIELS (Eau, Lave, Fluides moddés) ---
-        // 26.1: the legacy FluidUtil.interactWithFluidHandler(player, hand,
-        // IFluidHandler) overload silently no-ops in some setups because the
-        // new bucket plumbing only sees fluid handlers via the
-        // Capabilities.Fluid.BLOCK capability (a ResourceHandler<FluidResource>).
-        // Use the new transfer-package FluidUtil that looks the capability
-        // up itself at our position — that's the path vanilla buckets and
-        // mod pipes both follow now.
-        if (this.level != null
-                && net.neoforged.neoforge.transfer.fluid.FluidUtil.interactWithFluidHandler(
-                        player, hand, this.level, this.worldPosition, null)) {
-            return true;
-        }
+        // ORDER MATTERS — bucket/pipe FluidUtil is the LAST resort.
+        //
+        // In 26.1 the vanilla potion item registers an ItemFluidHandler
+        // exposing its contents as a water-like fluid. If we called the
+        // new transfer FluidUtil first, it would drain the potion bottle
+        // into our tank as plain water (no potion id), and the dipping
+        // recipes that branch on the stored potion would never fire.
+        // Same risk for empty glass bottles being treated as water cans.
+        // So we handle our specific Items.POTION / Items.GLASS_BOTTLE /
+        // dipping cases first, and only fall through to FluidUtil for
+        // actual buckets / mod fluid containers.
 
-        // --- NOUVEAU CAS : RÉCUPÉRER UNE POTION DANS UNE FIOLE VIDE ---
+        // --- CAS BOTTLE (vide): pull a potion-flavoured bottle back out ---
         if (itemInHand.is(Items.GLASS_BOTTLE)) {
             FluidStack currentFluid = fluidTank.getFluid();
 
@@ -148,43 +146,55 @@ public class DippingVatBlockEntity extends BlockEntity {
         }
 
         // --- CAS 1 : REMPLISSAGE POTION MANUEL ---
+        // Accept ANY Items.POTION — water bottles included. The previous
+        // !is(Potions.WATER) gate sent water bottles down to FluidUtil
+        // expecting it to drain them as vanilla water; in 26.1 vanilla
+        // potion items don't expose a clean Fluid capability so that
+        // path silently no-ops and the right-click does nothing. Storing
+        // water-bottle contents as our own LIQUID_POTION fluid (tagged
+        // minecraft:water) keeps the dipping-recipe matching consistent.
         if (itemInHand.is(Items.POTION)) {
-            PotionContents potionContents = itemInHand.get(DataComponents.POTION_CONTENTS);
-            if (potionContents != null && !potionContents.is(Potions.WATER)) {
+            // getOrDefault avoids the null-check trap if a potion item ever
+            // ships without POTION_CONTENTS set (shouldn't happen, but safe).
+            PotionContents potionContents = itemInHand.getOrDefault(
+                    DataComponents.POTION_CONTENTS, PotionContents.EMPTY);
 
-                String potionId = potionContents.potion()
-                        .flatMap(holder -> holder.unwrapKey())
-                        .map(key -> key.identifier().toString())
-                        .orElse("minecraft:water");
+            String potionId = potionContents.potion()
+                    .flatMap(holder -> holder.unwrapKey())
+                    .map(key -> key.identifier().toString())
+                    .orElse("minecraft:water");
 
-                net.minecraft.world.item.component.CustomData customData = fluidTank.getFluid().get(DataComponents.CUSTOM_DATA);
-                String savedPotionId = "";
-                if (customData != null && customData.contains("potion")) {
-                    savedPotionId = customData.copyTag().getString("potion").orElse("");
-                }
+            net.minecraft.world.item.component.CustomData customData =
+                    fluidTank.getFluid().get(DataComponents.CUSTOM_DATA);
+            String savedPotionId = "";
+            if (customData != null && customData.contains("potion")) {
+                savedPotionId = customData.copyTag().getString("potion").orElse("");
+            }
 
-                if (fluidTank.isEmpty() || savedPotionId.equals(potionId)) {
-                    if (fluidTank.getFluidAmount() <= 2000) {
-                        CompoundTag fluidTag = new CompoundTag();
-                        fluidTag.putString("potion", potionId);
+            if (fluidTank.isEmpty() || savedPotionId.equals(potionId)) {
+                if (fluidTank.getFluidAmount() <= 2000) {
+                    CompoundTag fluidTag = new CompoundTag();
+                    fluidTag.putString("potion", potionId);
 
-                        FluidStack potionFluid = new FluidStack(net.frostytrix.fletcherstrestle.fluid.ModFluids.LIQUID_POTION_SOURCE.get(), 1000);
-                        potionFluid.set(DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.of(fluidTag));
-                        fluidTank.fill(potionFluid, IFluidHandler.FluidAction.EXECUTE);
+                    FluidStack potionFluid = new FluidStack(
+                            net.frostytrix.fletcherstrestle.fluid.ModFluids.LIQUID_POTION_SOURCE.get(), 1000);
+                    potionFluid.set(DataComponents.CUSTOM_DATA,
+                            net.minecraft.world.item.component.CustomData.of(fluidTag));
+                    fluidTank.fill(potionFluid, IFluidHandler.FluidAction.EXECUTE);
 
-                        if (!player.getAbilities().instabuild) {
-                            itemInHand.shrink(1);
-                            ItemStack emptyBottle = new ItemStack(Items.GLASS_BOTTLE);
-                            if (itemInHand.isEmpty()) {
-                                player.setItemInHand(hand, emptyBottle);
-                            } else if (!player.getInventory().add(emptyBottle)) {
-                                player.drop(emptyBottle, false);
-                            }
+                    if (!player.getAbilities().instabuild) {
+                        itemInHand.shrink(1);
+                        ItemStack emptyBottle = new ItemStack(Items.GLASS_BOTTLE);
+                        if (itemInHand.isEmpty()) {
+                            player.setItemInHand(hand, emptyBottle);
+                        } else if (!player.getInventory().add(emptyBottle)) {
+                            player.drop(emptyBottle, false);
                         }
-
-                        level.playSound(null, this.worldPosition, SoundEvents.BOTTLE_EMPTY, SoundSource.BLOCKS, 1.0F, 1.0F);
-                        return true;
                     }
+
+                    level.playSound(null, this.worldPosition,
+                            SoundEvents.BOTTLE_EMPTY, SoundSource.BLOCKS, 1.0F, 1.0F);
+                    return true;
                 }
             }
         }
@@ -221,6 +231,18 @@ public class DippingVatBlockEntity extends BlockEntity {
                     return true;
                 }
             }
+        }
+
+        // --- LAST RESORT: vanilla buckets / mod fluid containers via the
+        // new 26.1 transfer FluidUtil. Routes through Capabilities.Fluid.BLOCK
+        // (our FluidTankResourceAdapter) and Capabilities.Fluid.ITEM (the
+        // bucket's auto-registered handler). Runs AFTER the potion / glass-
+        // bottle branches so it doesn't accidentally treat a potion bottle
+        // as a plain water container.
+        if (this.level != null
+                && net.neoforged.neoforge.transfer.fluid.FluidUtil.interactWithFluidHandler(
+                        player, hand, this.level, this.worldPosition, null)) {
+            return true;
         }
 
         return false;
