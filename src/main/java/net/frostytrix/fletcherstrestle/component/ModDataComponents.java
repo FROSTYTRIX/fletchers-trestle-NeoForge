@@ -50,6 +50,52 @@ public class ModDataComponents {
                             .networkSynchronized(ByteBufCodecs.VAR_INT) // For syncing from Server -> Client
                             .build());
 
+    // 26.1 model-dispatch components — mirror the strings inside BowAssembly /
+    // ArrowAssembly onto top-level String components so the new ItemModel
+    // JSON system can drive composite layer selection via
+    // `minecraft:select` + `minecraft:component`. The select codec compares
+    // the whole component value, so we need primitive-typed dispatch
+    // components (a record like BowAssembly doesn't decompose cleanly).
+    // The recipe writes these in tandem with BowAssembly / ArrowAssembly —
+    // the assembly stays as the gameplay source of truth.
+    public static final Supplier<DataComponentType<String>> LIMB_MATERIAL =
+            DATA_COMPONENT_TYPES.register("limb_material", () ->
+                    DataComponentType.<String>builder()
+                            .persistent(Codec.STRING)
+                            .networkSynchronized(ByteBufCodecs.STRING_UTF8)
+                            .build());
+    public static final Supplier<DataComponentType<String>> RISER_MATERIAL =
+            DATA_COMPONENT_TYPES.register("riser_material", () ->
+                    DataComponentType.<String>builder()
+                            .persistent(Codec.STRING)
+                            .networkSynchronized(ByteBufCodecs.STRING_UTF8)
+                            .build());
+    public static final Supplier<DataComponentType<String>> STRING_MATERIAL =
+            DATA_COMPONENT_TYPES.register("string_material", () ->
+                    DataComponentType.<String>builder()
+                            .persistent(Codec.STRING)
+                            .networkSynchronized(ByteBufCodecs.STRING_UTF8)
+                            .build());
+
+    public static final Supplier<DataComponentType<String>> HEAD_MATERIAL =
+            DATA_COMPONENT_TYPES.register("head_material", () ->
+                    DataComponentType.<String>builder()
+                            .persistent(Codec.STRING)
+                            .networkSynchronized(ByteBufCodecs.STRING_UTF8)
+                            .build());
+    public static final Supplier<DataComponentType<String>> SHAFT_MATERIAL =
+            DATA_COMPONENT_TYPES.register("shaft_material", () ->
+                    DataComponentType.<String>builder()
+                            .persistent(Codec.STRING)
+                            .networkSynchronized(ByteBufCodecs.STRING_UTF8)
+                            .build());
+    public static final Supplier<DataComponentType<String>> FLETCHING_MATERIAL =
+            DATA_COMPONENT_TYPES.register("fletching_material", () ->
+                    DataComponentType.<String>builder()
+                            .persistent(Codec.STRING)
+                            .networkSynchronized(ByteBufCodecs.STRING_UTF8)
+                            .build());
+
     // Stored on the Eagle Whistle item — UUID of the specific eagle the
     // whistle is bound to (or absent if it targets all owned eagles in range).
     public static final Supplier<DataComponentType<UUID>> BOUND_EAGLE =

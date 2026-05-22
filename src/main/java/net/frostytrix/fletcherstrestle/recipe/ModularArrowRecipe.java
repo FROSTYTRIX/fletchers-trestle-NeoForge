@@ -51,6 +51,13 @@ public class ModularArrowRecipe implements Recipe<ArrowRecipeInput> {
         if (shaftName == null) shaftName = "oak";
         if (fletchName == null) fletchName = "feather";
         output.set(ModDataComponents.ARROW_ASSEMBLY.get(), new ArrowAssembly(headName, shaftName, fletchName));
+        // Mirror parts as top-level String components so the 26.1 ItemModel
+        // JSON system can dispatch composite layer selection on them. The
+        // ArrowAssembly record stays as the gameplay source of truth (the
+        // entity reads it to apply head effects / shaft modifiers).
+        output.set(ModDataComponents.HEAD_MATERIAL.get(), headName);
+        output.set(ModDataComponents.SHAFT_MATERIAL.get(), shaftName);
+        output.set(ModDataComponents.FLETCHING_MATERIAL.get(), fletchName);
         return output;
     }
 

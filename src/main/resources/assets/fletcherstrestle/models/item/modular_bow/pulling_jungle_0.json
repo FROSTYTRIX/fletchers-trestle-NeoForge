@@ -1,0 +1,10 @@
+{
+  "_comment": "Pulling draw frame 0 for jungle limbs.",
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "fletcherstrestle:item/modular_bow/limbs/jungle_limb_pulling_0",
+    "layer1": "fletcherstrestle:item/modular_bow/risers/wood_riser",
+    "layer2": "fletcherstrestle:item/modular_bow/strings/flax_string_pulling_0",
+    "layer3": "fletcherstrestle:item/modular_bow/extras/arrow_pulling_0"
+  }
+}

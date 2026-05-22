@@ -1,7 +1,91 @@
 {
-  "_comment": "Composite arrow display — head + shaft + fletching. The three-layer mesh model lives in models/item/modular_arrow/idle.json; per-material variation will route through a registered fletcherstrestle:modular_arrow ItemModel type once we port the modular_loader.",
+  "_comment": "Selects between per-shaft composite arrow models. The head + fletching are still fixed to flint+feather in each composite model \u2014 extending dispatch to those would multiply combos (11 shafts \u00d7 10 heads \u00d7 6 fletchings = 660 files); revisit when we add a real Java ItemModel.",
   "model": {
-    "type": "minecraft:model",
-    "model": "fletcherstrestle:item/modular_arrow/idle"
+    "type": "minecraft:select",
+    "property": "minecraft:component",
+    "component": "fletcherstrestle:shaft_material",
+    "fallback": {
+      "type": "minecraft:model",
+      "model": "fletcherstrestle:item/modular_arrow/idle_oak"
+    },
+    "cases": [
+      {
+        "when": "acacia",
+        "model": {
+          "type": "minecraft:model",
+          "model": "fletcherstrestle:item/modular_arrow/idle_acacia"
+        }
+      },
+      {
+        "when": "birch",
+        "model": {
+          "type": "minecraft:model",
+          "model": "fletcherstrestle:item/modular_arrow/idle_birch"
+        }
+      },
+      {
+        "when": "cherry",
+        "model": {
+          "type": "minecraft:model",
+          "model": "fletcherstrestle:item/modular_arrow/idle_cherry"
+        }
+      },
+      {
+        "when": "crimson",
+        "model": {
+          "type": "minecraft:model",
+          "model": "fletcherstrestle:item/modular_arrow/idle_crimson"
+        }
+      },
+      {
+        "when": "dark_oak",
+        "model": {
+          "type": "minecraft:model",
+          "model": "fletcherstrestle:item/modular_arrow/idle_dark_oak"
+        }
+      },
+      {
+        "when": "jungle",
+        "model": {
+          "type": "minecraft:model",
+          "model": "fletcherstrestle:item/modular_arrow/idle_jungle"
+        }
+      },
+      {
+        "when": "mangrove",
+        "model": {
+          "type": "minecraft:model",
+          "model": "fletcherstrestle:item/modular_arrow/idle_mangrove"
+        }
+      },
+      {
+        "when": "oak",
+        "model": {
+          "type": "minecraft:model",
+          "model": "fletcherstrestle:item/modular_arrow/idle_oak"
+        }
+      },
+      {
+        "when": "pale_oak",
+        "model": {
+          "type": "minecraft:model",
+          "model": "fletcherstrestle:item/modular_arrow/idle_pale_oak"
+        }
+      },
+      {
+        "when": "spruce",
+        "model": {
+          "type": "minecraft:model",
+          "model": "fletcherstrestle:item/modular_arrow/idle_spruce"
+        }
+      },
+      {
+        "when": "warped",
+        "model": {
+          "type": "minecraft:model",
+          "model": "fletcherstrestle:item/modular_arrow/idle_warped"
+        }
+      }
+    ]
   }
 }

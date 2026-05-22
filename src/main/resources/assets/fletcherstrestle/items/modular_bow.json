@@ -1,36 +1,439 @@
 {
-  "_comment": "Mirrors vanilla bow's structure (using_item + use_duration range_dispatch) but points at our layered models so the limb/riser/string all show. The pull-frame texture set is fixed (oak/wood/flax) — full per-material variation needs a fletcherstrestle:modular_bow ItemModel type registered through RegisterItemModelsEvent. TODO(port-26.1) for that.",
+  "_comment": "26.1 ItemModel resolver. Outer select dispatches on the fletcherstrestle:limb_material component the recipe writes, then each per-limb branch swaps between idle and the 3-frame pull animation via minecraft:condition + minecraft:range_dispatch. Riser + string are still fixed to wood/flax in the model files themselves \u2014 a follow-up will dispatch on those too.",
   "model": {
-    "type": "minecraft:condition",
-    "property": "minecraft:using_item",
-    "on_false": {
-      "type": "minecraft:model",
-      "model": "fletcherstrestle:item/modular_bow/idle"
-    },
-    "on_true": {
-      "type": "minecraft:range_dispatch",
-      "property": "minecraft:use_duration",
-      "scale": 0.05,
-      "fallback": {
+    "type": "minecraft:select",
+    "property": "minecraft:component",
+    "component": "fletcherstrestle:limb_material",
+    "fallback": {
+      "type": "minecraft:condition",
+      "property": "minecraft:using_item",
+      "on_false": {
         "type": "minecraft:model",
-        "model": "fletcherstrestle:item/modular_bow/pulling_0"
+        "model": "fletcherstrestle:item/modular_bow/idle_oak"
       },
-      "entries": [
-        {
-          "threshold": 0.65,
-          "model": {
-            "type": "minecraft:model",
-            "model": "fletcherstrestle:item/modular_bow/pulling_1"
-          }
+      "on_true": {
+        "type": "minecraft:range_dispatch",
+        "property": "minecraft:use_duration",
+        "scale": 0.05,
+        "fallback": {
+          "type": "minecraft:model",
+          "model": "fletcherstrestle:item/modular_bow/pulling_oak_0"
         },
-        {
-          "threshold": 0.9,
-          "model": {
+        "entries": [
+          {
+            "threshold": 0.65,
+            "model": {
+              "type": "minecraft:model",
+              "model": "fletcherstrestle:item/modular_bow/pulling_oak_1"
+            }
+          },
+          {
+            "threshold": 0.9,
+            "model": {
+              "type": "minecraft:model",
+              "model": "fletcherstrestle:item/modular_bow/pulling_oak_2"
+            }
+          }
+        ]
+      }
+    },
+    "cases": [
+      {
+        "when": "acacia",
+        "model": {
+          "type": "minecraft:condition",
+          "property": "minecraft:using_item",
+          "on_false": {
             "type": "minecraft:model",
-            "model": "fletcherstrestle:item/modular_bow/pulling_2"
+            "model": "fletcherstrestle:item/modular_bow/idle_acacia"
+          },
+          "on_true": {
+            "type": "minecraft:range_dispatch",
+            "property": "minecraft:use_duration",
+            "scale": 0.05,
+            "fallback": {
+              "type": "minecraft:model",
+              "model": "fletcherstrestle:item/modular_bow/pulling_acacia_0"
+            },
+            "entries": [
+              {
+                "threshold": 0.65,
+                "model": {
+                  "type": "minecraft:model",
+                  "model": "fletcherstrestle:item/modular_bow/pulling_acacia_1"
+                }
+              },
+              {
+                "threshold": 0.9,
+                "model": {
+                  "type": "minecraft:model",
+                  "model": "fletcherstrestle:item/modular_bow/pulling_acacia_2"
+                }
+              }
+            ]
           }
         }
-      ]
-    }
+      },
+      {
+        "when": "birch",
+        "model": {
+          "type": "minecraft:condition",
+          "property": "minecraft:using_item",
+          "on_false": {
+            "type": "minecraft:model",
+            "model": "fletcherstrestle:item/modular_bow/idle_birch"
+          },
+          "on_true": {
+            "type": "minecraft:range_dispatch",
+            "property": "minecraft:use_duration",
+            "scale": 0.05,
+            "fallback": {
+              "type": "minecraft:model",
+              "model": "fletcherstrestle:item/modular_bow/pulling_birch_0"
+            },
+            "entries": [
+              {
+                "threshold": 0.65,
+                "model": {
+                  "type": "minecraft:model",
+                  "model": "fletcherstrestle:item/modular_bow/pulling_birch_1"
+                }
+              },
+              {
+                "threshold": 0.9,
+                "model": {
+                  "type": "minecraft:model",
+                  "model": "fletcherstrestle:item/modular_bow/pulling_birch_2"
+                }
+              }
+            ]
+          }
+        }
+      },
+      {
+        "when": "cherry",
+        "model": {
+          "type": "minecraft:condition",
+          "property": "minecraft:using_item",
+          "on_false": {
+            "type": "minecraft:model",
+            "model": "fletcherstrestle:item/modular_bow/idle_cherry"
+          },
+          "on_true": {
+            "type": "minecraft:range_dispatch",
+            "property": "minecraft:use_duration",
+            "scale": 0.05,
+            "fallback": {
+              "type": "minecraft:model",
+              "model": "fletcherstrestle:item/modular_bow/pulling_cherry_0"
+            },
+            "entries": [
+              {
+                "threshold": 0.65,
+                "model": {
+                  "type": "minecraft:model",
+                  "model": "fletcherstrestle:item/modular_bow/pulling_cherry_1"
+                }
+              },
+              {
+                "threshold": 0.9,
+                "model": {
+                  "type": "minecraft:model",
+                  "model": "fletcherstrestle:item/modular_bow/pulling_cherry_2"
+                }
+              }
+            ]
+          }
+        }
+      },
+      {
+        "when": "crimson",
+        "model": {
+          "type": "minecraft:condition",
+          "property": "minecraft:using_item",
+          "on_false": {
+            "type": "minecraft:model",
+            "model": "fletcherstrestle:item/modular_bow/idle_crimson"
+          },
+          "on_true": {
+            "type": "minecraft:range_dispatch",
+            "property": "minecraft:use_duration",
+            "scale": 0.05,
+            "fallback": {
+              "type": "minecraft:model",
+              "model": "fletcherstrestle:item/modular_bow/pulling_crimson_0"
+            },
+            "entries": [
+              {
+                "threshold": 0.65,
+                "model": {
+                  "type": "minecraft:model",
+                  "model": "fletcherstrestle:item/modular_bow/pulling_crimson_1"
+                }
+              },
+              {
+                "threshold": 0.9,
+                "model": {
+                  "type": "minecraft:model",
+                  "model": "fletcherstrestle:item/modular_bow/pulling_crimson_2"
+                }
+              }
+            ]
+          }
+        }
+      },
+      {
+        "when": "dark_oak",
+        "model": {
+          "type": "minecraft:condition",
+          "property": "minecraft:using_item",
+          "on_false": {
+            "type": "minecraft:model",
+            "model": "fletcherstrestle:item/modular_bow/idle_dark_oak"
+          },
+          "on_true": {
+            "type": "minecraft:range_dispatch",
+            "property": "minecraft:use_duration",
+            "scale": 0.05,
+            "fallback": {
+              "type": "minecraft:model",
+              "model": "fletcherstrestle:item/modular_bow/pulling_dark_oak_0"
+            },
+            "entries": [
+              {
+                "threshold": 0.65,
+                "model": {
+                  "type": "minecraft:model",
+                  "model": "fletcherstrestle:item/modular_bow/pulling_dark_oak_1"
+                }
+              },
+              {
+                "threshold": 0.9,
+                "model": {
+                  "type": "minecraft:model",
+                  "model": "fletcherstrestle:item/modular_bow/pulling_dark_oak_2"
+                }
+              }
+            ]
+          }
+        }
+      },
+      {
+        "when": "jungle",
+        "model": {
+          "type": "minecraft:condition",
+          "property": "minecraft:using_item",
+          "on_false": {
+            "type": "minecraft:model",
+            "model": "fletcherstrestle:item/modular_bow/idle_jungle"
+          },
+          "on_true": {
+            "type": "minecraft:range_dispatch",
+            "property": "minecraft:use_duration",
+            "scale": 0.05,
+            "fallback": {
+              "type": "minecraft:model",
+              "model": "fletcherstrestle:item/modular_bow/pulling_jungle_0"
+            },
+            "entries": [
+              {
+                "threshold": 0.65,
+                "model": {
+                  "type": "minecraft:model",
+                  "model": "fletcherstrestle:item/modular_bow/pulling_jungle_1"
+                }
+              },
+              {
+                "threshold": 0.9,
+                "model": {
+                  "type": "minecraft:model",
+                  "model": "fletcherstrestle:item/modular_bow/pulling_jungle_2"
+                }
+              }
+            ]
+          }
+        }
+      },
+      {
+        "when": "mangrove",
+        "model": {
+          "type": "minecraft:condition",
+          "property": "minecraft:using_item",
+          "on_false": {
+            "type": "minecraft:model",
+            "model": "fletcherstrestle:item/modular_bow/idle_mangrove"
+          },
+          "on_true": {
+            "type": "minecraft:range_dispatch",
+            "property": "minecraft:use_duration",
+            "scale": 0.05,
+            "fallback": {
+              "type": "minecraft:model",
+              "model": "fletcherstrestle:item/modular_bow/pulling_mangrove_0"
+            },
+            "entries": [
+              {
+                "threshold": 0.65,
+                "model": {
+                  "type": "minecraft:model",
+                  "model": "fletcherstrestle:item/modular_bow/pulling_mangrove_1"
+                }
+              },
+              {
+                "threshold": 0.9,
+                "model": {
+                  "type": "minecraft:model",
+                  "model": "fletcherstrestle:item/modular_bow/pulling_mangrove_2"
+                }
+              }
+            ]
+          }
+        }
+      },
+      {
+        "when": "oak",
+        "model": {
+          "type": "minecraft:condition",
+          "property": "minecraft:using_item",
+          "on_false": {
+            "type": "minecraft:model",
+            "model": "fletcherstrestle:item/modular_bow/idle_oak"
+          },
+          "on_true": {
+            "type": "minecraft:range_dispatch",
+            "property": "minecraft:use_duration",
+            "scale": 0.05,
+            "fallback": {
+              "type": "minecraft:model",
+              "model": "fletcherstrestle:item/modular_bow/pulling_oak_0"
+            },
+            "entries": [
+              {
+                "threshold": 0.65,
+                "model": {
+                  "type": "minecraft:model",
+                  "model": "fletcherstrestle:item/modular_bow/pulling_oak_1"
+                }
+              },
+              {
+                "threshold": 0.9,
+                "model": {
+                  "type": "minecraft:model",
+                  "model": "fletcherstrestle:item/modular_bow/pulling_oak_2"
+                }
+              }
+            ]
+          }
+        }
+      },
+      {
+        "when": "pale_oak",
+        "model": {
+          "type": "minecraft:condition",
+          "property": "minecraft:using_item",
+          "on_false": {
+            "type": "minecraft:model",
+            "model": "fletcherstrestle:item/modular_bow/idle_pale_oak"
+          },
+          "on_true": {
+            "type": "minecraft:range_dispatch",
+            "property": "minecraft:use_duration",
+            "scale": 0.05,
+            "fallback": {
+              "type": "minecraft:model",
+              "model": "fletcherstrestle:item/modular_bow/pulling_pale_oak_0"
+            },
+            "entries": [
+              {
+                "threshold": 0.65,
+                "model": {
+                  "type": "minecraft:model",
+                  "model": "fletcherstrestle:item/modular_bow/pulling_pale_oak_1"
+                }
+              },
+              {
+                "threshold": 0.9,
+                "model": {
+                  "type": "minecraft:model",
+                  "model": "fletcherstrestle:item/modular_bow/pulling_pale_oak_2"
+                }
+              }
+            ]
+          }
+        }
+      },
+      {
+        "when": "spruce",
+        "model": {
+          "type": "minecraft:condition",
+          "property": "minecraft:using_item",
+          "on_false": {
+            "type": "minecraft:model",
+            "model": "fletcherstrestle:item/modular_bow/idle_spruce"
+          },
+          "on_true": {
+            "type": "minecraft:range_dispatch",
+            "property": "minecraft:use_duration",
+            "scale": 0.05,
+            "fallback": {
+              "type": "minecraft:model",
+              "model": "fletcherstrestle:item/modular_bow/pulling_spruce_0"
+            },
+            "entries": [
+              {
+                "threshold": 0.65,
+                "model": {
+                  "type": "minecraft:model",
+                  "model": "fletcherstrestle:item/modular_bow/pulling_spruce_1"
+                }
+              },
+              {
+                "threshold": 0.9,
+                "model": {
+                  "type": "minecraft:model",
+                  "model": "fletcherstrestle:item/modular_bow/pulling_spruce_2"
+                }
+              }
+            ]
+          }
+        }
+      },
+      {
+        "when": "warped",
+        "model": {
+          "type": "minecraft:condition",
+          "property": "minecraft:using_item",
+          "on_false": {
+            "type": "minecraft:model",
+            "model": "fletcherstrestle:item/modular_bow/idle_warped"
+          },
+          "on_true": {
+            "type": "minecraft:range_dispatch",
+            "property": "minecraft:use_duration",
+            "scale": 0.05,
+            "fallback": {
+              "type": "minecraft:model",
+              "model": "fletcherstrestle:item/modular_bow/pulling_warped_0"
+            },
+            "entries": [
+              {
+                "threshold": 0.65,
+                "model": {
+                  "type": "minecraft:model",
+                  "model": "fletcherstrestle:item/modular_bow/pulling_warped_1"
+                }
+              },
+              {
+                "threshold": 0.9,
+                "model": {
+                  "type": "minecraft:model",
+                  "model": "fletcherstrestle:item/modular_bow/pulling_warped_2"
+                }
+              }
+            ]
+          }
+        }
+      }
+    ]
   }
 }

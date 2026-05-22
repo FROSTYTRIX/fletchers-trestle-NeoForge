@@ -1,0 +1,9 @@
+{
+  "_comment": "Composite bow with jungle limbs + default wood riser + flax string.",
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "fletcherstrestle:item/modular_bow/limbs/jungle_limb",
+    "layer1": "fletcherstrestle:item/modular_bow/risers/wood_riser",
+    "layer2": "fletcherstrestle:item/modular_bow/strings/flax_string"
+  }
+}

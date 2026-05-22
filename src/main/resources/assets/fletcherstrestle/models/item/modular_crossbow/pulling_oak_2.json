@@ -1,0 +1,9 @@
+{
+  "_comment": "Crossbow draw frame 2 for oak limbs.",
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "fletcherstrestle:item/modular_crossbow/limbs/oak_limb",
+    "layer1": "fletcherstrestle:item/modular_crossbow/risers/wood_riser",
+    "layer2": "fletcherstrestle:item/modular_crossbow/strings/flax_string_pulling_2"
+  }
+}

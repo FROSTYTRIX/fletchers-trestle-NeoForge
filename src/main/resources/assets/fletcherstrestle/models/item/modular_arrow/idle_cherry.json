@@ -1,0 +1,9 @@
+{
+  "_comment": "Composite arrow (cherry shaft + flint head + feather fletching).",
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "fletcherstrestle:item/modular_arrow/shafts/cherry_shaft",
+    "layer1": "fletcherstrestle:item/modular_arrow/fletchings/feather_fletching",
+    "layer2": "fletcherstrestle:item/modular_arrow/heads/flint_head"
+  }
+}

@@ -43,7 +43,23 @@ public class ModularWeaponRecipe implements Recipe<FletchingRecipeInput> {
         String stringMat = getMaterialName(input.string());
         output.set(ModDataComponents.BOW_ASSEMBLY.get(),
                 new BowAssembly(limbMat, riserMat, stringMat, 0.0f));
+        // Mirror the three material strings onto top-level String components
+        // so the new 26.1 ItemModel JSON system can dispatch composite layer
+        // selection on them via minecraft:select + minecraft:component.
+        // Lower-cased + space-stripped to match how texture filenames are
+        // organised (e.g. "Dark Oak" → "dark_oak").
+        output.set(ModDataComponents.LIMB_MATERIAL.get(), toModelKey(limbMat));
+        output.set(ModDataComponents.RISER_MATERIAL.get(), toModelKey(riserMat));
+        output.set(ModDataComponents.STRING_MATERIAL.get(), toModelKey(stringMat));
         return output;
+    }
+
+    /** Convert a display name like "Dark Oak" / "High Tension" into the
+     *  filename-friendly key the model JSONs use ("dark_oak", "high_tension"). */
+    private static String toModelKey(String displayName) {
+        return displayName == null
+                ? "oak"
+                : displayName.trim().toLowerCase(java.util.Locale.ROOT).replace(' ', '_');
     }
 
     public static String getMaterialName(ItemStack stack) {
