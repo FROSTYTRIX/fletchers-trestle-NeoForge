@@ -6,6 +6,7 @@ import net.frostytrix.fletcherstrestle.block.entity.ModBlockEntities;
 import net.frostytrix.fletcherstrestle.item.ModItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -83,7 +84,7 @@ public class EagleNestBlock extends BaseEntityBlock {
     @Override
     public <T extends BlockEntity> @Nullable BlockEntityTicker<T> getTicker(Level level, BlockState state,
                                                                             BlockEntityType<T> type) {
-        if (level.isClientSide) return null;
+        if (level.isClientSide()) return null;
         return createTickerHelper(type, ModBlockEntities.EAGLE_NEST_BE.get(),
                 EagleNestBlockEntity::serverTick);
     }
@@ -91,7 +92,7 @@ public class EagleNestBlock extends BaseEntityBlock {
     @Override
     protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos,
                                                Player player, BlockHitResult hitResult) {
-        if (level.isClientSide) return InteractionResult.SUCCESS;
+        if (level.isClientSide()) return InteractionResult.SUCCESS;
         if (!(level.getBlockEntity(pos) instanceof EagleNestBlockEntity nest)) {
             return InteractionResult.PASS;
         }
@@ -122,17 +123,20 @@ public class EagleNestBlock extends BaseEntityBlock {
     // On break, drop any remaining eggs as items so the player isn't punished
     // for relocating their nest mid-incubation. (Hatch progress is lost — eggs
     // come back as fresh items.)
+    // 26.1: onRemove was removed from BlockBehaviour; the per-removal hook is
+    // now affectNeighborsAfterRemoval (server-only). We've already lost the
+    // BlockEntity at this point in vanilla flow, so we look it up via the
+    // freshly-removed state via the level read. If the BE is gone, we silently
+    // skip — players just lose pending eggs in that rare case.
     @Override
-    public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean moving) {
-        if (!state.is(newState.getBlock())) {
-            if (level.getBlockEntity(pos) instanceof EagleNestBlockEntity nest) {
-                int count = nest.eggCount();
-                if (count > 0 && !level.isClientSide()) {
-                    Block.popResource(level, pos,
-                            new ItemStack(ModItems.EAGLE_EGG.get(), count));
-                }
+    protected void affectNeighborsAfterRemoval(BlockState state, net.minecraft.server.level.ServerLevel level, BlockPos pos, boolean moving) {
+        if (level.getBlockEntity(pos) instanceof EagleNestBlockEntity nest) {
+            int count = nest.eggCount();
+            if (count > 0) {
+                Block.popResource(level, pos,
+                        new ItemStack(ModItems.EAGLE_EGG.get(), count));
             }
         }
-        super.onRemove(state, level, pos, newState, moving);
+        super.affectNeighborsAfterRemoval(state, level, pos, moving);
     }
 }

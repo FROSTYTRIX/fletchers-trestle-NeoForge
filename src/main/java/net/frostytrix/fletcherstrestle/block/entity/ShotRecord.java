@@ -26,15 +26,16 @@ public record ShotRecord(
     }
 
     public static ShotRecord fromNBT(CompoundTag tag) {
+        // 26.1: CompoundTag getters return Optional<T>; unwrap with orElse.
         return new ShotRecord(
-                tag.getDouble("x"),
-                tag.getDouble("y"),
-                tag.getDouble("z"),
-                tag.getFloat("u"),
-                tag.getFloat("v"),
-                tag.getFloat("estimatedDamage"),
-                tag.getFloat("speed"),
-                tag.getLong("timestamp")
+                tag.getDouble("x").orElse(0.0),
+                tag.getDouble("y").orElse(0.0),
+                tag.getDouble("z").orElse(0.0),
+                tag.getFloat("u").orElse(0f),
+                tag.getFloat("v").orElse(0f),
+                tag.getFloat("estimatedDamage").orElse(0f),
+                tag.getFloat("speed").orElse(0f),
+                tag.getLong("timestamp").orElse(0L)
         );
     }
 }

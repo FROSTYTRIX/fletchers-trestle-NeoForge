@@ -78,16 +78,18 @@ public class ModularCrossbowItem extends CrossbowItem {
         return super.getMaxDamage(stack);
     }
 
+
+
     // --- 2. QUIVER SWAP & LOADING LOGIC ---
+    // 26.1: CrossbowItem.releaseUsing now returns boolean (true = consumed).
     @Override
-    public void releaseUsing(ItemStack stack, Level level, LivingEntity entityLiving, int timeLeft) {
-        if (!(entityLiving instanceof Player player)) return;
+    public boolean releaseUsing(ItemStack stack, Level level, LivingEntity entityLiving, int timeLeft) {
+        if (!(entityLiving instanceof Player player)) return false;
 
         // Ensure we actually pulled it back far enough to load!
         int chargeTicks = this.getUseDuration(stack, entityLiving) - timeLeft;
         if (chargeTicks < this.getChargeDuration(stack, entityLiving)) {
-            super.releaseUsing(stack, level, entityLiving, timeLeft);
-            return;
+            return super.releaseUsing(stack, level, entityLiving, timeLeft);
         }
 
         // 1. THE QUIVER SWAP TRICK
@@ -118,7 +120,7 @@ public class ModularCrossbowItem extends CrossbowItem {
         }
 
         // 2. VANILLA LOADING
-        super.releaseUsing(stack, level, entityLiving, timeLeft);
+        boolean consumed = super.releaseUsing(stack, level, entityLiving, timeLeft);
 
         // 3. RESTORE THE QUIVER
         if (quiverInvSlot != -1) {
@@ -128,6 +130,7 @@ public class ModularCrossbowItem extends CrossbowItem {
             ModularQuiverItem.saveQuiverContents(quiverStack, list);
             player.getInventory().setItem(quiverInvSlot, quiverStack);
         }
+        return consumed;
     }
 
     @Override
@@ -197,7 +200,11 @@ public class ModularCrossbowItem extends CrossbowItem {
 
             // Apply Durability Cost
             if (string.getDurabilityCost() > 1 && shooter instanceof Player player) {
-                crossbowStack.hurtAndBreak((int) (string.getDurabilityCost() - 1), player, LivingEntity.getSlotForHand(shooter.getUsedItemHand()));
+                // 26.1: LivingEntity.getSlotForHand removed; map InteractionHand directly.
+                crossbowStack.hurtAndBreak((int) (string.getDurabilityCost() - 1), player,
+                        shooter.getUsedItemHand() == net.minecraft.world.InteractionHand.MAIN_HAND
+                                ? net.minecraft.world.entity.EquipmentSlot.MAINHAND
+                                : net.minecraft.world.entity.EquipmentSlot.OFFHAND);
             }
         }
 

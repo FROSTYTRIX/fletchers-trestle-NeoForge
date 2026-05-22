@@ -71,7 +71,7 @@ public class SteamBoxBlock extends BaseEntityBlock {
 
     @Override
     protected InteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
-        if (level.isClientSide) {
+        if (level.isClientSide()) {
             return InteractionResult.SUCCESS;
         }
 
@@ -93,7 +93,7 @@ public class SteamBoxBlock extends BaseEntityBlock {
             // --- ACTION 2: INSERTING VALID RECIPE ITEMS ---
             if (!stack.isEmpty()) {
                 SingleRecipeInput input = new SingleRecipeInput(stack);
-                var recipe = level.getRecipeManager().getRecipeFor(ModRecipes.STEAMING_TYPE.get(), input, level);
+                var recipe = ((net.minecraft.server.level.ServerLevel) level).recipeAccess().getRecipeFor(ModRecipes.STEAMING_TYPE.get(), input, level);
 
                 if (recipe.isPresent()) {
                     for (int i = 0; i < 16; i++) {

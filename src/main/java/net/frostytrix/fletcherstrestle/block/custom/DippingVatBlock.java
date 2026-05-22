@@ -60,12 +60,13 @@ public class DippingVatBlock extends BaseEntityBlock {
     }
 
     @Override
-    public boolean hasAnalogOutputSignal(BlockState state) {
+    protected boolean hasAnalogOutputSignal(BlockState state) {
         return true;
     }
 
+    // 26.1: getAnalogOutputSignal now takes a Direction (side it's measured from).
     @Override
-    public int getAnalogOutputSignal(BlockState state, Level level, BlockPos pos) {
+    protected int getAnalogOutputSignal(BlockState state, Level level, BlockPos pos, net.minecraft.core.Direction side) {
         if (level.getBlockEntity(pos) instanceof DippingVatBlockEntity vat) {
             int amount = vat.fluidTank.getFluidAmount();
             int capacity = vat.fluidTank.getCapacity();

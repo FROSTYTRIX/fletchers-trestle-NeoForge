@@ -20,7 +20,7 @@ public class EagleEggItem extends Item {
 
     @Override
     public InteractionResult useOn(UseOnContext context) {
-        if (context.getLevel().isClientSide) {
+        if (context.getLevel().isClientSide()) {
             return InteractionResult.SUCCESS;
         }
         if (!(context.getLevel().getBlockEntity(context.getClickedPos()) instanceof EagleNestBlockEntity nest)) {

@@ -15,35 +15,32 @@ public class ModBlockEntities {
 
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<SteamBoxBlockEntity>> STEAM_BOX_BE =
             BLOCK_ENTITIES.register("steam_box_be", () ->
-                    BlockEntityType.Builder.of(SteamBoxBlockEntity::new, ModBlocks.STEAM_BOX.get())
-                            .build(null)
+                    new BlockEntityType<>(SteamBoxBlockEntity::new, ModBlocks.STEAM_BOX.get())
             );
 
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<ShavingHorseBlockEntity>> SHAVING_HORSE_BE =
             BLOCK_ENTITIES.register("shaving_horse_be", () ->
-                    BlockEntityType.Builder.of(ShavingHorseBlockEntity::new, ModBlocks.SHAVING_HORSE.get())
-                            .build(null)
+                    new BlockEntityType<>(ShavingHorseBlockEntity::new, ModBlocks.SHAVING_HORSE.get())
             );
 
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<ArcheryTargetBlockEntity>> ARCHERY_TARGET_BE =
             BLOCK_ENTITIES.register("archery_target_be", () ->
-                    BlockEntityType.Builder.of(ArcheryTargetBlockEntity::new, ModBlocks.ARCHERY_TARGET.get())
-                            .build(null)
+                    new BlockEntityType<>(ArcheryTargetBlockEntity::new, ModBlocks.ARCHERY_TARGET.get())
             );
 
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<DippingVatBlockEntity>> DIPPING_VAT_BE =
             BLOCK_ENTITIES.register("dipping_vat_be", () ->
-                    BlockEntityType.Builder.of(DippingVatBlockEntity::new, ModBlocks.DIPPING_VAT.get()).build(null)
+                    new BlockEntityType<>(DippingVatBlockEntity::new, ModBlocks.DIPPING_VAT.get())
             );
 
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<EaglePerchBlockEntity>> EAGLE_PERCH_BE =
             BLOCK_ENTITIES.register("eagle_perch_be", () ->
-                    BlockEntityType.Builder.of(EaglePerchBlockEntity::new, ModBlocks.EAGLE_PERCH.get()).build(null)
+                    new BlockEntityType<>(EaglePerchBlockEntity::new, ModBlocks.EAGLE_PERCH.get())
             );
 
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<EagleNestBlockEntity>> EAGLE_NEST_BE =
             BLOCK_ENTITIES.register("eagle_nest_be", () ->
-                    BlockEntityType.Builder.of(EagleNestBlockEntity::new, ModBlocks.EAGLE_NEST.get()).build(null)
+                    new BlockEntityType<>(EagleNestBlockEntity::new, ModBlocks.EAGLE_NEST.get())
             );
 
     public static void register(IEventBus eventBus) {

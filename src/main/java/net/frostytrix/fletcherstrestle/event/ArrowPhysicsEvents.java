@@ -41,8 +41,8 @@ public class ArrowPhysicsEvents {
                     // 7. Apply the new super-charged vector
                     arrow.setDeltaMovement(newVelocity);
 
-                    // Force the game engine to recognize the sudden change in physics
-                    arrow.hasImpulse = true;
+                    // 26.1: Entity.hasImpulse field is gone. setDeltaMovement now
+                    // already flags the physics step for us, so no follow-up needed.
                 }
             }
         }

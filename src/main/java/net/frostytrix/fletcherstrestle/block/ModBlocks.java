@@ -29,7 +29,7 @@ public class ModBlocks {
                     .noOcclusion()));
 
     public static final DeferredBlock<Block> FLAX_CROP = registerBlock("flax_crop",
-            () -> new FlaxCropBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.WHEAT).noOcclusion().noCollission()));
+            () -> new FlaxCropBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.WHEAT).noOcclusion().noCollision()));
 
     public static final DeferredBlock<Block> ARCHERY_TARGET = registerBlock("archery_target",
             () -> new ArcheryTargetBlock(Block.Properties.of()
@@ -39,7 +39,7 @@ public class ModBlocks {
 
     public static final DeferredBlock<Block> ROPE = registerBlock("rope",
             () -> new RopeBlock(Block.Properties.of()
-                    .noCollission()
+                    .noCollision()
                     .sound(SoundType.WOOL)
                     .noOcclusion()
                     .strength(0.6f)));

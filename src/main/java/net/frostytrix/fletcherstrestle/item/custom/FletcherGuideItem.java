@@ -36,8 +36,10 @@ public class FletcherGuideItem extends Item {
                     .withStyle(s -> s
                             .withColor(ChatFormatting.AQUA)
                             .withUnderlined(true)
-                            .withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, WIKI_URL))
-                            .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
+                            // 26.1: ClickEvent/HoverEvent are interfaces; each
+                            // variant is its own record (OpenUrl, ShowText, …).
+                            .withClickEvent(new ClickEvent.OpenUrl(java.net.URI.create(WIKI_URL)))
+                            .withHoverEvent(new HoverEvent.ShowText(
                                     Component.literal("Open the wiki in your browser"))));
 
             Component message = Component.literal("[Fletcher's Trestle] ")

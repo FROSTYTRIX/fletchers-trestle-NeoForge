@@ -98,15 +98,15 @@ public class DippingVatBlockEntity extends BlockEntity {
                     if (isOurPotion) {
                         net.minecraft.world.item.component.CustomData customData = currentFluid.get(DataComponents.CUSTOM_DATA);
                         if (customData != null && customData.contains("potion")) {
-                            String potionId = customData.copyTag().getString("potion");
-                            var potionHolder = net.minecraft.core.registries.BuiltInRegistries.POTION.getHolder(net.minecraft.resources.Identifier.parse(potionId)).orElse(null);
+                            String potionId = customData.copyTag().getString("potion").orElse("");
+                            var potionHolder = net.minecraft.core.registries.BuiltInRegistries.POTION.get(net.minecraft.resources.Identifier.parse(potionId)).orElse(null);
                             if (potionHolder != null) {
                                 filledBottle.set(DataComponents.POTION_CONTENTS, new net.minecraft.world.item.alchemy.PotionContents(potionHolder));
                             }
                         }
                     } else {
                         // Cas où le joueur a mis de l'eau pure via un tuyau ou un seau
-                        var waterHolder = net.minecraft.core.registries.BuiltInRegistries.POTION.getHolder(net.minecraft.resources.Identifier.parse("minecraft:water")).orElse(null);
+                        var waterHolder = net.minecraft.core.registries.BuiltInRegistries.POTION.get(net.minecraft.resources.Identifier.parse("minecraft:water")).orElse(null);
                         if (waterHolder != null) {
                             filledBottle.set(DataComponents.POTION_CONTENTS, new net.minecraft.world.item.alchemy.PotionContents(waterHolder));
                         }
@@ -140,13 +140,13 @@ public class DippingVatBlockEntity extends BlockEntity {
 
                 String potionId = potionContents.potion()
                         .flatMap(holder -> holder.unwrapKey())
-                        .map(key -> key.location().toString())
+                        .map(key -> key.identifier().toString())
                         .orElse("minecraft:water");
 
                 net.minecraft.world.item.component.CustomData customData = fluidTank.getFluid().get(DataComponents.CUSTOM_DATA);
                 String savedPotionId = "";
                 if (customData != null && customData.contains("potion")) {
-                    savedPotionId = customData.copyTag().getString("potion");
+                    savedPotionId = customData.copyTag().getString("potion").orElse("");
                 }
 
                 if (fluidTank.isEmpty() || savedPotionId.equals(potionId)) {
@@ -181,7 +181,7 @@ public class DippingVatBlockEntity extends BlockEntity {
             DippingRecipeInput input = new DippingRecipeInput(itemInHand, fluidTank.getFluid());
 
             // 2. On interroge le gestionnaire de recettes de Minecraft
-            Optional<RecipeHolder<DippingRecipe>> match = this.level.getRecipeManager()
+            Optional<RecipeHolder<DippingRecipe>> match = ((net.minecraft.server.level.ServerLevel) this.level).recipeAccess()
                     .getRecipeFor(ModRecipes.DIPPING_TYPE.get(), input, this.level);
 
             // 3. Si une recette correspond (Ex: 16 Flèches + 1000mB correspond)
@@ -192,7 +192,7 @@ public class DippingVatBlockEntity extends BlockEntity {
                 if (itemInHand.getCount() >= recipe.inputCount) {
 
                     // On assemble le résultat (ce qui transfère magiquement la couleur de la potion)
-                    ItemStack result = recipe.assemble(input, level.registryAccess());
+                    ItemStack result = recipe.assemble(input);
 
                     // Consommation
                     itemInHand.shrink(recipe.inputCount);

@@ -66,7 +66,7 @@ public class SteamBoxBlockEntity extends BlockEntity {
 
             if (!currentItem.isEmpty()) {
                 SingleRecipeInput input = new SingleRecipeInput(currentItem);
-                var recipeHolder = level.getRecipeManager().getRecipeFor(ModRecipes.STEAMING_TYPE.get(), input, level);
+                var recipeHolder = ((net.minecraft.server.level.ServerLevel) level).recipeAccess().getRecipeFor(ModRecipes.STEAMING_TYPE.get(), input, level);
 
                 if (recipeHolder.isPresent()) {
                     SteamingRecipe recipe = recipeHolder.get().value();
@@ -81,7 +81,7 @@ public class SteamBoxBlockEntity extends BlockEntity {
                             fluidTank.drain(requiredWater, IFluidHandler.FluidAction.EXECUTE);
 
                             // Get output from JSON and clear input slot
-                            ItemStack result = recipe.assemble(input, level.registryAccess());
+                            ItemStack result = recipe.assemble(input);
                             itemHandler.extractItem(i, 1, false);
 
                             // Drop item on top of the block

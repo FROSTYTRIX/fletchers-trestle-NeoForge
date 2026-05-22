@@ -54,7 +54,9 @@ public class ModularArrowItem extends ArrowItem {
             tooltipComponents.accept(Component.literal("Effects:").withStyle(ChatFormatting.LIGHT_PURPLE, ChatFormatting.BOLD));
             // 1.0 durationFactor — full potion duration at impact center.
             // Effects fall off by distance at hit-time (see applyGlassVialEffect).
-            potion.addPotionTooltip(tooltipComponents::add, 1.0F, 20.0F);
+            // 26.1: addPotionTooltip is now static; first arg is the effects iterable.
+            net.minecraft.world.item.alchemy.PotionContents.addPotionTooltip(
+                    potion.getAllEffects(), tooltipComponents::accept, 1.0F, 20.0F);
         }
     }
 

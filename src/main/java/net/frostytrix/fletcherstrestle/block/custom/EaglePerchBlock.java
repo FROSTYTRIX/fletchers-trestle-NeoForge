@@ -98,7 +98,7 @@ public class EaglePerchBlock extends BaseEntityBlock {
     @Override
     protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos,
                                                Player player, BlockHitResult hitResult) {
-        if (level.isClientSide) {
+        if (level.isClientSide()) {
             return InteractionResult.SUCCESS;
         }
         if (!(level.getBlockEntity(pos) instanceof EaglePerchBlockEntity perch)) {
@@ -159,7 +159,7 @@ public class EaglePerchBlock extends BaseEntityBlock {
     // When the perch is unclaimed (or broken), clear the eagle's pointer so
     // its AI doesn't try to fly to a dead perch.
     private static void clearEaglePerchPos(Level level, @Nullable UUID eagleUUID) {
-        if (eagleUUID == null || level.isClientSide) return;
+        if (eagleUUID == null || level.isClientSide()) return;
         AABB world = new AABB(-30_000_000, -64, -30_000_000, 30_000_000, 320, 30_000_000);
         for (EagleEntity e : level.getEntitiesOfClass(EagleEntity.class, world,
                 e -> eagleUUID.equals(e.getUUID()))) {
@@ -168,13 +168,12 @@ public class EaglePerchBlock extends BaseEntityBlock {
     }
 
     // If the perch gets broken, drop the bound eagle's pointer too.
+    // 26.1: onRemove was removed; affectNeighborsAfterRemoval replaces it.
     @Override
-    public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean moving) {
-        if (!state.is(newState.getBlock())) {
-            if (level.getBlockEntity(pos) instanceof EaglePerchBlockEntity perch) {
-                clearEaglePerchPos(level, perch.getEagleUUID());
-            }
+    protected void affectNeighborsAfterRemoval(BlockState state, net.minecraft.server.level.ServerLevel level, BlockPos pos, boolean moving) {
+        if (level.getBlockEntity(pos) instanceof EaglePerchBlockEntity perch) {
+            clearEaglePerchPos(level, perch.getEagleUUID());
         }
-        super.onRemove(state, level, pos, newState, moving);
+        super.affectNeighborsAfterRemoval(state, level, pos, moving);
     }
 }

@@ -76,7 +76,7 @@ public class ShavingHorseBlock extends BaseEntityBlock {
 
     @Override
     protected InteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
-        if (level.isClientSide) {
+        if (level.isClientSide()) {
             return InteractionResult.SUCCESS;
         }
 
@@ -86,16 +86,19 @@ public class ShavingHorseBlock extends BaseEntityBlock {
             // --- ACTION 1: USING THE DRAWKNIFE ---
             if (stack.is(ModItems.DRAWKNIFE.get()) && !storedLog.isEmpty()) {
                 SingleRecipeInput input = new SingleRecipeInput(storedLog);
-                var recipeHolder = level.getRecipeManager().getRecipeFor(ModRecipes.SHAVING_TYPE.get(), input, level);
+                var recipeHolder = ((net.minecraft.server.level.ServerLevel) level).recipeAccess().getRecipeFor(ModRecipes.SHAVING_TYPE.get(), input, level);
 
                 if (recipeHolder.isPresent()) {
                     horse.currentShaves++;
 
-                    stack.hurtAndBreak(1, player, Player.getSlotForHand(hand));
+                    // 26.1: Player.getSlotForHand removed; map InteractionHand directly.
+                    stack.hurtAndBreak(1, player, hand == net.minecraft.world.InteractionHand.MAIN_HAND
+                            ? net.minecraft.world.entity.EquipmentSlot.MAINHAND
+                            : net.minecraft.world.entity.EquipmentSlot.OFFHAND);
                     level.playSound(null, pos, SoundEvents.AXE_STRIP, SoundSource.BLOCKS, 1.0F, 1.0F);
 
                     if (horse.currentShaves >= recipeHolder.get().value().getShavesRequired()) {
-                        ItemStack result = recipeHolder.get().value().assemble(input, level.registryAccess());
+                        ItemStack result = recipeHolder.get().value().assemble(input);
 
                         horse.itemHandler.extractItem(0, 1, false);
                         horse.currentShaves = 0;
@@ -110,7 +113,7 @@ public class ShavingHorseBlock extends BaseEntityBlock {
             // --- ACTION 2: STOCKING THE BLOCK ---
             if (storedLog.isEmpty() && !stack.isEmpty()) {
                 SingleRecipeInput input = new SingleRecipeInput(stack);
-                var recipeHolder = level.getRecipeManager().getRecipeFor(ModRecipes.SHAVING_TYPE.get(), input, level);
+                var recipeHolder = ((net.minecraft.server.level.ServerLevel) level).recipeAccess().getRecipeFor(ModRecipes.SHAVING_TYPE.get(), input, level);
 
                 if (recipeHolder.isPresent()) {
                     horse.itemHandler.insertItem(0, new ItemStack(stack.getItem(), 1), false);

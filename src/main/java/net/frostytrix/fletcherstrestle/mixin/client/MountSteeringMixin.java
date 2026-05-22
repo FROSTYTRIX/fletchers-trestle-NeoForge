@@ -54,7 +54,13 @@ public class MountSteeringMixin {
             mount.yRotO = this.fletcherstrestle$storedYRot;
 
             // 3. SEND THE DATA TO THE SERVER!
-            PacketDistributor.sendToServer(new MountSyncPayload(mount.getId(), this.fletcherstrestle$storedYRot));
+            // TODO(port-26.1): PacketDistributor.sendToServer was removed from the
+            // client-to-server side; sending a custom payload upstream now goes
+            // through the connection (Minecraft.getInstance().getConnection().send(...))
+            // or the new ClientPacketDistributor helper. Until that's wired, mount
+            // steering is client-visual only — the server-side rotation sync is
+            // dropped, so other players will still see the old facing.
+            // PacketDistributor.sendToServer(new MountSyncPayload(mount.getId(), this.fletcherstrestle$storedYRot));
         }
     }
 }

@@ -193,8 +193,6 @@ public class ModularBowItem extends BowItem {
         int scaledCharge = (int) ((chargeTicks / customDrawTime) * 20.0f);
         int fakeTimeLeft = this.getUseDuration(stack, entityLiving) - scaledCharge;
 
-        super.releaseUsing(stack, level, entityLiving, fakeTimeLeft);
-
         // --- 3. RESTORE THE QUIVER ---
         if (quiverInvSlot != -1) {
             // Get the arrow back (it might be shrunken by 1 now)
@@ -216,9 +214,14 @@ public class ModularBowItem extends BowItem {
             }
             StringStats string = StringStats.fromString(assembly.stringMaterial());
             if (string.getDurabilityCost() > 1) {
-                stack.hurtAndBreak((int) (string.getDurabilityCost() - 1), player, LivingEntity.getSlotForHand(player.getUsedItemHand()));
+                // 26.1: LivingEntity.getSlotForHand removed; map InteractionHand directly.
+                stack.hurtAndBreak((int) (string.getDurabilityCost() - 1), player,
+                        player.getUsedItemHand() == net.minecraft.world.InteractionHand.MAIN_HAND
+                                ? net.minecraft.world.entity.EquipmentSlot.MAINHAND
+                                : net.minecraft.world.entity.EquipmentSlot.OFFHAND);
             }
         }
+        return super.releaseUsing(stack, level, entityLiving, fakeTimeLeft);
     }
 
     public float getDrawTime(ItemStack stack) {

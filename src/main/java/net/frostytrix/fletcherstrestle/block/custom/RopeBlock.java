@@ -13,10 +13,7 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SimpleWaterloggedBlock;
@@ -74,29 +71,30 @@ public class RopeBlock extends Block implements SimpleWaterloggedBlock {
     }
 
     @Override
-    protected BlockState updateShape(BlockState state, Direction direction, BlockState neighborState, LevelAccessor level, BlockPos currentPos, BlockPos neighborPos) {
+    protected BlockState updateShape(BlockState state, LevelReader level, ScheduledTickAccess scheduleTick, BlockPos currentPos, Direction direction, BlockPos neighbourPos, BlockState neighbourState, RandomSource random) {
         // If we lost our support from above, break instantly
         if (!state.canSurvive(level, currentPos)) {
             return Blocks.AIR.defaultBlockState();
         }
 
         if (state.getValue(WATERLOGGED)) {
-            level.scheduleTick(currentPos, Fluids.WATER, Fluids.WATER.getTickDelay(level));
+            // 26.1: scheduleTick moved off LevelReader to ScheduledTickAccess.
+            scheduleTick.scheduleTick(currentPos, Fluids.WATER, Fluids.WATER.getTickDelay(level));
         }
 
         // Dynamically update the 'BOTTOM' visual state if the block below changes
         if (direction == Direction.DOWN) {
-            return state.setValue(BOTTOM, !neighborState.is(this));
+            return state.setValue(BOTTOM, !neighbourState.is(this));
         }
-
-        return super.updateShape(state, direction, neighborState, level, currentPos, neighborPos);
+        return super.updateShape(state, level, scheduleTick, currentPos, direction, neighbourPos, neighbourState, random);
     }
+
 
     // --- DECAY LOGIC (For Arrow-Deployed Ropes) ---
 
     @Override
     protected void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean isMoving) {
-        if (!level.isClientSide && !state.getValue(PERSISTENT)) {
+        if (!level.isClientSide() && !state.getValue(PERSISTENT)) {
             // Schedule destruction 600 ticks (30 seconds) after being spawned
             level.scheduleTick(pos, this, duration);
         }

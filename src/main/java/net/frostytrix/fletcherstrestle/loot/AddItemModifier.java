@@ -11,16 +11,19 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.neoforged.neoforge.common.loot.IGlobalLootModifier;
 import net.neoforged.neoforge.common.loot.LootModifier;
 
+// 26.1: LootModifier now takes (conditions, priority); codecStart returns a P2
+// of (LootItemCondition[], Integer). Constructors and the codec builder need
+// the priority slot threaded through.
 public class AddItemModifier extends LootModifier {
     public static final MapCodec<AddItemModifier> CODEC = RecordCodecBuilder.mapCodec(inst ->
-    LootModifier.codecStart(inst).and(
-            BuiltInRegistries.ITEM.byNameCodec().fieldOf("item").forGetter(e -> e.item)).apply(inst, AddItemModifier::new));
+            LootModifier.codecStart(inst).and(
+                    BuiltInRegistries.ITEM.byNameCodec().fieldOf("item").forGetter(e -> e.item)
+            ).apply(inst, AddItemModifier::new));
+
     private final Item item;
 
-
-
-    public AddItemModifier(LootItemCondition[] conditionsIn, Item item) {
-        super(conditionsIn);
+    public AddItemModifier(LootItemCondition[] conditionsIn, int priority, Item item) {
+        super(conditionsIn, priority);
         this.item = item;
     }
 

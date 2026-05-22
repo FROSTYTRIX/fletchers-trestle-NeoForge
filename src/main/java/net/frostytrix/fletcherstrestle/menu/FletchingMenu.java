@@ -113,6 +113,14 @@ public class FletchingMenu extends AbstractContainerMenu {
     public void slotsChanged(Container container) {
         super.slotsChanged(container);
 
+        // TODO(port-26.1): RecipeManager.getRecipeFor is server-only now.
+        // The result slot only resolves on the server; client will see whatever
+        // the server syncs. Once we move output computation to a server event,
+        // we can drop this guard entirely.
+        if (!(this.level instanceof net.minecraft.server.level.ServerLevel)) {
+            return;
+        }
+
         if (this.activeTab == 0) {
             // Check Bow Recipe
             FletchingRecipeInput input = new FletchingRecipeInput(
@@ -122,10 +130,10 @@ public class FletchingMenu extends AbstractContainerMenu {
                     this.craftSlots.getItem(3)  // String
             );
 
-            var recipeHolder = this.level.getRecipeManager().getRecipeFor(ModRecipes.MODULAR_WEAPON_TYPE.get(), input, this.level);
+            var recipeHolder = ((net.minecraft.server.level.ServerLevel) this.level).recipeAccess().getRecipeFor(ModRecipes.MODULAR_WEAPON_TYPE.get(), input, this.level);
 
             if (recipeHolder.isPresent()) {
-                ItemStack output = recipeHolder.get().value().assemble(input, this.level.registryAccess());
+                ItemStack output = recipeHolder.get().value().assemble(input);
 
                 // INJECT CUSTOM TUNING (Order fixed: limbs, riser, string)
                 if (this.customTuning != -1.0f) {
@@ -155,12 +163,12 @@ public class FletchingMenu extends AbstractContainerMenu {
             //System.out.println("Shaft Slot contains: " + arrowInput.shaft().getItem());
             //System.out.println("Fletch Slot contains: " + arrowInput.fletching().getItem());
 
-            var arrowRecipeHolder = this.level.getRecipeManager().getRecipeFor(ModRecipes.MODULAR_ARROW_TYPE.get(), arrowInput, this.level);
+            var arrowRecipeHolder = ((net.minecraft.server.level.ServerLevel) this.level).recipeAccess().getRecipeFor(ModRecipes.MODULAR_ARROW_TYPE.get(), arrowInput, this.level);
 
             //System.out.println("Did RecipeManager find a match? " + arrowRecipeHolder.isPresent());
 
             if (arrowRecipeHolder.isPresent()) {
-                ItemStack output = arrowRecipeHolder.get().value().assemble(arrowInput, this.level.registryAccess());
+                ItemStack output = arrowRecipeHolder.get().value().assemble(arrowInput);
                 output.setCount(4);
                 this.resultSlots.setItem(0, output);
             } else {

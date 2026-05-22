@@ -107,7 +107,8 @@ public class EagleNestFeature extends Feature<NoneFeatureConfiguration> {
         double z = nestPos.getZ() + 0.5 + Math.sin(angle) * dist;
         double y = nestPos.getY() + 3.0 + random.nextDouble() * 4.0;
 
-        eagle.moveTo(x, y, z, random.nextFloat() * 360.0f, 0f);
+        // 26.1: moveTo(d,d,d,f,f) renamed to snapTo(d,d,d,f,f).
+        eagle.snapTo(x, y, z, random.nextFloat() * 360.0f, 0f);
         eagle.setNestPos(nestPos);
         // Wild — no owner, no taming. Players need to tame these themselves.
         level.addFreshEntity(eagle);
