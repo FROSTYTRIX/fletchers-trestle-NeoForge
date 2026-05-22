@@ -1,0 +1,7 @@
+{
+  "_comment": "26.1: villager trades are data-driven via ResourceKey tag entries. This tag overlays our two new fletcher novice trades onto the vanilla level_1 set — without `replace:true`, vanilla's stick/arrow/gravel-flint trades remain intact.",
+  "values": [
+    "fletcherstrestle:fletcher/1/emerald_for_modular_arrows",
+    "fletcherstrestle:fletcher/1/emerald_for_flax_seeds"
+  ]
+}

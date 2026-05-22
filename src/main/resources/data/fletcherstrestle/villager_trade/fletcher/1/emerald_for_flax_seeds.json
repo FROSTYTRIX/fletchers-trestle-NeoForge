@@ -1,0 +1,14 @@
+{
+  "_comment": "Novice fletcher trade — flax seeds in exchange for an emerald. Helps players bootstrap the bow-string supply chain from a village even if they haven't found wild flax.",
+  "gives": {
+    "id": "fletcherstrestle:flax_seeds",
+    "count": 6.0
+  },
+  "max_uses": 12.0,
+  "reputation_discount": 0.05,
+  "wants": {
+    "id": "minecraft:emerald",
+    "count": 1.0
+  },
+  "xp": 2.0
+}
