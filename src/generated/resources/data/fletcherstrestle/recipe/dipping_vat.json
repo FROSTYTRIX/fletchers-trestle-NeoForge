@@ -2,12 +2,8 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "minecraft:bucket"
-    },
-    {
-      "item": "minecraft:cauldron"
-    }
+    "minecraft:bucket",
+    "minecraft:cauldron"
   ],
   "result": {
     "count": 1,

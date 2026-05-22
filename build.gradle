@@ -198,21 +198,28 @@ tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8' // Use the UTF-8 charset for Java compilation
 }
 
-// NeoForge 26.1 passes --sun-misc-unsafe-memory-access=allow at launch.
-// That flag was added in JDK 24; running with anything older fails before
-// the JVM starts. The `java.toolchain` block above already picks Java 25
-// for `./gradlew runClient`, but IDE-generated tasks like
-// `:net.neoforged.devlaunch.Main.main()` use the IDE's project SDK and
-// can sneak in an older JDK. Provide Java 25 as the *default* launcher
-// for every JavaExec — `.convention(...)` only sets a value when nothing
-// else (ModDevGradle, the IDE, an `executable = ...` line) has already
-// pinned one, so we don't trip Gradle's "executable vs javaLauncher
-// mismatch" check.
-tasks.withType(JavaExec).configureEach {
-    javaLauncher.convention(javaToolchains.launcherFor {
-        languageVersion = JavaLanguageVersion.of(25)
-    })
-}
+// NeoForge 26.1 passes --sun-misc-unsafe-memory-access=allow at launch,
+// which only parses on JDK 24+. The `java.toolchain` block above pins
+// Gradle-managed tasks (e.g. `./gradlew runClient`) to Java 25, so the
+// CLI path is fine.
+//
+// IDE Run Configurations are a different story. IntelliJ's "Run with
+// Gradle" generates an ad-hoc `:net.neoforged.devlaunch.Main.main()`
+// task whose `executable` is set to the IDE's project SDK — if that
+// SDK is Java 21 you get either
+//   * "Unrecognized option: --sun-misc-unsafe-memory-access=allow", or
+//   * "Toolchain from `executable` property does not match toolchain
+//     from `javaLauncher` property" (if something else also sets a
+//     launcher on that task).
+// The fix lives in the IDE, not here. In IntelliJ:
+//   File → Project Structure → Project SDK   → JDK 25
+//   Settings → Build, Execution → Build Tools → Gradle → Gradle JVM → JDK 25
+// After changing, "Reload Gradle Project" so IntelliJ regenerates the
+// ad-hoc run tasks against the new SDK.
+//
+// We deliberately do NOT force-set javaLauncher on every JavaExec — that
+// causes the executable/javaLauncher mismatch above as soon as the IDE
+// also pins an executable.
 
 // IDEA no longer automatically downloads sources/javadoc jars for dependencies, so we need to explicitly enable the behavior.
 idea {

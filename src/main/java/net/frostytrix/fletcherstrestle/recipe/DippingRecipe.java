@@ -11,6 +11,7 @@ import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
 
@@ -21,9 +22,12 @@ public class DippingRecipe implements Recipe<DippingRecipeInput> {
     public final int inputCount;
     public final Optional<String> requiredPotion;
     public final int fluidAmount;
-    public final ItemStack output;
+    // 26.1: ItemStackTemplate replaces ItemStack for recipe results so the
+    // JSON parse doesn't require item components to be bound yet (see
+    // ShavingHorseRecipe for the longer note).
+    public final ItemStackTemplate output;
 
-    public DippingRecipe(Ingredient inputItem, int inputCount, Optional<String> requiredPotion, int fluidAmount, ItemStack output) {
+    public DippingRecipe(Ingredient inputItem, int inputCount, Optional<String> requiredPotion, int fluidAmount, ItemStackTemplate output) {
         this.inputItem = inputItem;
         this.inputCount = inputCount;
         this.requiredPotion = requiredPotion;
@@ -53,7 +57,7 @@ public class DippingRecipe implements Recipe<DippingRecipeInput> {
 
     @Override
     public ItemStack assemble(DippingRecipeInput input) {
-        ItemStack result = this.output.copy();
+        ItemStack result = this.output.create();
         ArrowAssembly assembly = input.item().get(ModDataComponents.ARROW_ASSEMBLY.get());
         if (assembly != null) {
             result.set(ModDataComponents.ARROW_ASSEMBLY.get(), assembly);
@@ -113,7 +117,7 @@ public class DippingRecipe implements Recipe<DippingRecipeInput> {
             Codec.INT.fieldOf("input_count").orElse(1).forGetter(r -> r.inputCount),
             Codec.STRING.optionalFieldOf("required_potion").forGetter(r -> r.requiredPotion),
             Codec.INT.fieldOf("fluid_amount").forGetter(r -> r.fluidAmount),
-            ItemStack.CODEC.fieldOf("result").forGetter(r -> r.output)
+            ItemStackTemplate.CODEC.fieldOf("result").forGetter(r -> r.output)
     ).apply(inst, DippingRecipe::new));
 
     public static final StreamCodec<RegistryFriendlyByteBuf, DippingRecipe> STREAM_CODEC = StreamCodec.of(
@@ -128,7 +132,7 @@ public class DippingRecipe implements Recipe<DippingRecipeInput> {
         buf.writeInt(recipe.inputCount);
         ByteBufCodecs.optional(ByteBufCodecs.STRING_UTF8).encode(buf, recipe.requiredPotion);
         buf.writeInt(recipe.fluidAmount);
-        ItemStack.STREAM_CODEC.encode(buf, recipe.output);
+        ItemStackTemplate.STREAM_CODEC.encode(buf, recipe.output);
     }
 
     private static DippingRecipe fromNetwork(RegistryFriendlyByteBuf buf) {
@@ -137,7 +141,7 @@ public class DippingRecipe implements Recipe<DippingRecipeInput> {
                 buf.readInt(),
                 ByteBufCodecs.optional(ByteBufCodecs.STRING_UTF8).decode(buf),
                 buf.readInt(),
-                ItemStack.STREAM_CODEC.decode(buf)
+                ItemStackTemplate.STREAM_CODEC.decode(buf)
         );
     }
 }

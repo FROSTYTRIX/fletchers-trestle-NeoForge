@@ -1,8 +1,6 @@
 {
   "type": "fletcherstrestle:shaving",
-  "ingredient": {
-    "item": "minecraft:acacia_wood"
-  },
+  "ingredient": "minecraft:acacia_wood",
   "result": {
     "count": 1,
     "id": "fletcherstrestle:rough_acacia_limb"

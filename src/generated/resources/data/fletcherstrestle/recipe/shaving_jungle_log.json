@@ -1,8 +1,6 @@
 {
   "type": "fletcherstrestle:shaving",
-  "ingredient": {
-    "item": "minecraft:jungle_log"
-  },
+  "ingredient": "minecraft:jungle_log",
   "result": {
     "count": 1,
     "id": "fletcherstrestle:rough_jungle_limb"

@@ -2,15 +2,9 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "minecraft:string"
-    },
-    {
-      "item": "minecraft:string"
-    },
-    {
-      "item": "minecraft:iron_nugget"
-    }
+    "minecraft:string",
+    "minecraft:string",
+    "minecraft:iron_nugget"
   ],
   "result": {
     "count": 1,

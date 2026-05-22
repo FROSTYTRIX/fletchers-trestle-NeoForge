@@ -1,8 +1,6 @@
 {
   "type": "fletcherstrestle:shaving",
-  "ingredient": {
-    "item": "minecraft:warped_stem"
-  },
+  "ingredient": "minecraft:warped_stem",
   "result": {
     "count": 1,
     "id": "fletcherstrestle:rough_warped_limb"

@@ -1,8 +1,6 @@
 {
   "type": "fletcherstrestle:shaving",
-  "ingredient": {
-    "item": "minecraft:cherry_log"
-  },
+  "ingredient": "minecraft:cherry_log",
   "result": {
     "count": 1,
     "id": "fletcherstrestle:rough_cherry_limb"

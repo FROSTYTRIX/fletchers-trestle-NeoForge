@@ -2,9 +2,7 @@
   "type": "minecraft:crafting_shaped",
   "category": "equipment",
   "key": {
-    "F": {
-      "item": "fletcherstrestle:flax_string"
-    }
+    "F": "fletcherstrestle:flax_string"
   },
   "pattern": [
     "FF ",

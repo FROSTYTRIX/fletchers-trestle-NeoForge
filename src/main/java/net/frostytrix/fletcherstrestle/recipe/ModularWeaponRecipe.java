@@ -7,6 +7,7 @@ import net.frostytrix.fletcherstrestle.component.ModDataComponents;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
 
@@ -15,9 +16,10 @@ public class ModularWeaponRecipe implements Recipe<FletchingRecipeInput> {
     private final Ingredient riser;
     private final Ingredient limbs;
     private final Ingredient string;
-    private final ItemStack result;
+    // 26.1: ItemStackTemplate result — see ShavingHorseRecipe note.
+    private final ItemStackTemplate result;
 
-    public ModularWeaponRecipe(Ingredient riser, Ingredient limbs, Ingredient string, ItemStack result) {
+    public ModularWeaponRecipe(Ingredient riser, Ingredient limbs, Ingredient string, ItemStackTemplate result) {
         this.riser = riser;
         this.limbs = limbs;
         this.string = string;
@@ -35,7 +37,7 @@ public class ModularWeaponRecipe implements Recipe<FletchingRecipeInput> {
 
     @Override
     public ItemStack assemble(FletchingRecipeInput input) {
-        ItemStack output = this.result.copy();
+        ItemStack output = this.result.create();
         String riserMat = getMaterialName(input.riser());
         String limbMat = getMaterialName(input.topLimb());
         String stringMat = getMaterialName(input.string());
@@ -85,7 +87,7 @@ public class ModularWeaponRecipe implements Recipe<FletchingRecipeInput> {
             Ingredient.CODEC.fieldOf("riser").forGetter(r -> r.riser),
             Ingredient.CODEC.fieldOf("limbs").forGetter(r -> r.limbs),
             Ingredient.CODEC.fieldOf("string").forGetter(r -> r.string),
-            ItemStack.CODEC.fieldOf("result").forGetter(r -> r.result)
+            ItemStackTemplate.CODEC.fieldOf("result").forGetter(r -> r.result)
     ).apply(inst, ModularWeaponRecipe::new));
 
     public static final StreamCodec<RegistryFriendlyByteBuf, ModularWeaponRecipe> STREAM_CODEC = StreamCodec.of(
@@ -99,7 +101,7 @@ public class ModularWeaponRecipe implements Recipe<FletchingRecipeInput> {
         Ingredient.CONTENTS_STREAM_CODEC.encode(buf, recipe.riser);
         Ingredient.CONTENTS_STREAM_CODEC.encode(buf, recipe.limbs);
         Ingredient.CONTENTS_STREAM_CODEC.encode(buf, recipe.string);
-        ItemStack.STREAM_CODEC.encode(buf, recipe.result);
+        ItemStackTemplate.STREAM_CODEC.encode(buf, recipe.result);
     }
 
     private static ModularWeaponRecipe fromNetwork(RegistryFriendlyByteBuf buf) {
@@ -107,7 +109,7 @@ public class ModularWeaponRecipe implements Recipe<FletchingRecipeInput> {
                 Ingredient.CONTENTS_STREAM_CODEC.decode(buf),
                 Ingredient.CONTENTS_STREAM_CODEC.decode(buf),
                 Ingredient.CONTENTS_STREAM_CODEC.decode(buf),
-                ItemStack.STREAM_CODEC.decode(buf)
+                ItemStackTemplate.STREAM_CODEC.decode(buf)
         );
     }
 }

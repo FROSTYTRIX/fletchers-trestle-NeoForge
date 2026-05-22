@@ -1,8 +1,6 @@
 {
   "type": "fletcherstrestle:steaming",
-  "ingredient": {
-    "item": "minecraft:potato"
-  },
+  "ingredient": "minecraft:potato",
   "result": {
     "count": 1,
     "id": "minecraft:baked_potato"

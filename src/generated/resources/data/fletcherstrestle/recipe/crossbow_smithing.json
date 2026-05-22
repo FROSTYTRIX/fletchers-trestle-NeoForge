@@ -1,16 +1,10 @@
 {
   "type": "minecraft:smithing_transform",
-  "addition": {
-    "item": "minecraft:tripwire_hook"
-  },
-  "base": {
-    "item": "minecraft:bow"
-  },
+  "addition": "minecraft:tripwire_hook",
+  "base": "minecraft:bow",
   "result": {
     "count": 1,
     "id": "minecraft:crossbow"
   },
-  "template": {
-    "item": "fletcherstrestle:mechanical_trigger"
-  }
+  "template": "fletcherstrestle:mechanical_trigger"
 }

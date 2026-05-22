@@ -1,8 +1,6 @@
 {
   "type": "fletcherstrestle:shaving",
-  "ingredient": {
-    "item": "minecraft:stripped_spruce_log"
-  },
+  "ingredient": "minecraft:stripped_spruce_log",
   "result": {
     "count": 1,
     "id": "fletcherstrestle:rough_spruce_limb"

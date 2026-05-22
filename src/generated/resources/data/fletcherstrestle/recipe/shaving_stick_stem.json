@@ -1,8 +1,6 @@
 {
   "type": "fletcherstrestle:shaving",
-  "ingredient": {
-    "item": "minecraft:stick"
-  },
+  "ingredient": "minecraft:stick",
   "result": {
     "count": 1,
     "id": "fletcherstrestle:rough_oak_limb"

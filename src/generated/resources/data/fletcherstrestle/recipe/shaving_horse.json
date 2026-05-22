@@ -2,15 +2,9 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "L": {
-      "tag": "minecraft:logs"
-    },
-    "S": {
-      "tag": "minecraft:wooden_slabs"
-    },
-    "s": {
-      "item": "minecraft:stick"
-    }
+    "L": "#minecraft:logs",
+    "S": "#minecraft:wooden_slabs",
+    "s": "minecraft:stick"
   },
   "pattern": [
     "SS ",

@@ -1,8 +1,6 @@
 {
   "type": "fletcherstrestle:shaving",
-  "ingredient": {
-    "item": "minecraft:jungle_wood"
-  },
+  "ingredient": "minecraft:jungle_wood",
   "result": {
     "count": 1,
     "id": "fletcherstrestle:rough_jungle_limb"

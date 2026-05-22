@@ -1,5 +1,6 @@
 {
   "type": "fletcherstrestle:add_item",
+  "priority": 0,
   "conditions": [
     {
       "block": "minecraft:short_grass",

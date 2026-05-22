@@ -1,8 +1,6 @@
 {
   "type": "fletcherstrestle:shaving",
-  "ingredient": {
-    "item": "minecraft:mangrove_log"
-  },
+  "ingredient": "minecraft:mangrove_log",
   "result": {
     "count": 1,
     "id": "fletcherstrestle:rough_mangrove_limb"

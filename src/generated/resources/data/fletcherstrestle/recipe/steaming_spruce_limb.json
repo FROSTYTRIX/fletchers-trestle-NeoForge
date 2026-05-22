@@ -1,8 +1,6 @@
 {
   "type": "fletcherstrestle:steaming",
-  "ingredient": {
-    "item": "fletcherstrestle:rough_spruce_limb"
-  },
+  "ingredient": "fletcherstrestle:rough_spruce_limb",
   "result": {
     "count": 1,
     "id": "fletcherstrestle:pliable_spruce_limb"

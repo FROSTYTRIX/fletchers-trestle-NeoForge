@@ -2,12 +2,8 @@
   "type": "minecraft:crafting_shaped",
   "category": "equipment",
   "key": {
-    "I": {
-      "item": "minecraft:iron_ingot"
-    },
-    "S": {
-      "tag": "fletcherstrestle:bow_strings"
-    }
+    "I": "minecraft:iron_ingot",
+    "S": "#fletcherstrestle:bow_strings"
   },
   "pattern": [
     "III",

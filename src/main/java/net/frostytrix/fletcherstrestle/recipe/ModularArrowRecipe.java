@@ -9,6 +9,7 @@ import net.frostytrix.fletcherstrestle.item.ModItems;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
@@ -18,9 +19,10 @@ public class ModularArrowRecipe implements Recipe<ArrowRecipeInput> {
     private final Ingredient head;
     private final Ingredient shaft;
     private final Ingredient fletching;
-    private final ItemStack result;
+    // 26.1: ItemStackTemplate result — see ShavingHorseRecipe note.
+    private final ItemStackTemplate result;
 
-    public ModularArrowRecipe(Ingredient head, Ingredient shaft, Ingredient fletching, ItemStack result) {
+    public ModularArrowRecipe(Ingredient head, Ingredient shaft, Ingredient fletching, ItemStackTemplate result) {
         this.head = head;
         this.shaft = shaft;
         this.fletching = fletching;
@@ -41,7 +43,7 @@ public class ModularArrowRecipe implements Recipe<ArrowRecipeInput> {
 
     @Override
     public ItemStack assemble(ArrowRecipeInput input) {
-        ItemStack output = this.result.copy();
+        ItemStack output = this.result.create();
         String headName = getArrowHead(input.head());
         String shaftName = getArrowShaft(input.shaft());
         String fletchName = getArrowFletching(input.fletching());
@@ -112,7 +114,7 @@ public class ModularArrowRecipe implements Recipe<ArrowRecipeInput> {
             Ingredient.CODEC.fieldOf("head").forGetter(r -> r.head),
             Ingredient.CODEC.fieldOf("shaft").forGetter(r -> r.shaft),
             Ingredient.CODEC.fieldOf("fletching").forGetter(r -> r.fletching),
-            ItemStack.CODEC.fieldOf("result").forGetter(r -> r.result)
+            ItemStackTemplate.CODEC.fieldOf("result").forGetter(r -> r.result)
     ).apply(inst, ModularArrowRecipe::new));
 
     public static final StreamCodec<RegistryFriendlyByteBuf, ModularArrowRecipe> STREAM_CODEC = StreamCodec.of(
@@ -126,7 +128,7 @@ public class ModularArrowRecipe implements Recipe<ArrowRecipeInput> {
         Ingredient.CONTENTS_STREAM_CODEC.encode(buf, recipe.head);
         Ingredient.CONTENTS_STREAM_CODEC.encode(buf, recipe.shaft);
         Ingredient.CONTENTS_STREAM_CODEC.encode(buf, recipe.fletching);
-        ItemStack.STREAM_CODEC.encode(buf, recipe.result);
+        ItemStackTemplate.STREAM_CODEC.encode(buf, recipe.result);
     }
 
     private static ModularArrowRecipe fromNetwork(RegistryFriendlyByteBuf buf) {
@@ -134,7 +136,7 @@ public class ModularArrowRecipe implements Recipe<ArrowRecipeInput> {
                 Ingredient.CONTENTS_STREAM_CODEC.decode(buf),
                 Ingredient.CONTENTS_STREAM_CODEC.decode(buf),
                 Ingredient.CONTENTS_STREAM_CODEC.decode(buf),
-                ItemStack.STREAM_CODEC.decode(buf)
+                ItemStackTemplate.STREAM_CODEC.decode(buf)
         );
     }
 }

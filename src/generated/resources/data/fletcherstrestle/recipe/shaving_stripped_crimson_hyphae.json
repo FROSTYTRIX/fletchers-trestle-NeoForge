@@ -1,8 +1,6 @@
 {
   "type": "fletcherstrestle:shaving",
-  "ingredient": {
-    "item": "minecraft:crimson_stem"
-  },
+  "ingredient": "minecraft:crimson_stem",
   "result": {
     "count": 1,
     "id": "fletcherstrestle:rough_crimson_limb"

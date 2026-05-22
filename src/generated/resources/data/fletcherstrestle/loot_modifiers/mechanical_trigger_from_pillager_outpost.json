@@ -1,5 +1,6 @@
 {
   "type": "fletcherstrestle:add_item",
+  "priority": 0,
   "conditions": [
     {
       "condition": "neoforge:loot_table_id",

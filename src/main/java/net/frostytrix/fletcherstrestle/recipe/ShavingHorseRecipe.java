@@ -7,15 +7,23 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
 
 public class ShavingHorseRecipe implements Recipe<SingleRecipeInput> {
     private final Ingredient input;
-    private final ItemStack result;
+    // 26.1: recipes store ItemStackTemplate (a Holder<Item> + count + patch)
+    // for the result instead of a fully-materialised ItemStack. ItemStack.CODEC
+    // now routes through Item.CODEC_WITH_BOUND_COMPONENTS, which throws
+    // "does not have components yet" at recipe-load time because component
+    // binding hasn't run on the server when datapacks reload. The template
+    // codec sidesteps that and materializes into a real ItemStack via
+    // .create() inside assemble().
+    private final ItemStackTemplate result;
     private final int shavesRequired;
 
-    public ShavingHorseRecipe(Ingredient input, ItemStack result, int shavesRequired) {
+    public ShavingHorseRecipe(Ingredient input, ItemStackTemplate result, int shavesRequired) {
         this.input = input;
         this.result = result;
         this.shavesRequired = shavesRequired;
@@ -31,7 +39,7 @@ public class ShavingHorseRecipe implements Recipe<SingleRecipeInput> {
 
     @Override
     public ItemStack assemble(SingleRecipeInput input) {
-        return this.result.copy();
+        return this.result.create();
     }
 
     @Override
@@ -51,7 +59,7 @@ public class ShavingHorseRecipe implements Recipe<SingleRecipeInput> {
 
     public static final MapCodec<ShavingHorseRecipe> CODEC = RecordCodecBuilder.mapCodec(inst -> inst.group(
             Ingredient.CODEC.fieldOf("ingredient").forGetter(r -> r.input),
-            ItemStack.CODEC.fieldOf("result").forGetter(r -> r.result),
+            ItemStackTemplate.CODEC.fieldOf("result").forGetter(r -> r.result),
             Codec.INT.optionalFieldOf("shaves_required", 3).forGetter(r -> r.shavesRequired)
     ).apply(inst, ShavingHorseRecipe::new));
 
@@ -64,14 +72,14 @@ public class ShavingHorseRecipe implements Recipe<SingleRecipeInput> {
 
     private static void toNetwork(RegistryFriendlyByteBuf buf, ShavingHorseRecipe recipe) {
         Ingredient.CONTENTS_STREAM_CODEC.encode(buf, recipe.input);
-        ItemStack.STREAM_CODEC.encode(buf, recipe.result);
+        ItemStackTemplate.STREAM_CODEC.encode(buf, recipe.result);
         ByteBufCodecs.INT.encode(buf, recipe.shavesRequired);
     }
 
     private static ShavingHorseRecipe fromNetwork(RegistryFriendlyByteBuf buf) {
         return new ShavingHorseRecipe(
                 Ingredient.CONTENTS_STREAM_CODEC.decode(buf),
-                ItemStack.STREAM_CODEC.decode(buf),
+                ItemStackTemplate.STREAM_CODEC.decode(buf),
                 ByteBufCodecs.INT.decode(buf)
         );
     }

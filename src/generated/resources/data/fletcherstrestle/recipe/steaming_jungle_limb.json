@@ -1,8 +1,6 @@
 {
   "type": "fletcherstrestle:steaming",
-  "ingredient": {
-    "item": "fletcherstrestle:rough_jungle_limb"
-  },
+  "ingredient": "fletcherstrestle:rough_jungle_limb",
   "result": {
     "count": 1,
     "id": "fletcherstrestle:pliable_jungle_limb"

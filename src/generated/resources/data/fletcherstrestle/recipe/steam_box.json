@@ -2,18 +2,10 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "B": {
-      "item": "minecraft:bucket"
-    },
-    "C": {
-      "item": "minecraft:copper_ingot"
-    },
-    "I": {
-      "item": "minecraft:iron_bars"
-    },
-    "P": {
-      "tag": "minecraft:planks"
-    }
+    "B": "minecraft:bucket",
+    "C": "minecraft:copper_ingot",
+    "I": "minecraft:iron_bars",
+    "P": "#minecraft:planks"
   },
   "pattern": [
     "III",

@@ -1,8 +1,6 @@
 {
   "type": "fletcherstrestle:steaming",
-  "ingredient": {
-    "item": "fletcherstrestle:rough_birch_limb"
-  },
+  "ingredient": "fletcherstrestle:rough_birch_limb",
   "result": {
     "count": 1,
     "id": "fletcherstrestle:pliable_birch_limb"

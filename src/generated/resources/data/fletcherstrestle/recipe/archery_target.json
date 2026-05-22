@@ -2,21 +2,11 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "minecraft:white_wool"
-    },
-    {
-      "item": "minecraft:black_dye"
-    },
-    {
-      "item": "minecraft:blue_dye"
-    },
-    {
-      "item": "minecraft:red_dye"
-    },
-    {
-      "item": "minecraft:yellow_dye"
-    }
+    "minecraft:white_wool",
+    "minecraft:black_dye",
+    "minecraft:blue_dye",
+    "minecraft:red_dye",
+    "minecraft:yellow_dye"
   ],
   "result": {
     "count": 1,

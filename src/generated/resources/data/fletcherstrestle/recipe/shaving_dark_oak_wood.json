@@ -1,8 +1,6 @@
 {
   "type": "fletcherstrestle:shaving",
-  "ingredient": {
-    "item": "minecraft:dark_oak_wood"
-  },
+  "ingredient": "minecraft:dark_oak_wood",
   "result": {
     "count": 1,
     "id": "fletcherstrestle:rough_dark_oak_limb"

@@ -1,14 +1,8 @@
 {
   "type": "fletcherstrestle:modular_arrow_assembly",
-  "head": {
-    "tag": "fletcherstrestle:arrow_heads"
-  },
-  "shaft": {
-    "tag": "fletcherstrestle:rough_limbs"
-  },
-  "fletching": {
-    "tag": "fletcherstrestle:arrow_fletching"
-  },
+  "head": "#fletcherstrestle:arrow_heads",
+  "shaft": "#fletcherstrestle:rough_limbs",
+  "fletching": "#fletcherstrestle:arrow_fletching",
   "result": {
     "id": "fletcherstrestle:modular_arrow",
     "count": 4

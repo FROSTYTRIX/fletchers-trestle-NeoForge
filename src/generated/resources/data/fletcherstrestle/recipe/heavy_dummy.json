@@ -2,15 +2,9 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "H": {
-      "item": "minecraft:hay_block"
-    },
-    "I": {
-      "item": "minecraft:iron_block"
-    },
-    "T": {
-      "item": "fletcherstrestle:archery_target"
-    }
+    "H": "minecraft:hay_block",
+    "I": "minecraft:iron_block",
+    "T": "fletcherstrestle:archery_target"
   },
   "pattern": [
     "HTH",
