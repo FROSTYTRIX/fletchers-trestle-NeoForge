@@ -53,10 +53,13 @@ public class ShavingHorseRenderer implements BlockEntityRenderer<ShavingHorseBlo
         if (stack.isEmpty()) {
             state.item.clear();
         } else if (be.getLevel() != null) {
-            // updateForNonLiving takes (state, stack, displayContext, Entity).
-            // We don't have an Entity in BE-renderer scope; passing null is
-            // accepted (only used for things like player skin context).
-            itemModelResolver.updateForNonLiving(state.item, stack, ItemDisplayContext.FIXED, null);
+            // updateForNonLiving internally calls entity.level() / entity.getId(),
+            // so passing null throws an NPE silently and the item never renders.
+            // updateForTopItem is the lower-level path that accepts a null
+            // ItemOwner — exactly what we need for a block-entity-held stack.
+            itemModelResolver.updateForTopItem(
+                    state.item, stack, ItemDisplayContext.FIXED,
+                    be.getLevel(), null, 0);
         }
     }
 

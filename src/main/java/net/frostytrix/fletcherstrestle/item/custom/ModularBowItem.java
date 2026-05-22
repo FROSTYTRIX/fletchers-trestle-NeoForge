@@ -136,7 +136,10 @@ public class ModularBowItem extends BowItem {
             return;
         }
 
-        if (!false /* TODO(port-26.1): Screen.hasShiftDown gone */) {
+        // 26.1: modifier-key state moved off Screen onto TooltipFlag itself,
+        // which is a much cleaner injection point — works on the server side
+        // (where Screen isn't accessible) too.
+        if (!tooltipFlag.hasShiftDown()) {
             tooltipComponents.accept(Component.literal("Hold Shift for details")
                     .withStyle(ChatFormatting.DARK_GRAY, ChatFormatting.ITALIC));
             return;

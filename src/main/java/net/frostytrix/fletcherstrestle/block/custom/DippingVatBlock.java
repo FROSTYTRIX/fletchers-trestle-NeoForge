@@ -9,6 +9,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -35,17 +36,42 @@ public class DippingVatBlock extends BaseEntityBlock {
         return null;
     }
 
+    // 26.1: a block sees two distinct interaction callbacks —
+    //   * useItemOn(stack, …)         — fired when the player's main hand is
+    //                                   holding something (bucket, glass bottle,
+    //                                   potion, arrow stack to dip, etc.).
+    //   * useWithoutItem(…)           — fired when the main hand is empty.
+    // Previously only useWithoutItem was wired, so dipping a bucket into the
+    // vat or feeding it a potion silently did nothing. Both now delegate to
+    // the same handlePlayerInteraction on the BE; player.getUsedItemHand()
+    // doesn't work here (the player isn't actively *using* an item), so we
+    // pass the hand the method already gives us.
+    @Override
+    protected InteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos,
+                                          Player player, InteractionHand hand, BlockHitResult hitResult) {
+        if (level.isClientSide()) {
+            return InteractionResult.SUCCESS;
+        }
+        if (level.getBlockEntity(pos) instanceof DippingVatBlockEntity vat) {
+            if (vat.handlePlayerInteraction(player, hand)) {
+                return InteractionResult.SUCCESS;
+            }
+        }
+        // Returning PASS lets vanilla item logic try (e.g. bucket placing
+        // a fluid in the world if our handler didn't claim the click).
+        return InteractionResult.PASS;
+    }
+
     @Override
     protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
-        if (!level.isClientSide()) {
-            if (level.getBlockEntity(pos) instanceof DippingVatBlockEntity vat) {
-                // On délègue tout le traitement logique au Block Entity
-                boolean success = vat.handlePlayerInteraction(player, player.getUsedItemHand());
-
-                if (success) {
-                    return InteractionResult.SUCCESS;
-                }
-            }
+        if (level.isClientSide()) {
+            return InteractionResult.SUCCESS;
+        }
+        if (level.getBlockEntity(pos) instanceof DippingVatBlockEntity vat) {
+            // Empty-handed click: only the "extract potion via glass bottle"
+            // branch in handlePlayerInteraction will hit anything useful, but
+            // calling it is harmless if the conditions don't match.
+            vat.handlePlayerInteraction(player, InteractionHand.MAIN_HAND);
         }
         return InteractionResult.SUCCESS;
     }

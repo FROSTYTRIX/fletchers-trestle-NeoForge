@@ -37,7 +37,8 @@ public class ModularArrowItem extends ArrowItem {
             return;
         }
 
-        if (!false /* TODO(port-26.1): Screen.hasShiftDown gone */) {
+        // 26.1: tooltipFlag.hasShiftDown() replaces Screen.hasShiftDown().
+        if (!tooltipFlag.hasShiftDown()) {
             tooltipComponents.accept(Component.literal("Hold Shift for details")
                     .withStyle(ChatFormatting.DARK_GRAY, ChatFormatting.ITALIC));
             return;
