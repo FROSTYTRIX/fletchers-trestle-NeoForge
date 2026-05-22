@@ -136,7 +136,12 @@ public class EagleEntity extends TamableAnimal {
                 .add(Attributes.MOVEMENT_SPEED, 0.3)
                 .add(Attributes.FLYING_SPEED,   0.17)
                 .add(Attributes.FOLLOW_RANGE,   32.0)
-                .add(Attributes.ATTACK_DAMAGE,  3.0);
+                .add(Attributes.ATTACK_DAMAGE,  3.0)
+                // 26.1: TemptGoal.canUse reads minecraft:tempt_range from the
+                // entity's attribute map (was a constant in 1.21.1). Mobs that
+                // use the goal must declare the attribute or AttributeSupplier
+                // throws "Can't find attribute" mid-tick.
+                .add(Attributes.TEMPT_RANGE,    10.0);
     }
 
     // ---------------------------------------------------------------

@@ -1,17 +1,41 @@
 package net.frostytrix.fletcherstrestle.event;
 
-// TODO(port-26.1): Whole file stubbed.
+import net.frostytrix.fletcherstrestle.FletcherTrestle;
+import net.frostytrix.fletcherstrestle.entity.ModEntities;
+import net.minecraft.client.renderer.entity.NoopRenderer;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.client.event.EntityRenderersEvent;
+
+// Subset of the old ModClientEvents — for now just registers a no-op
+// renderer for every modded entity so the client doesn't NPE when one
+// shows up in the world. The real renderers (eagle model, modular arrow
+// renderer, heavy dummy, etc.) are still pending the 26.1 renderer
+// rewrite (deferred extract/submit pattern + new ArrowRenderer<T,S>
+// shape).
 //
-// In 1.21.1 this file did a lot:
-//   - Registered renderers (renderer subsystem rewritten in 26.1, see TODOs)
-//   - Registered geometry loaders (gone — ItemModel JSON system replaces it)
-//   - Handled QUIVER_LEFT/RIGHT/MODIFIER keybind ticks (ClientKeybinds stubbed)
-//   - Custom FOV modifier on crossbow draw (ComputeFovModifierEvent unchanged
-//     but the rest of the file's deps are stubbed)
-//   - Block/item color handlers (RegisterColorHandlersEvent.Item/.Block removed)
-//
-// Restoring this file is a "client UI" milestone that should happen
-// after the renderer / model / screen subsystems are properly ported.
+// TODO(port-26.1): replace NoopRenderer wiring with real renderers.
+// Keybinds, quiver scroll, color handlers, geometry loaders, and FOV
+// modifier are still on the long-term TODO list.
+// 26.1: EventBusSubscriber lost the `bus` member (mod-bus is the default)
+// and `value` is now Dist[]. The "client only" gate is `value = Dist.CLIENT`.
+@EventBusSubscriber(modid = FletcherTrestle.MOD_ID, value = Dist.CLIENT)
 public final class ModClientEvents {
     private ModClientEvents() {}
+
+    @SubscribeEvent
+    public static void onRegisterRenderers(EntityRenderersEvent.RegisterRenderers event) {
+        // Eagles tick on the server even without a renderer, but the client
+        // entity dispatcher NPEs the first time one enters the camera frustum.
+        event.registerEntityRenderer(ModEntities.EAGLE.get(), NoopRenderer::new);
+
+        // Same precaution for everything else we register through ModEntities.
+        // Iterating ModEntities directly would be neater, but we don't expose
+        // a List<EntityType<?>>, so enumerate the known ones explicitly.
+        if (ModEntities.MODULAR_ARROW != null)
+            event.registerEntityRenderer(ModEntities.MODULAR_ARROW.get(), NoopRenderer::new);
+        if (ModEntities.HEAVY_DUMMY != null)
+            event.registerEntityRenderer(ModEntities.HEAVY_DUMMY.get(), NoopRenderer::new);
+    }
 }
