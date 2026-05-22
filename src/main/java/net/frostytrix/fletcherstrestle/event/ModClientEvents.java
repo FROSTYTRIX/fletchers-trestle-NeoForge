@@ -24,6 +24,15 @@ import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 public final class ModClientEvents {
     private ModClientEvents() {}
 
+    // Bake the eagle body layer at startup so EagleRenderer can pull a
+    // ModelPart from the EntityModelSet via context.bakeLayer(LAYER_LOCATION).
+    @SubscribeEvent
+    public static void onRegisterLayerDefinitions(EntityRenderersEvent.RegisterLayerDefinitions event) {
+        event.registerLayerDefinition(
+                net.frostytrix.fletcherstrestle.entity.client.EagleModel.LAYER_LOCATION,
+                net.frostytrix.fletcherstrestle.entity.client.EagleModel::createBodyLayer);
+    }
+
     @SubscribeEvent
     public static void onRegisterRenderers(EntityRenderersEvent.RegisterRenderers event) {
         // Block entity renderers — same event covers them in 26.1.
@@ -31,9 +40,12 @@ public final class ModClientEvents {
                 net.frostytrix.fletcherstrestle.block.entity.ModBlockEntities.SHAVING_HORSE_BE.get(),
                 net.frostytrix.fletcherstrestle.block.entity.renderer.ShavingHorseRenderer::new);
 
-        // Eagles tick on the server even without a renderer, but the client
-        // entity dispatcher NPEs the first time one enters the camera frustum.
-        event.registerEntityRenderer(ModEntities.EAGLE.get(), NoopRenderer::new);
+        // Eagles get the proper geometric renderer back. The 1.21.1 model
+        // ported intact; only the EntityModel<S>/MobRenderer<T,S,M>
+        // signatures changed (see entity/client/EagleRenderer.java).
+        event.registerEntityRenderer(
+                ModEntities.EAGLE.get(),
+                net.frostytrix.fletcherstrestle.entity.client.EagleRenderer::new);
 
         // Modular arrows get a real renderer so projectiles are visible in
         // flight. Texture is picked from ArrowAssembly.shaft each frame.
