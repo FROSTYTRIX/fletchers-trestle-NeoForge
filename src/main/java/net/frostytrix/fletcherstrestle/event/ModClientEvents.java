@@ -26,6 +26,11 @@ public final class ModClientEvents {
 
     @SubscribeEvent
     public static void onRegisterRenderers(EntityRenderersEvent.RegisterRenderers event) {
+        // Block entity renderers — same event covers them in 26.1.
+        event.registerBlockEntityRenderer(
+                net.frostytrix.fletcherstrestle.block.entity.ModBlockEntities.SHAVING_HORSE_BE.get(),
+                net.frostytrix.fletcherstrestle.block.entity.renderer.ShavingHorseRenderer::new);
+
         // Eagles tick on the server even without a renderer, but the client
         // entity dispatcher NPEs the first time one enters the camera frustum.
         event.registerEntityRenderer(ModEntities.EAGLE.get(), NoopRenderer::new);
