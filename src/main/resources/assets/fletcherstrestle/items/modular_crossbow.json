@@ -1,6 +1,55 @@
 {
+  "_comment": "Mirrors vanilla crossbow: top-level select on charge_type (which arrow is loaded), with the unloaded branch handling using_item + crossbow/pull for the draw animation. Materials are fixed (oak/wood/flax) until we port the modular_loader replacement.",
   "model": {
-    "type": "minecraft:model",
-    "model": "fletcherstrestle:item/modular_crossbow"
+    "type": "minecraft:select",
+    "property": "minecraft:charge_type",
+    "fallback": {
+      "type": "minecraft:condition",
+      "property": "minecraft:using_item",
+      "on_false": {
+        "type": "minecraft:model",
+        "model": "fletcherstrestle:item/modular_crossbow/idle"
+      },
+      "on_true": {
+        "type": "minecraft:range_dispatch",
+        "property": "minecraft:crossbow/pull",
+        "fallback": {
+          "type": "minecraft:model",
+          "model": "fletcherstrestle:item/modular_crossbow/pulling_0"
+        },
+        "entries": [
+          {
+            "threshold": 0.58,
+            "model": {
+              "type": "minecraft:model",
+              "model": "fletcherstrestle:item/modular_crossbow/pulling_1"
+            }
+          },
+          {
+            "threshold": 1.0,
+            "model": {
+              "type": "minecraft:model",
+              "model": "fletcherstrestle:item/modular_crossbow/pulling_2"
+            }
+          }
+        ]
+      }
+    },
+    "cases": [
+      {
+        "when": "arrow",
+        "model": {
+          "type": "minecraft:model",
+          "model": "fletcherstrestle:item/modular_crossbow/loaded_arrow"
+        }
+      },
+      {
+        "when": "rocket",
+        "model": {
+          "type": "minecraft:model",
+          "model": "fletcherstrestle:item/modular_crossbow/loaded_firework"
+        }
+      }
+    ]
   }
 }

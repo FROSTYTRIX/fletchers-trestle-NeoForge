@@ -1,6 +1,7 @@
 {
+  "_comment": "Composite arrow display — head + shaft + fletching. The three-layer mesh model lives in models/item/modular_arrow/idle.json; per-material variation will route through a registered fletcherstrestle:modular_arrow ItemModel type once we port the modular_loader.",
   "model": {
     "type": "minecraft:model",
-    "model": "fletcherstrestle:item/modular_arrow"
+    "model": "fletcherstrestle:item/modular_arrow/idle"
   }
 }

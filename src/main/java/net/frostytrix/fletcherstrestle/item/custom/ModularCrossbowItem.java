@@ -54,9 +54,17 @@ public class ModularCrossbowItem extends CrossbowItem {
     }
 
     // --- 1. CHARGING TIME LOGIC ---
+    // 26.1: CrossbowItem.releaseUsing now refuses to load unless
+    // useDuration - timeLeft >= getChargeDuration (~25 ticks at base).
+    // Our materials let draw time drop to ~12 ticks at high tuning, which
+    // used to be fine in 1.21.1 but now silently fails the load check
+    // (crossbow goes back to empty after release — "doesn't keep the arrow").
+    // Floor against the static charge duration so the load always passes.
     @Override
     public int getUseDuration(ItemStack stack, LivingEntity entity) {
-        return (int) getDrawTime(stack) + 3;
+        int draw = (int) getDrawTime(stack);
+        int floor = CrossbowItem.getChargeDuration(stack, entity);
+        return Math.max(draw, floor) + 3;
     }
 
     public float getDrawTime(ItemStack stack) {

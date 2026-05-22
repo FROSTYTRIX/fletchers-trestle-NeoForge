@@ -203,12 +203,15 @@ tasks.withType(JavaCompile).configureEach {
 // the JVM starts. The `java.toolchain` block above already picks Java 25
 // for `./gradlew runClient`, but IDE-generated tasks like
 // `:net.neoforged.devlaunch.Main.main()` use the IDE's project SDK and
-// can sneak in an older JDK. Pin every JavaExec to the same toolchain so
-// IDE launches don't bypass it.
+// can sneak in an older JDK. Provide Java 25 as the *default* launcher
+// for every JavaExec — `.convention(...)` only sets a value when nothing
+// else (ModDevGradle, the IDE, an `executable = ...` line) has already
+// pinned one, so we don't trip Gradle's "executable vs javaLauncher
+// mismatch" check.
 tasks.withType(JavaExec).configureEach {
-    javaLauncher = javaToolchains.launcherFor {
+    javaLauncher.convention(javaToolchains.launcherFor {
         languageVersion = JavaLanguageVersion.of(25)
-    }
+    })
 }
 
 // IDEA no longer automatically downloads sources/javadoc jars for dependencies, so we need to explicitly enable the behavior.

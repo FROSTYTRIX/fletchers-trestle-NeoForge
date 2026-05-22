@@ -30,11 +30,12 @@ public final class ModClientEvents {
         // entity dispatcher NPEs the first time one enters the camera frustum.
         event.registerEntityRenderer(ModEntities.EAGLE.get(), NoopRenderer::new);
 
-        // Same precaution for everything else we register through ModEntities.
-        // Iterating ModEntities directly would be neater, but we don't expose
-        // a List<EntityType<?>>, so enumerate the known ones explicitly.
-        if (ModEntities.MODULAR_ARROW != null)
-            event.registerEntityRenderer(ModEntities.MODULAR_ARROW.get(), NoopRenderer::new);
+        // Modular arrows get a real renderer so projectiles are visible in
+        // flight. Texture is picked from ArrowAssembly.shaft each frame.
+        event.registerEntityRenderer(
+                ModEntities.MODULAR_ARROW.get(),
+                net.frostytrix.fletcherstrestle.client.renderer.ModularArrowRenderer::new);
+
         if (ModEntities.HEAVY_DUMMY != null)
             event.registerEntityRenderer(ModEntities.HEAVY_DUMMY.get(), NoopRenderer::new);
     }
