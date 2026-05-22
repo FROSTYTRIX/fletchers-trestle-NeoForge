@@ -1,9 +1,0 @@
-{
-  "_comment": "Default arrow display — flint head + oak shaft + feather fletching. Per-ArrowAssembly material variation is still pending the modular_loader replacement.",
-  "parent": "minecraft:item/generated",
-  "textures": {
-    "layer0": "fletcherstrestle:item/modular_arrow/shafts/oak_shaft",
-    "layer1": "fletcherstrestle:item/modular_arrow/fletchings/feather_fletching",
-    "layer2": "fletcherstrestle:item/modular_arrow/heads/flint_head"
-  }
-}

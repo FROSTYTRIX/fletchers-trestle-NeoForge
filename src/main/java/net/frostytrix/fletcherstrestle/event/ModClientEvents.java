@@ -55,4 +55,16 @@ public final class ModClientEvents {
                 net.minecraft.resources.Identifier.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "quiver_hud"),
                 net.frostytrix.fletcherstrestle.client.QuiverHudOverlay.INSTANCE);
     }
+
+    // 26.1: RegisterColorHandlersEvent.Item is gone; tint sources are
+    // value-typed model components registered as MapCodecs through this
+    // sub-event. Models reference them by id ("fletcherstrestle:potion")
+    // in their "tints" array. Used for the glass-vial arrow liquid layer.
+    @SubscribeEvent
+    public static void onRegisterItemTintSources(
+            net.neoforged.neoforge.client.event.RegisterColorHandlersEvent.ItemTintSources event) {
+        event.register(
+                net.minecraft.resources.Identifier.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "potion"),
+                net.frostytrix.fletcherstrestle.client.PotionTintSource.MAP_CODEC);
+    }
 }

@@ -1,9 +1,0 @@
-{
-  "_comment": "Drawing animation, start. The limb itself doesn't bend on crossbows — only the string does, which is the layer that gets the _pulling variant.",
-  "parent": "minecraft:item/generated",
-  "textures": {
-    "layer0": "fletcherstrestle:item/modular_crossbow/limbs/oak_limb",
-    "layer1": "fletcherstrestle:item/modular_crossbow/risers/wood_riser",
-    "layer2": "fletcherstrestle:item/modular_crossbow/strings/flax_string_pulling_0"
-  }
-}

@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "fletcherstrestle:item/modular_bow/strings/spider_string_pulling_1"
+  }
+}

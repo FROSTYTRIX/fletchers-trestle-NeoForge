@@ -1,520 +1,813 @@
 {
-  "_comment": "Outer select picks loaded_arrow / loaded_firework variants when the crossbow is charged, falling back to a per-limb idle/pulling branch.",
+  "_comment": "Per-layer dispatch. Outer select on charge_type picks loaded (arrow/firework) overlay variants when the crossbow is charged. Crossbow limbs don't bend like a bow's, so only the string layer has per-state (idle/pulling) variants.",
   "model": {
     "type": "minecraft:select",
     "property": "minecraft:charge_type",
     "fallback": {
-      "type": "minecraft:select",
-      "property": "minecraft:component",
-      "component": "fletcherstrestle:limb_material",
-      "fallback": {
-        "type": "minecraft:condition",
-        "property": "minecraft:using_item",
-        "on_false": {
-          "type": "minecraft:model",
-          "model": "fletcherstrestle:item/modular_crossbow/idle_oak"
-        },
-        "on_true": {
-          "type": "minecraft:range_dispatch",
-          "property": "minecraft:crossbow/pull",
-          "fallback": {
-            "type": "minecraft:model",
-            "model": "fletcherstrestle:item/modular_crossbow/pulling_oak_0"
-          },
-          "entries": [
-            {
-              "threshold": 0.58,
-              "model": {
-                "type": "minecraft:model",
-                "model": "fletcherstrestle:item/modular_crossbow/pulling_oak_1"
+      "type": "minecraft:condition",
+      "property": "minecraft:using_item",
+      "on_false": {
+        "type": "minecraft:composite",
+        "models": [
+          {
+            "type": "minecraft:select",
+            "property": "minecraft:component",
+            "component": "fletcherstrestle:limb_material",
+            "fallback": {
+              "type": "minecraft:model",
+              "model": "fletcherstrestle:item/modular_crossbow/layers/limb_oak"
+            },
+            "cases": [
+              {
+                "when": "acacia",
+                "model": {
+                  "type": "minecraft:model",
+                  "model": "fletcherstrestle:item/modular_crossbow/layers/limb_acacia"
+                }
+              },
+              {
+                "when": "birch",
+                "model": {
+                  "type": "minecraft:model",
+                  "model": "fletcherstrestle:item/modular_crossbow/layers/limb_birch"
+                }
+              },
+              {
+                "when": "cherry",
+                "model": {
+                  "type": "minecraft:model",
+                  "model": "fletcherstrestle:item/modular_crossbow/layers/limb_cherry"
+                }
+              },
+              {
+                "when": "crimson",
+                "model": {
+                  "type": "minecraft:model",
+                  "model": "fletcherstrestle:item/modular_crossbow/layers/limb_crimson"
+                }
+              },
+              {
+                "when": "dark_oak",
+                "model": {
+                  "type": "minecraft:model",
+                  "model": "fletcherstrestle:item/modular_crossbow/layers/limb_dark_oak"
+                }
+              },
+              {
+                "when": "jungle",
+                "model": {
+                  "type": "minecraft:model",
+                  "model": "fletcherstrestle:item/modular_crossbow/layers/limb_jungle"
+                }
+              },
+              {
+                "when": "mangrove",
+                "model": {
+                  "type": "minecraft:model",
+                  "model": "fletcherstrestle:item/modular_crossbow/layers/limb_mangrove"
+                }
+              },
+              {
+                "when": "oak",
+                "model": {
+                  "type": "minecraft:model",
+                  "model": "fletcherstrestle:item/modular_crossbow/layers/limb_oak"
+                }
+              },
+              {
+                "when": "pale_oak",
+                "model": {
+                  "type": "minecraft:model",
+                  "model": "fletcherstrestle:item/modular_crossbow/layers/limb_pale_oak"
+                }
+              },
+              {
+                "when": "spruce",
+                "model": {
+                  "type": "minecraft:model",
+                  "model": "fletcherstrestle:item/modular_crossbow/layers/limb_spruce"
+                }
+              },
+              {
+                "when": "warped",
+                "model": {
+                  "type": "minecraft:model",
+                  "model": "fletcherstrestle:item/modular_crossbow/layers/limb_warped"
+                }
               }
+            ]
+          },
+          {
+            "type": "minecraft:select",
+            "property": "minecraft:component",
+            "component": "fletcherstrestle:riser_material",
+            "fallback": {
+              "type": "minecraft:model",
+              "model": "fletcherstrestle:item/modular_crossbow/layers/riser_wood"
+            },
+            "cases": [
+              {
+                "when": "wood",
+                "model": {
+                  "type": "minecraft:model",
+                  "model": "fletcherstrestle:item/modular_crossbow/layers/riser_wood"
+                }
+              },
+              {
+                "when": "iron",
+                "model": {
+                  "type": "minecraft:model",
+                  "model": "fletcherstrestle:item/modular_crossbow/layers/riser_iron"
+                }
+              },
+              {
+                "when": "copper",
+                "model": {
+                  "type": "minecraft:model",
+                  "model": "fletcherstrestle:item/modular_crossbow/layers/riser_copper"
+                }
+              }
+            ]
+          },
+          {
+            "type": "minecraft:select",
+            "property": "minecraft:component",
+            "component": "fletcherstrestle:string_material",
+            "fallback": {
+              "type": "minecraft:model",
+              "model": "fletcherstrestle:item/modular_crossbow/layers/string_spider"
+            },
+            "cases": [
+              {
+                "when": "flax",
+                "model": {
+                  "type": "minecraft:model",
+                  "model": "fletcherstrestle:item/modular_crossbow/layers/string_flax"
+                }
+              },
+              {
+                "when": "high_tension",
+                "model": {
+                  "type": "minecraft:model",
+                  "model": "fletcherstrestle:item/modular_crossbow/layers/string_high_tension"
+                }
+              },
+              {
+                "when": "spider",
+                "model": {
+                  "type": "minecraft:model",
+                  "model": "fletcherstrestle:item/modular_crossbow/layers/string_spider"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "on_true": {
+        "type": "minecraft:range_dispatch",
+        "property": "minecraft:crossbow/pull",
+        "fallback": {
+          "type": "minecraft:composite",
+          "models": [
+            {
+              "type": "minecraft:select",
+              "property": "minecraft:component",
+              "component": "fletcherstrestle:limb_material",
+              "fallback": {
+                "type": "minecraft:model",
+                "model": "fletcherstrestle:item/modular_crossbow/layers/limb_oak"
+              },
+              "cases": [
+                {
+                  "when": "acacia",
+                  "model": {
+                    "type": "minecraft:model",
+                    "model": "fletcherstrestle:item/modular_crossbow/layers/limb_acacia"
+                  }
+                },
+                {
+                  "when": "birch",
+                  "model": {
+                    "type": "minecraft:model",
+                    "model": "fletcherstrestle:item/modular_crossbow/layers/limb_birch"
+                  }
+                },
+                {
+                  "when": "cherry",
+                  "model": {
+                    "type": "minecraft:model",
+                    "model": "fletcherstrestle:item/modular_crossbow/layers/limb_cherry"
+                  }
+                },
+                {
+                  "when": "crimson",
+                  "model": {
+                    "type": "minecraft:model",
+                    "model": "fletcherstrestle:item/modular_crossbow/layers/limb_crimson"
+                  }
+                },
+                {
+                  "when": "dark_oak",
+                  "model": {
+                    "type": "minecraft:model",
+                    "model": "fletcherstrestle:item/modular_crossbow/layers/limb_dark_oak"
+                  }
+                },
+                {
+                  "when": "jungle",
+                  "model": {
+                    "type": "minecraft:model",
+                    "model": "fletcherstrestle:item/modular_crossbow/layers/limb_jungle"
+                  }
+                },
+                {
+                  "when": "mangrove",
+                  "model": {
+                    "type": "minecraft:model",
+                    "model": "fletcherstrestle:item/modular_crossbow/layers/limb_mangrove"
+                  }
+                },
+                {
+                  "when": "oak",
+                  "model": {
+                    "type": "minecraft:model",
+                    "model": "fletcherstrestle:item/modular_crossbow/layers/limb_oak"
+                  }
+                },
+                {
+                  "when": "pale_oak",
+                  "model": {
+                    "type": "minecraft:model",
+                    "model": "fletcherstrestle:item/modular_crossbow/layers/limb_pale_oak"
+                  }
+                },
+                {
+                  "when": "spruce",
+                  "model": {
+                    "type": "minecraft:model",
+                    "model": "fletcherstrestle:item/modular_crossbow/layers/limb_spruce"
+                  }
+                },
+                {
+                  "when": "warped",
+                  "model": {
+                    "type": "minecraft:model",
+                    "model": "fletcherstrestle:item/modular_crossbow/layers/limb_warped"
+                  }
+                }
+              ]
             },
             {
-              "threshold": 1.0,
-              "model": {
+              "type": "minecraft:select",
+              "property": "minecraft:component",
+              "component": "fletcherstrestle:riser_material",
+              "fallback": {
                 "type": "minecraft:model",
-                "model": "fletcherstrestle:item/modular_crossbow/pulling_oak_2"
-              }
+                "model": "fletcherstrestle:item/modular_crossbow/layers/riser_wood"
+              },
+              "cases": [
+                {
+                  "when": "wood",
+                  "model": {
+                    "type": "minecraft:model",
+                    "model": "fletcherstrestle:item/modular_crossbow/layers/riser_wood"
+                  }
+                },
+                {
+                  "when": "iron",
+                  "model": {
+                    "type": "minecraft:model",
+                    "model": "fletcherstrestle:item/modular_crossbow/layers/riser_iron"
+                  }
+                },
+                {
+                  "when": "copper",
+                  "model": {
+                    "type": "minecraft:model",
+                    "model": "fletcherstrestle:item/modular_crossbow/layers/riser_copper"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "minecraft:select",
+              "property": "minecraft:component",
+              "component": "fletcherstrestle:string_material",
+              "fallback": {
+                "type": "minecraft:model",
+                "model": "fletcherstrestle:item/modular_crossbow/layers/string_spider_pull_0"
+              },
+              "cases": [
+                {
+                  "when": "flax",
+                  "model": {
+                    "type": "minecraft:model",
+                    "model": "fletcherstrestle:item/modular_crossbow/layers/string_flax_pull_0"
+                  }
+                },
+                {
+                  "when": "high_tension",
+                  "model": {
+                    "type": "minecraft:model",
+                    "model": "fletcherstrestle:item/modular_crossbow/layers/string_high_tension_pull_0"
+                  }
+                },
+                {
+                  "when": "spider",
+                  "model": {
+                    "type": "minecraft:model",
+                    "model": "fletcherstrestle:item/modular_crossbow/layers/string_spider_pull_0"
+                  }
+                }
+              ]
             }
           ]
-        }
-      },
-      "cases": [
-        {
-          "when": "acacia",
-          "model": {
-            "type": "minecraft:condition",
-            "property": "minecraft:using_item",
-            "on_false": {
-              "type": "minecraft:model",
-              "model": "fletcherstrestle:item/modular_crossbow/idle_acacia"
-            },
-            "on_true": {
-              "type": "minecraft:range_dispatch",
-              "property": "minecraft:crossbow/pull",
-              "fallback": {
-                "type": "minecraft:model",
-                "model": "fletcherstrestle:item/modular_crossbow/pulling_acacia_0"
-              },
-              "entries": [
-                {
-                  "threshold": 0.58,
-                  "model": {
-                    "type": "minecraft:model",
-                    "model": "fletcherstrestle:item/modular_crossbow/pulling_acacia_1"
-                  }
-                },
-                {
-                  "threshold": 1.0,
-                  "model": {
-                    "type": "minecraft:model",
-                    "model": "fletcherstrestle:item/modular_crossbow/pulling_acacia_2"
-                  }
-                }
-              ]
-            }
-          }
         },
-        {
-          "when": "birch",
-          "model": {
-            "type": "minecraft:condition",
-            "property": "minecraft:using_item",
-            "on_false": {
-              "type": "minecraft:model",
-              "model": "fletcherstrestle:item/modular_crossbow/idle_birch"
-            },
-            "on_true": {
-              "type": "minecraft:range_dispatch",
-              "property": "minecraft:crossbow/pull",
-              "fallback": {
-                "type": "minecraft:model",
-                "model": "fletcherstrestle:item/modular_crossbow/pulling_birch_0"
-              },
-              "entries": [
+        "entries": [
+          {
+            "threshold": 0.58,
+            "model": {
+              "type": "minecraft:composite",
+              "models": [
                 {
-                  "threshold": 0.58,
-                  "model": {
+                  "type": "minecraft:select",
+                  "property": "minecraft:component",
+                  "component": "fletcherstrestle:limb_material",
+                  "fallback": {
                     "type": "minecraft:model",
-                    "model": "fletcherstrestle:item/modular_crossbow/pulling_birch_1"
-                  }
+                    "model": "fletcherstrestle:item/modular_crossbow/layers/limb_oak"
+                  },
+                  "cases": [
+                    {
+                      "when": "acacia",
+                      "model": {
+                        "type": "minecraft:model",
+                        "model": "fletcherstrestle:item/modular_crossbow/layers/limb_acacia"
+                      }
+                    },
+                    {
+                      "when": "birch",
+                      "model": {
+                        "type": "minecraft:model",
+                        "model": "fletcherstrestle:item/modular_crossbow/layers/limb_birch"
+                      }
+                    },
+                    {
+                      "when": "cherry",
+                      "model": {
+                        "type": "minecraft:model",
+                        "model": "fletcherstrestle:item/modular_crossbow/layers/limb_cherry"
+                      }
+                    },
+                    {
+                      "when": "crimson",
+                      "model": {
+                        "type": "minecraft:model",
+                        "model": "fletcherstrestle:item/modular_crossbow/layers/limb_crimson"
+                      }
+                    },
+                    {
+                      "when": "dark_oak",
+                      "model": {
+                        "type": "minecraft:model",
+                        "model": "fletcherstrestle:item/modular_crossbow/layers/limb_dark_oak"
+                      }
+                    },
+                    {
+                      "when": "jungle",
+                      "model": {
+                        "type": "minecraft:model",
+                        "model": "fletcherstrestle:item/modular_crossbow/layers/limb_jungle"
+                      }
+                    },
+                    {
+                      "when": "mangrove",
+                      "model": {
+                        "type": "minecraft:model",
+                        "model": "fletcherstrestle:item/modular_crossbow/layers/limb_mangrove"
+                      }
+                    },
+                    {
+                      "when": "oak",
+                      "model": {
+                        "type": "minecraft:model",
+                        "model": "fletcherstrestle:item/modular_crossbow/layers/limb_oak"
+                      }
+                    },
+                    {
+                      "when": "pale_oak",
+                      "model": {
+                        "type": "minecraft:model",
+                        "model": "fletcherstrestle:item/modular_crossbow/layers/limb_pale_oak"
+                      }
+                    },
+                    {
+                      "when": "spruce",
+                      "model": {
+                        "type": "minecraft:model",
+                        "model": "fletcherstrestle:item/modular_crossbow/layers/limb_spruce"
+                      }
+                    },
+                    {
+                      "when": "warped",
+                      "model": {
+                        "type": "minecraft:model",
+                        "model": "fletcherstrestle:item/modular_crossbow/layers/limb_warped"
+                      }
+                    }
+                  ]
                 },
                 {
-                  "threshold": 1.0,
-                  "model": {
+                  "type": "minecraft:select",
+                  "property": "minecraft:component",
+                  "component": "fletcherstrestle:riser_material",
+                  "fallback": {
                     "type": "minecraft:model",
-                    "model": "fletcherstrestle:item/modular_crossbow/pulling_birch_2"
-                  }
+                    "model": "fletcherstrestle:item/modular_crossbow/layers/riser_wood"
+                  },
+                  "cases": [
+                    {
+                      "when": "wood",
+                      "model": {
+                        "type": "minecraft:model",
+                        "model": "fletcherstrestle:item/modular_crossbow/layers/riser_wood"
+                      }
+                    },
+                    {
+                      "when": "iron",
+                      "model": {
+                        "type": "minecraft:model",
+                        "model": "fletcherstrestle:item/modular_crossbow/layers/riser_iron"
+                      }
+                    },
+                    {
+                      "when": "copper",
+                      "model": {
+                        "type": "minecraft:model",
+                        "model": "fletcherstrestle:item/modular_crossbow/layers/riser_copper"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "minecraft:select",
+                  "property": "minecraft:component",
+                  "component": "fletcherstrestle:string_material",
+                  "fallback": {
+                    "type": "minecraft:model",
+                    "model": "fletcherstrestle:item/modular_crossbow/layers/string_spider_pull_1"
+                  },
+                  "cases": [
+                    {
+                      "when": "flax",
+                      "model": {
+                        "type": "minecraft:model",
+                        "model": "fletcherstrestle:item/modular_crossbow/layers/string_flax_pull_1"
+                      }
+                    },
+                    {
+                      "when": "high_tension",
+                      "model": {
+                        "type": "minecraft:model",
+                        "model": "fletcherstrestle:item/modular_crossbow/layers/string_high_tension_pull_1"
+                      }
+                    },
+                    {
+                      "when": "spider",
+                      "model": {
+                        "type": "minecraft:model",
+                        "model": "fletcherstrestle:item/modular_crossbow/layers/string_spider_pull_1"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          {
+            "threshold": 1.0,
+            "model": {
+              "type": "minecraft:composite",
+              "models": [
+                {
+                  "type": "minecraft:select",
+                  "property": "minecraft:component",
+                  "component": "fletcherstrestle:limb_material",
+                  "fallback": {
+                    "type": "minecraft:model",
+                    "model": "fletcherstrestle:item/modular_crossbow/layers/limb_oak"
+                  },
+                  "cases": [
+                    {
+                      "when": "acacia",
+                      "model": {
+                        "type": "minecraft:model",
+                        "model": "fletcherstrestle:item/modular_crossbow/layers/limb_acacia"
+                      }
+                    },
+                    {
+                      "when": "birch",
+                      "model": {
+                        "type": "minecraft:model",
+                        "model": "fletcherstrestle:item/modular_crossbow/layers/limb_birch"
+                      }
+                    },
+                    {
+                      "when": "cherry",
+                      "model": {
+                        "type": "minecraft:model",
+                        "model": "fletcherstrestle:item/modular_crossbow/layers/limb_cherry"
+                      }
+                    },
+                    {
+                      "when": "crimson",
+                      "model": {
+                        "type": "minecraft:model",
+                        "model": "fletcherstrestle:item/modular_crossbow/layers/limb_crimson"
+                      }
+                    },
+                    {
+                      "when": "dark_oak",
+                      "model": {
+                        "type": "minecraft:model",
+                        "model": "fletcherstrestle:item/modular_crossbow/layers/limb_dark_oak"
+                      }
+                    },
+                    {
+                      "when": "jungle",
+                      "model": {
+                        "type": "minecraft:model",
+                        "model": "fletcherstrestle:item/modular_crossbow/layers/limb_jungle"
+                      }
+                    },
+                    {
+                      "when": "mangrove",
+                      "model": {
+                        "type": "minecraft:model",
+                        "model": "fletcherstrestle:item/modular_crossbow/layers/limb_mangrove"
+                      }
+                    },
+                    {
+                      "when": "oak",
+                      "model": {
+                        "type": "minecraft:model",
+                        "model": "fletcherstrestle:item/modular_crossbow/layers/limb_oak"
+                      }
+                    },
+                    {
+                      "when": "pale_oak",
+                      "model": {
+                        "type": "minecraft:model",
+                        "model": "fletcherstrestle:item/modular_crossbow/layers/limb_pale_oak"
+                      }
+                    },
+                    {
+                      "when": "spruce",
+                      "model": {
+                        "type": "minecraft:model",
+                        "model": "fletcherstrestle:item/modular_crossbow/layers/limb_spruce"
+                      }
+                    },
+                    {
+                      "when": "warped",
+                      "model": {
+                        "type": "minecraft:model",
+                        "model": "fletcherstrestle:item/modular_crossbow/layers/limb_warped"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "minecraft:select",
+                  "property": "minecraft:component",
+                  "component": "fletcherstrestle:riser_material",
+                  "fallback": {
+                    "type": "minecraft:model",
+                    "model": "fletcherstrestle:item/modular_crossbow/layers/riser_wood"
+                  },
+                  "cases": [
+                    {
+                      "when": "wood",
+                      "model": {
+                        "type": "minecraft:model",
+                        "model": "fletcherstrestle:item/modular_crossbow/layers/riser_wood"
+                      }
+                    },
+                    {
+                      "when": "iron",
+                      "model": {
+                        "type": "minecraft:model",
+                        "model": "fletcherstrestle:item/modular_crossbow/layers/riser_iron"
+                      }
+                    },
+                    {
+                      "when": "copper",
+                      "model": {
+                        "type": "minecraft:model",
+                        "model": "fletcherstrestle:item/modular_crossbow/layers/riser_copper"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "minecraft:select",
+                  "property": "minecraft:component",
+                  "component": "fletcherstrestle:string_material",
+                  "fallback": {
+                    "type": "minecraft:model",
+                    "model": "fletcherstrestle:item/modular_crossbow/layers/string_spider_pull_2"
+                  },
+                  "cases": [
+                    {
+                      "when": "flax",
+                      "model": {
+                        "type": "minecraft:model",
+                        "model": "fletcherstrestle:item/modular_crossbow/layers/string_flax_pull_2"
+                      }
+                    },
+                    {
+                      "when": "high_tension",
+                      "model": {
+                        "type": "minecraft:model",
+                        "model": "fletcherstrestle:item/modular_crossbow/layers/string_high_tension_pull_2"
+                      }
+                    },
+                    {
+                      "when": "spider",
+                      "model": {
+                        "type": "minecraft:model",
+                        "model": "fletcherstrestle:item/modular_crossbow/layers/string_spider_pull_2"
+                      }
+                    }
+                  ]
                 }
               ]
             }
           }
-        },
-        {
-          "when": "cherry",
-          "model": {
-            "type": "minecraft:condition",
-            "property": "minecraft:using_item",
-            "on_false": {
-              "type": "minecraft:model",
-              "model": "fletcherstrestle:item/modular_crossbow/idle_cherry"
-            },
-            "on_true": {
-              "type": "minecraft:range_dispatch",
-              "property": "minecraft:crossbow/pull",
-              "fallback": {
-                "type": "minecraft:model",
-                "model": "fletcherstrestle:item/modular_crossbow/pulling_cherry_0"
-              },
-              "entries": [
-                {
-                  "threshold": 0.58,
-                  "model": {
-                    "type": "minecraft:model",
-                    "model": "fletcherstrestle:item/modular_crossbow/pulling_cherry_1"
-                  }
-                },
-                {
-                  "threshold": 1.0,
-                  "model": {
-                    "type": "minecraft:model",
-                    "model": "fletcherstrestle:item/modular_crossbow/pulling_cherry_2"
-                  }
-                }
-              ]
-            }
-          }
-        },
-        {
-          "when": "crimson",
-          "model": {
-            "type": "minecraft:condition",
-            "property": "minecraft:using_item",
-            "on_false": {
-              "type": "minecraft:model",
-              "model": "fletcherstrestle:item/modular_crossbow/idle_crimson"
-            },
-            "on_true": {
-              "type": "minecraft:range_dispatch",
-              "property": "minecraft:crossbow/pull",
-              "fallback": {
-                "type": "minecraft:model",
-                "model": "fletcherstrestle:item/modular_crossbow/pulling_crimson_0"
-              },
-              "entries": [
-                {
-                  "threshold": 0.58,
-                  "model": {
-                    "type": "minecraft:model",
-                    "model": "fletcherstrestle:item/modular_crossbow/pulling_crimson_1"
-                  }
-                },
-                {
-                  "threshold": 1.0,
-                  "model": {
-                    "type": "minecraft:model",
-                    "model": "fletcherstrestle:item/modular_crossbow/pulling_crimson_2"
-                  }
-                }
-              ]
-            }
-          }
-        },
-        {
-          "when": "dark_oak",
-          "model": {
-            "type": "minecraft:condition",
-            "property": "minecraft:using_item",
-            "on_false": {
-              "type": "minecraft:model",
-              "model": "fletcherstrestle:item/modular_crossbow/idle_dark_oak"
-            },
-            "on_true": {
-              "type": "minecraft:range_dispatch",
-              "property": "minecraft:crossbow/pull",
-              "fallback": {
-                "type": "minecraft:model",
-                "model": "fletcherstrestle:item/modular_crossbow/pulling_dark_oak_0"
-              },
-              "entries": [
-                {
-                  "threshold": 0.58,
-                  "model": {
-                    "type": "minecraft:model",
-                    "model": "fletcherstrestle:item/modular_crossbow/pulling_dark_oak_1"
-                  }
-                },
-                {
-                  "threshold": 1.0,
-                  "model": {
-                    "type": "minecraft:model",
-                    "model": "fletcherstrestle:item/modular_crossbow/pulling_dark_oak_2"
-                  }
-                }
-              ]
-            }
-          }
-        },
-        {
-          "when": "jungle",
-          "model": {
-            "type": "minecraft:condition",
-            "property": "minecraft:using_item",
-            "on_false": {
-              "type": "minecraft:model",
-              "model": "fletcherstrestle:item/modular_crossbow/idle_jungle"
-            },
-            "on_true": {
-              "type": "minecraft:range_dispatch",
-              "property": "minecraft:crossbow/pull",
-              "fallback": {
-                "type": "minecraft:model",
-                "model": "fletcherstrestle:item/modular_crossbow/pulling_jungle_0"
-              },
-              "entries": [
-                {
-                  "threshold": 0.58,
-                  "model": {
-                    "type": "minecraft:model",
-                    "model": "fletcherstrestle:item/modular_crossbow/pulling_jungle_1"
-                  }
-                },
-                {
-                  "threshold": 1.0,
-                  "model": {
-                    "type": "minecraft:model",
-                    "model": "fletcherstrestle:item/modular_crossbow/pulling_jungle_2"
-                  }
-                }
-              ]
-            }
-          }
-        },
-        {
-          "when": "mangrove",
-          "model": {
-            "type": "minecraft:condition",
-            "property": "minecraft:using_item",
-            "on_false": {
-              "type": "minecraft:model",
-              "model": "fletcherstrestle:item/modular_crossbow/idle_mangrove"
-            },
-            "on_true": {
-              "type": "minecraft:range_dispatch",
-              "property": "minecraft:crossbow/pull",
-              "fallback": {
-                "type": "minecraft:model",
-                "model": "fletcherstrestle:item/modular_crossbow/pulling_mangrove_0"
-              },
-              "entries": [
-                {
-                  "threshold": 0.58,
-                  "model": {
-                    "type": "minecraft:model",
-                    "model": "fletcherstrestle:item/modular_crossbow/pulling_mangrove_1"
-                  }
-                },
-                {
-                  "threshold": 1.0,
-                  "model": {
-                    "type": "minecraft:model",
-                    "model": "fletcherstrestle:item/modular_crossbow/pulling_mangrove_2"
-                  }
-                }
-              ]
-            }
-          }
-        },
-        {
-          "when": "oak",
-          "model": {
-            "type": "minecraft:condition",
-            "property": "minecraft:using_item",
-            "on_false": {
-              "type": "minecraft:model",
-              "model": "fletcherstrestle:item/modular_crossbow/idle_oak"
-            },
-            "on_true": {
-              "type": "minecraft:range_dispatch",
-              "property": "minecraft:crossbow/pull",
-              "fallback": {
-                "type": "minecraft:model",
-                "model": "fletcherstrestle:item/modular_crossbow/pulling_oak_0"
-              },
-              "entries": [
-                {
-                  "threshold": 0.58,
-                  "model": {
-                    "type": "minecraft:model",
-                    "model": "fletcherstrestle:item/modular_crossbow/pulling_oak_1"
-                  }
-                },
-                {
-                  "threshold": 1.0,
-                  "model": {
-                    "type": "minecraft:model",
-                    "model": "fletcherstrestle:item/modular_crossbow/pulling_oak_2"
-                  }
-                }
-              ]
-            }
-          }
-        },
-        {
-          "when": "pale_oak",
-          "model": {
-            "type": "minecraft:condition",
-            "property": "minecraft:using_item",
-            "on_false": {
-              "type": "minecraft:model",
-              "model": "fletcherstrestle:item/modular_crossbow/idle_pale_oak"
-            },
-            "on_true": {
-              "type": "minecraft:range_dispatch",
-              "property": "minecraft:crossbow/pull",
-              "fallback": {
-                "type": "minecraft:model",
-                "model": "fletcherstrestle:item/modular_crossbow/pulling_pale_oak_0"
-              },
-              "entries": [
-                {
-                  "threshold": 0.58,
-                  "model": {
-                    "type": "minecraft:model",
-                    "model": "fletcherstrestle:item/modular_crossbow/pulling_pale_oak_1"
-                  }
-                },
-                {
-                  "threshold": 1.0,
-                  "model": {
-                    "type": "minecraft:model",
-                    "model": "fletcherstrestle:item/modular_crossbow/pulling_pale_oak_2"
-                  }
-                }
-              ]
-            }
-          }
-        },
-        {
-          "when": "spruce",
-          "model": {
-            "type": "minecraft:condition",
-            "property": "minecraft:using_item",
-            "on_false": {
-              "type": "minecraft:model",
-              "model": "fletcherstrestle:item/modular_crossbow/idle_spruce"
-            },
-            "on_true": {
-              "type": "minecraft:range_dispatch",
-              "property": "minecraft:crossbow/pull",
-              "fallback": {
-                "type": "minecraft:model",
-                "model": "fletcherstrestle:item/modular_crossbow/pulling_spruce_0"
-              },
-              "entries": [
-                {
-                  "threshold": 0.58,
-                  "model": {
-                    "type": "minecraft:model",
-                    "model": "fletcherstrestle:item/modular_crossbow/pulling_spruce_1"
-                  }
-                },
-                {
-                  "threshold": 1.0,
-                  "model": {
-                    "type": "minecraft:model",
-                    "model": "fletcherstrestle:item/modular_crossbow/pulling_spruce_2"
-                  }
-                }
-              ]
-            }
-          }
-        },
-        {
-          "when": "warped",
-          "model": {
-            "type": "minecraft:condition",
-            "property": "minecraft:using_item",
-            "on_false": {
-              "type": "minecraft:model",
-              "model": "fletcherstrestle:item/modular_crossbow/idle_warped"
-            },
-            "on_true": {
-              "type": "minecraft:range_dispatch",
-              "property": "minecraft:crossbow/pull",
-              "fallback": {
-                "type": "minecraft:model",
-                "model": "fletcherstrestle:item/modular_crossbow/pulling_warped_0"
-              },
-              "entries": [
-                {
-                  "threshold": 0.58,
-                  "model": {
-                    "type": "minecraft:model",
-                    "model": "fletcherstrestle:item/modular_crossbow/pulling_warped_1"
-                  }
-                },
-                {
-                  "threshold": 1.0,
-                  "model": {
-                    "type": "minecraft:model",
-                    "model": "fletcherstrestle:item/modular_crossbow/pulling_warped_2"
-                  }
-                }
-              ]
-            }
-          }
-        }
-      ]
+        ]
+      }
     },
     "cases": [
       {
         "when": "arrow",
         "model": {
-          "type": "minecraft:select",
-          "property": "minecraft:component",
-          "component": "fletcherstrestle:limb_material",
-          "fallback": {
-            "type": "minecraft:model",
-            "model": "fletcherstrestle:item/modular_crossbow/loaded_arrow_oak"
-          },
-          "cases": [
+          "type": "minecraft:composite",
+          "models": [
             {
-              "when": "acacia",
-              "model": {
+              "type": "minecraft:select",
+              "property": "minecraft:component",
+              "component": "fletcherstrestle:limb_material",
+              "fallback": {
                 "type": "minecraft:model",
-                "model": "fletcherstrestle:item/modular_crossbow/loaded_arrow_acacia"
-              }
+                "model": "fletcherstrestle:item/modular_crossbow/layers/limb_oak"
+              },
+              "cases": [
+                {
+                  "when": "acacia",
+                  "model": {
+                    "type": "minecraft:model",
+                    "model": "fletcherstrestle:item/modular_crossbow/layers/limb_acacia"
+                  }
+                },
+                {
+                  "when": "birch",
+                  "model": {
+                    "type": "minecraft:model",
+                    "model": "fletcherstrestle:item/modular_crossbow/layers/limb_birch"
+                  }
+                },
+                {
+                  "when": "cherry",
+                  "model": {
+                    "type": "minecraft:model",
+                    "model": "fletcherstrestle:item/modular_crossbow/layers/limb_cherry"
+                  }
+                },
+                {
+                  "when": "crimson",
+                  "model": {
+                    "type": "minecraft:model",
+                    "model": "fletcherstrestle:item/modular_crossbow/layers/limb_crimson"
+                  }
+                },
+                {
+                  "when": "dark_oak",
+                  "model": {
+                    "type": "minecraft:model",
+                    "model": "fletcherstrestle:item/modular_crossbow/layers/limb_dark_oak"
+                  }
+                },
+                {
+                  "when": "jungle",
+                  "model": {
+                    "type": "minecraft:model",
+                    "model": "fletcherstrestle:item/modular_crossbow/layers/limb_jungle"
+                  }
+                },
+                {
+                  "when": "mangrove",
+                  "model": {
+                    "type": "minecraft:model",
+                    "model": "fletcherstrestle:item/modular_crossbow/layers/limb_mangrove"
+                  }
+                },
+                {
+                  "when": "oak",
+                  "model": {
+                    "type": "minecraft:model",
+                    "model": "fletcherstrestle:item/modular_crossbow/layers/limb_oak"
+                  }
+                },
+                {
+                  "when": "pale_oak",
+                  "model": {
+                    "type": "minecraft:model",
+                    "model": "fletcherstrestle:item/modular_crossbow/layers/limb_pale_oak"
+                  }
+                },
+                {
+                  "when": "spruce",
+                  "model": {
+                    "type": "minecraft:model",
+                    "model": "fletcherstrestle:item/modular_crossbow/layers/limb_spruce"
+                  }
+                },
+                {
+                  "when": "warped",
+                  "model": {
+                    "type": "minecraft:model",
+                    "model": "fletcherstrestle:item/modular_crossbow/layers/limb_warped"
+                  }
+                }
+              ]
             },
             {
-              "when": "birch",
-              "model": {
+              "type": "minecraft:select",
+              "property": "minecraft:component",
+              "component": "fletcherstrestle:riser_material",
+              "fallback": {
                 "type": "minecraft:model",
-                "model": "fletcherstrestle:item/modular_crossbow/loaded_arrow_birch"
-              }
+                "model": "fletcherstrestle:item/modular_crossbow/layers/riser_wood"
+              },
+              "cases": [
+                {
+                  "when": "wood",
+                  "model": {
+                    "type": "minecraft:model",
+                    "model": "fletcherstrestle:item/modular_crossbow/layers/riser_wood"
+                  }
+                },
+                {
+                  "when": "iron",
+                  "model": {
+                    "type": "minecraft:model",
+                    "model": "fletcherstrestle:item/modular_crossbow/layers/riser_iron"
+                  }
+                },
+                {
+                  "when": "copper",
+                  "model": {
+                    "type": "minecraft:model",
+                    "model": "fletcherstrestle:item/modular_crossbow/layers/riser_copper"
+                  }
+                }
+              ]
             },
             {
-              "when": "cherry",
-              "model": {
+              "type": "minecraft:select",
+              "property": "minecraft:component",
+              "component": "fletcherstrestle:string_material",
+              "fallback": {
                 "type": "minecraft:model",
-                "model": "fletcherstrestle:item/modular_crossbow/loaded_arrow_cherry"
-              }
+                "model": "fletcherstrestle:item/modular_crossbow/layers/string_spider"
+              },
+              "cases": [
+                {
+                  "when": "flax",
+                  "model": {
+                    "type": "minecraft:model",
+                    "model": "fletcherstrestle:item/modular_crossbow/layers/string_flax"
+                  }
+                },
+                {
+                  "when": "high_tension",
+                  "model": {
+                    "type": "minecraft:model",
+                    "model": "fletcherstrestle:item/modular_crossbow/layers/string_high_tension"
+                  }
+                },
+                {
+                  "when": "spider",
+                  "model": {
+                    "type": "minecraft:model",
+                    "model": "fletcherstrestle:item/modular_crossbow/layers/string_spider"
+                  }
+                }
+              ]
             },
             {
-              "when": "crimson",
-              "model": {
-                "type": "minecraft:model",
-                "model": "fletcherstrestle:item/modular_crossbow/loaded_arrow_crimson"
-              }
-            },
-            {
-              "when": "dark_oak",
-              "model": {
-                "type": "minecraft:model",
-                "model": "fletcherstrestle:item/modular_crossbow/loaded_arrow_dark_oak"
-              }
-            },
-            {
-              "when": "jungle",
-              "model": {
-                "type": "minecraft:model",
-                "model": "fletcherstrestle:item/modular_crossbow/loaded_arrow_jungle"
-              }
-            },
-            {
-              "when": "mangrove",
-              "model": {
-                "type": "minecraft:model",
-                "model": "fletcherstrestle:item/modular_crossbow/loaded_arrow_mangrove"
-              }
-            },
-            {
-              "when": "oak",
-              "model": {
-                "type": "minecraft:model",
-                "model": "fletcherstrestle:item/modular_crossbow/loaded_arrow_oak"
-              }
-            },
-            {
-              "when": "pale_oak",
-              "model": {
-                "type": "minecraft:model",
-                "model": "fletcherstrestle:item/modular_crossbow/loaded_arrow_pale_oak"
-              }
-            },
-            {
-              "when": "spruce",
-              "model": {
-                "type": "minecraft:model",
-                "model": "fletcherstrestle:item/modular_crossbow/loaded_arrow_spruce"
-              }
-            },
-            {
-              "when": "warped",
-              "model": {
-                "type": "minecraft:model",
-                "model": "fletcherstrestle:item/modular_crossbow/loaded_arrow_warped"
-              }
+              "type": "minecraft:model",
+              "model": "fletcherstrestle:item/modular_crossbow/layers/loaded_arrow"
             }
           ]
         }
@@ -522,90 +815,163 @@
       {
         "when": "rocket",
         "model": {
-          "type": "minecraft:select",
-          "property": "minecraft:component",
-          "component": "fletcherstrestle:limb_material",
-          "fallback": {
-            "type": "minecraft:model",
-            "model": "fletcherstrestle:item/modular_crossbow/loaded_firework_oak"
-          },
-          "cases": [
+          "type": "minecraft:composite",
+          "models": [
             {
-              "when": "acacia",
-              "model": {
+              "type": "minecraft:select",
+              "property": "minecraft:component",
+              "component": "fletcherstrestle:limb_material",
+              "fallback": {
                 "type": "minecraft:model",
-                "model": "fletcherstrestle:item/modular_crossbow/loaded_firework_acacia"
-              }
+                "model": "fletcherstrestle:item/modular_crossbow/layers/limb_oak"
+              },
+              "cases": [
+                {
+                  "when": "acacia",
+                  "model": {
+                    "type": "minecraft:model",
+                    "model": "fletcherstrestle:item/modular_crossbow/layers/limb_acacia"
+                  }
+                },
+                {
+                  "when": "birch",
+                  "model": {
+                    "type": "minecraft:model",
+                    "model": "fletcherstrestle:item/modular_crossbow/layers/limb_birch"
+                  }
+                },
+                {
+                  "when": "cherry",
+                  "model": {
+                    "type": "minecraft:model",
+                    "model": "fletcherstrestle:item/modular_crossbow/layers/limb_cherry"
+                  }
+                },
+                {
+                  "when": "crimson",
+                  "model": {
+                    "type": "minecraft:model",
+                    "model": "fletcherstrestle:item/modular_crossbow/layers/limb_crimson"
+                  }
+                },
+                {
+                  "when": "dark_oak",
+                  "model": {
+                    "type": "minecraft:model",
+                    "model": "fletcherstrestle:item/modular_crossbow/layers/limb_dark_oak"
+                  }
+                },
+                {
+                  "when": "jungle",
+                  "model": {
+                    "type": "minecraft:model",
+                    "model": "fletcherstrestle:item/modular_crossbow/layers/limb_jungle"
+                  }
+                },
+                {
+                  "when": "mangrove",
+                  "model": {
+                    "type": "minecraft:model",
+                    "model": "fletcherstrestle:item/modular_crossbow/layers/limb_mangrove"
+                  }
+                },
+                {
+                  "when": "oak",
+                  "model": {
+                    "type": "minecraft:model",
+                    "model": "fletcherstrestle:item/modular_crossbow/layers/limb_oak"
+                  }
+                },
+                {
+                  "when": "pale_oak",
+                  "model": {
+                    "type": "minecraft:model",
+                    "model": "fletcherstrestle:item/modular_crossbow/layers/limb_pale_oak"
+                  }
+                },
+                {
+                  "when": "spruce",
+                  "model": {
+                    "type": "minecraft:model",
+                    "model": "fletcherstrestle:item/modular_crossbow/layers/limb_spruce"
+                  }
+                },
+                {
+                  "when": "warped",
+                  "model": {
+                    "type": "minecraft:model",
+                    "model": "fletcherstrestle:item/modular_crossbow/layers/limb_warped"
+                  }
+                }
+              ]
             },
             {
-              "when": "birch",
-              "model": {
+              "type": "minecraft:select",
+              "property": "minecraft:component",
+              "component": "fletcherstrestle:riser_material",
+              "fallback": {
                 "type": "minecraft:model",
-                "model": "fletcherstrestle:item/modular_crossbow/loaded_firework_birch"
-              }
+                "model": "fletcherstrestle:item/modular_crossbow/layers/riser_wood"
+              },
+              "cases": [
+                {
+                  "when": "wood",
+                  "model": {
+                    "type": "minecraft:model",
+                    "model": "fletcherstrestle:item/modular_crossbow/layers/riser_wood"
+                  }
+                },
+                {
+                  "when": "iron",
+                  "model": {
+                    "type": "minecraft:model",
+                    "model": "fletcherstrestle:item/modular_crossbow/layers/riser_iron"
+                  }
+                },
+                {
+                  "when": "copper",
+                  "model": {
+                    "type": "minecraft:model",
+                    "model": "fletcherstrestle:item/modular_crossbow/layers/riser_copper"
+                  }
+                }
+              ]
             },
             {
-              "when": "cherry",
-              "model": {
+              "type": "minecraft:select",
+              "property": "minecraft:component",
+              "component": "fletcherstrestle:string_material",
+              "fallback": {
                 "type": "minecraft:model",
-                "model": "fletcherstrestle:item/modular_crossbow/loaded_firework_cherry"
-              }
+                "model": "fletcherstrestle:item/modular_crossbow/layers/string_spider"
+              },
+              "cases": [
+                {
+                  "when": "flax",
+                  "model": {
+                    "type": "minecraft:model",
+                    "model": "fletcherstrestle:item/modular_crossbow/layers/string_flax"
+                  }
+                },
+                {
+                  "when": "high_tension",
+                  "model": {
+                    "type": "minecraft:model",
+                    "model": "fletcherstrestle:item/modular_crossbow/layers/string_high_tension"
+                  }
+                },
+                {
+                  "when": "spider",
+                  "model": {
+                    "type": "minecraft:model",
+                    "model": "fletcherstrestle:item/modular_crossbow/layers/string_spider"
+                  }
+                }
+              ]
             },
             {
-              "when": "crimson",
-              "model": {
-                "type": "minecraft:model",
-                "model": "fletcherstrestle:item/modular_crossbow/loaded_firework_crimson"
-              }
-            },
-            {
-              "when": "dark_oak",
-              "model": {
-                "type": "minecraft:model",
-                "model": "fletcherstrestle:item/modular_crossbow/loaded_firework_dark_oak"
-              }
-            },
-            {
-              "when": "jungle",
-              "model": {
-                "type": "minecraft:model",
-                "model": "fletcherstrestle:item/modular_crossbow/loaded_firework_jungle"
-              }
-            },
-            {
-              "when": "mangrove",
-              "model": {
-                "type": "minecraft:model",
-                "model": "fletcherstrestle:item/modular_crossbow/loaded_firework_mangrove"
-              }
-            },
-            {
-              "when": "oak",
-              "model": {
-                "type": "minecraft:model",
-                "model": "fletcherstrestle:item/modular_crossbow/loaded_firework_oak"
-              }
-            },
-            {
-              "when": "pale_oak",
-              "model": {
-                "type": "minecraft:model",
-                "model": "fletcherstrestle:item/modular_crossbow/loaded_firework_pale_oak"
-              }
-            },
-            {
-              "when": "spruce",
-              "model": {
-                "type": "minecraft:model",
-                "model": "fletcherstrestle:item/modular_crossbow/loaded_firework_spruce"
-              }
-            },
-            {
-              "when": "warped",
-              "model": {
-                "type": "minecraft:model",
-                "model": "fletcherstrestle:item/modular_crossbow/loaded_firework_warped"
-              }
+              "type": "minecraft:model",
+              "model": "fletcherstrestle:item/modular_crossbow/layers/loaded_firework"
             }
           ]
         }

@@ -1,9 +1,0 @@
-{
-  "_comment": "Three-layer idle bow: limb on top of riser on top of string. Layer order matters — generated parents draw layer0 first, so the limb winds up in front like in the original modular_loader output. Material variation (per-BowAssembly limb/riser/string materials) will come back once we register a fletcherstrestle:modular_bow ItemModel type that reads the component; for now this is the default oak+wood+flax look.",
-  "parent": "minecraft:item/generated",
-  "textures": {
-    "layer0": "fletcherstrestle:item/modular_bow/limbs/oak_limb",
-    "layer1": "fletcherstrestle:item/modular_bow/risers/wood_riser",
-    "layer2": "fletcherstrestle:item/modular_bow/strings/flax_string"
-  }
-}

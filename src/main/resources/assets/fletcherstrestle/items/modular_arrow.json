@@ -1,90 +1,245 @@
 {
-  "_comment": "Selects between per-shaft composite arrow models. The head + fletching are still fixed to flint+feather in each composite model \u2014 extending dispatch to those would multiply combos (11 shafts \u00d7 10 heads \u00d7 6 fletchings = 660 files); revisit when we add a real Java ItemModel.",
+  "_comment": "Per-layer dispatch arrow with optional glass-vial liquid overlay. Layer order matters \u2014 shaft first, fletching, head, then the tinted liquid (only when head is glass_vial) sits on top of the vial head. The potion tint is supplied by the custom fletcherstrestle:potion ItemTintSource registered Java-side.",
   "model": {
-    "type": "minecraft:select",
-    "property": "minecraft:component",
-    "component": "fletcherstrestle:shaft_material",
-    "fallback": {
-      "type": "minecraft:model",
-      "model": "fletcherstrestle:item/modular_arrow/idle_oak"
-    },
-    "cases": [
+    "type": "minecraft:composite",
+    "models": [
       {
-        "when": "acacia",
-        "model": {
+        "type": "minecraft:select",
+        "property": "minecraft:component",
+        "component": "fletcherstrestle:shaft_material",
+        "fallback": {
           "type": "minecraft:model",
-          "model": "fletcherstrestle:item/modular_arrow/idle_acacia"
-        }
+          "model": "fletcherstrestle:item/modular_arrow/layers/shaft_oak"
+        },
+        "cases": [
+          {
+            "when": "acacia",
+            "model": {
+              "type": "minecraft:model",
+              "model": "fletcherstrestle:item/modular_arrow/layers/shaft_acacia"
+            }
+          },
+          {
+            "when": "birch",
+            "model": {
+              "type": "minecraft:model",
+              "model": "fletcherstrestle:item/modular_arrow/layers/shaft_birch"
+            }
+          },
+          {
+            "when": "cherry",
+            "model": {
+              "type": "minecraft:model",
+              "model": "fletcherstrestle:item/modular_arrow/layers/shaft_cherry"
+            }
+          },
+          {
+            "when": "crimson",
+            "model": {
+              "type": "minecraft:model",
+              "model": "fletcherstrestle:item/modular_arrow/layers/shaft_crimson"
+            }
+          },
+          {
+            "when": "dark_oak",
+            "model": {
+              "type": "minecraft:model",
+              "model": "fletcherstrestle:item/modular_arrow/layers/shaft_dark_oak"
+            }
+          },
+          {
+            "when": "jungle",
+            "model": {
+              "type": "minecraft:model",
+              "model": "fletcherstrestle:item/modular_arrow/layers/shaft_jungle"
+            }
+          },
+          {
+            "when": "mangrove",
+            "model": {
+              "type": "minecraft:model",
+              "model": "fletcherstrestle:item/modular_arrow/layers/shaft_mangrove"
+            }
+          },
+          {
+            "when": "oak",
+            "model": {
+              "type": "minecraft:model",
+              "model": "fletcherstrestle:item/modular_arrow/layers/shaft_oak"
+            }
+          },
+          {
+            "when": "pale_oak",
+            "model": {
+              "type": "minecraft:model",
+              "model": "fletcherstrestle:item/modular_arrow/layers/shaft_pale_oak"
+            }
+          },
+          {
+            "when": "spruce",
+            "model": {
+              "type": "minecraft:model",
+              "model": "fletcherstrestle:item/modular_arrow/layers/shaft_spruce"
+            }
+          },
+          {
+            "when": "warped",
+            "model": {
+              "type": "minecraft:model",
+              "model": "fletcherstrestle:item/modular_arrow/layers/shaft_warped"
+            }
+          }
+        ]
       },
       {
-        "when": "birch",
-        "model": {
+        "type": "minecraft:select",
+        "property": "minecraft:component",
+        "component": "fletcherstrestle:fletching_material",
+        "fallback": {
           "type": "minecraft:model",
-          "model": "fletcherstrestle:item/modular_arrow/idle_birch"
-        }
+          "model": "fletcherstrestle:item/modular_arrow/layers/fletching_feather"
+        },
+        "cases": [
+          {
+            "when": "feather",
+            "model": {
+              "type": "minecraft:model",
+              "model": "fletcherstrestle:item/modular_arrow/layers/fletching_feather"
+            }
+          },
+          {
+            "when": "rigid",
+            "model": {
+              "type": "minecraft:model",
+              "model": "fletcherstrestle:item/modular_arrow/layers/fletching_rigid"
+            }
+          },
+          {
+            "when": "trailing",
+            "model": {
+              "type": "minecraft:model",
+              "model": "fletcherstrestle:item/modular_arrow/layers/fletching_trailing"
+            }
+          },
+          {
+            "when": "serrated",
+            "model": {
+              "type": "minecraft:model",
+              "model": "fletcherstrestle:item/modular_arrow/layers/fletching_serrated"
+            }
+          },
+          {
+            "when": "bound",
+            "model": {
+              "type": "minecraft:model",
+              "model": "fletcherstrestle:item/modular_arrow/layers/fletching_bound"
+            }
+          },
+          {
+            "when": "vex",
+            "model": {
+              "type": "minecraft:model",
+              "model": "fletcherstrestle:item/modular_arrow/layers/fletching_vex"
+            }
+          }
+        ]
       },
       {
-        "when": "cherry",
-        "model": {
+        "type": "minecraft:select",
+        "property": "minecraft:component",
+        "component": "fletcherstrestle:head_material",
+        "fallback": {
           "type": "minecraft:model",
-          "model": "fletcherstrestle:item/modular_arrow/idle_cherry"
-        }
+          "model": "fletcherstrestle:item/modular_arrow/layers/head_flint"
+        },
+        "cases": [
+          {
+            "when": "flint",
+            "model": {
+              "type": "minecraft:model",
+              "model": "fletcherstrestle:item/modular_arrow/layers/head_flint"
+            }
+          },
+          {
+            "when": "broadhead",
+            "model": {
+              "type": "minecraft:model",
+              "model": "fletcherstrestle:item/modular_arrow/layers/head_broadhead"
+            }
+          },
+          {
+            "when": "bodkin_point",
+            "model": {
+              "type": "minecraft:model",
+              "model": "fletcherstrestle:item/modular_arrow/layers/head_bodkin_point"
+            }
+          },
+          {
+            "when": "resonance_tip",
+            "model": {
+              "type": "minecraft:model",
+              "model": "fletcherstrestle:item/modular_arrow/layers/head_resonance_tip"
+            }
+          },
+          {
+            "when": "barbed_tip",
+            "model": {
+              "type": "minecraft:model",
+              "model": "fletcherstrestle:item/modular_arrow/layers/head_barbed_tip"
+            }
+          },
+          {
+            "when": "weighted_blunt",
+            "model": {
+              "type": "minecraft:model",
+              "model": "fletcherstrestle:item/modular_arrow/layers/head_weighted_blunt"
+            }
+          },
+          {
+            "when": "weighted_hook",
+            "model": {
+              "type": "minecraft:model",
+              "model": "fletcherstrestle:item/modular_arrow/layers/head_weighted_hook"
+            }
+          },
+          {
+            "when": "trailing_rope",
+            "model": {
+              "type": "minecraft:model",
+              "model": "fletcherstrestle:item/modular_arrow/layers/head_trailing_rope"
+            }
+          },
+          {
+            "when": "glass_vial",
+            "model": {
+              "type": "minecraft:model",
+              "model": "fletcherstrestle:item/modular_arrow/layers/head_glass_vial"
+            }
+          }
+        ]
       },
       {
-        "when": "crimson",
-        "model": {
-          "type": "minecraft:model",
-          "model": "fletcherstrestle:item/modular_arrow/idle_crimson"
-        }
-      },
-      {
-        "when": "dark_oak",
-        "model": {
-          "type": "minecraft:model",
-          "model": "fletcherstrestle:item/modular_arrow/idle_dark_oak"
-        }
-      },
-      {
-        "when": "jungle",
-        "model": {
-          "type": "minecraft:model",
-          "model": "fletcherstrestle:item/modular_arrow/idle_jungle"
-        }
-      },
-      {
-        "when": "mangrove",
-        "model": {
-          "type": "minecraft:model",
-          "model": "fletcherstrestle:item/modular_arrow/idle_mangrove"
-        }
-      },
-      {
-        "when": "oak",
-        "model": {
-          "type": "minecraft:model",
-          "model": "fletcherstrestle:item/modular_arrow/idle_oak"
-        }
-      },
-      {
-        "when": "pale_oak",
-        "model": {
-          "type": "minecraft:model",
-          "model": "fletcherstrestle:item/modular_arrow/idle_pale_oak"
-        }
-      },
-      {
-        "when": "spruce",
-        "model": {
-          "type": "minecraft:model",
-          "model": "fletcherstrestle:item/modular_arrow/idle_spruce"
-        }
-      },
-      {
-        "when": "warped",
-        "model": {
-          "type": "minecraft:model",
-          "model": "fletcherstrestle:item/modular_arrow/idle_warped"
-        }
+        "type": "minecraft:select",
+        "property": "minecraft:component",
+        "component": "fletcherstrestle:head_material",
+        "fallback": {
+          "type": "minecraft:empty"
+        },
+        "cases": [
+          {
+            "when": "glass_vial",
+            "model": {
+              "type": "minecraft:model",
+              "model": "fletcherstrestle:item/modular_arrow/layers/glass_vial_liquid",
+              "tints": [
+                {
+                  "type": "fletcherstrestle:potion",
+                  "default": -13083194
+                }
+              ]
+            }
+          }
+        ]
       }
     ]
   }
