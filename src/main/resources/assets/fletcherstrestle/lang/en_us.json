@@ -77,6 +77,9 @@
 "key.fletcherstrestle.quiver_right": "Quiver Cycle Right",
 "key.fletcherstrestle.quiver_modifier": "Quiver Scroll Modifier",
 "key.categories.fletcherstrestle": "Fletcher's Trestle",
+"key.categories.fletcherstrestle.main": "Fletcher's Trestle",
+"key.fletcherstrestle.free_look": "Mount Free-Look",
+"key.fletcherstrestle.gallop_lock_key": "Mount Gallop Lock",
 
 "block.fletcherstrestle.archery_target": "Archery Target",
 "gui.fletcherstrestle.clear_shots": "Clear Shots",

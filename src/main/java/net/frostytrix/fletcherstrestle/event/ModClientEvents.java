@@ -44,4 +44,15 @@ public final class ModClientEvents {
         if (ModEntities.HEAVY_DUMMY != null)
             event.registerEntityRenderer(ModEntities.HEAVY_DUMMY.get(), NoopRenderer::new);
     }
+
+    // Layered HUD draw — sits the quiver overlay just above vanilla's
+    // hotbar so the selection-ring + arrow icons appear in the same
+    // visual space.
+    @SubscribeEvent
+    public static void onRegisterGuiLayers(net.neoforged.neoforge.client.event.RegisterGuiLayersEvent event) {
+        event.registerAbove(
+                net.neoforged.neoforge.client.gui.VanillaGuiLayers.HOTBAR,
+                net.minecraft.resources.Identifier.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "quiver_hud"),
+                net.frostytrix.fletcherstrestle.client.QuiverHudOverlay.INSTANCE);
+    }
 }
