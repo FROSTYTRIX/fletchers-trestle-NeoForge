@@ -48,4 +48,19 @@ public class ShavingHorseBlockEntity extends BlockEntity {
         currentShaves = input.getIntOr("currentShaves", 0);
         input.child("inventory").ifPresent(itemHandler::deserialize);
     }
+
+    // 26.1 client sync — vanilla BlockEntity.getUpdateTag defaults to an
+    // empty CompoundTag, which is why the held log didn't show on remote
+    // clients: the renderer ran but the item slot was always EMPTY on the
+    // client side. saveCustomOnly walks our saveAdditional, so the
+    // inventory + shave counter ride along through the update packet.
+    @Override
+    public net.minecraft.nbt.CompoundTag getUpdateTag(net.minecraft.core.HolderLookup.Provider registries) {
+        return saveCustomOnly(registries);
+    }
+
+    @Override
+    public net.minecraft.network.protocol.Packet<net.minecraft.network.protocol.game.ClientGamePacketListener> getUpdatePacket() {
+        return net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket.create(this);
+    }
 }

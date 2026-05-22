@@ -1,5 +1,5 @@
 {
-  "_comment": "Per-layer dispatch arrow with optional glass-vial liquid overlay. Layer order matters \u2014 shaft first, fletching, head, then the tinted liquid (only when head is glass_vial) sits on top of the vial head. The potion tint is supplied by the custom fletcherstrestle:potion ItemTintSource registered Java-side.",
+  "_comment": "Per-layer dispatch arrow. Layer order: shaft \u2192 fletching \u2192 head \u2192 optional liquid overlay. The liquid layer is gated TWICE: outer select by head_material (only glass_vial heads can have liquid), inner condition by minecraft:has_component on minecraft:potion_contents (empty vials get no overlay). The tint comes from the custom fletcherstrestle:potion ItemTintSource registered Java-side.",
   "model": {
     "type": "minecraft:composite",
     "models": [
@@ -229,14 +229,22 @@
           {
             "when": "glass_vial",
             "model": {
-              "type": "minecraft:model",
-              "model": "fletcherstrestle:item/modular_arrow/layers/glass_vial_liquid",
-              "tints": [
-                {
-                  "type": "fletcherstrestle:potion",
-                  "default": -13083194
-                }
-              ]
+              "type": "minecraft:condition",
+              "property": "minecraft:has_component",
+              "component": "minecraft:potion_contents",
+              "on_false": {
+                "type": "minecraft:empty"
+              },
+              "on_true": {
+                "type": "minecraft:model",
+                "model": "fletcherstrestle:item/modular_arrow/layers/glass_vial_liquid",
+                "tints": [
+                  {
+                    "type": "fletcherstrestle:potion",
+                    "default": -13083194
+                  }
+                ]
+              }
             }
           }
         ]

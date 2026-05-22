@@ -82,9 +82,17 @@ public class DippingVatBlockEntity extends BlockEntity {
         ItemStack itemInHand = player.getItemInHand(hand);
 
         // --- SEAUX ET CONTENANTS OFFICIELS (Eau, Lave, Fluides moddés) ---
-        // FluidUtil va vider le seau dans le tank (ou le remplir) et donner le seau vide au joueur automatiquement
-        if (net.neoforged.neoforge.fluids.FluidUtil.interactWithFluidHandler(player, hand, this.fluidTank)) {
-            return true; // Si l'interaction réussit, on s'arrête là !
+        // 26.1: the legacy FluidUtil.interactWithFluidHandler(player, hand,
+        // IFluidHandler) overload silently no-ops in some setups because the
+        // new bucket plumbing only sees fluid handlers via the
+        // Capabilities.Fluid.BLOCK capability (a ResourceHandler<FluidResource>).
+        // Use the new transfer-package FluidUtil that looks the capability
+        // up itself at our position — that's the path vanilla buckets and
+        // mod pipes both follow now.
+        if (this.level != null
+                && net.neoforged.neoforge.transfer.fluid.FluidUtil.interactWithFluidHandler(
+                        player, hand, this.level, this.worldPosition, null)) {
+            return true;
         }
 
         // --- NOUVEAU CAS : RÉCUPÉRER UNE POTION DANS UNE FIOLE VIDE ---

@@ -67,4 +67,17 @@ public final class ModClientEvents {
                 net.minecraft.resources.Identifier.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "potion"),
                 net.frostytrix.fletcherstrestle.client.PotionTintSource.MAP_CODEC);
     }
+
+    // Same story for block tinting — RegisterColorHandlersEvent.Block is
+    // replaced by .BlockTintSources where we hand in a list of
+    // BlockTintSource instances per block. The steam box's water layer
+    // (tintindex 0 in the block model) reads the biome-aware water tint
+    // so it shades blue in plains, green in swamps, etc.
+    @SubscribeEvent
+    public static void onRegisterBlockTintSources(
+            net.neoforged.neoforge.client.event.RegisterColorHandlersEvent.BlockTintSources event) {
+        event.register(
+                java.util.List.of(net.minecraft.client.color.block.BlockTintSources.water()),
+                net.frostytrix.fletcherstrestle.block.ModBlocks.STEAM_BOX.get());
+    }
 }
