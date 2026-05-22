@@ -48,25 +48,31 @@ public class DippingVatBlockEntity extends BlockEntity {
     }
 
     // --- DATA SAVING ---
-    // TODO(port-26.1): FluidTank persistence stubbed. The 1.21.1 form was
-    // tag.put("Fluid", fluidTank.writeToNBT(registries, new CompoundTag()))
-    // but writeToNBT and the BE save signature both changed. Vat starts
-    // empty after every reload until ported properly.
+    // 26.1: BlockEntity save/load is keyed off ValueOutput / ValueInput.
+    // FluidStack.OPTIONAL_CODEC handles the "empty fluid" case for us, so
+    // store/read by codec is enough to persist the tank contents across
+    // saves and chunk reloads.
     @Override
     protected void saveAdditional(net.minecraft.world.level.storage.ValueOutput output) {
         super.saveAdditional(output);
+        output.store("Fluid", FluidStack.OPTIONAL_CODEC, fluidTank.getFluid());
     }
 
     @Override
     protected void loadAdditional(net.minecraft.world.level.storage.ValueInput input) {
         super.loadAdditional(input);
+        FluidStack stored = input.read("Fluid", FluidStack.OPTIONAL_CODEC).orElse(FluidStack.EMPTY);
+        fluidTank.setFluid(stored);
     }
 
-    // TODO(port-26.1): getUpdateTag(HolderLookup.Provider) is gone — sync
-    // now happens via packet handling that uses the new ValueOutput too.
-    // Stubbed; vat's fluid state won't render-sync to clients yet.
-
-    // 3. On expédie le paquet au client
+    // 26.1: BlockEntity.getUpdateTag still returns CompoundTag; the default
+    // implementation routes through saveCustomOnly → saveAdditional, so
+    // as long as saveAdditional writes the fluid (it does, above), the
+    // update tag carries it for free. No override needed.
+    //
+    // Block-entity update packet sync stays the same shape; the codec
+    // walk inside ClientboundBlockEntityDataPacket.create reads the same
+    // saveAdditional output.
     @Override
     public ClientboundBlockEntityDataPacket getUpdatePacket() {
         return ClientboundBlockEntityDataPacket.create(this);

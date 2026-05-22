@@ -31,20 +31,21 @@ public class ShavingHorseBlockEntity extends BlockEntity {
         super(ModBlockEntities.SHAVING_HORSE_BE.get(), pos, state);
     }
 
-    // TODO(port-26.1): packet/sync + inventory save stubbed.
-    // ItemStackHandler.serializeNBT/deserializeNBT signature changed;
-    // getUpdateTag/getUpdatePacket/onDataPacket also use ValueOutput now.
-    // Only the simple int counter persists for now.
-
+    // 26.1: ItemStackHandler.serialize(ValueOutput)/.deserialize(ValueInput)
+    // replace the old serializeNBT/deserializeNBT pair. Saving into a child
+    // ValueOutput keeps the inventory blob namespaced and matches what
+    // SteamBoxBlockEntity does.
     @Override
     protected void saveAdditional(net.minecraft.world.level.storage.ValueOutput output) {
         super.saveAdditional(output);
         output.putInt("currentShaves", currentShaves);
+        itemHandler.serialize(output.child("inventory"));
     }
 
     @Override
     protected void loadAdditional(net.minecraft.world.level.storage.ValueInput input) {
         super.loadAdditional(input);
         currentShaves = input.getIntOr("currentShaves", 0);
+        input.child("inventory").ifPresent(itemHandler::deserialize);
     }
 }

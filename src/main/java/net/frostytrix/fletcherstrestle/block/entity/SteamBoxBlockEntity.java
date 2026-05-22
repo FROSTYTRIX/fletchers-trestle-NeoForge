@@ -118,15 +118,18 @@ public class SteamBoxBlockEntity extends BlockEntity {
         }
     }
 
-    // TODO(port-26.1): save/load stubbed — full migration needs:
-    //   - ItemStackHandler.serializeNBT/deserializeNBT signatures changed
-    //   - FluidTank.writeToNBT/readFromNBT likewise
-    //   - tag.getIntArray returns Optional now (input.getIntArray same)
-    // Until ported, the steam box loses state across saves but compiles.
+    // 26.1: ItemStackHandler/FluidTank now serialize through the
+    // ValueOutput/ValueInput contract directly. ItemStackHandler.serialize
+    // writes a slot+stack list using the new ItemStackWithSlot codec, and
+    // FluidStack.OPTIONAL_CODEC handles the fluid round-trip. With this
+    // the steam box keeps its contents + water across saves and chunk
+    // reloads, instead of resetting to empty.
     @Override
     protected void saveAdditional(net.minecraft.world.level.storage.ValueOutput output) {
         super.saveAdditional(output);
         output.putIntArray("cookingTimes", cookingTimes);
+        itemHandler.serialize(output.child("inventory"));
+        output.store("Fluid", net.neoforged.neoforge.fluids.FluidStack.OPTIONAL_CODEC, fluidTank.getFluid());
     }
 
     @Override
@@ -134,5 +137,10 @@ public class SteamBoxBlockEntity extends BlockEntity {
         super.loadAdditional(input);
         cookingTimes = input.getIntArray("cookingTimes").orElse(new int[16]);
         if (cookingTimes.length != 16) cookingTimes = new int[16];
+        input.child("inventory").ifPresent(itemHandler::deserialize);
+        net.neoforged.neoforge.fluids.FluidStack stored =
+                input.read("Fluid", net.neoforged.neoforge.fluids.FluidStack.OPTIONAL_CODEC)
+                        .orElse(net.neoforged.neoforge.fluids.FluidStack.EMPTY);
+        fluidTank.setFluid(stored);
     }
 }
