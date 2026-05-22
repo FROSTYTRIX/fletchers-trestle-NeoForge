@@ -1,5 +1,7 @@
 {
-  "loader": "fletcherstrestle:modular_loader",
-  "base_path": "item/modular_arrow",
-  "gui_light": "front"
+  "_comment": "26.1 placeholder — fletcherstrestle:modular_loader is gone. Showing the oak shaft as a stand-in. The composite head+shaft+fletching display needs the new ItemModel JSON system (assets/fletcherstrestle/items/modular_arrow.json) once we wire it up.",
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "fletcherstrestle:item/modular_arrow/shafts/oak_shaft"
+  }
 }

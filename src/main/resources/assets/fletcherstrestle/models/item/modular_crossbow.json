@@ -1,5 +1,7 @@
 {
-  "loader": "fletcherstrestle:modular_loader",
-  "base_path": "item/modular_crossbow",
-  "gui_light": "front"
+  "_comment": "26.1 placeholder — see modular_bow.json for context. Showing the oak limb as a stand-in until the composite item model is rebuilt.",
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "fletcherstrestle:item/modular_crossbow/limbs/oak_limb"
+  }
 }

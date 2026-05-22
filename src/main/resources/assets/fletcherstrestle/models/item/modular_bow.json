@@ -1,5 +1,7 @@
 {
-  "loader": "fletcherstrestle:modular_loader",
-  "base_path": "item/modular_bow",
-  "gui_light": "front"
+  "_comment": "26.1 placeholder model — the old fletcherstrestle:modular_loader (which composed limb/riser/string sprites at draw time) is gone. The new ItemModel JSON system can express this via composite/conditional models in assets/fletcherstrestle/items/modular_bow.json once we wire it up. Until then, show the oak limb sprite so the item is visible.",
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "fletcherstrestle:item/modular_bow/limbs/oak_limb"
+  }
 }

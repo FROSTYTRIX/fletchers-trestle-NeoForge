@@ -1,26 +1,32 @@
 package net.frostytrix.fletcherstrestle.event;
 
 import net.frostytrix.fletcherstrestle.FletcherTrestle;
+import net.frostytrix.fletcherstrestle.block.entity.ModBlockEntities;
+import net.frostytrix.fletcherstrestle.capability.FluidTankResourceAdapter;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 
-// TODO(port-26.1): capability registration stubbed.
-// The 1.21.1 form was:
-//   event.registerBlockEntity(
-//       Capabilities.FluidHandler.BLOCK,
-//       ModBlockEntities.DIPPING_VAT_BE.get(),
-//       (be, dir) -> be.getFluidTank()
-//   );
-// 26.1 emptied out `Capabilities` (the FluidHandler.BLOCK token moved). Until
-// the new resource-handler capability tokens are wired up, pipes/tanks can't
-// pull fluid from the dipping vat automatically — players have to use the
-// vat's manual interactions (bottles, buckets) instead.
+// 26.1: capability tokens moved.
+// * Old: Capabilities.FluidHandler.BLOCK : BlockCapability<IFluidHandler, Direction>
+// * New: Capabilities.Fluid.BLOCK        : BlockCapability<ResourceHandler<FluidResource>, Direction>
+// FluidTank doesn't implement ResourceHandler<FluidResource>, so we expose
+// it through FluidTankResourceAdapter (see capability/FluidTankResourceAdapter.java).
+// This restores pipe/bucket/cauldron interaction with the dipping vat while
+// leaving the BE's internal storage untouched.
+//
+// TODO(port-26.1): when DippingVatBlockEntity is fully ported to
+// FluidStacksResourceHandler, drop the adapter and provide the handler directly.
 @EventBusSubscriber(modid = FletcherTrestle.MOD_ID)
 public class ModCapabilities {
 
     @SubscribeEvent
     public static void registerCapabilities(RegisterCapabilitiesEvent event) {
-        // Intentionally empty until the capability tokens are ported.
+        event.registerBlockEntity(
+                Capabilities.Fluid.BLOCK,
+                ModBlockEntities.DIPPING_VAT_BE.get(),
+                (vat, side) -> new FluidTankResourceAdapter(vat.getFluidTank())
+        );
     }
 }
