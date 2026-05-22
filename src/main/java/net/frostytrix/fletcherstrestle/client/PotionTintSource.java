@@ -1,11 +1,11 @@
 package net.frostytrix.fletcherstrestle.client;
 
+import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.client.color.item.ItemTintSource;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.component.DataComponents;
-import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.alchemy.PotionContents;
@@ -23,8 +23,10 @@ import net.minecraft.world.item.alchemy.PotionContents;
 //     like {"type": "fletcherstrestle:potion", "default": -13083194}.
 public record PotionTintSource(int defaultColor) implements ItemTintSource {
 
+    // ByteBufCodecs.INT is a StreamCodec (wire format only); the JSON
+    // MapCodec needs Codec.INT from com.mojang.serialization.
     public static final MapCodec<PotionTintSource> MAP_CODEC = RecordCodecBuilder.mapCodec(inst -> inst.group(
-            ByteBufCodecs.INT.toCodec().fieldOf("default").forGetter(PotionTintSource::defaultColor)
+            Codec.INT.fieldOf("default").forGetter(PotionTintSource::defaultColor)
     ).apply(inst, PotionTintSource::new));
 
     @Override
