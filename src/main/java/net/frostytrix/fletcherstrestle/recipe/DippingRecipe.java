@@ -61,6 +61,14 @@ public class DippingRecipe implements Recipe<DippingRecipeInput> {
         ArrowAssembly assembly = input.item().get(ModDataComponents.ARROW_ASSEMBLY.get());
         if (assembly != null) {
             result.set(ModDataComponents.ARROW_ASSEMBLY.get(), assembly);
+            // The output is a fresh ItemStack from the recipe template, so
+            // it inherits none of the input's data components — including
+            // the 26.1 mirror components the renderer dispatches on.
+            // Without these, a dipped arrow falls back to oak/feather/flint
+            // even though the ArrowAssembly is correct. Mirror them back.
+            result.set(ModDataComponents.HEAD_MATERIAL.get(), assembly.head());
+            result.set(ModDataComponents.SHAFT_MATERIAL.get(), assembly.shaft());
+            result.set(ModDataComponents.FLETCHING_MATERIAL.get(), assembly.fletching());
         }
         if (this.requiredPotion.isEmpty()) {
             net.minecraft.world.item.component.CustomData customData = input.fluid().get(DataComponents.CUSTOM_DATA);

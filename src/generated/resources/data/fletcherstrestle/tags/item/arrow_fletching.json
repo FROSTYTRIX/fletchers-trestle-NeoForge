@@ -1,10 +1,11 @@
 {
+  "_comment": "Items the modular_arrow recipe accepts in the fletching slot. minecraft:string maps to a 'trailing' fletching in ModularArrowRecipe#getArrowFletching; without it in the tag the recipe wouldn't match and the arrow couldn't be assembled.",
   "values": [
     "minecraft:feather",
     "minecraft:flint",
+    "minecraft:string",
     "minecraft:phantom_membrane",
     "minecraft:leather",
-    "minecraft:vex_armor_trim_smithing_template",
-    "minecraft:feather"
+    "minecraft:vex_armor_trim_smithing_template"
   ]
 }
