@@ -39,6 +39,11 @@ public final class ModClientEvents {
         event.registerBlockEntityRenderer(
                 net.frostytrix.fletcherstrestle.block.entity.ModBlockEntities.SHAVING_HORSE_BE.get(),
                 net.frostytrix.fletcherstrestle.block.entity.renderer.ShavingHorseRenderer::new);
+        // Dipping vat fluid surface — draws the colored fluid pool inside
+        // the wooden walls (water blue, or potion-coloured + ripple).
+        event.registerBlockEntityRenderer(
+                net.frostytrix.fletcherstrestle.block.entity.ModBlockEntities.DIPPING_VAT_BE.get(),
+                net.frostytrix.fletcherstrestle.block.entity.renderer.DippingVatRenderer::new);
 
         // Eagles get the proper geometric renderer back. The 1.21.1 model
         // ported intact; only the EntityModel<S>/MobRenderer<T,S,M>
