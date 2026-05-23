@@ -111,9 +111,17 @@ public class DippingVatRenderer implements BlockEntityRenderer<DippingVatBlockEn
         boolean twoPass = state.isPotion;
         int light = state.lightCoords;
 
-        pose.pushPose();
-        Matrix4f matrix = pose.last().pose();
+        // CRITICAL: don't capture pose.last().pose() — PoseStack reuses the
+        // same Matrix4f across pushes, so by the time the deferred submit
+        // queue flushes the lambda the matrix has been mutated by whichever
+        // BE was rendered last. That caused (a) "only one vat shows fluid"
+        // (every vat drew at the last vat's position), and (b) "double
+        // overlay rising" (the same matrix referenced multiple submitted
+        // states). Use the lambda's poseRef snapshot — submitCustomGeometry
+        // hands us a *copied* PoseStack.Pose that survives the deferred
+        // flush.
         coll.submitCustomGeometry(pose, layer, (poseRef, builder) -> {
+            Matrix4f m = poseRef.pose();
             float u0 = sprite.getU0(), u1 = sprite.getU1();
             float v0 = sprite.getV0(), v1 = sprite.getV1();
             float r = ((color >> 16) & 0xFF) / 255F;
@@ -121,23 +129,22 @@ public class DippingVatRenderer implements BlockEntityRenderer<DippingVatBlockEn
             float b = (color & 0xFF) / 255F;
 
             // Pass 1 — opaque colour fluid surface (single quad, top-facing).
-            quad(builder, matrix, 0.125F, h, 0.875F, r, g, b, 1.0F, u0, v1, light);
-            quad(builder, matrix, 0.875F, h, 0.875F, r, g, b, 1.0F, u1, v1, light);
-            quad(builder, matrix, 0.875F, h, 0.125F, r, g, b, 1.0F, u1, v0, light);
-            quad(builder, matrix, 0.125F, h, 0.125F, r, g, b, 1.0F, u0, v0, light);
+            quad(builder, m, 0.125F, h, 0.875F, r, g, b, 1.0F, u0, v1, light);
+            quad(builder, m, 0.875F, h, 0.875F, r, g, b, 1.0F, u1, v1, light);
+            quad(builder, m, 0.875F, h, 0.125F, r, g, b, 1.0F, u1, v0, light);
+            quad(builder, m, 0.125F, h, 0.125F, r, g, b, 1.0F, u0, v0, light);
 
             // Pass 2 (potion only) — translucent moving-water ripple over
             // the colour bed so dipped potions feel alive.
             if (twoPass) {
                 float h2 = h + 0.0005F;
                 float a = 0.35F;
-                quad(builder, matrix, 0.125F, h2, 0.875F, 1F, 1F, 1F, a, u0, v1, light);
-                quad(builder, matrix, 0.875F, h2, 0.875F, 1F, 1F, 1F, a, u1, v1, light);
-                quad(builder, matrix, 0.875F, h2, 0.125F, 1F, 1F, 1F, a, u1, v0, light);
-                quad(builder, matrix, 0.125F, h2, 0.125F, 1F, 1F, 1F, a, u0, v0, light);
+                quad(builder, m, 0.125F, h2, 0.875F, 1F, 1F, 1F, a, u0, v1, light);
+                quad(builder, m, 0.875F, h2, 0.875F, 1F, 1F, 1F, a, u1, v1, light);
+                quad(builder, m, 0.875F, h2, 0.125F, 1F, 1F, 1F, a, u1, v0, light);
+                quad(builder, m, 0.125F, h2, 0.125F, 1F, 1F, 1F, a, u0, v0, light);
             }
         });
-        pose.popPose();
     }
 
     private static void quad(VertexConsumer builder, Matrix4f matrix,
