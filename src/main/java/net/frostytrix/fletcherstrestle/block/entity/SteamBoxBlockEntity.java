@@ -143,4 +143,20 @@ public class SteamBoxBlockEntity extends BlockEntity {
                         .orElse(net.neoforged.neoforge.fluids.FluidStack.EMPTY);
         fluidTank.setFluid(stored);
     }
+
+    // 26.1: BlockEntity.getUpdateTag defaults to an empty CompoundTag —
+    // the inventory + fluid would never reach the client without this
+    // override. Future BE renderers that read these fields rely on it;
+    // the water-level block state property still syncs via setBlock in
+    // updateWaterLevelState(), so the existing block-model swap works
+    // regardless of this override.
+    @Override
+    public net.minecraft.nbt.CompoundTag getUpdateTag(net.minecraft.core.HolderLookup.Provider registries) {
+        return saveCustomOnly(registries);
+    }
+
+    @Override
+    public net.minecraft.network.protocol.Packet<net.minecraft.network.protocol.game.ClientGamePacketListener> getUpdatePacket() {
+        return net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket.create(this);
+    }
 }

@@ -65,14 +65,17 @@ public class DippingVatBlockEntity extends BlockEntity {
         fluidTank.setFluid(stored);
     }
 
-    // 26.1: BlockEntity.getUpdateTag still returns CompoundTag; the default
-    // implementation routes through saveCustomOnly → saveAdditional, so
-    // as long as saveAdditional writes the fluid (it does, above), the
-    // update tag carries it for free. No override needed.
-    //
-    // Block-entity update packet sync stays the same shape; the codec
-    // walk inside ClientboundBlockEntityDataPacket.create reads the same
-    // saveAdditional output.
+    // 26.1: BlockEntity.getUpdateTag DEFAULTS to an empty CompoundTag —
+    // not (as I'd originally assumed) routed through saveCustomOnly /
+    // saveAdditional. Without this override the FluidTank state never
+    // reaches the client and the BE renderer sees a 0/3000 tank → no
+    // visible fill. saveCustomOnly walks our saveAdditional, so the
+    // fluid rides along through the update packet.
+    @Override
+    public net.minecraft.nbt.CompoundTag getUpdateTag(net.minecraft.core.HolderLookup.Provider registries) {
+        return saveCustomOnly(registries);
+    }
+
     @Override
     public ClientboundBlockEntityDataPacket getUpdatePacket() {
         return ClientboundBlockEntityDataPacket.create(this);
