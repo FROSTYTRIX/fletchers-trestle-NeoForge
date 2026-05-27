@@ -4,6 +4,10 @@ import net.frostytrix.fletcherstrestle.component.ArrowAssembly;
 import net.frostytrix.fletcherstrestle.component.BowAssembly;
 import net.frostytrix.fletcherstrestle.component.ModDataComponents;
 import net.frostytrix.fletcherstrestle.enchantment.ModEnchantments;
+import net.frostytrix.fletcherstrestle.material.BowLimbDef;
+import net.frostytrix.fletcherstrestle.material.BowRiserDef;
+import net.frostytrix.fletcherstrestle.material.BowStringDef;
+import net.frostytrix.fletcherstrestle.material.Materials;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.Holder;
@@ -68,31 +72,34 @@ public class ModularBowItem extends BowItem {
             BowAssembly assembly = weapon.get(ModDataComponents.BOW_ASSEMBLY.get());
 
             if (assembly != null && projectile instanceof AbstractArrow arrow) {
-                LimbStats limb = LimbStats.fromString(assembly.limbMaterial());
-                RiserStats riser = RiserStats.fromString(assembly.riserMaterial());
+                BowLimbDef limb = Materials.bowLimb(assembly.limbMaterial());
+                String limbId  = Materials.normaliseId(assembly.limbMaterial());
+                String riserId = Materials.normaliseId(assembly.riserMaterial());
 
                 // --- DAMAGE MODIFIER ---
-                arrow.setBaseDamage(arrow.getBaseDamage() * limb.getDamageMult());
+                arrow.setBaseDamage(arrow.getBaseDamage() * limb.stats().damageMultiplier());
 
                 // --- SPECIAL TRAITS ---
-                if (limb == LimbStats.CRIMSON) {
+                // (Phase E will move these into MaterialEffect entries on
+                // the corresponding limb / riser defs.)
+                if ("crimson".equals(limbId)) {
                     arrow.igniteForSeconds(100);
                 }
-                if (limb == LimbStats.WARPED) {
+                if ("warped".equals(limbId)) {
                     arrow.setNoGravity(true);
                 }
 
                 // --- PERSISTENT DATA TAGS ---
-                if (limb.isAmphibian()) {
+                if (limb.stats().amphibious()) {
                     arrow.getPersistentData().putBoolean("fletcherstrestle:amphibious", true);
                 }
                 // Spruce limb: built-in Punch I. The arrow entity reads this
                 // flag in doKnockback() to apply an extra knockback impulse,
                 // since AbstractArrow.setKnockback no longer exists in 1.21.
-                if (limb.getMaterialName().equals("Spruce")) {
+                if ("spruce".equals(limbId)) {
                     arrow.getPersistentData().putBoolean("fletcherstrestle:punch", true);
                 }
-                if (riser.getMaterialName().equalsIgnoreCase("Copper")) {
+                if ("copper".equals(riserId)) {
                     arrow.getPersistentData().putBoolean("fletcherstrestle:conductive", true);
                 }
             }
@@ -111,13 +118,16 @@ public class ModularBowItem extends BowItem {
         float finalInaccuracy = inaccuracy;
 
         if (assembly != null) {
-            StringStats string = StringStats.fromString(assembly.stringMaterial());
-            RiserStats riser = RiserStats.fromString(assembly.riserMaterial());
-            ModularArrowItem.FletchingStats fletching = ModularArrowItem.FletchingStats.fromString(Assembly.fletching());
+            BowStringDef string = Materials.bowString(assembly.stringMaterial());
+            BowRiserDef  riser  = Materials.bowRiser(assembly.riserMaterial());
+            // Fletching can be null if the ammo isn't a modular arrow.
+            float fletchInacc = Assembly != null
+                    ? Materials.arrowFletching(Assembly.fletching()).stats().inaccuracyMultiplier()
+                    : 1.0f;
 
             // --- APPLY VELOCITY & INACCURACY ---
-            finalVelocity = velocity * string.getVelocityMult();
-            finalInaccuracy = inaccuracy * riser.getInnacuracyMult() * fletching.getInaccuracyMult();
+            finalVelocity = velocity * string.stats().velocityMultiplier();
+            finalInaccuracy = inaccuracy * riser.stats().inaccuracyMultiplier() * fletchInacc;
         }
 
         // Call super with our modified values
@@ -143,9 +153,12 @@ public class ModularBowItem extends BowItem {
         }
 
         tooltipComponents.add(Component.literal("Assembly Parts:").withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD));
-        tooltipComponents.add(Component.literal("- Limbs: " + assembly.limbMaterial()).withStyle(ChatFormatting.GRAY));
-        tooltipComponents.add(Component.literal("- Riser: " + assembly.riserMaterial()).withStyle(ChatFormatting.GRAY));
-        tooltipComponents.add(Component.literal("- String: " + assembly.stringMaterial()).withStyle(ChatFormatting.GRAY));
+        tooltipComponents.add(Component.literal("- Limbs: ")
+                .append(Materials.bowLimbName(assembly.limbMaterial())).withStyle(ChatFormatting.GRAY));
+        tooltipComponents.add(Component.literal("- Riser: ")
+                .append(Materials.bowRiserName(assembly.riserMaterial())).withStyle(ChatFormatting.GRAY));
+        tooltipComponents.add(Component.literal("- String: ")
+                .append(Materials.bowStringName(assembly.stringMaterial())).withStyle(ChatFormatting.GRAY));
 
         int tuningPercent = (int) (assembly.tuning() * 100);
         tooltipComponents.add(Component.literal("Tuning: " + tuningPercent + "%").withStyle(ChatFormatting.GREEN));
@@ -211,12 +224,13 @@ public class ModularBowItem extends BowItem {
 
         // --- 4. YOUR EXISTING CUSTOM EFFECTS ---
         if (assembly != null) {
-            if (assembly.limbMaterial().equals("Acacia")) {
+            if ("acacia".equals(Materials.normaliseId(assembly.limbMaterial()))) {
                 player.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 30, 1, false, false, true));
             }
-            StringStats string = StringStats.fromString(assembly.stringMaterial());
-            if (string.getDurabilityCost() > 1) {
-                stack.hurtAndBreak((int) (string.getDurabilityCost() - 1), player, LivingEntity.getSlotForHand(player.getUsedItemHand()));
+            BowStringDef string = Materials.bowString(assembly.stringMaterial());
+            int durCost = string.stats().durabilityCost();
+            if (durCost > 1) {
+                stack.hurtAndBreak(durCost - 1, player, LivingEntity.getSlotForHand(player.getUsedItemHand()));
             }
         }
     }
@@ -225,7 +239,7 @@ public class ModularBowItem extends BowItem {
         BowAssembly assembly = stack.get(ModDataComponents.BOW_ASSEMBLY.get());
 
         if (assembly != null) {
-            float baseTime = LimbStats.fromString(assembly.limbMaterial()).getDrawTime();
+            float baseTime = Materials.bowLimb(assembly.limbMaterial()).stats().drawTimeTicks();
 
             float tuning = Math.max(0.2f, assembly.tuning());
 
@@ -239,7 +253,7 @@ public class ModularBowItem extends BowItem {
     public int getMaxDamage(ItemStack stack) {
         BowAssembly assembly = stack.get(ModDataComponents.BOW_ASSEMBLY.get());
         if (assembly != null) {
-            return (int) RiserStats.fromString(assembly.riserMaterial()).getMaxDurability();
+            return Materials.bowRiser(assembly.riserMaterial()).stats().maxDurability();
         }
         return super.getMaxDamage(stack);
     }
@@ -252,17 +266,19 @@ public class ModularBowItem extends BowItem {
         if (livingEntity instanceof Player player) {
             BowAssembly assembly = stack.get(ModDataComponents.BOW_ASSEMBLY.get());
             if (assembly != null) {
-                LimbStats limb = LimbStats.fromString(assembly.limbMaterial());
-                StringStats string = StringStats.fromString(assembly.stringMaterial());
+                BowLimbDef limb = Materials.bowLimb(assembly.limbMaterial());
+                String stringId = Materials.normaliseId(assembly.stringMaterial());
 
-                if (limb.isGivesSlowFalling() && !player.onGround()) {
+                if (limb.stats().givesSlowFalling() && !player.onGround()) {
                     player.addEffect(new MobEffectInstance(MobEffects.SLOW_FALLING, 2, 2, false, false, true));
                 }
 
                 int ticksDrawn = this.getUseDuration(stack, player) - count;
                 float maxDrawTime = getDrawTime(stack);
 
-                if (string == StringStats.FLAX && ticksDrawn > (maxDrawTime + 40)) {
+                // Flax string: jitters the aim if the player overdraws. Phase
+                // E will move this into a string-attached MaterialEffect.
+                if ("flax".equals(stringId) && ticksDrawn > (maxDrawTime + 40)) {
                     player.setYRot(player.getYRot() + (level.random.nextFloat() - 0.5F) * 3.0F);
                     player.setXRot(player.getXRot() + (level.random.nextFloat() - 0.5F) * 3.0F);
                 }
@@ -304,6 +320,15 @@ public class ModularBowItem extends BowItem {
     }
 
 
+    /**
+     * @deprecated superseded by {@link net.frostytrix.fletcherstrestle.material.Materials#bowLimb}
+     *             and the {@code fletcherstrestle:bow_limb} datapack registry.
+     *             No internal call site still references this enum after Phase D;
+     *             slated for deletion in a later phase. External consumers
+     *             (e.g. {@link net.frostytrix.fletcherstrestle.trades.RandomModularArrowTrade})
+     *             will migrate alongside.
+     */
+    @Deprecated(forRemoval = true)
     public enum LimbStats {
         OAK("oak", 20.0f, 1.0f,false,false),
         SPRUCE("spruce", 22.0f, 1.0f,false,false),
@@ -346,6 +371,8 @@ public class ModularBowItem extends BowItem {
         public Object getMaterialName() { return name;}
     }
 
+    /** @deprecated see {@link LimbStats}. */
+    @Deprecated(forRemoval = true)
     public enum RiserStats {
         WOOD("wood", 250, 1.0f),
         IRON("iron", 750, 0.2f),   // 0.2 inaccuracy = Laser precision
@@ -373,6 +400,8 @@ public class ModularBowItem extends BowItem {
         public String getMaterialName() {return name;}
     }
 
+    /** @deprecated see {@link LimbStats}. */
+    @Deprecated(forRemoval = true)
     public enum StringStats {
         SPIDER("spider", 1.0f, 1),
         FLAX("flax", 1.3f, 1),

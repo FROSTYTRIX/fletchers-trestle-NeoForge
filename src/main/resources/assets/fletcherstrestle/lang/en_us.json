@@ -88,5 +88,42 @@
 "subtitles.fletcherstrestle.eagle.death": "Eagle dies",
 "subtitles.fletcherstrestle.eagle.tame": "Eagle chirps",
 "subtitles.fletcherstrestle.eagle.flap": "Eagle flaps",
-"subtitles.fletcherstrestle.eagle.dive": "Eagle dives"
+"subtitles.fletcherstrestle.eagle.dive": "Eagle dives",
+
+"material.fletcherstrestle.oak":       "Oak",
+"material.fletcherstrestle.spruce":    "Spruce",
+"material.fletcherstrestle.birch":     "Birch",
+"material.fletcherstrestle.jungle":    "Jungle",
+"material.fletcherstrestle.acacia":    "Acacia",
+"material.fletcherstrestle.dark_oak":  "Dark Oak",
+"material.fletcherstrestle.mangrove":  "Mangrove",
+"material.fletcherstrestle.cherry":    "Cherry",
+"material.fletcherstrestle.pale_oak":  "Pale Oak",
+"material.fletcherstrestle.crimson":   "Crimson",
+"material.fletcherstrestle.warped":    "Warped",
+
+"material.fletcherstrestle.wood":         "Wood",
+"material.fletcherstrestle.iron":         "Iron",
+"material.fletcherstrestle.copper":       "Copper",
+
+"material.fletcherstrestle.spider":       "Spider",
+"material.fletcherstrestle.flax":         "Flax",
+"material.fletcherstrestle.high_tension": "High-Tension",
+
+"material.fletcherstrestle.flint":          "Flint",
+"material.fletcherstrestle.broadhead":      "Broadhead",
+"material.fletcherstrestle.bodkin_point":   "Bodkin Point",
+"material.fletcherstrestle.resonance_tip":  "Resonance Tip",
+"material.fletcherstrestle.barbed_tip":     "Barbed Tip",
+"material.fletcherstrestle.weighted_blunt": "Weighted Blunt",
+"material.fletcherstrestle.weighted_hook":  "Weighted Hook",
+"material.fletcherstrestle.trailing_rope":  "Trailing Rope",
+"material.fletcherstrestle.glass_vial":     "Glass Vial",
+
+"material.fletcherstrestle.feather":  "Feather",
+"material.fletcherstrestle.rigid":    "Rigid",
+"material.fletcherstrestle.trailing": "Trailing",
+"material.fletcherstrestle.serrated": "Serrated",
+"material.fletcherstrestle.bound":    "Bound",
+"material.fletcherstrestle.vex":      "Vex"
 }

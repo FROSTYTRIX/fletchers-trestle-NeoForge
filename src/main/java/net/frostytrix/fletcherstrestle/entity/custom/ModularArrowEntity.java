@@ -106,11 +106,11 @@ public class ModularArrowEntity extends AbstractArrow {
     private void applyFlightModifiers(ItemStack ammo) {
         ArrowAssembly assembly = ammo.get(ModDataComponents.ARROW_ASSEMBLY.get());
         if (assembly != null) {
-            ModularArrowItem.ShaftStats shaft = ModularArrowItem.ShaftStats.fromString(assembly.shaft());
-            ModularArrowItem.HeadStats head = ModularArrowItem.HeadStats.fromString(assembly.head());
+            var shaft = net.frostytrix.fletcherstrestle.material.Materials.arrowShaft(assembly.shaft());
+            var head  = net.frostytrix.fletcherstrestle.material.Materials.arrowHead(assembly.head());
 
-            this.setBaseDamage(this.getBaseDamage() * head.getDamageMult());
-            this.setDeltaMovement(this.getDeltaMovement().scale(shaft.getVelocityMult()));
+            this.setBaseDamage(this.getBaseDamage() * head.stats().damageMultiplier());
+            this.setDeltaMovement(this.getDeltaMovement().scale(shaft.stats().velocityMultiplier()));
 
             // Dark-oak shaft: piercing I — passes through one entity before
             // stopping. Vanilla AbstractArrow handles the bookkeeping.
@@ -126,8 +126,8 @@ public class ModularArrowEntity extends AbstractArrow {
         ArrowAssembly assembly = this.getAssembly();
 
         if (assembly != null) {
-            ModularArrowItem.ShaftStats shaft = ModularArrowItem.ShaftStats.fromString(assembly.shaft());
-            return super.getDefaultGravity() * shaft.getGravityMult();
+            var shaft = net.frostytrix.fletcherstrestle.material.Materials.arrowShaft(assembly.shaft());
+            return super.getDefaultGravity() * shaft.stats().gravityMultiplier();
         }
 
         return super.getDefaultGravity();
@@ -176,11 +176,16 @@ public class ModularArrowEntity extends AbstractArrow {
         // Resolve the hit
         super.onHitEntity(result);
 
-        ModularArrowItem.HeadStats head = ModularArrowItem.HeadStats.fromString(assembly.head());
+        // Head behaviors below — the legacy ArrowHeadStats had causesBleed
+        // and armorPiercing booleans, but ArrowHeadDef.stats() only carries
+        // the damage multiplier. The bleed / pierce behaviors stay
+        // hardcoded keyed by id-form here for Phase D; Phase E moves them
+        // into MaterialEffect entries on the head defs.
+        String headId = assembly.head();
 
         if (result.getEntity() instanceof LivingEntity target) {
             // BROADHEAD: Bleeding for 3s (60 ticks).
-            if (head.causesBleed()) {
+            if ("broadhead".equals(headId)) {
                 target.addEffect(new MobEffectInstance(ModEffects.BLEED_EFFECT, 60, 0));
             }
 
@@ -198,7 +203,9 @@ public class ModularArrowEntity extends AbstractArrow {
                 this.playSound(SoundEvents.LEASH_KNOT_PLACE, 1.0f, 1.6f);
             }
 
-            if (head.isArmorPiercing()) {
+            // BODKIN_POINT armor-piercing: 25% bonus to base damage. Phase E
+            // will move this into a head-attached MaterialEffect entry.
+            if ("bodkin_point".equals(headId)) {
                 this.setBaseDamage(this.getBaseDamage() * 1.25);
             }
 
@@ -286,7 +293,7 @@ public class ModularArrowEntity extends AbstractArrow {
     public void tick() {
         super.tick();
         ArrowAssembly assembly = this.getAssembly();
-        ModularArrowItem.ShaftStats shaft = ModularArrowItem.ShaftStats.fromString(assembly.shaft());
+        var shaft = net.frostytrix.fletcherstrestle.material.Materials.arrowShaft(assembly.shaft());
 
         if (this.isDeployingRope && !this.level().isClientSide) {
 
@@ -337,7 +344,7 @@ public class ModularArrowEntity extends AbstractArrow {
             }
 
             // Apply gravity Mult
-            this.setDeltaMovement(this.getDeltaMovement().add(0, -(shaft.getGravityMult()-1)/10, 0));
+            this.setDeltaMovement(this.getDeltaMovement().add(0, -(shaft.stats().gravityMultiplier()-1)/10, 0));
 
             // SERRATED: Magnetism (Subtle homing)
             if ("serrated".equals(assembly.fletching()) && this.tickCount > 2) {

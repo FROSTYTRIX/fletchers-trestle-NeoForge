@@ -3,6 +3,10 @@ package net.frostytrix.fletcherstrestle.item.custom;
 import net.frostytrix.fletcherstrestle.component.BowAssembly;
 import net.frostytrix.fletcherstrestle.component.ModDataComponents;
 import net.frostytrix.fletcherstrestle.entity.custom.ModularArrowEntity;
+import net.frostytrix.fletcherstrestle.material.BowLimbDef;
+import net.frostytrix.fletcherstrestle.material.BowRiserDef;
+import net.frostytrix.fletcherstrestle.material.BowStringDef;
+import net.frostytrix.fletcherstrestle.material.Materials;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
@@ -45,9 +49,12 @@ public class ModularCrossbowItem extends CrossbowItem {
         }
 
         tooltipComponents.add(Component.literal("Assembly Parts:").withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD));
-        tooltipComponents.add(Component.literal("- Limbs: " + assembly.limbMaterial()).withStyle(ChatFormatting.GRAY));
-        tooltipComponents.add(Component.literal("- Riser: " + assembly.riserMaterial()).withStyle(ChatFormatting.GRAY));
-        tooltipComponents.add(Component.literal("- String: " + assembly.stringMaterial()).withStyle(ChatFormatting.GRAY));
+        tooltipComponents.add(Component.literal("- Limbs: ")
+                .append(Materials.bowLimbName(assembly.limbMaterial())).withStyle(ChatFormatting.GRAY));
+        tooltipComponents.add(Component.literal("- Riser: ")
+                .append(Materials.bowRiserName(assembly.riserMaterial())).withStyle(ChatFormatting.GRAY));
+        tooltipComponents.add(Component.literal("- String: ")
+                .append(Materials.bowStringName(assembly.stringMaterial())).withStyle(ChatFormatting.GRAY));
 
         int tuningPercent = (int) (assembly.tuning() * 100);
         tooltipComponents.add(Component.literal("Tuning: " + tuningPercent + "%").withStyle(ChatFormatting.GREEN));
@@ -62,7 +69,7 @@ public class ModularCrossbowItem extends CrossbowItem {
     public float getDrawTime(ItemStack stack) {
         BowAssembly assembly = stack.get(ModDataComponents.BOW_ASSEMBLY.get());
         if (assembly != null) {
-            float baseTime = LimbStats.fromString(assembly.limbMaterial()).getDrawTime();
+            float baseTime = Materials.bowLimb(assembly.limbMaterial()).stats().drawTimeTicks();
             float tuning = Math.max(0.2f, assembly.tuning());
             return baseTime / tuning;
         }
@@ -73,7 +80,7 @@ public class ModularCrossbowItem extends CrossbowItem {
     public int getMaxDamage(ItemStack stack) {
         BowAssembly assembly = stack.get(ModDataComponents.BOW_ASSEMBLY.get());
         if (assembly != null) {
-            return (int) RiserStats.fromString(assembly.riserMaterial()).getMaxDurability();
+            return Materials.bowRiser(assembly.riserMaterial()).stats().maxDurability();
         }
         return super.getMaxDamage(stack);
     }
@@ -140,33 +147,34 @@ public class ModularCrossbowItem extends CrossbowItem {
 
         // 3. If it's a valid assembly and the projectile is an arrow, apply traits!
         if (assembly != null && projectile instanceof AbstractArrow arrow) {
-            LimbStats limb = LimbStats.fromString(assembly.limbMaterial());
+            BowLimbDef limb = Materials.bowLimb(assembly.limbMaterial());
+            String limbId = Materials.normaliseId(assembly.limbMaterial());
 
             // --- DAMAGE MODIFIER ---
             // Vanilla arrows calculate final damage as (velocity * baseDamage).
             // We apply the Limb's damage multiplier directly to the base damage here.
-            arrow.setBaseDamage(arrow.getBaseDamage() * limb.getDamageMult());
+            arrow.setBaseDamage(arrow.getBaseDamage() * limb.stats().damageMultiplier());
 
             // --- WARPED: No Gravity ---
-            if (assembly.limbMaterial().equalsIgnoreCase("Warped")) {
+            // (Phase E moves these to MaterialEffect entries on the limb def.)
+            if ("warped".equals(limbId)) {
                 arrow.setNoGravity(true);
             }
 
             // --- CRIMSON: Flaming Arrows ---
-            if (assembly.limbMaterial().equalsIgnoreCase("Crimson")) {
+            if ("crimson".equals(limbId)) {
                 arrow.setRemainingFireTicks(100);
             }
 
             // --- SPRUCE: Built-in Punch I (read by ModularArrowEntity.doKnockback) ---
-            if (assembly.limbMaterial().equalsIgnoreCase("Spruce")) {
+            if ("spruce".equals(limbId)) {
                 arrow.getPersistentData().putBoolean("fletcherstrestle:punch", true);
             }
-
 
             // --- MANGROVE: Amphibious ---
             // If you have a custom arrow entity that handles water physics,
             // you can cast it here and trigger your amphibious logic!
-            if (limb.isAmphibian() && arrow instanceof ModularArrowEntity modArrow) {
+            if (limb.stats().amphibious() && arrow instanceof ModularArrowEntity modArrow) {
                 // modArrow.setAmphibious(true); // Uncomment if you have this method in ModularArrowEntity
             }
         }
@@ -186,18 +194,18 @@ public class ModularCrossbowItem extends CrossbowItem {
 
 
         if (assembly != null) {
-            StringStats string = StringStats.fromString(assembly.stringMaterial());
-            RiserStats riser = RiserStats.fromString(assembly.riserMaterial());
-            LimbStats limb = LimbStats.fromString(assembly.limbMaterial());
+            BowStringDef string = Materials.bowString(assembly.stringMaterial());
+            BowRiserDef  riser  = Materials.bowRiser(assembly.riserMaterial());
 
             // Crossbow damage inherently scales with velocity in vanilla.
             // We multiply by both String Speed AND Limb Damage.
-            finalVelocity = velocity * string.getVelocityMult();
-            finalInaccuracy = inaccuracy * riser.getInnacuracyMult();
+            finalVelocity = velocity * string.stats().velocityMultiplier();
+            finalInaccuracy = inaccuracy * riser.stats().inaccuracyMultiplier();
 
             // Apply Durability Cost
-            if (string.getDurabilityCost() > 1 && shooter instanceof Player player) {
-                crossbowStack.hurtAndBreak((int) (string.getDurabilityCost() - 1), player, LivingEntity.getSlotForHand(shooter.getUsedItemHand()));
+            int durCost = string.stats().durabilityCost();
+            if (durCost > 1 && shooter instanceof Player player) {
+                crossbowStack.hurtAndBreak(durCost - 1, player, LivingEntity.getSlotForHand(shooter.getUsedItemHand()));
             }
         }
 
@@ -253,14 +261,14 @@ public class ModularCrossbowItem extends CrossbowItem {
         if (livingEntity instanceof Player player) {
             BowAssembly assembly = stack.get(ModDataComponents.BOW_ASSEMBLY.get());
             if (assembly != null) {
-                LimbStats limb = LimbStats.fromString(assembly.limbMaterial());
+                BowLimbDef limb = Materials.bowLimb(assembly.limbMaterial());
 
                 // Acacia Movement Buff WHILE pulling the crossbow
-                if (assembly.limbMaterial().equals("Acacia")) {
+                if ("acacia".equals(Materials.normaliseId(assembly.limbMaterial()))) {
                     player.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 5, 0, false, false, false));
                 }
 
-                if (limb.isGivesSlowFalling() && !player.onGround()) {
+                if (limb.stats().givesSlowFalling() && !player.onGround()) {
                     player.addEffect(new MobEffectInstance(MobEffects.SLOW_FALLING, 5, 2, false, false, false));
                 }
             }
@@ -301,6 +309,8 @@ public class ModularCrossbowItem extends CrossbowItem {
     }
 
     // --- ENUMS ---
+    /** @deprecated see {@link ModularBowItem.LimbStats}. */
+    @Deprecated(forRemoval = true)
     public enum LimbStats {
         OAK("oak", 20.0f, 1.0f,false,false),
         SPRUCE("spruce", 22.0f, 1.0f,false,false),
@@ -342,6 +352,8 @@ public class ModularCrossbowItem extends CrossbowItem {
         public Object getMaterialName() { return name;}
     }
 
+    /** @deprecated see {@link ModularBowItem.LimbStats}. */
+    @Deprecated(forRemoval = true)
     public enum RiserStats {
         WOOD("wood", 250, 1.0f),
         IRON("iron", 750, 0.2f),
@@ -369,6 +381,8 @@ public class ModularCrossbowItem extends CrossbowItem {
         public String getMaterialName() {return name;}
     }
 
+    /** @deprecated see {@link ModularBowItem.LimbStats}. */
+    @Deprecated(forRemoval = true)
     public enum StringStats {
         SPIDER("spider", 1.0f, 1),
         FLAX("flax", 1.3f, 1),

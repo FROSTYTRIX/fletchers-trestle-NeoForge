@@ -4,6 +4,7 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.frostytrix.fletcherstrestle.component.BowAssembly;
 import net.frostytrix.fletcherstrestle.component.ModDataComponents;
+import net.frostytrix.fletcherstrestle.material.MaterialResolver;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
@@ -43,9 +44,20 @@ public class ModularWeaponRecipe implements Recipe<FletchingRecipeInput> {
     public ItemStack assemble(FletchingRecipeInput input, HolderLookup.Provider provider) {
         ItemStack output = this.result.copy();
 
-        String riserMat = getMaterialName(input.riser());
-        String limbMat = getMaterialName(input.topLimb());
-        String stringMat = getMaterialName(input.string());
+        // Phase D: resolve each part by Ingredient match against the
+        // datapack registries; store the canonical registry-id path
+        // (e.g. "dark_oak", "high_tension") rather than a display name.
+        // Existing worlds saved with the legacy "Dark Oak" form are still
+        // resolvable — see MaterialResolver's three-tier fallback.
+        String limbMat = MaterialResolver.resolveBowLimb(provider, input.topLimb())
+                .map(h -> h.key().location().getPath())
+                .orElse("oak");
+        String riserMat = MaterialResolver.resolveBowRiser(provider, input.riser())
+                .map(h -> h.key().location().getPath())
+                .orElse("wood");
+        String stringMat = MaterialResolver.resolveBowString(provider, input.string())
+                .map(h -> h.key().location().getPath())
+                .orElse("spider");
 
         float defaultTuning = 0.0f;
 
@@ -56,31 +68,35 @@ public class ModularWeaponRecipe implements Recipe<FletchingRecipeInput> {
         return output;
     }
 
-    // Helper method to extract your material names from the input items.
-    // E.g., if the item is "copper_riser", return "copper"
+    /**
+     * Legacy material-name extractor. Kept because external code (e.g. the
+     * JEI fletching category) called it on hand-built sample stacks where
+     * no registry lookup is available. Returns the canonical id form
+     * ({@code "dark_oak"}, {@code "high_tension"}) rather than the old
+     * display form ("Dark Oak") to match the new storage format.
+     *
+     * @deprecated prefer {@link MaterialResolver#resolveBowLimb(HolderLookup.Provider, ItemStack)}
+     *             / {@code resolveBowRiser} / {@code resolveBowString} when
+     *             a {@link HolderLookup.Provider} is available — they
+     *             account for modpack-supplied materials too.
+     */
+    @Deprecated
     public static String getMaterialName(ItemStack stack) {
-        if (stack.isEmpty()) return "Unknown";
+        if (stack.isEmpty()) return "unknown";
 
-        // Handle vanilla items that don't match your naming convention
-        if (stack.is(net.minecraft.world.item.Items.STRING)) return "Spider";
-        if (stack.is(net.minecraft.world.item.Items.STICK)) return "Oak";
+        if (stack.is(net.minecraft.world.item.Items.STRING)) return "spider";
+        if (stack.is(net.minecraft.world.item.Items.STICK))  return "oak";
 
-        // Get the registry path (e.g., "dark_oak_limb" or "copper_riser")
+        // Get the registry path (e.g. "dark_oak_limb" or "copper_riser")
         String path = net.minecraft.core.registries.BuiltInRegistries.ITEM.getKey(stack.getItem()).getPath();
 
-        // Strip away the part identifiers
-        String material = path
+        // Strip the part-identifier prefixes / suffixes.
+        return path
                 .replace("_limb", "")
                 .replace("pliable_", "")
                 .replace("rough_", "")
                 .replace("_riser", "")
                 .replace("_string", "");
-
-        // Automatically capitalize each word (e.g., "dark_oak" -> "Dark Oak")
-        return java.util.Arrays.stream(material.split("_"))
-                .filter(word -> !word.isEmpty())
-                .map(word -> word.substring(0, 1).toUpperCase() + word.substring(1))
-                .collect(java.util.stream.Collectors.joining(" "));
     }
 
     @Override

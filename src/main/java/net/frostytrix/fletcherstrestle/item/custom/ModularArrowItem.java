@@ -45,9 +45,12 @@ public class ModularArrowItem extends ArrowItem {
 
         // Assembly parts
         tooltipComponents.add(Component.literal("Arrow Parts:").withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD));
-        tooltipComponents.add(Component.literal("- Head: " + capitalize(assembly.head())).withStyle(ChatFormatting.GRAY));
-        tooltipComponents.add(Component.literal("- Shaft: " + capitalize(assembly.shaft())).withStyle(ChatFormatting.GRAY));
-        tooltipComponents.add(Component.literal("- Fletching: " + capitalize(assembly.fletching())).withStyle(ChatFormatting.GRAY));
+        tooltipComponents.add(Component.literal("- Head: ")
+                .append(net.frostytrix.fletcherstrestle.material.Materials.arrowHeadName(assembly.head())).withStyle(ChatFormatting.GRAY));
+        tooltipComponents.add(Component.literal("- Shaft: ")
+                .append(net.frostytrix.fletcherstrestle.material.Materials.arrowShaftName(assembly.shaft())).withStyle(ChatFormatting.GRAY));
+        tooltipComponents.add(Component.literal("- Fletching: ")
+                .append(net.frostytrix.fletcherstrestle.material.Materials.arrowFletchingName(assembly.fletching())).withStyle(ChatFormatting.GRAY));
 
         // Potion contents (when present — for glass-vial arrows after dipping)
         if (potion != null) {
@@ -89,6 +92,8 @@ public class ModularArrowItem extends ArrowItem {
     }
 
 
+    /** @deprecated see {@link ModularBowItem.LimbStats}. */
+    @Deprecated(forRemoval = true)
     public enum HeadStats {
         FLINT("flint", 1.0f, false, false),
         BROADHEAD("broadhead", 1.15f, true, false), // Applies Bleed
@@ -124,6 +129,8 @@ public class ModularArrowItem extends ArrowItem {
         public boolean isArmorPiercing() { return armorPiercing; }
     }
 
+    /** @deprecated see {@link ModularBowItem.LimbStats}. */
+    @Deprecated(forRemoval = true)
     public enum ShaftStats {
         OAK("oak", 1.0f, 1.0f),
         SPRUCE("spruce", 1.0f, 1.1f),   // Drops slightly faster (heavy)
@@ -159,6 +166,8 @@ public class ModularArrowItem extends ArrowItem {
         public float getGravityMult() { return gravityMult; }
     }
 
+    /** @deprecated see {@link ModularBowItem.LimbStats}. */
+    @Deprecated(forRemoval = true)
     public enum FletchingStats {
         FEATHER("feather", 1.0f),
         RIGID("rigid", 0.84f),
