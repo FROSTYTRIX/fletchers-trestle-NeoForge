@@ -352,6 +352,87 @@ Applies a MobEffect to the **shooter** on release. **Built-in:** acacia limb.
   "effect": "minecraft:speed", "duration": 30, "amplifier": 1 }
 ```
 
+### Scripted escape hatch
+
+#### `fletcherstrestle:scripted_callback`
+Looks up a named callback in the live `ScriptedEffectCallbacks`
+registry at runtime and delegates every lifecycle hook to it. The
+escape valve for behaviors the closed vocabulary can't express —
+intended for **KubeJS scripts** and **Java companion mods** that
+want to attach custom logic without registering a new effect type.
+
+```json
+{ "type": "fletcherstrestle:scripted_callback", "id": "mypack:my_hit" }
+```
+
+| Field | Required | Meaning                                                |
+|-------|----------|--------------------------------------------------------|
+| `id`  | yes      | The callback id to look up. Free-form ResourceLocation |
+
+If no handler is registered for the id, the effect silently no-ops
+at runtime and a single warning is logged to flag the typo. This is
+intentional — a missing KubeJS callback should NOT crash the game.
+
+**KubeJS example** (`kubejs/startup_scripts/fletcher_hooks.js`):
+```js
+const Callbacks = Java.loadClass(
+    'net.frostytrix.fletcherstrestle.material.ScriptedEffectCallbacks');
+const RL = Java.loadClass('net.minecraft.resources.ResourceLocation');
+
+Callbacks.register(RL.parse('mypack:wither_on_hit'), {
+    onArrowHit: (arrow, hit) => {
+        const target = hit.getEntity();
+        if (target && target.addEffect) {
+            const wither = Java.loadClass('net.minecraft.world.effect.MobEffects').WITHER;
+            const inst = new (Java.loadClass('net.minecraft.world.effect.MobEffectInstance'))(
+                wither, 100, 1);
+            target.addEffect(inst);
+        }
+    }
+});
+```
+
+Then `data/mypack/fletcherstrestle/arrow_head/cursed.json`:
+```json
+{
+  "ingredient": { "tag": "c:ingots/cursed" },
+  "stats": { "damage_multiplier": 1.3 },
+  "effects": [
+    { "type": "fletcherstrestle:scripted_callback",
+      "id": "mypack:wither_on_hit" }
+  ]
+}
+```
+
+The handler object can override any of the seven lifecycle hooks
+(`onArrowSpawn`, `onArrowTick`, `onPreArrowHit`, `onArrowHit`,
+`onArrowHitBlock`, `onBowRelease`, `onProjectileFired`) — each
+defaults to a no-op, so leave out the ones you don't need.
+
+**Java companion mod example**:
+```java
+public class MyHooks {
+    public static void init() {
+        ScriptedEffectCallbacks.register(
+            ResourceLocation.fromNamespaceAndPath("mypack", "wither_on_hit"),
+            new ScriptedEffectCallbacks.Handler() {
+                @Override
+                public void onArrowHit(ModularArrowEntity arrow, EntityHitResult result) {
+                    if (result.getEntity() instanceof LivingEntity target) {
+                        target.addEffect(new MobEffectInstance(MobEffects.WITHER, 100, 1));
+                    }
+                }
+            });
+    }
+}
+```
+
+Call `MyHooks.init()` from your `FMLCommonSetupEvent` listener.
+
+> **Re-registration**: calling `register()` again with the same id
+> overwrites the previous handler. KubeJS hot-reloads work cleanly
+> with this — every reload re-registers the latest version.
+
 ---
 
 ## Textures

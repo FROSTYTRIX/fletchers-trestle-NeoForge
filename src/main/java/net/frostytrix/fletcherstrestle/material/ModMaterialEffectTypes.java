@@ -16,6 +16,7 @@ import net.frostytrix.fletcherstrestle.material.effect.DropSelfOnHitEffect;
 import net.frostytrix.fletcherstrestle.material.effect.HealShooterEffect;
 import net.frostytrix.fletcherstrestle.material.effect.PierceLevelEffect;
 import net.frostytrix.fletcherstrestle.material.effect.PullTargetToShooterEffect;
+import net.frostytrix.fletcherstrestle.material.effect.ScriptedCallbackEffect;
 import net.frostytrix.fletcherstrestle.material.effect.SetVelocityMultiplierAtTickEffect;
 import net.frostytrix.fletcherstrestle.material.effect.SubtleHomingEffect;
 import net.frostytrix.fletcherstrestle.material.effect.TeleportSwapWithTargetEffect;
@@ -163,6 +164,20 @@ public final class ModMaterialEffectTypes {
     public static final Supplier<MaterialEffectType<ApplyMobEffectToShooterEffect>> APPLY_EFFECT_TO_SHOOTER =
             EFFECT_TYPES.register("apply_effect_to_shooter",
                     () -> new MaterialEffectType<>(ApplyMobEffectToShooterEffect.CODEC));
+
+    // --- Phase H: KubeJS / companion-mod extension hook ---
+
+    /**
+     * {@code fletcherstrestle:scripted_callback} — looks up a
+     * {@link net.frostytrix.fletcherstrestle.material.ScriptedEffectCallbacks.Handler}
+     * by id at runtime and delegates every lifecycle hook to it.
+     * The escape valve for behaviors the closed vocabulary can't
+     * express, accessible to both KubeJS scripts and Java companion
+     * mods through {@link net.frostytrix.fletcherstrestle.material.ScriptedEffectCallbacks#register}.
+     */
+    public static final Supplier<MaterialEffectType<ScriptedCallbackEffect>> SCRIPTED_CALLBACK =
+            EFFECT_TYPES.register("scripted_callback",
+                    () -> new MaterialEffectType<>(ScriptedCallbackEffect.CODEC));
 
     public static void register(IEventBus bus) {
         EFFECT_TYPES.register(bus);
