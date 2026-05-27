@@ -1,0 +1,8 @@
+{
+  "ingredient": {
+    "item": "minecraft:string"
+  },
+  "stats": {
+    "inaccuracy_multiplier": 0.75
+  }
+}

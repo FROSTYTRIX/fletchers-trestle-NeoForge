@@ -1,0 +1,10 @@
+{
+  "ingredient": {
+    "item": "fletcherstrestle:pliable_cherry_limb"
+  },
+  "stats": {
+    "damage_multiplier": 0.85,
+    "draw_time_ticks": 20.0,
+    "gives_slow_falling": true
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "ingredient": {
+    "item": "fletcherstrestle:pliable_jungle_limb"
+  },
+  "stats": {
+    "damage_multiplier": 0.9,
+    "draw_time_ticks": 18.0
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "ingredient": {
+    "item": "fletcherstrestle:weighted_hook"
+  },
+  "stats": {
+    "damage_multiplier": 0.5
+  }
+}

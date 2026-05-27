@@ -1,0 +1,8 @@
+{
+  "ingredient": {
+    "item": "minecraft:flint"
+  },
+  "stats": {
+    "inaccuracy_multiplier": 0.84
+  }
+}

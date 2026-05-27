@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_modular_arrow": {
+      "conditions": {
+        "items": [
+          {
+            "items": "fletcherstrestle:modular_arrow"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "fletcherstrestle:modular_potion_arrow_dipping"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_modular_arrow"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "fletcherstrestle:modular_potion_arrow_dipping"
+    ]
+  }
+}

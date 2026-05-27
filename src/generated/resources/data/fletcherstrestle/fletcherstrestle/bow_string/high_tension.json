@@ -1,0 +1,9 @@
+{
+  "ingredient": {
+    "item": "fletcherstrestle:high_tension_string"
+  },
+  "stats": {
+    "durability_cost": 2,
+    "velocity_multiplier": 1.8
+  }
+}

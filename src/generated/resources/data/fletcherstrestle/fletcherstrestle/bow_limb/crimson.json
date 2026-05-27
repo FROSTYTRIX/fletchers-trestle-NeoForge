@@ -1,0 +1,9 @@
+{
+  "ingredient": {
+    "item": "fletcherstrestle:pliable_crimson_limb"
+  },
+  "stats": {
+    "damage_multiplier": 1.1,
+    "draw_time_ticks": 24.0
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "ingredient": {
+    "item": "fletcherstrestle:pliable_mangrove_limb"
+  },
+  "stats": {
+    "amphibious": true,
+    "draw_time_ticks": 22.0
+  }
+}

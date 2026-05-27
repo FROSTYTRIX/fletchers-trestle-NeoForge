@@ -36,6 +36,10 @@ public class ModBlockLootTableProvider extends BlockLootSubProvider {
         dropSelf(ModBlocks.SHAVING_HORSE.get());
         dropSelf(ModBlocks.ARCHERY_TARGET.get());
         dropSelf(ModBlocks.DIPPING_VAT.get());
+        // Pre-existing gap: every registered block needs a loot table entry
+        // here or BlockLootSubProvider.generate throws on datagen.
+        dropSelf(ModBlocks.EAGLE_PERCH.get());
+        dropSelf(ModBlocks.EAGLE_NEST.get());
 
         LootItemCondition.Builder lootitemcondition$builder = LootItemBlockStatePropertyCondition
                 .hasBlockStateProperties(ModBlocks.FLAX_CROP.get())

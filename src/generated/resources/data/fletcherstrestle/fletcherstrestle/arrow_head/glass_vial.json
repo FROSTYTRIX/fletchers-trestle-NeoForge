@@ -1,0 +1,8 @@
+{
+  "ingredient": {
+    "item": "minecraft:glass_bottle"
+  },
+  "stats": {
+    "damage_multiplier": 0.4
+  }
+}

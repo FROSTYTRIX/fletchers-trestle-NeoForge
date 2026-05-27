@@ -14,6 +14,8 @@ import net.frostytrix.fletcherstrestle.fluid.ModFluids;
 import net.frostytrix.fletcherstrestle.item.ModCreativeModeTabs;
 import net.frostytrix.fletcherstrestle.item.ModItems;
 import net.frostytrix.fletcherstrestle.loot.ModLootModifiers;
+import net.frostytrix.fletcherstrestle.material.ModMaterialEffectTypes;
+import net.frostytrix.fletcherstrestle.material.ModMaterialRegistries;
 import net.frostytrix.fletcherstrestle.menu.ModMenuTypes;
 import net.frostytrix.fletcherstrestle.recipe.ModRecipes;
 import net.frostytrix.fletcherstrestle.sound.ModSounds;
@@ -65,6 +67,14 @@ public class FletcherTrestle {
         ModFluids.FLUIDS.register(modEventBus);
         ModSounds.register(modEventBus);
         ModFeatures.register(modEventBus);
+        // Phase A: register the MaterialEffectType registry. Built-in effect
+        // types are registered onto it here; modpack-side def JSONs will
+        // reference them once the per-part datapack registries land in Phase B.
+        ModMaterialEffectTypes.register(modEventBus);
+        // Phase B: register the six datapack-driven material registries.
+        // JSON in data/<ns>/fletcherstrestle/{bow_limb,arrow_head,...}/<id>.json
+        // will be loaded into these and synced to clients.
+        ModMaterialRegistries.register(modEventBus);
 
 
         // Register the item to a creative tab

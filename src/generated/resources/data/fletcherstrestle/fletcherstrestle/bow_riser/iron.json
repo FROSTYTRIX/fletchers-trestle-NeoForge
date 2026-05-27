@@ -1,0 +1,9 @@
+{
+  "ingredient": {
+    "item": "fletcherstrestle:iron_riser"
+  },
+  "stats": {
+    "inaccuracy_multiplier": 0.2,
+    "max_durability": 750
+  }
+}

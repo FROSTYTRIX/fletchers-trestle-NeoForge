@@ -1,0 +1,8 @@
+{
+  "ingredient": {
+    "item": "fletcherstrestle:flax_string"
+  },
+  "stats": {
+    "velocity_multiplier": 1.3
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "ingredient": {
+    "item": "fletcherstrestle:pliable_oak_limb"
+  },
+  "stats": {
+    "draw_time_ticks": 20.0
+  }
+}
