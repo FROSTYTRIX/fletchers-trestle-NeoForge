@@ -11,6 +11,7 @@ import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.frostytrix.fletcherstrestle.FletcherTrestle;
 import net.frostytrix.fletcherstrestle.component.BowAssembly;
 import net.frostytrix.fletcherstrestle.component.ModDataComponents;
+import net.frostytrix.fletcherstrestle.material.MaterialResolver;
 import net.frostytrix.fletcherstrestle.recipe.ModularWeaponRecipe;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -88,15 +89,35 @@ public class FletchingRecipeCategory implements IRecipeCategory<ModularWeaponRec
 
             ItemStack out = recipe.getResultItem(null).copy();
 
-            String riserMat = ModularWeaponRecipe.getMaterialName(currentRiser);
-            String limbMat = ModularWeaponRecipe.getMaterialName(currentLimb);
-            String stringMat = ModularWeaponRecipe.getMaterialName(currentString);
+            // Phase G: route through MaterialResolver so a modpack-added
+            // ingredient resolves to the matching def's registry id
+            // (including non-fletcherstrestle namespaces). Falls back to
+            // the legacy stripping for items the resolver can't bridge.
+            String limbMat   = resolveOrLegacy(currentLimb,
+                    s -> MaterialResolver.resolveBowLimb(s).map(h -> h.key().location().getPath()));
+            String riserMat  = resolveOrLegacy(currentRiser,
+                    s -> MaterialResolver.resolveBowRiser(s).map(h -> h.key().location().getPath()));
+            String stringMat = resolveOrLegacy(currentString,
+                    s -> MaterialResolver.resolveBowString(s).map(h -> h.key().location().getPath()));
 
-            out.set(ModDataComponents.BOW_ASSEMBLY.get(), new net.frostytrix.fletcherstrestle.component.BowAssembly(limbMat, riserMat, stringMat, 0.0f));
+            out.set(ModDataComponents.BOW_ASSEMBLY.get(), new BowAssembly(limbMat, riserMat, stringMat, 0.0f));
             outputPermutations.add(out);
         }
 
         // 3. ADD OUTPUT SLOT
         builder.addSlot(RecipeIngredientRole.OUTPUT, 114, 25).addItemStacks(outputPermutations);
+    }
+
+    /**
+     * Tries the registry-driven resolver first (returns the registry-key
+     * path, e.g. "dark_oak", "high_tension", "steel"); falls back to the
+     * legacy {@link ModularWeaponRecipe#getMaterialName} stripping when
+     * resolution fails (e.g. when the JEI sample stack isn't a registered
+     * material because tags expanded it from elsewhere).
+     */
+    @SuppressWarnings("deprecation")
+    private static String resolveOrLegacy(ItemStack stack,
+                                          java.util.function.Function<ItemStack, java.util.Optional<String>> resolver) {
+        return resolver.apply(stack).orElseGet(() -> ModularWeaponRecipe.getMaterialName(stack));
     }
 }
