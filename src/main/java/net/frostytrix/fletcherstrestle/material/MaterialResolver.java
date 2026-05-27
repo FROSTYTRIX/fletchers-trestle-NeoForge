@@ -196,7 +196,15 @@ public final class MaterialResolver {
         if (maybeLookup.isEmpty()) return Optional.empty();
         HolderLookup.RegistryLookup<T> lookup = maybeLookup.get();
 
-        // (1) explicit namespace
+        // Every ResourceLocation build below goes through tryBuild / tryParse,
+        // which return null on invalid characters instead of throwing. This
+        // matters: BowAssemblies saved before Phase D store legacy display
+        // form ("Wood", "Dark Oak", "High Tension") which contain capitals
+        // and spaces — both rejected by ResourceLocation's strict path check.
+        // The legacy-form fallback at step (3) is what handles those, but it
+        // can only run if steps (1) and (2) don't throw first.
+
+        // (1) explicit namespace e.g. "mypack:steel"
         if (idOrLegacy.indexOf(':') >= 0) {
             ResourceLocation rl = ResourceLocation.tryParse(idOrLegacy);
             if (rl != null) {
@@ -205,16 +213,21 @@ public final class MaterialResolver {
             }
         }
 
-        // (2) bare path, default namespace
-        ResourceLocation withNs = ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, idOrLegacy);
-        Optional<Holder.Reference<T>> direct = lookup.get(ResourceKey.create(registryKey, withNs));
-        if (direct.isPresent()) return direct;
+        // (2) bare path, default namespace — only attempted if the path
+        //     passes ResourceLocation's character validation.
+        ResourceLocation withNs = ResourceLocation.tryBuild(FletcherTrestle.MOD_ID, idOrLegacy);
+        if (withNs != null) {
+            Optional<Holder.Reference<T>> direct = lookup.get(ResourceKey.create(registryKey, withNs));
+            if (direct.isPresent()) return direct;
+        }
 
-        // (3) legacy display form
+        // (3) legacy display form: lowercase + space-to-underscore.
         String normalised = idOrLegacy.trim().toLowerCase(Locale.ROOT).replace(' ', '_');
         if (!normalised.equals(idOrLegacy) && !normalised.isEmpty()) {
-            ResourceLocation rl2 = ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, normalised);
-            return lookup.get(ResourceKey.create(registryKey, rl2));
+            ResourceLocation rl2 = ResourceLocation.tryBuild(FletcherTrestle.MOD_ID, normalised);
+            if (rl2 != null) {
+                return lookup.get(ResourceKey.create(registryKey, rl2));
+            }
         }
         return Optional.empty();
     }
