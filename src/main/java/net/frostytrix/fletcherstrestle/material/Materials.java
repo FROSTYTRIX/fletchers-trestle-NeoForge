@@ -6,8 +6,10 @@ import net.frostytrix.fletcherstrestle.material.stats.ArrowShaftStats;
 import net.frostytrix.fletcherstrestle.material.stats.BowLimbStats;
 import net.frostytrix.fletcherstrestle.material.stats.BowRiserStats;
 import net.frostytrix.fletcherstrestle.material.stats.BowStringStats;
+import net.frostytrix.fletcherstrestle.FletcherTrestle;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.Ingredient;
 
 import java.util.List;
@@ -135,6 +137,86 @@ public final class Materials {
         return MaterialResolver.resolveArrowFletchingById(idOrLegacy)
                 .map(h -> MaterialResolver.displayName(h.key().location()))
                 .orElseGet(() -> Component.literal(idOrLegacy));
+    }
+
+    // ---- Texture resolution (Phase F) ----
+
+    /**
+     * Resolves a texture {@link ResourceLocation} for a material slot,
+     * honoring the def's optional {@code texture} override and falling
+     * back to a conventional path otherwise.
+     *
+     * <p>Convention path: {@code <materialNamespace>:<basePathPrefix>/<materialPath><suffix>}
+     * where the material namespace is the namespace of the registered def
+     * (so {@code mypack:steel} pulls from {@code mypack:...} by default),
+     * and {@code <materialPath>} is the registry-key path of the def
+     * (e.g. {@code dark_oak}, {@code high_tension}).</p>
+     *
+     * <p>If the def carries an explicit {@code texture} field, that
+     * location is used as the override base — {@code suffix} is appended
+     * to whatever path the override points to so the same suffix scheme
+     * (e.g. {@code _limb_pulling_0}) works.</p>
+     *
+     * <p>Falls back to the mod's own namespace + the supplied id string if
+     * the def can't be resolved (e.g. an empty assembly or pre-Phase-D
+     * display-form string that doesn't normalise to anything known).</p>
+     */
+    public static ResourceLocation bowLimbTexture(String idString, String basePathPrefix, String suffix) {
+        return textureOf(MaterialResolver.resolveBowLimbById(idString),
+                h -> h.value().texture(), basePathPrefix, suffix, idString);
+    }
+
+    public static ResourceLocation bowRiserTexture(String idString, String basePathPrefix, String suffix) {
+        return textureOf(MaterialResolver.resolveBowRiserById(idString),
+                h -> h.value().texture(), basePathPrefix, suffix, idString);
+    }
+
+    public static ResourceLocation bowStringTexture(String idString, String basePathPrefix, String suffix) {
+        return textureOf(MaterialResolver.resolveBowStringById(idString),
+                h -> h.value().texture(), basePathPrefix, suffix, idString);
+    }
+
+    public static ResourceLocation arrowHeadTexture(String idString, String basePathPrefix, String suffix) {
+        return textureOf(MaterialResolver.resolveArrowHeadById(idString),
+                h -> h.value().texture(), basePathPrefix, suffix, idString);
+    }
+
+    public static ResourceLocation arrowShaftTexture(String idString, String basePathPrefix, String suffix) {
+        return textureOf(MaterialResolver.resolveArrowShaftById(idString),
+                h -> h.value().texture(), basePathPrefix, suffix, idString);
+    }
+
+    public static ResourceLocation arrowFletchingTexture(String idString, String basePathPrefix, String suffix) {
+        return textureOf(MaterialResolver.resolveArrowFletchingById(idString),
+                h -> h.value().texture(), basePathPrefix, suffix, idString);
+    }
+
+    /** Implementation shared by every per-part texture helper. */
+    private static <T> ResourceLocation textureOf(
+            Optional<Holder.Reference<T>> resolved,
+            java.util.function.Function<Holder.Reference<T>, Optional<ResourceLocation>> overrideExtractor,
+            String basePathPrefix,
+            String suffix,
+            String fallbackPath) {
+        if (resolved.isPresent()) {
+            Holder.Reference<T> h = resolved.get();
+            Optional<ResourceLocation> override = overrideExtractor.apply(h);
+            if (override.isPresent()) {
+                return ResourceLocation.fromNamespaceAndPath(
+                        override.get().getNamespace(),
+                        override.get().getPath() + suffix);
+            }
+            ResourceLocation key = h.key().location();
+            return ResourceLocation.fromNamespaceAndPath(
+                    key.getNamespace(),
+                    basePathPrefix + "/" + key.getPath() + suffix);
+        }
+        // Last-ditch: mod namespace + the raw string (normalised). Mirrors
+        // the legacy behavior for stored display-form strings the resolver
+        // couldn't bridge.
+        return ResourceLocation.fromNamespaceAndPath(
+                FletcherTrestle.MOD_ID,
+                basePathPrefix + "/" + normaliseId(fallbackPath) + suffix);
     }
 
     /**

@@ -9,6 +9,7 @@ import net.frostytrix.fletcherstrestle.component.ArrowAssembly;
 import net.frostytrix.fletcherstrestle.component.BowAssembly;
 import net.frostytrix.fletcherstrestle.component.ModDataComponents;
 import net.frostytrix.fletcherstrestle.item.custom.ModularBowItem;
+import net.frostytrix.fletcherstrestle.material.Materials;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.block.model.*;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -100,7 +101,7 @@ public class ModularBakedModel implements BakedModel {
     private class ModularItemOverrides extends ItemOverrides {
         @Override
         public @Nullable BakedModel resolve(BakedModel originalModel, ItemStack stack, @Nullable ClientLevel level, @Nullable LivingEntity entity, int seed) {
-            List<String> textures = new ArrayList<>();
+            List<ResourceLocation> textures = new ArrayList<>();
             String cacheKey;
 
             // Grab components (they will be null if it's an unfinished/raw item)
@@ -120,41 +121,47 @@ public class ModularBakedModel implements BakedModel {
                 }
                 String pull = getPullSuffix(stack, entity, maxPull);
 
-                // FALLBACK LOGIC: If bow is null, default to oak/spider.
-                String limbMat = bow != null ? bow.limbMaterial().toLowerCase().replace(" ", "_") : "oak";
-                String riserMat = bow != null ? bow.riserMaterial().toLowerCase().replace(" ", "_") : "wood";
-                String stringMat = bow != null ? bow.stringMaterial().toLowerCase().replace(" ", "_") : "spider";
+                // FALLBACK LOGIC: if no assembly, render oak/wood/spider.
+                String limbMat   = bow != null ? bow.limbMaterial()   : "oak";
+                String riserMat  = bow != null ? bow.riserMaterial()  : "wood";
+                String stringMat = bow != null ? bow.stringMaterial() : "spider";
 
-                // Properly using basePath and your subfolders!
-                textures.add(basePath + "/limbs/" + limbMat + "_limb" + pull);
-                textures.add(basePath + "/risers/" + riserMat + "_riser");
-                textures.add(basePath + "/strings/" + stringMat + "_string" + pull);
-                if (!pull.isEmpty()) textures.add(basePath + "/extras/arrow" + pull);
+                // Phase F: each texture lookup goes through Materials.*Texture,
+                // which honors a def's optional "texture" override and falls
+                // back to <materialNamespace>:<basePath>/<folder>/<id><suffix>
+                // for modpack-supplied materials with no override.
+                textures.add(Materials.bowLimbTexture(  limbMat,   basePath + "/limbs",   "_limb" + pull));
+                textures.add(Materials.bowRiserTexture( riserMat,  basePath + "/risers",  "_riser"));
+                textures.add(Materials.bowStringTexture(stringMat, basePath + "/strings", "_string" + pull));
+                if (!pull.isEmpty()) {
+                    // The "arrow on the bow" silhouette stays in our namespace
+                    // — no def to override it.
+                    textures.add(ResourceLocation.fromNamespaceAndPath(
+                            FletcherTrestle.MOD_ID, basePath + "/extras/arrow" + pull));
+                }
 
-                cacheKey = "bow_" + limbMat + "_" + riserMat + "_" + stringMat + pull;
+                cacheKey = "bow_" + Materials.normaliseId(limbMat) + "_"
+                        + Materials.normaliseId(riserMat) + "_"
+                        + Materials.normaliseId(stringMat) + pull;
             }
             // --- 2. MODULAR CROSSBOW ---
             else if (basePath.contains("crossbow")) {
                 String state = getCrossbowStateSuffix(stack, entity);
 
-                String limbMat = bow != null ? bow.limbMaterial().toLowerCase().replace(" ", "_") : "oak";
-                String riserMat = bow != null ? bow.riserMaterial().toLowerCase().replace(" ", "_") : "wood";
-                String stringMat = bow != null ? bow.stringMaterial().toLowerCase().replace(" ", "_") : "spider";
+                String limbMat   = bow != null ? bow.limbMaterial()   : "oak";
+                String riserMat  = bow != null ? bow.riserMaterial()  : "wood";
+                String stringMat = bow != null ? bow.stringMaterial() : "spider";
 
-                textures.add(basePath + "/limbs/" + limbMat + "_limb");
-                textures.add(basePath + "/risers/" + riserMat + "_riser");
+                textures.add(Materials.bowLimbTexture( limbMat,  basePath + "/limbs",  "_limb"));
+                textures.add(Materials.bowRiserTexture(riserMat, basePath + "/risers", "_riser"));
 
                 String stringState = state.equals("_charged") ? "_pulling_2" : state;
-                textures.add(basePath + "/strings/" + stringMat + "_string" + stringState);
+                textures.add(Materials.bowStringTexture(stringMat, basePath + "/strings", "_string" + stringState));
 
-                // We declare this outside the if-statement so the cacheKey can see it
                 String loadedProjectile = "";
-
-                // 3. Fix the Firework vs Arrow logic
                 if (state.equals("_charged")) {
                     ChargedProjectiles projectiles = stack.get(DataComponents.CHARGED_PROJECTILES);
                     if (projectiles != null && !projectiles.isEmpty()) {
-
                         boolean hasFirework = false;
                         for (ItemStack projectile : projectiles.getItems()) {
                             if (projectile.getItem() instanceof net.minecraft.world.item.FireworkRocketItem) {
@@ -162,35 +169,40 @@ public class ModularBakedModel implements BakedModel {
                                 break;
                             }
                         }
-
                         loadedProjectile = hasFirework ? "firework" : "arrow";
-                        textures.add(basePath + "/extras/" + loadedProjectile);
+                        textures.add(ResourceLocation.fromNamespaceAndPath(
+                                FletcherTrestle.MOD_ID, basePath + "/extras/" + loadedProjectile));
                     }
                 }
 
-                // CACHE FIX: We append the loadedProjectile to the key!
-                cacheKey = "xbow_" + limbMat + "_" + riserMat + "_" + stringMat + state + "_" + loadedProjectile;
+                cacheKey = "xbow_" + Materials.normaliseId(limbMat) + "_"
+                        + Materials.normaliseId(riserMat) + "_"
+                        + Materials.normaliseId(stringMat) + state + "_" + loadedProjectile;
             }
             // --- 3. MODULAR ARROW ---
             else if (basePath.contains("arrow")) {
-                String headMat = arrow != null ? arrow.head().toLowerCase().replace(" ", "_") : "flint";
-                String shaftMat = arrow != null ? arrow.shaft().toLowerCase().replace(" ", "_") : "oak";
-                String fletchMat = arrow != null ? arrow.fletching().toLowerCase().replace(" ", "_") : "feather";
+                String headMat   = arrow != null ? arrow.head()      : "flint";
+                String shaftMat  = arrow != null ? arrow.shaft()     : "oak";
+                String fletchMat = arrow != null ? arrow.fletching() : "feather";
 
-                textures.add(basePath + "/shafts/" + shaftMat + "_shaft");        // tint idx 0
-                textures.add(basePath + "/fletchings/" + fletchMat + "_fletching"); // tint idx 1
-                textures.add(basePath + "/heads/" + headMat + "_head");           // tint idx 2
+                textures.add(Materials.arrowShaftTexture(   shaftMat,  basePath + "/shafts",     "_shaft"));     // tint idx 0
+                textures.add(Materials.arrowFletchingTexture(fletchMat, basePath + "/fletchings", "_fletching")); // tint idx 1
+                textures.add(Materials.arrowHeadTexture(    headMat,   basePath + "/heads",      "_head"));      // tint idx 2
 
                 // Glass-vial arrows that have been dipped get a fourth layer:
                 // the "liquid" silhouette tinted to the potion's color via the
                 // ItemColor handler registered in ModClientEvents.
-                boolean hasLiquid = "glass_vial".equals(headMat)
+                String headIdNormalised = Materials.normaliseId(headMat);
+                boolean hasLiquid = "glass_vial".equals(headIdNormalised)
                         && stack.get(DataComponents.POTION_CONTENTS) != null;
                 if (hasLiquid) {
-                    textures.add(basePath + "/heads/glass_vial_liquid");          // tint idx 3
+                    textures.add(ResourceLocation.fromNamespaceAndPath(
+                            FletcherTrestle.MOD_ID, basePath + "/heads/glass_vial_liquid")); // tint idx 3
                 }
 
-                cacheKey = "arrow_" + headMat + "_" + shaftMat + "_" + fletchMat
+                cacheKey = "arrow_" + headIdNormalised + "_"
+                        + Materials.normaliseId(shaftMat) + "_"
+                        + Materials.normaliseId(fletchMat)
                         + (hasLiquid ? "_potion" : "");
             }
             // --- CATCH ALL ---
@@ -234,9 +246,9 @@ public class ModularBakedModel implements BakedModel {
         }
     }
 
-    private BakedModel bakeLayeredModel(List<String> texturePaths) {
+    private BakedModel bakeLayeredModel(List<ResourceLocation> texturePaths) {
         List<Material> materials = texturePaths.stream()
-                .map(path -> new Material(InventoryMenu.BLOCK_ATLAS, ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, path)))
+                .map(loc -> new Material(InventoryMenu.BLOCK_ATLAS, loc))
                 .toList();
         try {
             java.lang.reflect.Constructor<ItemLayerModel> ctor = ItemLayerModel.class.getDeclaredConstructor(
