@@ -8,6 +8,7 @@ import net.frostytrix.fletcherstrestle.FletcherTrestle;
 import net.frostytrix.fletcherstrestle.component.ArrowAssembly;
 import net.frostytrix.fletcherstrestle.component.BowAssembly;
 import net.frostytrix.fletcherstrestle.component.ModDataComponents;
+import net.frostytrix.fletcherstrestle.item.custom.ModularBowItem;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.block.model.*;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -108,7 +109,16 @@ public class ModularBakedModel implements BakedModel {
 
             // --- 1. MODULAR BOW ---
             if (basePath.contains("bow") && !basePath.contains("crossbow")) {
-                String pull = getPullSuffix(stack, entity, 20.0f);
+                // Pull-stage thresholds need to match the per-limb draw time
+                // so the bow visually finishes drawing at the same instant
+                // gameplay finishes drawing (and the FOV zoom completes).
+                // Fall back to vanilla 20 ticks only when the stack isn't a
+                // ModularBowItem (e.g. during the inventory icon pass).
+                float maxPull = 20.0f;
+                if (stack.getItem() instanceof ModularBowItem bowItem) {
+                    maxPull = bowItem.getDrawTime(stack);
+                }
+                String pull = getPullSuffix(stack, entity, maxPull);
 
                 // FALLBACK LOGIC: If bow is null, default to oak/spider.
                 String limbMat = bow != null ? bow.limbMaterial().toLowerCase().replace(" ", "_") : "oak";
@@ -208,7 +218,13 @@ public class ModularBakedModel implements BakedModel {
 
         private String getCrossbowStateSuffix(ItemStack stack, @Nullable LivingEntity entity) {
             if (entity != null && entity.isUsingItem() && entity.getUseItem() == stack) {
-                return getPullSuffix(stack, entity, 25.0f);
+                // Same fix as the bow: use the crossbow's per-limb draw
+                // time so the load animation matches gameplay charge time.
+                float maxPull = 25.0f;
+                if (stack.getItem() instanceof net.frostytrix.fletcherstrestle.item.custom.ModularCrossbowItem xbow) {
+                    maxPull = xbow.getDrawTime(stack);
+                }
+                return getPullSuffix(stack, entity, maxPull);
             }
             ChargedProjectiles projectiles = stack.get(DataComponents.CHARGED_PROJECTILES);
             if (projectiles != null && !projectiles.isEmpty()) {
