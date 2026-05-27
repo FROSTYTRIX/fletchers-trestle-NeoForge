@@ -1,4 +1,13 @@
 {
+  "effects": [
+    {
+      "type": "fletcherstrestle:heal_shooter",
+      "amount": 2.0,
+      "particle": {
+        "type": "minecraft:cherry_leaves"
+      }
+    }
+  ],
   "ingredient": {
     "item": "fletcherstrestle:rough_cherry_limb"
   },

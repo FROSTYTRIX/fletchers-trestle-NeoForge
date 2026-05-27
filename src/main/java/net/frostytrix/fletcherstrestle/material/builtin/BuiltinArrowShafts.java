@@ -5,24 +5,43 @@ import net.frostytrix.fletcherstrestle.item.ModItems;
 import net.frostytrix.fletcherstrestle.material.ArrowShaftDef;
 import net.frostytrix.fletcherstrestle.material.MaterialEffect;
 import net.frostytrix.fletcherstrestle.material.ModMaterialRegistries;
+import net.frostytrix.fletcherstrestle.material.effect.ApplyMobEffectEffect;
+import net.frostytrix.fletcherstrestle.material.effect.DamageMultiplierIfTargetBelowHealthEffect;
+import net.frostytrix.fletcherstrestle.material.effect.DamageMultiplierOnBackstabEffect;
+import net.frostytrix.fletcherstrestle.material.effect.HealShooterEffect;
+import net.frostytrix.fletcherstrestle.material.effect.PierceLevelEffect;
+import net.frostytrix.fletcherstrestle.material.effect.TeleportSwapWithTargetEffect;
 import net.frostytrix.fletcherstrestle.material.stats.ArrowShaftStats;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.level.ItemLike;
 
 import java.util.List;
 import java.util.Optional;
 
 /**
- * Built-in arrow-shaft material defs. Mirrors the legacy
- * {@code ModularArrowItem.ShaftStats} enum 1:1.
+ * Built-in arrow-shaft material defs.
  *
- * <p>Special case: the {@code oak} shaft accepts both {@code rough_oak_limb}
- * and vanilla {@code stick} — matches {@code ModularArrowRecipe.getArrowShaft}.
- * The other ten shafts accept the corresponding {@code rough_X_limb}.</p>
+ * <p>Beyond the legacy velocity/gravity stats, each shaft now carries its
+ * thematic on-hit effect as a {@code MaterialEffect}:</p>
+ * <ul>
+ *   <li>dark_oak — pierce level 1</li>
+ *   <li>crimson — executioner bonus damage on low-HP targets</li>
+ *   <li>pale_oak — backstab bonus damage</li>
+ *   <li>mangrove — slowness on hit</li>
+ *   <li>cherry — heals shooter + cherry-leaves particle</li>
+ *   <li>warped — teleport-swap with target</li>
+ * </ul>
+ *
+ * <p>The acacia mid-flight speed boost is a tick-time effect and stays
+ * hardcoded in {@code ModularArrowEntity.tick} for now — Phase E's
+ * {@code on_tick} effects need a tick-specific lifecycle hook.</p>
  */
 public final class BuiltinArrowShafts {
     private BuiltinArrowShafts() {}
@@ -45,31 +64,45 @@ public final class BuiltinArrowShafts {
                 Ingredient.of(ModItems.ROUGH_OAK_LIMB.get(), Items.STICK),
                 new ArrowShaftStats(1.0f, 1.0f),
                 Optional.empty(),
-                List.<MaterialEffect>of()
-        ));
-        // (key, item, velocityMult, gravityMult)
-        register(ctx, SPRUCE,   ModItems.ROUGH_SPRUCE_LIMB,   1.0f, 1.1f);
-        register(ctx, BIRCH,    ModItems.ROUGH_BIRCH_LIMB,    1.0f, 0.9f);
-        register(ctx, JUNGLE,   ModItems.ROUGH_JUNGLE_LIMB,   1.0f, 1.0f);
-        register(ctx, DARK_OAK, ModItems.ROUGH_DARK_OAK_LIMB, 1.0f, 1.0f);
-        register(ctx, ACACIA,   ModItems.ROUGH_ACACIA_LIMB,   1.0f, 1.0f);
-        register(ctx, MANGROVE, ModItems.ROUGH_MANGROVE_LIMB, 1.0f, 1.0f);
-        register(ctx, CHERRY,   ModItems.ROUGH_CHERRY_LIMB,   1.0f, 1.0f);
-        register(ctx, PALE_OAK, ModItems.ROUGH_PALE_OAK_LIMB, 1.0f, 1.0f);
-        register(ctx, CRIMSON,  ModItems.ROUGH_CRIMSON_LIMB,  1.0f, 1.0f);
-        register(ctx, WARPED,   ModItems.ROUGH_WARPED_LIMB,   1.0f, 1.0f);
+                List.of()));
+
+        register(ctx, SPRUCE,   ModItems.ROUGH_SPRUCE_LIMB,   1.0f, 1.1f, List.of());
+        register(ctx, BIRCH,    ModItems.ROUGH_BIRCH_LIMB,    1.0f, 0.9f, List.of());
+        register(ctx, JUNGLE,   ModItems.ROUGH_JUNGLE_LIMB,   1.0f, 1.0f, List.of());
+
+        register(ctx, DARK_OAK, ModItems.ROUGH_DARK_OAK_LIMB, 1.0f, 1.0f,
+                List.of(new PierceLevelEffect(1)));
+
+        register(ctx, ACACIA,   ModItems.ROUGH_ACACIA_LIMB,   1.0f, 1.0f, List.of());
+
+        register(ctx, MANGROVE, ModItems.ROUGH_MANGROVE_LIMB, 1.0f, 1.0f,
+                List.of(new ApplyMobEffectEffect(MobEffects.MOVEMENT_SLOWDOWN, 80, 2)));
+
+        register(ctx, CHERRY,   ModItems.ROUGH_CHERRY_LIMB,   1.0f, 1.0f,
+                List.of(new HealShooterEffect(2.0f, Optional.of(ParticleTypes.CHERRY_LEAVES), 5)));
+
+        register(ctx, PALE_OAK, ModItems.ROUGH_PALE_OAK_LIMB, 1.0f, 1.0f,
+                List.of(new DamageMultiplierOnBackstabEffect(0.5f, 1.4f,
+                        Optional.of(BuiltInRegistries.SOUND_EVENT
+                                .getKey(net.minecraft.sounds.SoundEvents.BREEZE_WIND_CHARGE_BURST.value())))));
+
+        register(ctx, CRIMSON,  ModItems.ROUGH_CRIMSON_LIMB,  1.0f, 1.0f,
+                List.of(new DamageMultiplierIfTargetBelowHealthEffect(0.5f, 1.5f)));
+
+        register(ctx, WARPED,   ModItems.ROUGH_WARPED_LIMB,   1.0f, 1.0f,
+                List.of(new TeleportSwapWithTargetEffect(1.0f)));
     }
 
     private static void register(BootstrapContext<ArrowShaftDef> ctx,
                                  ResourceKey<ArrowShaftDef> key,
                                  java.util.function.Supplier<? extends ItemLike> ingredient,
-                                 float velocityMult, float gravityMult) {
+                                 float velocityMult, float gravityMult,
+                                 List<MaterialEffect> effects) {
         ctx.register(key, new ArrowShaftDef(
                 Ingredient.of(ingredient.get()),
                 new ArrowShaftStats(velocityMult, gravityMult),
                 Optional.empty(),
-                List.<MaterialEffect>of()
-        ));
+                effects));
     }
 
     private static ResourceKey<ArrowShaftDef> key(String name) {

@@ -56,7 +56,20 @@ public interface MaterialEffect {
     /** Called every server-side tick while the arrow is in flight. */
     default void onArrowTick(ModularArrowEntity arrow) {}
 
-    /** Called when the arrow hits an entity. {@code result} is the hit info. */
+    /**
+     * Called BEFORE the vanilla hit resolution runs — use this for damage
+     * modifiers (multiply base damage, set armor-piercing flags) that
+     * need to affect THIS hit. Effects that don't care about ordering
+     * should override {@link #onArrowHit} instead.
+     */
+    default void onPreArrowHit(ModularArrowEntity arrow, EntityHitResult result) {}
+
+    /**
+     * Called AFTER the vanilla hit resolution. Use this for post-damage
+     * side effects (apply status effect, pull target, heal shooter,
+     * teleport, etc.) — anything that doesn't need to influence the
+     * damage value being applied to this hit.
+     */
     default void onArrowHit(ModularArrowEntity arrow, EntityHitResult result) {}
 
     /**

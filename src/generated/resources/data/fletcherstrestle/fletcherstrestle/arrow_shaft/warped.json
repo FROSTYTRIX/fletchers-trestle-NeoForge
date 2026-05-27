@@ -1,4 +1,9 @@
 {
+  "effects": [
+    {
+      "type": "fletcherstrestle:teleport_swap_with_target"
+    }
+  ],
   "ingredient": {
     "item": "fletcherstrestle:rough_warped_limb"
   },

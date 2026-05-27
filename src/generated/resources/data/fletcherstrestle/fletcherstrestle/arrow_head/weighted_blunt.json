@@ -1,4 +1,10 @@
 {
+  "effects": [
+    {
+      "type": "fletcherstrestle:damage_multiplier_by_distance",
+      "per_block": 100.0
+    }
+  ],
   "ingredient": {
     "item": "minecraft:gold_ingot"
   },

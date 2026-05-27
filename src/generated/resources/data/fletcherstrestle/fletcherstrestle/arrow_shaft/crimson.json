@@ -1,4 +1,11 @@
 {
+  "effects": [
+    {
+      "type": "fletcherstrestle:damage_multiplier_if_target_below_health",
+      "multiplier": 1.5,
+      "threshold": 0.5
+    }
+  ],
   "ingredient": {
     "item": "fletcherstrestle:rough_crimson_limb"
   },

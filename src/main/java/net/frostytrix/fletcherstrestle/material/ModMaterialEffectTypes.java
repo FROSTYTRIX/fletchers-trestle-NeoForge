@@ -3,8 +3,16 @@ package net.frostytrix.fletcherstrestle.material;
 import net.frostytrix.fletcherstrestle.FletcherTrestle;
 import net.frostytrix.fletcherstrestle.material.effect.ApplyMobEffectEffect;
 import net.frostytrix.fletcherstrestle.material.effect.BounceOnBlockEffect;
+import net.frostytrix.fletcherstrestle.material.effect.DamageMultiplierByDistanceEffect;
 import net.frostytrix.fletcherstrestle.material.effect.DamageMultiplierEffect;
+import net.frostytrix.fletcherstrestle.material.effect.DamageMultiplierIfTargetArmoredEffect;
+import net.frostytrix.fletcherstrestle.material.effect.DamageMultiplierIfTargetBelowHealthEffect;
+import net.frostytrix.fletcherstrestle.material.effect.DamageMultiplierOnBackstabEffect;
+import net.frostytrix.fletcherstrestle.material.effect.DropSelfOnHitEffect;
+import net.frostytrix.fletcherstrestle.material.effect.HealShooterEffect;
 import net.frostytrix.fletcherstrestle.material.effect.PierceLevelEffect;
+import net.frostytrix.fletcherstrestle.material.effect.PullTargetToShooterEffect;
+import net.frostytrix.fletcherstrestle.material.effect.TeleportSwapWithTargetEffect;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -73,6 +81,48 @@ public final class ModMaterialEffectTypes {
     public static final Supplier<MaterialEffectType<BounceOnBlockEffect>> BOUNCE_ON_BLOCK =
             EFFECT_TYPES.register("bounce_on_block",
                     () -> new MaterialEffectType<>(BounceOnBlockEffect.CODEC));
+
+    // --- Phase E on-hit effect types ---
+
+    /** {@code fletcherstrestle:damage_multiplier_if_target_below_health} — crimson shaft executioner. */
+    public static final Supplier<MaterialEffectType<DamageMultiplierIfTargetBelowHealthEffect>> DAMAGE_MULTIPLIER_IF_TARGET_BELOW_HEALTH =
+            EFFECT_TYPES.register("damage_multiplier_if_target_below_health",
+                    () -> new MaterialEffectType<>(DamageMultiplierIfTargetBelowHealthEffect.CODEC));
+
+    /** {@code fletcherstrestle:damage_multiplier_on_backstab} — pale_oak shaft. */
+    public static final Supplier<MaterialEffectType<DamageMultiplierOnBackstabEffect>> DAMAGE_MULTIPLIER_ON_BACKSTAB =
+            EFFECT_TYPES.register("damage_multiplier_on_backstab",
+                    () -> new MaterialEffectType<>(DamageMultiplierOnBackstabEffect.CODEC));
+
+    /** {@code fletcherstrestle:damage_multiplier_by_distance} — weighted_blunt head. */
+    public static final Supplier<MaterialEffectType<DamageMultiplierByDistanceEffect>> DAMAGE_MULTIPLIER_BY_DISTANCE =
+            EFFECT_TYPES.register("damage_multiplier_by_distance",
+                    () -> new MaterialEffectType<>(DamageMultiplierByDistanceEffect.CODEC));
+
+    /** {@code fletcherstrestle:damage_multiplier_if_target_armored} — bodkin_point head. */
+    public static final Supplier<MaterialEffectType<DamageMultiplierIfTargetArmoredEffect>> DAMAGE_MULTIPLIER_IF_TARGET_ARMORED =
+            EFFECT_TYPES.register("damage_multiplier_if_target_armored",
+                    () -> new MaterialEffectType<>(DamageMultiplierIfTargetArmoredEffect.CODEC));
+
+    /** {@code fletcherstrestle:heal_shooter} — cherry shaft petal-burst. */
+    public static final Supplier<MaterialEffectType<HealShooterEffect>> HEAL_SHOOTER =
+            EFFECT_TYPES.register("heal_shooter",
+                    () -> new MaterialEffectType<>(HealShooterEffect.CODEC));
+
+    /** {@code fletcherstrestle:pull_target_to_shooter} — barbed_tip head. */
+    public static final Supplier<MaterialEffectType<PullTargetToShooterEffect>> PULL_TARGET_TO_SHOOTER =
+            EFFECT_TYPES.register("pull_target_to_shooter",
+                    () -> new MaterialEffectType<>(PullTargetToShooterEffect.CODEC));
+
+    /** {@code fletcherstrestle:teleport_swap_with_target} — warped shaft. */
+    public static final Supplier<MaterialEffectType<TeleportSwapWithTargetEffect>> TELEPORT_SWAP_WITH_TARGET =
+            EFFECT_TYPES.register("teleport_swap_with_target",
+                    () -> new MaterialEffectType<>(TeleportSwapWithTargetEffect.CODEC));
+
+    /** {@code fletcherstrestle:drop_self_on_hit} — bound fletching. */
+    public static final Supplier<MaterialEffectType<DropSelfOnHitEffect>> DROP_SELF_ON_HIT =
+            EFFECT_TYPES.register("drop_self_on_hit",
+                    () -> new MaterialEffectType<>(DropSelfOnHitEffect.CODEC));
 
     public static void register(IEventBus bus) {
         EFFECT_TYPES.register(bus);

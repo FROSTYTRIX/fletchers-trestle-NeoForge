@@ -1,4 +1,11 @@
 {
+  "effects": [
+    {
+      "type": "fletcherstrestle:apply_effect",
+      "duration": 60,
+      "effect": "fletcherstrestle:bleed"
+    }
+  ],
   "ingredient": {
     "item": "minecraft:iron_ingot"
   },

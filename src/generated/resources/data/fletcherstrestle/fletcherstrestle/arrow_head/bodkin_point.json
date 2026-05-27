@@ -1,4 +1,10 @@
 {
+  "effects": [
+    {
+      "type": "fletcherstrestle:damage_multiplier_if_target_armored",
+      "multiplier": 1.25
+    }
+  ],
   "ingredient": {
     "item": "minecraft:copper_ingot"
   },

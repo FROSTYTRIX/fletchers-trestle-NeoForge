@@ -93,6 +93,21 @@ public class ModularArrowEntity extends AbstractArrow {
         return this.entityData.get(IS_HOOKED);
     }
 
+    /** Position at which this arrow was spawned. {@code null} until set
+     *  by the shooting code on the first tick. Used by distance-scaled
+     *  effects (e.g. {@link net.frostytrix.fletcherstrestle.material.effect.DamageMultiplierByDistanceEffect}). */
+    public @Nullable Vec3 getStartPos() {
+        return this.startPos;
+    }
+
+    /** Public accessor for the protected vanilla
+     *  {@link net.minecraft.world.entity.projectile.AbstractArrow#getPickupItem()}.
+     *  Used by effects that need to drop the arrow stack on hit
+     *  (e.g. {@link net.frostytrix.fletcherstrestle.material.effect.DropSelfOnHitEffect}). */
+    public ItemStack getPickupItemPublic() {
+        return this.getPickupItem();
+    }
+
     public ArrowAssembly getAssembly() {
         ItemStack pickupItem = this.getPickupItem();
 
@@ -138,152 +153,61 @@ public class ModularArrowEntity extends AbstractArrow {
         ArrowAssembly assembly = this.getAssembly();
 
         // Glass-vial arrows shatter on impact and splash whatever potion they
-        // were dipped in. Resolves before normal damage so it can't be combined
-        // with other head effects.
+        // were dipped in. Resolves before everything else so it can't be
+        // combined with other head effects. Still hardcoded — splashing
+        // a potion needs the arrow's POTION_CONTENTS component and the
+        // current stateful coordination; lifts to a "splash_potion" effect
+        // in a later sub-phase.
         if ("glass_vial".equals(assembly.head())) {
             applyGlassVialEffect(result.getLocation());
             return;
         }
 
+        // Resonance setup — head-specific multi-tick state that freezes the
+        // arrow and queues delayed damage. Stays here because it needs to
+        // mutate arrow state in coordinated ways the simple effect hook
+        // doesn't expose. Future "stateful effect" extension can lift it.
         double velocityOnImpact = this.getDeltaMovement().length();
-
-        // WEIGHTED BLUNT: Calculate distance traveled and increase base damage before the hit resolves
-        if ("weighted_blunt".equals(assembly.head()) && this.startPos != null) {
-            double distance = this.position().distanceTo(this.startPos);
-            double bonusMultiplier = 1.0 + ((distance / 100));
-            this.setBaseDamage(this.getBaseDamage() * bonusMultiplier);
+        if ("resonance_tip".equals(assembly.head())
+                && result.getEntity() instanceof LivingEntity resonanceTarget) {
+            this.resonanceTicks = 20;
+            this.resonanceTargetId = resonanceTarget.getId();
+            this.resonanceDamage = (float) (this.getBaseDamage() * velocityOnImpact) * 0.3f;
+            this.level().playSound(null, this.getX(), this.getY(), this.getZ(),
+                    SoundEvents.WARDEN_HEARTBEAT, this.getSoundSource(), 1.0f, 2.0f);
+            this.setDeltaMovement(Vec3.ZERO);
+            this.setNoGravity(true);
         }
 
-        if (result.getEntity() instanceof LivingEntity target) {
-            if ("resonance_tip".equals(assembly.head())) {
-                this.resonanceTicks = 20; // 20 ticks = 1 seconds
-                this.resonanceTargetId = target.getId();
+        // --- PRE-HIT effects: damage modifiers that need to influence
+        // the damage value vanilla is about to apply.
+        var head      = net.frostytrix.fletcherstrestle.material.Materials.arrowHead(assembly.head());
+        var shaft     = net.frostytrix.fletcherstrestle.material.Materials.arrowShaft(assembly.shaft());
+        var fletching = net.frostytrix.fletcherstrestle.material.Materials.arrowFletching(assembly.fletching());
+        head.effects().forEach(e -> e.onPreArrowHit(this, result));
+        shaft.effects().forEach(e -> e.onPreArrowHit(this, result));
+        fletching.effects().forEach(e -> e.onPreArrowHit(this, result));
 
-                // Calculate the echo damage
-                double impactDamage = this.getBaseDamage() * velocityOnImpact;
-                this.resonanceDamage = (float) impactDamage * 0.3f;
-
-                // Play the initial heartbeat
-                this.level().playSound(null, this.getX(), this.getY(), this.getZ(),
-                        SoundEvents.WARDEN_HEARTBEAT, this.getSoundSource(), 1.0f, 2.0f);
-
-                // Freeze the arrow in place so it doesn't fall to the floor while resonating
-                this.setDeltaMovement(Vec3.ZERO);
-                this.setNoGravity(true);
-            }
-        }
-
-        // Resolve the hit
+        // Vanilla hit resolution.
         super.onHitEntity(result);
 
-        // Head behaviors below — the legacy ArrowHeadStats had causesBleed
-        // and armorPiercing booleans, but ArrowHeadDef.stats() only carries
-        // the damage multiplier. The bleed / pierce behaviors stay
-        // hardcoded keyed by id-form here for Phase D; Phase E moves them
-        // into MaterialEffect entries on the head defs.
-        String headId = assembly.head();
+        // --- POST-HIT effects: status effects, target pull, shooter heal,
+        // teleport swap, drop-on-hit, etc.
+        head.effects().forEach(e -> e.onArrowHit(this, result));
+        shaft.effects().forEach(e -> e.onArrowHit(this, result));
+        fletching.effects().forEach(e -> e.onArrowHit(this, result));
 
-        if (result.getEntity() instanceof LivingEntity target) {
-            // BROADHEAD: Bleeding for 3s (60 ticks).
-            if ("broadhead".equals(headId)) {
-                target.addEffect(new MobEffectInstance(ModEffects.BLEED_EFFECT, 60, 0));
-            }
-
-            // BARBED TIP: yank the target toward the shooter on hit. A small
-            // upward lift keeps them from getting caught on terrain mid-pull.
-            if ("barbed_tip".equals(assembly.head()) && this.getOwner() != null) {
-                Vec3 toShooter = this.getOwner().position()
-                        .subtract(target.position())
-                        .normalize()
-                        .scale(0.75);
-                target.setDeltaMovement(toShooter.x,
-                        Math.max(0.25, toShooter.y),
-                        toShooter.z);
-                target.hurtMarked = true;
-                this.playSound(SoundEvents.LEASH_KNOT_PLACE, 1.0f, 1.6f);
-            }
-
-            // BODKIN_POINT armor-piercing: 25% bonus to base damage. Phase E
-            // will move this into a head-attached MaterialEffect entry.
-            if ("bodkin_point".equals(headId)) {
-                this.setBaseDamage(this.getBaseDamage() * 1.25);
-            }
-
-            // BOUND (Fletching): 25% chance to drop the arrow on impact instead of breaking
-            if ("bound".equals(assembly.fletching()) && this.random.nextFloat() < 0.25f) {
-                this.spawnAtLocation(this.getPickupItem());
-                this.discard(); // Remove the entity so it doesn't get stuck in the target
-            }
-
-            // CRIMSON: Executioner (+50% damage if target is below half health)
-            if ("crimson".equals(assembly.shaft())) {
-                if (target.getHealth() < target.getMaxHealth() * 0.5f) {
-                    this.setBaseDamage(this.getBaseDamage() * 1.5);
-                }
-            }
-
-            // PALE OAK: Vengeful (Backstab - +40% damage if hitting from behind)
-            if ("pale_oak".equals(assembly.shaft())) {
-                Vec3 targetView = target.getViewVector(1.0F);
-                Vec3 arrowDir = this.getDeltaMovement().normalize();
-                // If dot product is > 0.5, they are looking in the same direction = Backstab
-                if (targetView.dot(arrowDir) > 0.5) {
-                    this.setBaseDamage(this.getBaseDamage() * 1.4);
-                    // Play a ghostly sound
-                    this.level().playSound(null, this.getX(), this.getY(), this.getZ(), SoundEvents.BREEZE_WIND_CHARGE_BURST, this.getSoundSource(), 1.0f, 1.5f);
-                }
-            }
-
-            // MANGROVE: Slowness III for 1 second
-            if ("mangrove".equals(assembly.shaft())) {
-                target.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 80, 2));
-            }
-
-            // CHERRY: Petal Burst (Heal shooter 1 heart)
-            if ("cherry".equals(assembly.shaft())) {
-                if (this.getOwner() instanceof LivingEntity shooter) {
-                    shooter.heal(2.0f); // 2.0f = 1 Heart
-                    // Pink particles
-                    for(int i = 0; i < 5; ++i) {
-                        this.level().addParticle(net.minecraft.core.particles.ParticleTypes.CHERRY_LEAVES,
-                                target.getRandomX(0.5D), target.getRandomY(), target.getRandomZ(0.5D), 0, 0, 0);
-                    }
-                }
-            }
-
-            // WARPED: Translocation (50% chance to swap positions)
-            if ("warped".equals(assembly.shaft()) && this.random.nextFloat() < 1f) {
-                Entity shooter = this.getOwner();
-                if (shooter != null && shooter.isAlive()) {
-                    Vec3 sPos = shooter.position();
-                    Vec3 tPos = target.position();
-
-                    // Swap them
-                    shooter.teleportTo(tPos.x, tPos.y, tPos.z);
-                    target.teleportTo(sPos.x, sPos.y, sPos.z);
-
-                    this.playSound(net.minecraft.sounds.SoundEvents.CHORUS_FRUIT_TELEPORT, 1.0f, 1.0f);
-                }
-            }
-
-            if (this.getPersistentData().getBoolean("fletcherstrestle:conductive") && this.level().isThundering()) {
-                LightningBolt lightning = EntityType.LIGHTNING_BOLT.create(this.level());
-                if (lightning != null) {
-                    lightning.moveTo(target.position());
-                    this.level().addFreshEntity(lightning);
-                }
-            }
-
-            if (assembly != null && "bodkin_point".equals(assembly.head())) {
-                float armorValue = target.getArmorValue();
-                if (armorValue > 0) {
-                    // Calculate bonus damage manually since we are inside the impact call
-                    double baseDamage = this.getBaseDamage() * this.getDeltaMovement().length();
-                    float bonus = (armorValue * 0.25f) * ((float)baseDamage * 0.04f);
-
-                    // Temporarily increase damage for this specific hit
-                    this.setBaseDamage(this.getBaseDamage() + (bonus / this.getDeltaMovement().length()));
-                }
+        // Riser-driven Copper "conductive" lightning — still keyed off the
+        // persistent flag set by ModularBowItem.createProjectile. Phase E
+        // (a later sub-phase that adds bow-release effects) will move
+        // this into a riser-attached effect.
+        if (result.getEntity() instanceof LivingEntity target
+                && this.getPersistentData().getBoolean("fletcherstrestle:conductive")
+                && this.level().isThundering()) {
+            LightningBolt lightning = EntityType.LIGHTNING_BOLT.create(this.level());
+            if (lightning != null) {
+                lightning.moveTo(target.position());
+                this.level().addFreshEntity(lightning);
             }
         }
     }

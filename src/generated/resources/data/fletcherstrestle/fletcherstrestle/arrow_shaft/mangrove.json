@@ -1,4 +1,12 @@
 {
+  "effects": [
+    {
+      "type": "fletcherstrestle:apply_effect",
+      "amplifier": 2,
+      "duration": 80,
+      "effect": "minecraft:slowness"
+    }
+  ],
   "ingredient": {
     "item": "fletcherstrestle:rough_mangrove_limb"
   },

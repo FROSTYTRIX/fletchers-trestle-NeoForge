@@ -1,4 +1,10 @@
 {
+  "effects": [
+    {
+      "type": "fletcherstrestle:pierce_level",
+      "level": 1
+    }
+  ],
   "ingredient": {
     "item": "fletcherstrestle:rough_dark_oak_limb"
   },

@@ -1,4 +1,9 @@
 {
+  "effects": [
+    {
+      "type": "fletcherstrestle:pull_target_to_shooter"
+    }
+  ],
   "ingredient": {
     "item": "minecraft:iron_nugget"
   },

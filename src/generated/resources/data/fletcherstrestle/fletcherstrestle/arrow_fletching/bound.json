@@ -1,4 +1,10 @@
 {
+  "effects": [
+    {
+      "type": "fletcherstrestle:drop_self_on_hit",
+      "chance": 0.25
+    }
+  ],
   "ingredient": {
     "item": "minecraft:leather"
   },

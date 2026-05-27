@@ -1,4 +1,11 @@
 {
+  "effects": [
+    {
+      "type": "fletcherstrestle:damage_multiplier_on_backstab",
+      "multiplier": 1.4,
+      "sound": "minecraft:entity.breeze.wind_burst"
+    }
+  ],
   "ingredient": {
     "item": "fletcherstrestle:rough_pale_oak_limb"
   },
