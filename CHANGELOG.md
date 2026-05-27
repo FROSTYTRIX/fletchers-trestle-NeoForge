@@ -1,4 +1,4 @@
-# Fletcher's Trestle — 1.6.0
+# Fletcher's Trestle — 2.0.0
 
 A big update. The headline is **modpack compatibility** — pack makers
 can now add their own bow / arrow materials purely from JSON. Beyond
