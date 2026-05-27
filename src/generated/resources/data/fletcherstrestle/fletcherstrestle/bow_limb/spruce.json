@@ -1,4 +1,10 @@
 {
+  "effects": [
+    {
+      "type": "fletcherstrestle:set_arrow_flag",
+      "key": "fletcherstrestle:punch"
+    }
+  ],
   "ingredient": {
     "item": "fletcherstrestle:pliable_spruce_limb"
   },

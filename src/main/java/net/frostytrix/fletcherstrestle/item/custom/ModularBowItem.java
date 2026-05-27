@@ -72,36 +72,24 @@ public class ModularBowItem extends BowItem {
             BowAssembly assembly = weapon.get(ModDataComponents.BOW_ASSEMBLY.get());
 
             if (assembly != null && projectile instanceof AbstractArrow arrow) {
-                BowLimbDef limb = Materials.bowLimb(assembly.limbMaterial());
-                String limbId  = Materials.normaliseId(assembly.limbMaterial());
-                String riserId = Materials.normaliseId(assembly.riserMaterial());
+                BowLimbDef   limb   = Materials.bowLimb(assembly.limbMaterial());
+                BowRiserDef  riser  = Materials.bowRiser(assembly.riserMaterial());
+                BowStringDef string = Materials.bowString(assembly.stringMaterial());
 
                 // --- DAMAGE MODIFIER ---
                 arrow.setBaseDamage(arrow.getBaseDamage() * limb.stats().damageMultiplier());
 
-                // --- SPECIAL TRAITS ---
-                // (Phase E will move these into MaterialEffect entries on
-                // the corresponding limb / riser defs.)
-                if ("crimson".equals(limbId)) {
-                    arrow.igniteForSeconds(100);
-                }
-                if ("warped".equals(limbId)) {
-                    arrow.setNoGravity(true);
-                }
-
-                // --- PERSISTENT DATA TAGS ---
+                // --- PERSISTENT DATA TAG: amphibious lives on stats, not effects.
                 if (limb.stats().amphibious()) {
                     arrow.getPersistentData().putBoolean("fletcherstrestle:amphibious", true);
                 }
-                // Spruce limb: built-in Punch I. The arrow entity reads this
-                // flag in doKnockback() to apply an extra knockback impulse,
-                // since AbstractArrow.setKnockback no longer exists in 1.21.
-                if ("spruce".equals(limbId)) {
-                    arrow.getPersistentData().putBoolean("fletcherstrestle:punch", true);
-                }
-                if ("copper".equals(riserId)) {
-                    arrow.getPersistentData().putBoolean("fletcherstrestle:conductive", true);
-                }
+
+                // --- ON-FIRE EFFECTS: ignite (crimson), no-gravity (warped),
+                //     flag-set (spruce punch, copper conductive), …
+                LivingEntity finalShooter = shooter;
+                limb.effects().forEach(e -> e.onProjectileFired(finalShooter, weapon, arrow));
+                riser.effects().forEach(e -> e.onProjectileFired(finalShooter, weapon, arrow));
+                string.effects().forEach(e -> e.onProjectileFired(finalShooter, weapon, arrow));
             }
         }
         return projectile;
@@ -222,12 +210,19 @@ public class ModularBowItem extends BowItem {
             player.getInventory().setItem(quiverInvSlot, quiverStack);
         }
 
-        // --- 4. YOUR EXISTING CUSTOM EFFECTS ---
+        // --- 4. SHOOTER-SIDE RELEASE EFFECTS ---
         if (assembly != null) {
-            if ("acacia".equals(Materials.normaliseId(assembly.limbMaterial()))) {
-                player.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 30, 1, false, false, true));
-            }
+            BowLimbDef   limb   = Materials.bowLimb(assembly.limbMaterial());
+            BowRiserDef  riser  = Materials.bowRiser(assembly.riserMaterial());
             BowStringDef string = Materials.bowString(assembly.stringMaterial());
+
+            // Effects that target the shooter (acacia speed buff) or
+            // anything else attached to a limb/riser/string def with an
+            // onBowRelease handler.
+            limb.effects().forEach(e -> e.onBowRelease(player, stack));
+            riser.effects().forEach(e -> e.onBowRelease(player, stack));
+            string.effects().forEach(e -> e.onBowRelease(player, stack));
+
             int durCost = string.stats().durabilityCost();
             if (durCost > 1) {
                 stack.hurtAndBreak(durCost - 1, player, LivingEntity.getSlotForHand(player.getUsedItemHand()));

@@ -5,6 +5,7 @@ import net.frostytrix.fletcherstrestle.material.ArrowFletchingDef;
 import net.frostytrix.fletcherstrestle.material.MaterialEffect;
 import net.frostytrix.fletcherstrestle.material.ModMaterialRegistries;
 import net.frostytrix.fletcherstrestle.material.effect.DropSelfOnHitEffect;
+import net.frostytrix.fletcherstrestle.material.effect.SubtleHomingEffect;
 import net.frostytrix.fletcherstrestle.material.stats.ArrowFletchingStats;
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
@@ -37,7 +38,10 @@ public final class BuiltinArrowFletchings {
         register(ctx, FEATHER,  Ingredient.of(Items.FEATHER),                          1.00f, List.of());
         register(ctx, RIGID,    Ingredient.of(Items.FLINT),                            0.84f, List.of());
         register(ctx, TRAILING, Ingredient.of(Items.STRING),                           0.75f, List.of());
-        register(ctx, SERRATED, Ingredient.of(Items.PHANTOM_MEMBRANE),                 1.00f, List.of());
+        // SERRATED — mid-flight magnetism, pulls arrow toward nearest target
+        // within 5 blocks. Skips the first 2 ticks so initial trajectory holds.
+        register(ctx, SERRATED, Ingredient.of(Items.PHANTOM_MEMBRANE),                 1.00f,
+                List.of(new SubtleHomingEffect(5.0f, 1.0f, 2)));
         register(ctx, BOUND,    Ingredient.of(Items.LEATHER),                          1.00f,
                 List.of(new DropSelfOnHitEffect(0.25f)));
         register(ctx, VEX,      Ingredient.of(Items.VEX_ARMOR_TRIM_SMITHING_TEMPLATE), 1.00f, List.of());

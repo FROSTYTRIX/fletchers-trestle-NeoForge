@@ -6,10 +6,12 @@ import net.frostytrix.fletcherstrestle.material.ArrowShaftDef;
 import net.frostytrix.fletcherstrestle.material.MaterialEffect;
 import net.frostytrix.fletcherstrestle.material.ModMaterialRegistries;
 import net.frostytrix.fletcherstrestle.material.effect.ApplyMobEffectEffect;
+import net.frostytrix.fletcherstrestle.material.effect.BounceOnBlockEffect;
 import net.frostytrix.fletcherstrestle.material.effect.DamageMultiplierIfTargetBelowHealthEffect;
 import net.frostytrix.fletcherstrestle.material.effect.DamageMultiplierOnBackstabEffect;
 import net.frostytrix.fletcherstrestle.material.effect.HealShooterEffect;
 import net.frostytrix.fletcherstrestle.material.effect.PierceLevelEffect;
+import net.frostytrix.fletcherstrestle.material.effect.SetVelocityMultiplierAtTickEffect;
 import net.frostytrix.fletcherstrestle.material.effect.TeleportSwapWithTargetEffect;
 import net.frostytrix.fletcherstrestle.material.stats.ArrowShaftStats;
 import net.minecraft.core.particles.ParticleTypes;
@@ -68,12 +70,17 @@ public final class BuiltinArrowShafts {
 
         register(ctx, SPRUCE,   ModItems.ROUGH_SPRUCE_LIMB,   1.0f, 1.1f, List.of());
         register(ctx, BIRCH,    ModItems.ROUGH_BIRCH_LIMB,    1.0f, 0.9f, List.of());
-        register(ctx, JUNGLE,   ModItems.ROUGH_JUNGLE_LIMB,   1.0f, 1.0f, List.of());
+
+        // JUNGLE — 85% chance to bounce off a block, up to 3 times per arrow.
+        register(ctx, JUNGLE,   ModItems.ROUGH_JUNGLE_LIMB,   1.0f, 1.0f,
+                List.of(new BounceOnBlockEffect(0.85f, 3, 0.3f)));
 
         register(ctx, DARK_OAK, ModItems.ROUGH_DARK_OAK_LIMB, 1.0f, 1.0f,
                 List.of(new PierceLevelEffect(1)));
 
-        register(ctx, ACACIA,   ModItems.ROUGH_ACACIA_LIMB,   1.0f, 1.0f, List.of());
+        // ACACIA — at tick=10, multiply velocity ×1.4 for a brief mid-flight boost.
+        register(ctx, ACACIA,   ModItems.ROUGH_ACACIA_LIMB,   1.0f, 1.0f,
+                List.of(new SetVelocityMultiplierAtTickEffect(10, 1.4f)));
 
         register(ctx, MANGROVE, ModItems.ROUGH_MANGROVE_LIMB, 1.0f, 1.0f,
                 List.of(new ApplyMobEffectEffect(MobEffects.MOVEMENT_SLOWDOWN, 80, 2)));

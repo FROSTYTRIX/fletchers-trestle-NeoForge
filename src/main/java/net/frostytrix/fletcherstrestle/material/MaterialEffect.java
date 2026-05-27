@@ -2,8 +2,10 @@ package net.frostytrix.fletcherstrestle.material;
 
 import com.mojang.serialization.Codec;
 import net.frostytrix.fletcherstrestle.entity.custom.ModularArrowEntity;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 
 /**
@@ -72,10 +74,21 @@ public interface MaterialEffect {
      */
     default void onArrowHit(ModularArrowEntity arrow, EntityHitResult result) {}
 
+    /** Called when the arrow collides with a block. */
+    default void onArrowHitBlock(ModularArrowEntity arrow, BlockHitResult result) {}
+
     /**
      * Called when a bow / crossbow releases a shot. The default no-op covers
      * the common case where a bow effect only modifies arrow stats via the
      * surrounding code rather than running its own logic on release.
      */
     default void onBowRelease(LivingEntity shooter, ItemStack weapon) {}
+
+    /**
+     * Called from the bow / crossbow's {@code createProjectile} after the
+     * arrow entity is constructed. Lets bow-side limb / riser / string
+     * effects mutate the fired projectile directly (set fire, drop gravity,
+     * attach a persistent-data flag, etc.).
+     */
+    default void onProjectileFired(LivingEntity shooter, ItemStack weapon, Entity projectile) {}
 }

@@ -1,4 +1,9 @@
 {
+  "effects": [
+    {
+      "type": "fletcherstrestle:subtle_homing"
+    }
+  ],
   "ingredient": {
     "item": "minecraft:phantom_membrane"
   },

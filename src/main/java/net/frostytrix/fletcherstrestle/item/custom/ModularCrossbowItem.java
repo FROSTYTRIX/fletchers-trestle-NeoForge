@@ -145,38 +145,24 @@ public class ModularCrossbowItem extends CrossbowItem {
         // 2. Fetch our custom modular stats
         BowAssembly assembly = weapon.get(ModDataComponents.BOW_ASSEMBLY.get());
 
-        // 3. If it's a valid assembly and the projectile is an arrow, apply traits!
+        // 3. If it's a valid assembly and the projectile is an arrow, apply traits.
         if (assembly != null && projectile instanceof AbstractArrow arrow) {
-            BowLimbDef limb = Materials.bowLimb(assembly.limbMaterial());
-            String limbId = Materials.normaliseId(assembly.limbMaterial());
+            BowLimbDef   limb   = Materials.bowLimb(assembly.limbMaterial());
+            BowRiserDef  riser  = Materials.bowRiser(assembly.riserMaterial());
+            BowStringDef string = Materials.bowString(assembly.stringMaterial());
 
             // --- DAMAGE MODIFIER ---
-            // Vanilla arrows calculate final damage as (velocity * baseDamage).
-            // We apply the Limb's damage multiplier directly to the base damage here.
             arrow.setBaseDamage(arrow.getBaseDamage() * limb.stats().damageMultiplier());
 
-            // --- WARPED: No Gravity ---
-            // (Phase E moves these to MaterialEffect entries on the limb def.)
-            if ("warped".equals(limbId)) {
-                arrow.setNoGravity(true);
+            // --- AMPHIBIOUS FLAG (stats-driven; not an effect) ---
+            if (limb.stats().amphibious()) {
+                arrow.getPersistentData().putBoolean("fletcherstrestle:amphibious", true);
             }
 
-            // --- CRIMSON: Flaming Arrows ---
-            if ("crimson".equals(limbId)) {
-                arrow.setRemainingFireTicks(100);
-            }
-
-            // --- SPRUCE: Built-in Punch I (read by ModularArrowEntity.doKnockback) ---
-            if ("spruce".equals(limbId)) {
-                arrow.getPersistentData().putBoolean("fletcherstrestle:punch", true);
-            }
-
-            // --- MANGROVE: Amphibious ---
-            // If you have a custom arrow entity that handles water physics,
-            // you can cast it here and trigger your amphibious logic!
-            if (limb.stats().amphibious() && arrow instanceof ModularArrowEntity modArrow) {
-                // modArrow.setAmphibious(true); // Uncomment if you have this method in ModularArrowEntity
-            }
+            // --- ON-FIRE EFFECTS: ignite, no-gravity, flag-set, etc.
+            limb.effects().forEach(e -> e.onProjectileFired(shooter, weapon, arrow));
+            riser.effects().forEach(e -> e.onProjectileFired(shooter, weapon, arrow));
+            string.effects().forEach(e -> e.onProjectileFired(shooter, weapon, arrow));
         }
 
         // 4. Return the fully modified arrow to the firing sequence
@@ -194,13 +180,19 @@ public class ModularCrossbowItem extends CrossbowItem {
 
 
         if (assembly != null) {
-            BowStringDef string = Materials.bowString(assembly.stringMaterial());
+            BowLimbDef   limb   = Materials.bowLimb(assembly.limbMaterial());
             BowRiserDef  riser  = Materials.bowRiser(assembly.riserMaterial());
+            BowStringDef string = Materials.bowString(assembly.stringMaterial());
 
             // Crossbow damage inherently scales with velocity in vanilla.
             // We multiply by both String Speed AND Limb Damage.
             finalVelocity = velocity * string.stats().velocityMultiplier();
             finalInaccuracy = inaccuracy * riser.stats().inaccuracyMultiplier();
+
+            // Shooter-targeting effects (acacia speed buff, …) fire here.
+            limb.effects().forEach(e -> e.onBowRelease(shooter, crossbowStack));
+            riser.effects().forEach(e -> e.onBowRelease(shooter, crossbowStack));
+            string.effects().forEach(e -> e.onBowRelease(shooter, crossbowStack));
 
             // Apply Durability Cost
             int durCost = string.stats().durabilityCost();
@@ -263,14 +255,17 @@ public class ModularCrossbowItem extends CrossbowItem {
             if (assembly != null) {
                 BowLimbDef limb = Materials.bowLimb(assembly.limbMaterial());
 
-                // Acacia Movement Buff WHILE pulling the crossbow
-                if ("acacia".equals(Materials.normaliseId(assembly.limbMaterial()))) {
-                    player.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 5, 0, false, false, false));
-                }
-
+                // Slow-falling-while-aiming is stats-driven (cherry limb sets it).
                 if (limb.stats().givesSlowFalling() && !player.onGround()) {
                     player.addEffect(new MobEffectInstance(MobEffects.SLOW_FALLING, 5, 2, false, false, false));
                 }
+
+                // Acacia's onUseTick speed buff and any other "tick while
+                // drawing" effects would land via a dedicated onBowDrawTick
+                // hook in a future sub-phase. For now this branch is dispatch-
+                // ready but does nothing extra — the acacia release-time
+                // speed buff is attached as onBowRelease on the limb def and
+                // fires when the shot leaves.
             }
         }
     }

@@ -1,4 +1,10 @@
 {
+  "effects": [
+    {
+      "type": "fletcherstrestle:set_arrow_flag",
+      "key": "fletcherstrestle:conductive"
+    }
+  ],
   "ingredient": {
     "item": "fletcherstrestle:copper_riser"
   },

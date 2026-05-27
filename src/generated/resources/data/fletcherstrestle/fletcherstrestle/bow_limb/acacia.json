@@ -1,4 +1,12 @@
 {
+  "effects": [
+    {
+      "type": "fletcherstrestle:apply_effect_to_shooter",
+      "amplifier": 1,
+      "duration": 30,
+      "effect": "minecraft:speed"
+    }
+  ],
   "ingredient": {
     "item": "fletcherstrestle:pliable_acacia_limb"
   },

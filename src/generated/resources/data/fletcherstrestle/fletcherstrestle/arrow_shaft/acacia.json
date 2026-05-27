@@ -1,4 +1,11 @@
 {
+  "effects": [
+    {
+      "type": "fletcherstrestle:set_velocity_multiplier_at_tick",
+      "multiplier": 1.4,
+      "tick": 10
+    }
+  ],
   "ingredient": {
     "item": "fletcherstrestle:rough_acacia_limb"
   },

@@ -108,6 +108,24 @@ public class ModularArrowEntity extends AbstractArrow {
         return this.getPickupItem();
     }
 
+    /** True once the arrow has stuck into a block / become a pickup-able
+     *  entity. Mirrors the protected {@code inGround} field on AbstractArrow.
+     *  Effects use this to gate tick-time work to in-flight only. */
+    public boolean isInGroundPublic() {
+        return this.inGround;
+    }
+
+    /** Number of times this arrow has bounced off a block.
+     *  Read by {@link net.frostytrix.fletcherstrestle.material.effect.BounceOnBlockEffect}. */
+    public int getBounceCount() {
+        return bounceCount;
+    }
+
+    /** Increment the bounce counter. Called from the bounce effect after a successful bounce. */
+    public void incrementBounceCount() {
+        this.bounceCount++;
+    }
+
     public ArrowAssembly getAssembly() {
         ItemStack pickupItem = this.getPickupItem();
 
@@ -121,17 +139,20 @@ public class ModularArrowEntity extends AbstractArrow {
     private void applyFlightModifiers(ItemStack ammo) {
         ArrowAssembly assembly = ammo.get(ModDataComponents.ARROW_ASSEMBLY.get());
         if (assembly != null) {
-            var shaft = net.frostytrix.fletcherstrestle.material.Materials.arrowShaft(assembly.shaft());
-            var head  = net.frostytrix.fletcherstrestle.material.Materials.arrowHead(assembly.head());
+            var shaft     = net.frostytrix.fletcherstrestle.material.Materials.arrowShaft(assembly.shaft());
+            var head      = net.frostytrix.fletcherstrestle.material.Materials.arrowHead(assembly.head());
+            var fletching = net.frostytrix.fletcherstrestle.material.Materials.arrowFletching(assembly.fletching());
 
+            // Stats: base damage scaled by head, initial velocity scaled by shaft.
             this.setBaseDamage(this.getBaseDamage() * head.stats().damageMultiplier());
             this.setDeltaMovement(this.getDeltaMovement().scale(shaft.stats().velocityMultiplier()));
 
-            // Dark-oak shaft: piercing I — passes through one entity before
-            // stopping. Vanilla AbstractArrow handles the bookkeeping.
-            if ("dark_oak".equals(assembly.shaft())) {
-                this.setPierceLevel((byte) 1);
-            }
+            // Spawn-time effects: PierceLevelEffect (dark_oak),
+            // DamageMultiplierEffect (any), and anything else a modpack
+            // attaches with onArrowSpawn semantics.
+            head.effects().forEach(e -> e.onArrowSpawn(this));
+            shaft.effects().forEach(e -> e.onArrowSpawn(this));
+            fletching.effects().forEach(e -> e.onArrowSpawn(this));
         }
     }
 
@@ -261,28 +282,16 @@ public class ModularArrowEntity extends AbstractArrow {
 
         // Flight modifiers only apply when flying
         if (!this.inGround) {
-            // ACACIA: Speed boost mid-flight (at 10 ticks)
-            if ("acacia".equals(assembly.shaft()) && this.tickCount == 10) {
-                this.setDeltaMovement(this.getDeltaMovement().scale(1.4));
-                this.hasImpulse = true; // Tell the server to sync the sudden movement
-            }
-
             // Apply gravity Mult
             this.setDeltaMovement(this.getDeltaMovement().add(0, -(shaft.stats().gravityMultiplier()-1)/10, 0));
 
-            // SERRATED: Magnetism (Subtle homing)
-            if ("serrated".equals(assembly.fletching()) && this.tickCount > 2) {
-                AABB searchBox = this.getBoundingBox().inflate(5.0D);
-                List<LivingEntity> entities = this.level().getEntitiesOfClass(LivingEntity.class, searchBox, e -> e != this.getOwner() && e.isAlive());
-
-                if (!entities.isEmpty()) {
-                    LivingEntity target = entities.get(0); // Get closest target
-                    Vec3 targetCenter = target.position().add(0, target.getBbHeight() / 2.0, 0);
-                    // Create a small pull vector towards the target
-                    Vec3 pull = targetCenter.subtract(this.position()).normalize().scale(1);
-                    this.setDeltaMovement(this.getDeltaMovement().add(pull));
-                }
-            }
+            // Tick-time effects: acacia speed boost, serrated homing, and
+            // anything else a modpack attaches.
+            var head      = net.frostytrix.fletcherstrestle.material.Materials.arrowHead(assembly.head());
+            var fletching = net.frostytrix.fletcherstrestle.material.Materials.arrowFletching(assembly.fletching());
+            head.effects().forEach(e -> e.onArrowTick(this));
+            shaft.effects().forEach(e -> e.onArrowTick(this));
+            fletching.effects().forEach(e -> e.onArrowTick(this));
         }
 
         // RESONANCE TIP: Trigger delayed damage
@@ -449,45 +458,19 @@ public class ModularArrowEntity extends AbstractArrow {
             return;
         }
 
-        if (assembly != null && "jungle".equals(assembly.shaft()) && this.bounceCount < MAX_BOUNCES && this.random.nextFloat() < 0.85f) { // Keep at 1.0f for testing
-
-            // 1. SNAP TO SURFACE: Prevent the arrow from embedding in the wall and slingshotting out!
-            Vec3 hitPos = result.getLocation();
-            this.setPos(hitPos.x, hitPos.y, hitPos.z);
-
-            Direction face = result.getDirection();
-
-
-            Vec3 motion = this.getDeltaMovement();
-
-            // 2. HIGH DAMPENING: Arrows lose a lot of energy when bouncing. 30% retention is much more realistic.
-            double dampen = 0.3;
-            double bounceX = motion.x * dampen;
-            double bounceY = motion.y * dampen;
-            double bounceZ = motion.z * dampen;
-
-            // Invert the impacted axis
-            if (face.getAxis() == Direction.Axis.X) bounceX = -bounceX;
-            if (face.getAxis() == Direction.Axis.Y) bounceY = -bounceY;
-            if (face.getAxis() == Direction.Axis.Z) bounceZ = -bounceZ;
-
-            Vec3 newMovement = new Vec3(bounceX, bounceY, bounceZ);
-            this.setDeltaMovement(newMovement);
-
-            // 3. VISUAL FIXES: Instantly rotate the arrow and disable crit particles
-            double d0 = newMovement.horizontalDistance();
-            this.setYRot((float)(Math.atan2(newMovement.x, newMovement.z) * (double)(180F / (float)Math.PI)));
-            this.setXRot((float)(Math.atan2(newMovement.y, d0) * (double)(180F / (float)Math.PI)));
-            this.yRotO = this.getYRot();
-            this.xRotO = this.getXRot();
-            this.setCritArrow(false); // Stop the critical hit particles after it bounces
-
-            this.hasImpulse = true;
-            this.bounceCount++;
-
-            this.playSound(net.minecraft.sounds.SoundEvents.SLIME_BLOCK_FALL, 1.0F, 1.2F / (this.random.nextFloat() * 0.2F + 0.9F));
-
-            return;
+        // Dispatch block-hit effects (jungle bounce, future: phase-through,
+        // sticky, etc.). Effects that mutate the arrow into a deflected
+        // state signal it by bumping bounceCount — if that happened,
+        // skip the vanilla embed path.
+        int bounceBefore = this.bounceCount;
+        var head      = net.frostytrix.fletcherstrestle.material.Materials.arrowHead(assembly.head());
+        var shaft     = net.frostytrix.fletcherstrestle.material.Materials.arrowShaft(assembly.shaft());
+        var fletching = net.frostytrix.fletcherstrestle.material.Materials.arrowFletching(assembly.fletching());
+        head.effects().forEach(e -> e.onArrowHitBlock(this, result));
+        shaft.effects().forEach(e -> e.onArrowHitBlock(this, result));
+        fletching.effects().forEach(e -> e.onArrowHitBlock(this, result));
+        if (this.bounceCount > bounceBefore) {
+            return; // a bounce effect consumed the impact
         }
 
         super.onHitBlock(result);

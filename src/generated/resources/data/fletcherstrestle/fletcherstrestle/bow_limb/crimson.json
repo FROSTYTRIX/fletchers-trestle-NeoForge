@@ -1,4 +1,10 @@
 {
+  "effects": [
+    {
+      "type": "fletcherstrestle:ignite_arrow",
+      "seconds": 100
+    }
+  ],
   "ingredient": {
     "item": "fletcherstrestle:pliable_crimson_limb"
   },

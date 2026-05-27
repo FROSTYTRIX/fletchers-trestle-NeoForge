@@ -1,4 +1,10 @@
 {
+  "effects": [
+    {
+      "type": "fletcherstrestle:bounce_on_block",
+      "chance": 0.85
+    }
+  ],
   "ingredient": {
     "item": "fletcherstrestle:rough_jungle_limb"
   },

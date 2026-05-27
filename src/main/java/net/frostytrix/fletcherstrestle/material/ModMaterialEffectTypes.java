@@ -2,7 +2,11 @@ package net.frostytrix.fletcherstrestle.material;
 
 import net.frostytrix.fletcherstrestle.FletcherTrestle;
 import net.frostytrix.fletcherstrestle.material.effect.ApplyMobEffectEffect;
+import net.frostytrix.fletcherstrestle.material.effect.ApplyMobEffectToShooterEffect;
 import net.frostytrix.fletcherstrestle.material.effect.BounceOnBlockEffect;
+import net.frostytrix.fletcherstrestle.material.effect.IgniteArrowEffect;
+import net.frostytrix.fletcherstrestle.material.effect.SetArrowFlagEffect;
+import net.frostytrix.fletcherstrestle.material.effect.SetArrowNoGravityEffect;
 import net.frostytrix.fletcherstrestle.material.effect.DamageMultiplierByDistanceEffect;
 import net.frostytrix.fletcherstrestle.material.effect.DamageMultiplierEffect;
 import net.frostytrix.fletcherstrestle.material.effect.DamageMultiplierIfTargetArmoredEffect;
@@ -12,6 +16,8 @@ import net.frostytrix.fletcherstrestle.material.effect.DropSelfOnHitEffect;
 import net.frostytrix.fletcherstrestle.material.effect.HealShooterEffect;
 import net.frostytrix.fletcherstrestle.material.effect.PierceLevelEffect;
 import net.frostytrix.fletcherstrestle.material.effect.PullTargetToShooterEffect;
+import net.frostytrix.fletcherstrestle.material.effect.SetVelocityMultiplierAtTickEffect;
+import net.frostytrix.fletcherstrestle.material.effect.SubtleHomingEffect;
 import net.frostytrix.fletcherstrestle.material.effect.TeleportSwapWithTargetEffect;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
@@ -123,6 +129,40 @@ public final class ModMaterialEffectTypes {
     public static final Supplier<MaterialEffectType<DropSelfOnHitEffect>> DROP_SELF_ON_HIT =
             EFFECT_TYPES.register("drop_self_on_hit",
                     () -> new MaterialEffectType<>(DropSelfOnHitEffect.CODEC));
+
+    // --- Phase E.2 tick + block-hit effect types ---
+
+    /** {@code fletcherstrestle:set_velocity_multiplier_at_tick} — acacia shaft mid-flight boost. */
+    public static final Supplier<MaterialEffectType<SetVelocityMultiplierAtTickEffect>> SET_VELOCITY_MULTIPLIER_AT_TICK =
+            EFFECT_TYPES.register("set_velocity_multiplier_at_tick",
+                    () -> new MaterialEffectType<>(SetVelocityMultiplierAtTickEffect.CODEC));
+
+    /** {@code fletcherstrestle:subtle_homing} — serrated fletching magnetism. */
+    public static final Supplier<MaterialEffectType<SubtleHomingEffect>> SUBTLE_HOMING =
+            EFFECT_TYPES.register("subtle_homing",
+                    () -> new MaterialEffectType<>(SubtleHomingEffect.CODEC));
+
+    // --- Phase E.3 bow/crossbow release effect types ---
+
+    /** {@code fletcherstrestle:ignite_arrow} — crimson bow/crossbow limb. */
+    public static final Supplier<MaterialEffectType<IgniteArrowEffect>> IGNITE_ARROW =
+            EFFECT_TYPES.register("ignite_arrow",
+                    () -> new MaterialEffectType<>(IgniteArrowEffect.CODEC));
+
+    /** {@code fletcherstrestle:set_arrow_no_gravity} — warped limb. */
+    public static final Supplier<MaterialEffectType<SetArrowNoGravityEffect>> SET_ARROW_NO_GRAVITY =
+            EFFECT_TYPES.register("set_arrow_no_gravity",
+                    () -> new MaterialEffectType<>(SetArrowNoGravityEffect.CODEC));
+
+    /** {@code fletcherstrestle:set_arrow_flag} — spruce punch, copper conductive, etc. */
+    public static final Supplier<MaterialEffectType<SetArrowFlagEffect>> SET_ARROW_FLAG =
+            EFFECT_TYPES.register("set_arrow_flag",
+                    () -> new MaterialEffectType<>(SetArrowFlagEffect.CODEC));
+
+    /** {@code fletcherstrestle:apply_effect_to_shooter} — acacia limb speed buff. */
+    public static final Supplier<MaterialEffectType<ApplyMobEffectToShooterEffect>> APPLY_EFFECT_TO_SHOOTER =
+            EFFECT_TYPES.register("apply_effect_to_shooter",
+                    () -> new MaterialEffectType<>(ApplyMobEffectToShooterEffect.CODEC));
 
     public static void register(IEventBus bus) {
         EFFECT_TYPES.register(bus);

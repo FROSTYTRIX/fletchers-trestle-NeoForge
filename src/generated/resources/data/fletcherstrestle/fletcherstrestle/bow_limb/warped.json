@@ -1,4 +1,9 @@
 {
+  "effects": [
+    {
+      "type": "fletcherstrestle:set_arrow_no_gravity"
+    }
+  ],
   "ingredient": {
     "item": "fletcherstrestle:pliable_warped_limb"
   },
