@@ -80,6 +80,15 @@ material's translation key: `material.<namespace>.<path>`. So
 Tags are the friendliest option for cross-mod compatibility — `c:` tags
 work across most modpacks already.
 
+> **Tie-break:** if two registered defs accept the same item (e.g. a
+> modpack adds a `mypack:bronze` head and another datapack later adds
+> `otherpack:bronze` whose ingredient also lists `c:ingots/bronze`),
+> the resolver returns the **first match by registry-iteration order**.
+> Within a single datapack the order is alphabetical by id. If you
+> need deterministic precedence, narrow your ingredient (use a more
+> specific tag or list explicit items) so only one def matches the
+> stack.
+
 ---
 
 ## Stats schemas
@@ -112,6 +121,11 @@ stats just for the crossbow:
   "stats": { "draw_time_ticks": 30.0 }
 }
 ```
+
+> Only **stats** can be overridden per-weapon; the limb's `effects`
+> list is shared between the bow and the crossbow. If you need
+> different on-fire behavior between the two, ship two separate limb
+> defs with different ingredients.
 
 ### `bow_riser`
 ```json
@@ -169,15 +183,37 @@ Sub-1.0 makes the arrow group tighter; above 1.0 spreads it.
 ## Effects reference
 
 Effects let a JSON describe **behavior** in addition to stats. They fire
-at different points in the projectile's lifecycle. The same `type`
-vocabulary works on any def, but each effect type is opinionated about
-*when* it runs — see the **fires on** column.
+at different points in the projectile's lifecycle. Each effect type is
+opinionated about *when* it runs, which means it's also opinionated
+about *which def types* it makes sense to attach to.
 
-Effects compose: you can attach as many as you like, in any combination.
-Two `apply_effect` entries on the same head will apply two different
-status effects on hit.
+### Lifecycle hooks ↔ where to attach
+
+| Effect runs on this lifecycle hook                    | Only fires when attached to             |
+|-------------------------------------------------------|-----------------------------------------|
+| `onArrowSpawn`, `onArrowTick`, `onPreArrowHit`, `onArrowHit`, `onArrowHitBlock` | `arrow_head` / `arrow_shaft` / `arrow_fletching` |
+| `onBowRelease`, `onProjectileFired`                   | `bow_limb` / `bow_riser` / `bow_string` |
+
+The dispatch is one-directional — the bow doesn't run arrow-hit
+effects, and the arrow doesn't run bow-release effects. Attaching a
+`apply_effect` (arrow on-hit) to a `bow_limb` is a silent no-op: the
+JSON parses, the def loads, but the bow-release path never invokes
+that hook. Each effect's section below says which def types it makes
+sense to attach to.
+
+### Ordering & composition
+
+Effects compose: attach as many as you like, in any combination.
+Two `apply_effect` entries on the same head apply two different
+status effects on hit. Within a single def's effects list, hooks fire
+**in JSON list order** — the first effect's hook runs first, then the
+second, and so on. Across def types (head + shaft + fletching), the
+firing order at each lifecycle phase is head → shaft → fletching for
+arrows, and limb → riser → string for bows.
 
 ### On-hit damage modifiers (run BEFORE damage applies)
+
+*Attach to: `arrow_head`, `arrow_shaft`, or `arrow_fletching`.*
 
 #### `fletcherstrestle:damage_multiplier`
 Scales base damage by a constant. Fires at arrow spawn.
@@ -234,6 +270,8 @@ Sets the arrow's pierce level (passes through N entities). **Built-in:** dark_oa
 
 ### On-hit side effects (run AFTER damage applies)
 
+*Attach to: `arrow_head`, `arrow_shaft`, or `arrow_fletching`.*
+
 #### `fletcherstrestle:apply_effect`
 Applies a MobEffect to the target. **Built-ins:** broadhead (bleed), mangrove (slowness).
 ```json
@@ -285,6 +323,8 @@ With chance, drops the arrow as an item instead of consuming it. **Built-in:** b
 
 ### Tick-time effects (run every server tick while in flight)
 
+*Attach to: `arrow_head`, `arrow_shaft`, or `arrow_fletching`.*
+
 #### `fletcherstrestle:set_velocity_multiplier_at_tick`
 Multiplies arrow velocity at a specific tick of flight. **Built-in:** acacia shaft.
 ```json
@@ -306,6 +346,8 @@ Pulls the arrow toward the nearest non-shooter living entity. **Built-in:** serr
 | `grace_ticks` | 2       | Skip homing for the first N ticks (lets initial trajectory hold)   |
 
 ### Block-hit effects
+
+*Attach to: `arrow_head`, `arrow_shaft`, or `arrow_fletching`.*
 
 #### `fletcherstrestle:bounce_on_block`
 Chance to ricochet off blocks instead of embedding. **Built-in:** jungle shaft.
@@ -353,6 +395,9 @@ Applies a MobEffect to the **shooter** on release. **Built-in:** acacia limb.
 ```
 
 ### Scripted escape hatch
+
+*Attach to: any def — the handler chooses which lifecycle hooks to
+implement.*
 
 #### `fletcherstrestle:scripted_callback`
 Looks up a named callback in the live `ScriptedEffectCallbacks`
@@ -458,11 +503,21 @@ across multiple materials), set the optional `texture` field in your
 material JSON:
 
 ```json
-"texture": "mypack:entity/projectiles/head/shared_metal"
+"texture": "mypack:item/modular_bow/limbs/shared_metal"
 ```
 
-The string is interpreted as a `ResourceLocation`; the `.png` extension
-is added automatically.
+The string is interpreted as a **base path** that each renderer
+appends its own suffix to:
+
+- Inventory / item-model renderer appends the per-part suffix
+  (`_limb_pulling_0/_1/_2`, `_riser`, `_string_pulling_0/_1/_2`,
+  `_head`, `_shaft`, `_fletching`). No file extension.
+- Entity (in-flight arrow) renderer appends `.png`.
+
+So a single override base like `"mypack:custom/steel"` produces
+`mypack:custom/steel_head` for the inventory icon and
+`mypack:custom/steel.png` for the entity texture — ship both. There
+is no way to override only one renderer; the field controls both.
 
 > **Note:** datapacks ship server-side by default. Textures live in
 > *resource packs*. A modpack that adds a material with a custom texture
@@ -550,11 +605,14 @@ A handful of head behaviors are too entangled with the arrow's tick
 lifecycle to externalise cleanly without a richer state API. These stay
 keyed off built-in material ids in Java code:
 
-- `glass_vial` — splashes its stored potion contents on impact.
-- `resonance_tip` — delayed echo damage with target-locking.
-- `weighted_hook` — sticks to blocks and pulls the shooter.
-- `trailing_rope` — drops a chain of rope blocks downward from impact.
+- `glass_vial` (head) — splashes its stored potion contents on impact.
+- `resonance_tip` (head) — delayed echo damage with target-locking.
+- `weighted_hook` (head) — sticks to blocks and pulls the shooter.
+- `trailing_rope` (head) — drops a chain of rope blocks downward from impact.
 - `vex` (fletching) — phases through one block of cover.
+- `flax` (string) — aim jitter when the player overdraws past the
+  bow's max draw time + 40 ticks. Logic lives in
+  `ModularBowItem.onUseTick`.
 
 A modpack can still **add** new materials with these ids (or override
 the built-ins) and they'll use the standard data path, but the

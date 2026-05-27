@@ -94,11 +94,11 @@ public class FletchingRecipeCategory implements IRecipeCategory<ModularWeaponRec
             // (including non-fletcherstrestle namespaces). Falls back to
             // the legacy stripping for items the resolver can't bridge.
             String limbMat   = resolveOrLegacy(currentLimb,
-                    s -> MaterialResolver.resolveBowLimb(s).map(h -> h.key().location().getPath()));
+                    s -> MaterialResolver.resolveBowLimb(s).map(h -> h.key().location().toString()));
             String riserMat  = resolveOrLegacy(currentRiser,
-                    s -> MaterialResolver.resolveBowRiser(s).map(h -> h.key().location().getPath()));
+                    s -> MaterialResolver.resolveBowRiser(s).map(h -> h.key().location().toString()));
             String stringMat = resolveOrLegacy(currentString,
-                    s -> MaterialResolver.resolveBowString(s).map(h -> h.key().location().getPath()));
+                    s -> MaterialResolver.resolveBowString(s).map(h -> h.key().location().toString()));
 
             out.set(ModDataComponents.BOW_ASSEMBLY.get(), new BowAssembly(limbMat, riserMat, stringMat, 0.0f));
             outputPermutations.add(out);

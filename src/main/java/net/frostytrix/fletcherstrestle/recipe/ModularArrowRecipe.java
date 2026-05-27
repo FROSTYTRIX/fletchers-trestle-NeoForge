@@ -64,19 +64,19 @@ public class ModularArrowRecipe implements Recipe<ArrowRecipeInput> {
     /** Returns the id-path of the matching head def, or {@code "flint"} as fallback. */
     private static String resolveHead(HolderLookup.Provider provider, ItemStack stack) {
         return MaterialResolver.resolveArrowHead(provider, stack)
-                .map(h -> h.key().location().getPath())
+                .map(h -> h.key().location().toString())
                 .orElse("flint");
     }
 
     private static String resolveShaft(HolderLookup.Provider provider, ItemStack stack) {
         return MaterialResolver.resolveArrowShaft(provider, stack)
-                .map(h -> h.key().location().getPath())
+                .map(h -> h.key().location().toString())
                 .orElse("oak");
     }
 
     private static String resolveFletching(HolderLookup.Provider provider, ItemStack stack) {
         return MaterialResolver.resolveArrowFletching(provider, stack)
-                .map(h -> h.key().location().getPath())
+                .map(h -> h.key().location().toString())
                 .orElse("feather");
     }
 

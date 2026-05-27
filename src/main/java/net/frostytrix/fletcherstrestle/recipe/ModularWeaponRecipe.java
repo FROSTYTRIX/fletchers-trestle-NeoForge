@@ -50,13 +50,13 @@ public class ModularWeaponRecipe implements Recipe<FletchingRecipeInput> {
         // Existing worlds saved with the legacy "Dark Oak" form are still
         // resolvable — see MaterialResolver's three-tier fallback.
         String limbMat = MaterialResolver.resolveBowLimb(provider, input.topLimb())
-                .map(h -> h.key().location().getPath())
+                .map(h -> h.key().location().toString())
                 .orElse("oak");
         String riserMat = MaterialResolver.resolveBowRiser(provider, input.riser())
-                .map(h -> h.key().location().getPath())
+                .map(h -> h.key().location().toString())
                 .orElse("wood");
         String stringMat = MaterialResolver.resolveBowString(provider, input.string())
-                .map(h -> h.key().location().getPath())
+                .map(h -> h.key().location().toString())
                 .orElse("spider");
 
         float defaultTuning = 0.0f;
