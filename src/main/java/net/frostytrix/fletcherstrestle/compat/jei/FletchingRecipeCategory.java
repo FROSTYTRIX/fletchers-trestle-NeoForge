@@ -61,15 +61,15 @@ public class FletchingRecipeCategory implements IRecipeCategory<ModularWeaponRec
         // 1. ADD ALL FOUR SLOTS EXPLICITLY
 
         // Riser slot
-        builder.addSlot(RecipeIngredientRole.INPUT, 12, 25).addIngredients(recipe.getRiser());
+        builder.addSlot(RecipeIngredientRole.INPUT, 11, 25).addIngredients(recipe.getRiser());
         // Top Limb slot (uses the limbs ingredient)
-        builder.addSlot(RecipeIngredientRole.INPUT, 34, 25-18).addIngredients(recipe.getLimbs());
+        builder.addSlot(RecipeIngredientRole.INPUT, 35, 25-18).addIngredients(recipe.getLimbs());
 
         // Bottom Limb slot (uses the exact same limbs ingredient, but at a different Y coordinate)
-        builder.addSlot(RecipeIngredientRole.INPUT, 34, 25+18).addIngredients(recipe.getLimbs());
+        builder.addSlot(RecipeIngredientRole.INPUT, 35, 25+18).addIngredients(recipe.getLimbs());
 
         // String slot
-        builder.addSlot(RecipeIngredientRole.INPUT, 58, 25).addIngredients(recipe.getString());
+        builder.addSlot(RecipeIngredientRole.INPUT, 59, 25).addIngredients(recipe.getString());
 
 
         // 2. GENERATE DYNAMIC OUTPUT
