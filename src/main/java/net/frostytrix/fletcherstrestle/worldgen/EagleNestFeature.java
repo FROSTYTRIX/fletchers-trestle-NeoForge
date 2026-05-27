@@ -35,6 +35,15 @@ public class EagleNestFeature extends Feature<NoneFeatureConfiguration> {
 
     @Override
     public boolean place(FeaturePlaceContext<NoneFeatureConfiguration> context) {
+        // Gated by FletcherConfig.EAGLES_NATURAL_SPAWNING. Returning false
+        // here means "no nest placed at this chunk-decoration site" — the
+        // biome modifier JSON still lists the feature, but every attempt
+        // bails immediately when the toggle is off. Flip the config to true
+        // to restore the full nest worldgen.
+        if (!net.frostytrix.fletcherstrestle.config.FletcherConfig.EAGLES_NATURAL_SPAWNING.get()) {
+            return false;
+        }
+
         WorldGenLevel level = context.level();
         BlockPos origin = context.origin();
         RandomSource random = context.random();
