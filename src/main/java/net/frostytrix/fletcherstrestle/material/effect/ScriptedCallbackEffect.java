@@ -44,13 +44,38 @@ public record ScriptedCallbackEffect(ResourceLocation id) implements MaterialEff
         return ScriptedEffectCallbacks.get(id);
     }
 
-    @Override public void onArrowSpawn(ModularArrowEntity arrow)                          { handler().onArrowSpawn(arrow); }
-    @Override public void onArrowTick(ModularArrowEntity arrow)                           { handler().onArrowTick(arrow); }
-    @Override public void onPreArrowHit(ModularArrowEntity arrow, EntityHitResult result) { handler().onPreArrowHit(arrow, result); }
-    @Override public void onArrowHit(ModularArrowEntity arrow, EntityHitResult result)    { handler().onArrowHit(arrow, result); }
-    @Override public void onArrowHitBlock(ModularArrowEntity arrow, BlockHitResult result){ handler().onArrowHitBlock(arrow, result); }
-    @Override public void onBowRelease(LivingEntity shooter, ItemStack weapon)            { handler().onBowRelease(shooter, weapon); }
-    @Override public void onProjectileFired(LivingEntity shooter, ItemStack weapon, Entity projectile) {
+    @Override
+    public void onArrowSpawn(ModularArrowEntity arrow) {
+        handler().onArrowSpawn(arrow);
+    }
+
+    @Override
+    public void onArrowTick(ModularArrowEntity arrow) {
+        handler().onArrowTick(arrow);
+    }
+
+    @Override
+    public void onPreArrowHit(ModularArrowEntity arrow, EntityHitResult result) {
+        handler().onPreArrowHit(arrow, result);
+    }
+
+    @Override
+    public void onArrowHit(ModularArrowEntity arrow, EntityHitResult result) {
+        handler().onArrowHit(arrow, result);
+    }
+
+    @Override
+    public void onArrowHitBlock(ModularArrowEntity arrow, BlockHitResult result) {
+        handler().onArrowHitBlock(arrow, result);
+    }
+
+    @Override
+    public void onBowRelease(LivingEntity shooter, ItemStack weapon) {
+        handler().onBowRelease(shooter, weapon);
+    }
+
+    @Override
+    public void onProjectileFired(LivingEntity shooter, ItemStack weapon, Entity projectile) {
         handler().onProjectileFired(shooter, weapon, projectile);
     }
 }

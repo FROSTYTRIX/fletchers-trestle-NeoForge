@@ -25,5 +25,7 @@ public class ModMenuTypes {
             MENUS.register("archery_target_menu",
                     () -> new MenuType<>(ArcheryTargetMenu::new, FeatureFlags.DEFAULT_FLAGS));
 
-    public static void register(IEventBus bus) {MENUS.register(bus);}
+    public static void register(IEventBus bus) {
+        MENUS.register(bus);
+    }
 }

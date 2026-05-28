@@ -21,7 +21,7 @@ public class ModCreativeModeTabs {
 
     public static final Supplier<CreativeModeTab> FLETCHERS_TRESTLE_TAB = CREATIVE_MODE_TAB.register("fletchers_trestle_tab",
             () -> CreativeModeTab.builder().icon(() -> new ItemStack(ModItems.MODULAR_BOW.get()))
-                    .withTabsBefore(ResourceLocation.fromNamespaceAndPath("minecraft","spawn_eggs"))
+                    .withTabsBefore(ResourceLocation.fromNamespaceAndPath("minecraft", "spawn_eggs"))
                     .title(Component.translatable("creative_tab.fletcherstrestle.fletchers_trestle_tab"))
                     .displayItems((itemDisplayParameters, output) -> {
                         output.accept(ModBlocks.STEAM_BOX);
@@ -112,6 +112,7 @@ public class ModCreativeModeTabs {
                     .build());
 
 
-
-    public static void register(IEventBus bus) {CREATIVE_MODE_TAB.register(bus);}
+    public static void register(IEventBus bus) {
+        CREATIVE_MODE_TAB.register(bus);
+    }
 }

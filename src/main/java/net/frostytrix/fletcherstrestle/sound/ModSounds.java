@@ -15,17 +15,18 @@ import java.util.function.Supplier;
 // .ogg files you only have to update sounds.json (no code changes).
 public final class ModSounds {
 
-    private ModSounds() {}
+    private ModSounds() {
+    }
 
     public static final DeferredRegister<SoundEvent> SOUND_EVENTS =
             DeferredRegister.create(BuiltInRegistries.SOUND_EVENT, FletcherTrestle.MOD_ID);
 
     public static final Supplier<SoundEvent> EAGLE_AMBIENT = register("eagle.ambient");
-    public static final Supplier<SoundEvent> EAGLE_HURT    = register("eagle.hurt");
-    public static final Supplier<SoundEvent> EAGLE_DEATH   = register("eagle.death");
-    public static final Supplier<SoundEvent> EAGLE_TAME    = register("eagle.tame");
-    public static final Supplier<SoundEvent> EAGLE_FLAP    = register("eagle.flap");
-    public static final Supplier<SoundEvent> EAGLE_DIVE    = register("eagle.dive");
+    public static final Supplier<SoundEvent> EAGLE_HURT = register("eagle.hurt");
+    public static final Supplier<SoundEvent> EAGLE_DEATH = register("eagle.death");
+    public static final Supplier<SoundEvent> EAGLE_TAME = register("eagle.tame");
+    public static final Supplier<SoundEvent> EAGLE_FLAP = register("eagle.flap");
+    public static final Supplier<SoundEvent> EAGLE_DIVE = register("eagle.dive");
 
     private static DeferredHolder<SoundEvent, SoundEvent> register(String name) {
         ResourceLocation id = ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, name);

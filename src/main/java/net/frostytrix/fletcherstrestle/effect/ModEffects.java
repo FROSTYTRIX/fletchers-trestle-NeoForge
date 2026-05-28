@@ -15,6 +15,7 @@ public class ModEffects {
     public static final Holder<MobEffect> BLEED_EFFECT = MOB_EFFECTS.register("bleed",
             () -> new BleedEffect(MobEffectCategory.HARMFUL, 0x980002));
 
-    public static void register(IEventBus bus)
-    {MOB_EFFECTS.register(bus);}
+    public static void register(IEventBus bus) {
+        MOB_EFFECTS.register(bus);
+    }
 }

@@ -27,7 +27,8 @@ public class SteamingRecipeBuilder implements RecipeBuilder {
     private int waterAmount = 250;
 
     private final Map<String, Criterion<?>> criteria = new LinkedHashMap<>();
-    @Nullable private String group;
+    @Nullable
+    private String group;
 
     private SteamingRecipeBuilder(Ingredient input, ItemLike result) {
         this.input = input;

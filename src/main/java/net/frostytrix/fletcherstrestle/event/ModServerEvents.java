@@ -59,11 +59,26 @@ public class ModServerEvents {
         float u;
         float v;
         switch (state.getValue(net.frostytrix.fletcherstrestle.block.custom.ArcheryTargetBlock.FACING)) {
-            case NORTH -> { u = (float) (1.0D - localX); v = (float) (1.0D - localY); }
-            case SOUTH -> { u = (float)  localX;        v = (float) (1.0D - localY); }
-            case EAST  -> { u = (float) (1.0D - localZ); v = (float) (1.0D - localY); }
-            case WEST  -> { u = (float)  localZ;        v = (float) (1.0D - localY); }
-            default    -> { u = 0.5F; v = 0.5F; }
+            case NORTH -> {
+                u = (float) (1.0D - localX);
+                v = (float) (1.0D - localY);
+            }
+            case SOUTH -> {
+                u = (float) localX;
+                v = (float) (1.0D - localY);
+            }
+            case EAST -> {
+                u = (float) (1.0D - localZ);
+                v = (float) (1.0D - localY);
+            }
+            case WEST -> {
+                u = (float) localZ;
+                v = (float) (1.0D - localY);
+            }
+            default -> {
+                u = 0.5F;
+                v = 0.5F;
+            }
         }
         u = Math.max(0.0F, Math.min(1.0F, u));
         v = Math.max(0.0F, Math.min(1.0F, v));

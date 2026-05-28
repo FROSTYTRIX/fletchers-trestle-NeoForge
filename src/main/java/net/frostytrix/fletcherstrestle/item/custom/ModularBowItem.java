@@ -48,7 +48,7 @@ public class ModularBowItem extends BowItem {
 
                 // 1. Riser MUST be wood (Update this list if you add Iron/Gold risers later)
                 // Assuming currently only "copper" is your non-wood riser.
-                boolean isWoodRiser = !riser.contains("copper") &&  !riser.contains("iron");
+                boolean isWoodRiser = !riser.contains("copper") && !riser.contains("iron");
 
                 // 2. Limbs MUST NOT be Nether fungi
                 boolean isValidLimbs = !limbs.contains("crimson") && !limbs.contains("warped");
@@ -72,8 +72,8 @@ public class ModularBowItem extends BowItem {
             BowAssembly assembly = weapon.get(ModDataComponents.BOW_ASSEMBLY.get());
 
             if (assembly != null && projectile instanceof AbstractArrow arrow) {
-                BowLimbDef   limb   = Materials.bowLimb(assembly.limbMaterial());
-                BowRiserDef  riser  = Materials.bowRiser(assembly.riserMaterial());
+                BowLimbDef limb = Materials.bowLimb(assembly.limbMaterial());
+                BowRiserDef riser = Materials.bowRiser(assembly.riserMaterial());
                 BowStringDef string = Materials.bowString(assembly.stringMaterial());
 
                 // --- DAMAGE MODIFIER ---
@@ -107,7 +107,7 @@ public class ModularBowItem extends BowItem {
 
         if (assembly != null) {
             BowStringDef string = Materials.bowString(assembly.stringMaterial());
-            BowRiserDef  riser  = Materials.bowRiser(assembly.riserMaterial());
+            BowRiserDef riser = Materials.bowRiser(assembly.riserMaterial());
             // Fletching can be null if the ammo isn't a modular arrow.
             float fletchInacc = Assembly != null
                     ? Materials.arrowFletching(Assembly.fletching()).stats().inaccuracyMultiplier()
@@ -212,8 +212,8 @@ public class ModularBowItem extends BowItem {
 
         // --- 4. SHOOTER-SIDE RELEASE EFFECTS ---
         if (assembly != null) {
-            BowLimbDef   limb   = Materials.bowLimb(assembly.limbMaterial());
-            BowRiserDef  riser  = Materials.bowRiser(assembly.riserMaterial());
+            BowLimbDef limb = Materials.bowLimb(assembly.limbMaterial());
+            BowRiserDef riser = Materials.bowRiser(assembly.riserMaterial());
             BowStringDef string = Materials.bowString(assembly.stringMaterial());
 
             // Effects that target the shooter (acacia speed buff) or
@@ -316,24 +316,24 @@ public class ModularBowItem extends BowItem {
 
     /**
      * @deprecated superseded by {@link net.frostytrix.fletcherstrestle.material.Materials#bowLimb}
-     *             and the {@code fletcherstrestle:bow_limb} datapack registry.
-     *             Slated for deletion once the remaining external consumer
-     *             ({@link net.frostytrix.fletcherstrestle.trades.RandomModularArrowTrade})
-     *             migrates.
+     * and the {@code fletcherstrestle:bow_limb} datapack registry.
+     * Slated for deletion once the remaining external consumer
+     * ({@link net.frostytrix.fletcherstrestle.trades.RandomModularArrowTrade})
+     * migrates.
      */
     @Deprecated(forRemoval = true)
     public enum LimbStats {
-        OAK("oak", 20.0f, 1.0f,false,false),
-        SPRUCE("spruce", 22.0f, 1.0f,false,false),
-        BIRCH("birch", 10.0f, 0.7f,false,false),
-        JUNGLE("jungle", 18.0f, 0.9f,false,false),
-        ACACIA("acacia", 20.0f, 1f,false,false),
-        DARK_OAK("dark oak", 35.0f, 1.6f,false,false),
-        MANGROVE("mangrove", 22.0f, 1f,true,false),
-        CHERRY("cherry", 20.0f, 0.85f,false,true),
-        PALE_OAK("pale oak", 26.0f, 1f,false,false),
-        CRIMSON("crimson", 24.0f, 1.1f,false,false),
-        WARPED("warped", 20.0f, 1.0f,false,false);
+        OAK("oak", 20.0f, 1.0f, false, false),
+        SPRUCE("spruce", 22.0f, 1.0f, false, false),
+        BIRCH("birch", 10.0f, 0.7f, false, false),
+        JUNGLE("jungle", 18.0f, 0.9f, false, false),
+        ACACIA("acacia", 20.0f, 1f, false, false),
+        DARK_OAK("dark oak", 35.0f, 1.6f, false, false),
+        MANGROVE("mangrove", 22.0f, 1f, true, false),
+        CHERRY("cherry", 20.0f, 0.85f, false, true),
+        PALE_OAK("pale oak", 26.0f, 1f, false, false),
+        CRIMSON("crimson", 24.0f, 1.1f, false, false),
+        WARPED("warped", 20.0f, 1.0f, false, false);
 
         private final String name;
         private final float drawTime;
@@ -356,15 +356,30 @@ public class ModularBowItem extends BowItem {
             return OAK; // Default fallback
         }
 
-        public float getDrawTime() { return drawTime; }
-        public float getDamageMult() { return damageMult; }
-        public boolean isGivesSlowFalling() { return givesSlowFalling; }
-        public boolean isAmphibian() { return isAmphibious; }
+        public float getDrawTime() {
+            return drawTime;
+        }
 
-        public Object getMaterialName() { return name;}
+        public float getDamageMult() {
+            return damageMult;
+        }
+
+        public boolean isGivesSlowFalling() {
+            return givesSlowFalling;
+        }
+
+        public boolean isAmphibian() {
+            return isAmphibious;
+        }
+
+        public Object getMaterialName() {
+            return name;
+        }
     }
 
-    /** @deprecated see {@link LimbStats}. */
+    /**
+     * @deprecated see {@link LimbStats}.
+     */
     @Deprecated(forRemoval = true)
     public enum RiserStats {
         WOOD("wood", 250, 1.0f),
@@ -388,12 +403,22 @@ public class ModularBowItem extends BowItem {
             return WOOD;
         }
 
-        public float getMaxDurability() { return maxDurability; }
-        public float getInnacuracyMult() { return inaccuracyMult; }
-        public String getMaterialName() {return name;}
+        public float getMaxDurability() {
+            return maxDurability;
+        }
+
+        public float getInnacuracyMult() {
+            return inaccuracyMult;
+        }
+
+        public String getMaterialName() {
+            return name;
+        }
     }
 
-    /** @deprecated see {@link LimbStats}. */
+    /**
+     * @deprecated see {@link LimbStats}.
+     */
     @Deprecated(forRemoval = true)
     public enum StringStats {
         SPIDER("spider", 1.0f, 1),
@@ -416,7 +441,13 @@ public class ModularBowItem extends BowItem {
             }
             return SPIDER;
         }
-        public float getVelocityMult() { return velocityMult; }
-        public float getDurabilityCost() { return durabilityCost; }
+
+        public float getVelocityMult() {
+            return velocityMult;
+        }
+
+        public float getDurabilityCost() {
+            return durabilityCost;
+        }
     }
 }

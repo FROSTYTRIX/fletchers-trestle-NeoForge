@@ -33,10 +33,25 @@ public class ShavingRecipeCategory implements IRecipeCategory<ShavingHorseRecipe
         this.arrow = helper.createDrawable(ResourceLocation.withDefaultNamespace("textures/gui/container/furnace.png"), 79, 34, 24, 17);
     }
 
-    @Override public RecipeType<ShavingHorseRecipe> getRecipeType() { return SHAVING_TYPE; }
-    @Override public Component getTitle() { return Component.literal("Shaving Horse"); }
-    @Override public IDrawable getBackground() { return this.background; }
-    @Override public IDrawable getIcon() { return this.icon; }
+    @Override
+    public RecipeType<ShavingHorseRecipe> getRecipeType() {
+        return SHAVING_TYPE;
+    }
+
+    @Override
+    public Component getTitle() {
+        return Component.literal("Shaving Horse");
+    }
+
+    @Override
+    public IDrawable getBackground() {
+        return this.background;
+    }
+
+    @Override
+    public IDrawable getIcon() {
+        return this.icon;
+    }
 
     @Override
     public void draw(ShavingHorseRecipe recipe, mezz.jei.api.gui.ingredient.IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics, double mouseX, double mouseY) {

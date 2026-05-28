@@ -7,8 +7,8 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 /**
  * Per-material numeric stats for a bow string.
  *
- * @param velocityMultiplier  multiplier applied to the projectile's initial speed
- * @param durabilityCost      durability consumed per shot (high-tension = 2)
+ * @param velocityMultiplier multiplier applied to the projectile's initial speed
+ * @param durabilityCost     durability consumed per shot (high-tension = 2)
  */
 public record BowStringStats(
         float velocityMultiplier,

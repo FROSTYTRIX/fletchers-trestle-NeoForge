@@ -28,7 +28,6 @@ import java.util.Optional;
  *                          (e.g. amphibious aim, slow-falling-while-aiming).
  * @param crossbowOverrides optional per-stat overrides applied when this
  *                          limb is used on a crossbow.
- *
  * @see CrossbowOverrides
  * @see MaterialEffect
  */

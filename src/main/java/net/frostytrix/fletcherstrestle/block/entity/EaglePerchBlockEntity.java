@@ -32,9 +32,20 @@ public class EaglePerchBlockEntity extends BlockEntity {
         return ownerUUID != null;
     }
 
-    @Nullable public UUID   getOwnerUUID() { return ownerUUID; }
-    @Nullable public UUID   getEagleUUID() { return eagleUUID; }
-    @Nullable public String getOwnerName() { return ownerName; }
+    @Nullable
+    public UUID getOwnerUUID() {
+        return ownerUUID;
+    }
+
+    @Nullable
+    public UUID getEagleUUID() {
+        return eagleUUID;
+    }
+
+    @Nullable
+    public String getOwnerName() {
+        return ownerName;
+    }
 
     public void claim(UUID owner, String name, UUID eagle) {
         this.ownerUUID = owner;

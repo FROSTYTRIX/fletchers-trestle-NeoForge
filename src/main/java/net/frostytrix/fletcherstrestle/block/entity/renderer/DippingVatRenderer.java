@@ -58,8 +58,10 @@ public class DippingVatRenderer implements BlockEntityRenderer<DippingVatBlockEn
         if (isPotion) {
             // --- RENDU POTION (Double-Pass) ---
             // Passe 1 : Le fond opaque coloré
-            float u0_w = whiteSprite.getU0(); float u1_w = whiteSprite.getU1();
-            float v0_w = whiteSprite.getV0(); float v1_w = whiteSprite.getV1();
+            float u0_w = whiteSprite.getU0();
+            float u1_w = whiteSprite.getU1();
+            float v0_w = whiteSprite.getV0();
+            float v1_w = whiteSprite.getV1();
             builder.addVertex(matrix, 0.125f, currentHeight, 0.875f).setColor(r, g, b, 1.0f).setUv(u0_w, v1_w).setOverlay(packedOverlay).setLight(packedLight).setNormal(poseStack.last(), 0, 1, 0);
             builder.addVertex(matrix, 0.875f, currentHeight, 0.875f).setColor(r, g, b, 1.0f).setUv(u1_w, v1_w).setOverlay(packedOverlay).setLight(packedLight).setNormal(poseStack.last(), 0, 1, 0);
             builder.addVertex(matrix, 0.875f, currentHeight, 0.125f).setColor(r, g, b, 1.0f).setUv(u1_w, v0_w).setOverlay(packedOverlay).setLight(packedLight).setNormal(poseStack.last(), 0, 1, 0);
@@ -67,8 +69,10 @@ public class DippingVatRenderer implements BlockEntityRenderer<DippingVatBlockEn
 
             // Passe 2 : Les vagues d'eau translucides par-dessus
             float currentHeightOverlay = currentHeight + 0.0005f;
-            float u0_h = waterSprite.getU0(); float u1_h = waterSprite.getU1();
-            float v0_h = waterSprite.getV0(); float v1_h = waterSprite.getV1();
+            float u0_h = waterSprite.getU0();
+            float u1_h = waterSprite.getU1();
+            float v0_h = waterSprite.getV0();
+            float v1_h = waterSprite.getV1();
             float waterAlpha = 0.35f;
             builder.addVertex(matrix, 0.125f, currentHeightOverlay, 0.875f).setColor(1.0f, 1.0f, 1.0f, waterAlpha).setUv(u0_h, v1_h).setOverlay(packedOverlay).setLight(packedLight).setNormal(poseStack.last(), 0, 1, 0);
             builder.addVertex(matrix, 0.875f, currentHeightOverlay, 0.875f).setColor(1.0f, 1.0f, 1.0f, waterAlpha).setUv(u1_h, v1_h).setOverlay(packedOverlay).setLight(packedLight).setNormal(poseStack.last(), 0, 1, 0);
@@ -77,8 +81,10 @@ public class DippingVatRenderer implements BlockEntityRenderer<DippingVatBlockEn
         } else {
             // --- RENDU FLUIDE CLASSIQUE (Eau pure, Lave, Fluides moddés) ---
             // On dessine une seule passe à opacité maximale (1.0f) avec la vraie texture du fluide (ex: l'animation de la lave)
-            float u0_f = waterSprite.getU0(); float u1_f = waterSprite.getU1();
-            float v0_f = waterSprite.getV0(); float v1_f = waterSprite.getV1();
+            float u0_f = waterSprite.getU0();
+            float u1_f = waterSprite.getU1();
+            float v0_f = waterSprite.getV0();
+            float v1_f = waterSprite.getV1();
             builder.addVertex(matrix, 0.125f, currentHeight, 0.875f).setColor(r, g, b, 1.0f).setUv(u0_f, v1_f).setOverlay(packedOverlay).setLight(packedLight).setNormal(poseStack.last(), 0, 1, 0);
             builder.addVertex(matrix, 0.875f, currentHeight, 0.875f).setColor(r, g, b, 1.0f).setUv(u1_f, v1_f).setOverlay(packedOverlay).setLight(packedLight).setNormal(poseStack.last(), 0, 1, 0);
             builder.addVertex(matrix, 0.875f, currentHeight, 0.125f).setColor(r, g, b, 1.0f).setUv(u1_f, v0_f).setOverlay(packedOverlay).setLight(packedLight).setNormal(poseStack.last(), 0, 1, 0);

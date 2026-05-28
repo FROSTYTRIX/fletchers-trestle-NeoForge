@@ -56,8 +56,8 @@ public class QuiverHudOverlay {
         int screenWidth = guiGraphics.guiWidth();
         int baseWidth = 182;
 
-        int x = (screenWidth - (int)(baseWidth * scale)) / 2 + (int)round(FletcherConfig.QUIVER_HUD_X.get());
-        int y = (int)round(FletcherConfig.QUIVER_HUD_Y.get()) + (int)yAnimationOffset;
+        int x = (screenWidth - (int) (baseWidth * scale)) / 2 + (int) round(FletcherConfig.QUIVER_HUD_X.get());
+        int y = (int) round(FletcherConfig.QUIVER_HUD_Y.get()) + (int) yAnimationOffset;
 
         guiGraphics.pose().pushPose();
         guiGraphics.pose().translate(x, y, 0);

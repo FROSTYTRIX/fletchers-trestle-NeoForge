@@ -35,8 +35,6 @@ public class ModGlobalLootModifierProvider extends GlobalLootModifierProvider {
                 }, ModItems.MECHANICAL_TRIGGER.get()));
 
 
-
-
         this.add("flax_seed_from_short_grass",
                 new AddItemModifier(new LootItemCondition[]{
                         LootItemBlockStatePropertyCondition.hasBlockStateProperties(Blocks.SHORT_GRASS).build(),

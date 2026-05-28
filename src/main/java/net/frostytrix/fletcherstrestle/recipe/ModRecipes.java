@@ -4,6 +4,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.neoforged.neoforge.registries.DeferredRegister;
+
 import java.util.function.Supplier;
 
 public class ModRecipes {
@@ -40,7 +41,10 @@ public class ModRecipes {
 
     public static final Supplier<RecipeType<SteamingRecipe>> STEAMING_TYPE =
             TYPES.register("steaming", () -> new RecipeType<SteamingRecipe>() {
-                @Override public String toString() { return "steaming"; }
+                @Override
+                public String toString() {
+                    return "steaming";
+                }
             });
 
     public static final Supplier<RecipeSerializer<ShavingHorseRecipe>> SHAVING_SERIALIZER =
@@ -48,7 +52,10 @@ public class ModRecipes {
 
     public static final Supplier<RecipeType<ShavingHorseRecipe>> SHAVING_TYPE =
             TYPES.register("shaving", () -> new RecipeType<ShavingHorseRecipe>() {
-                @Override public String toString() { return "shaving"; }
+                @Override
+                public String toString() {
+                    return "shaving";
+                }
             });
 
     public static final Supplier<RecipeSerializer<DippingRecipe>> DIPPING_SERIALIZER =
@@ -56,6 +63,9 @@ public class ModRecipes {
 
     public static final Supplier<RecipeType<DippingRecipe>> DIPPING_TYPE =
             TYPES.register("dipping", () -> new RecipeType<DippingRecipe>() {
-                @Override public String toString() { return "dipping"; }
+                @Override
+                public String toString() {
+                    return "dipping";
+                }
             });
 }

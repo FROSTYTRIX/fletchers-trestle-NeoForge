@@ -24,10 +24,10 @@ import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConf
 public class EagleNestFeature extends Feature<NoneFeatureConfiguration> {
 
     // Worldgen tuning. Kept here so they're easy to find / change.
-    private static final int MIN_Y         = 70;   // includes high windswept hills
-    private static final int MAX_EGGS_GEN  = 3;
-    private static final int MIN_EAGLES    = 1;
-    private static final int MAX_EAGLES    = 2;
+    private static final int MIN_Y = 70;   // includes high windswept hills
+    private static final int MAX_EGGS_GEN = 3;
+    private static final int MIN_EAGLES = 1;
+    private static final int MAX_EAGLES = 2;
 
     public EagleNestFeature(Codec<NoneFeatureConfiguration> codec) {
         super(codec);
@@ -98,9 +98,9 @@ public class EagleNestFeature extends Feature<NoneFeatureConfiguration> {
     // visually-empty nests so each populated one feels like a small reward.
     private static int pickWeightedEggCount(RandomSource random) {
         int roll = random.nextInt(100);
-        if (roll < 30)  return 0;
-        if (roll < 65)  return 1;
-        if (roll < 90)  return 2;
+        if (roll < 30) return 0;
+        if (roll < 65) return 1;
+        if (roll < 90) return 2;
         return 3;
     }
 
@@ -110,7 +110,7 @@ public class EagleNestFeature extends Feature<NoneFeatureConfiguration> {
 
         // Place each eagle in a small ring around (and above) the nest.
         double angle = random.nextDouble() * Math.PI * 2.0;
-        double dist  = 2.0 + random.nextDouble() * 3.0;
+        double dist = 2.0 + random.nextDouble() * 3.0;
         double x = nestPos.getX() + 0.5 + Math.cos(angle) * dist;
         double z = nestPos.getZ() + 0.5 + Math.sin(angle) * dist;
         double y = nestPos.getY() + 3.0 + random.nextDouble() * 4.0;

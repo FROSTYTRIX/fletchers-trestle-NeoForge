@@ -7,8 +7,8 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 /**
  * Per-material numeric stats for an arrow shaft.
  *
- * @param velocityMultiplier  multiplier on initial velocity at spawn
- * @param gravityMultiplier   multiplier on the arrow's gravity (>1 drops faster)
+ * @param velocityMultiplier multiplier on initial velocity at spawn
+ * @param gravityMultiplier  multiplier on the arrow's gravity (>1 drops faster)
  */
 public record ArrowShaftStats(
         float velocityMultiplier,

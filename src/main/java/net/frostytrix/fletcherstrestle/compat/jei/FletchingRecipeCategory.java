@@ -63,10 +63,10 @@ public class FletchingRecipeCategory implements IRecipeCategory<ModularWeaponRec
         // Riser slot
         builder.addSlot(RecipeIngredientRole.INPUT, 11, 25).addIngredients(recipe.getRiser());
         // Top Limb slot (uses the limbs ingredient)
-        builder.addSlot(RecipeIngredientRole.INPUT, 35, 25-18).addIngredients(recipe.getLimbs());
+        builder.addSlot(RecipeIngredientRole.INPUT, 35, 25 - 18).addIngredients(recipe.getLimbs());
 
         // Bottom Limb slot (uses the exact same limbs ingredient, but at a different Y coordinate)
-        builder.addSlot(RecipeIngredientRole.INPUT, 35, 25+18).addIngredients(recipe.getLimbs());
+        builder.addSlot(RecipeIngredientRole.INPUT, 35, 25 + 18).addIngredients(recipe.getLimbs());
 
         // String slot
         builder.addSlot(RecipeIngredientRole.INPUT, 59, 25).addIngredients(recipe.getString());
@@ -91,9 +91,9 @@ public class FletchingRecipeCategory implements IRecipeCategory<ModularWeaponRec
 
             // Resolve each ingredient to its matching def's registry id
             // (any namespace); fall back to legacy stripping otherwise.
-            String limbMat   = resolveOrLegacy(currentLimb,
+            String limbMat = resolveOrLegacy(currentLimb,
                     s -> MaterialResolver.resolveBowLimb(s).map(h -> h.key().location().toString()));
-            String riserMat  = resolveOrLegacy(currentRiser,
+            String riserMat = resolveOrLegacy(currentRiser,
                     s -> MaterialResolver.resolveBowRiser(s).map(h -> h.key().location().toString()));
             String stringMat = resolveOrLegacy(currentString,
                     s -> MaterialResolver.resolveBowString(s).map(h -> h.key().location().toString()));

@@ -27,7 +27,7 @@ public class ModBlockTagProvider extends BlockTagsProvider {
         this.tag(BlockTags.WOOL)
                 .add(ModBlocks.ARCHERY_TARGET.get())
                 .add(ModBlocks.ROPE.get())
-                ;
+        ;
 
         this.tag(BlockTags.CLIMBABLE)
                 .add(ModBlocks.ROPE.get());

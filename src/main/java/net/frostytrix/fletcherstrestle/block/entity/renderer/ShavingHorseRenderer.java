@@ -32,7 +32,7 @@ public class ShavingHorseRenderer implements BlockEntityRenderer<ShavingHorseBlo
         poseStack.mulPose(Axis.XP.rotationDegrees(90f));
 
         poseStack.scale(.9f, .9f, .9f);
-            poseStack.translate(0.0, -0.25, 0);
+        poseStack.translate(0.0, -0.25, 0);
 
         Minecraft.getInstance().getItemRenderer().renderStatic(stack, ItemDisplayContext.FIXED,
                 combinedLight, combinedOverlay, poseStack, bufferSource, entity.getLevel(), 0);

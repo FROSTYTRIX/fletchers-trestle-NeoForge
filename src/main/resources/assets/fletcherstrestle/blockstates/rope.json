@@ -1,6 +1,10 @@
 {
   "variants": {
-    "bottom=false": { "model": "fletcherstrestle:block/rope_long" },
-    "bottom=true":  { "model": "fletcherstrestle:block/rope_short" }
+    "bottom=false": {
+      "model": "fletcherstrestle:block/rope_long"
+    },
+    "bottom=true": {
+      "model": "fletcherstrestle:block/rope_short"
+    }
   }
 }

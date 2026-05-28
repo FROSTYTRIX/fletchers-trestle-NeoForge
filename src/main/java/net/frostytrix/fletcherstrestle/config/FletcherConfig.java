@@ -8,10 +8,12 @@ public class FletcherConfig {
     public static final ModConfigSpec.DoubleValue MINIGAME_SPEED;
     public static final ModConfigSpec.DoubleValue MINIGAME_PUNISH_MULTIPLIER;
     public static final ModConfigSpec.DoubleValue MINIGAME_MIN_SCORE;
-    /** Master toggle for everything that adds eagles to a freshly-generated
-     *  world: the spawn-placement entry that lets the spawn pool tick them
-     *  in, and the eagle-nest world-gen feature. Default OFF for now — the
-     *  eagle model is still WIP. Flip back on once it ships. */
+    /**
+     * Master toggle for everything that adds eagles to a freshly-generated
+     * world: the spawn-placement entry that lets the spawn pool tick them
+     * in, and the eagle-nest world-gen feature. Default OFF for now — the
+     * eagle model is still WIP. Flip back on once it ships.
+     */
     public static final ModConfigSpec.BooleanValue EAGLES_NATURAL_SPAWNING;
 
     // --- CLIENT CONFIG (Local UI only) ---

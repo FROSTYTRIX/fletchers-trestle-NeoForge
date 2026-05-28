@@ -73,8 +73,8 @@ public record BounceOnBlockEffect(float chance, int maxBounces, float retention)
 
         // Recompute rotation off the new velocity vector.
         double d0 = newMovement.horizontalDistance();
-        arrow.setYRot((float)(Math.atan2(newMovement.x, newMovement.z) * (180F / (float)Math.PI)));
-        arrow.setXRot((float)(Math.atan2(newMovement.y, d0) * (180F / (float)Math.PI)));
+        arrow.setYRot((float) (Math.atan2(newMovement.x, newMovement.z) * (180F / (float) Math.PI)));
+        arrow.setXRot((float) (Math.atan2(newMovement.y, d0) * (180F / (float) Math.PI)));
         arrow.yRotO = arrow.getYRot();
         arrow.xRotO = arrow.getXRot();
         arrow.setCritArrow(false);

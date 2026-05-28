@@ -32,7 +32,9 @@ public class ArcheryTargetMenu extends AbstractContainerMenu {
         }
     }
 
-    public BlockPos getTargetPos() { return targetPos ;}
+    public BlockPos getTargetPos() {
+        return targetPos;
+    }
 
     // Client constructor
     public ArcheryTargetMenu(int containerId, Inventory playerInventory) {

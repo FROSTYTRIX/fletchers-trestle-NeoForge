@@ -75,16 +75,16 @@ public class ModularWeaponRecipe implements Recipe<FletchingRecipeInput> {
      * display form ("Dark Oak") to match the new storage format.
      *
      * @deprecated prefer {@link MaterialResolver#resolveBowLimb(HolderLookup.Provider, ItemStack)}
-     *             / {@code resolveBowRiser} / {@code resolveBowString} when
-     *             a {@link HolderLookup.Provider} is available — they
-     *             account for modpack-supplied materials too.
+     * / {@code resolveBowRiser} / {@code resolveBowString} when
+     * a {@link HolderLookup.Provider} is available — they
+     * account for modpack-supplied materials too.
      */
     @Deprecated
     public static String getMaterialName(ItemStack stack) {
         if (stack.isEmpty()) return "unknown";
 
         if (stack.is(net.minecraft.world.item.Items.STRING)) return "spider";
-        if (stack.is(net.minecraft.world.item.Items.STICK))  return "oak";
+        if (stack.is(net.minecraft.world.item.Items.STICK)) return "oak";
 
         // Get the registry path (e.g. "dark_oak_limb" or "copper_riser")
         String path = net.minecraft.core.registries.BuiltInRegistries.ITEM.getKey(stack.getItem()).getPath();
@@ -132,10 +132,14 @@ public class ModularWeaponRecipe implements Recipe<FletchingRecipeInput> {
         );
 
         @Override
-        public MapCodec<ModularWeaponRecipe> codec() { return CODEC; }
+        public MapCodec<ModularWeaponRecipe> codec() {
+            return CODEC;
+        }
 
         @Override
-        public StreamCodec<RegistryFriendlyByteBuf, ModularWeaponRecipe> streamCodec() { return STREAM_CODEC; }
+        public StreamCodec<RegistryFriendlyByteBuf, ModularWeaponRecipe> streamCodec() {
+            return STREAM_CODEC;
+        }
 
         private static ModularWeaponRecipe fromNetwork(RegistryFriendlyByteBuf buf) {
             Ingredient riser = Ingredient.CONTENTS_STREAM_CODEC.decode(buf);
@@ -153,7 +157,15 @@ public class ModularWeaponRecipe implements Recipe<FletchingRecipeInput> {
         }
     }
 
-    public net.minecraft.world.item.crafting.Ingredient getRiser() { return this.riser; }
-    public net.minecraft.world.item.crafting.Ingredient getLimbs() { return this.limbs; }
-    public net.minecraft.world.item.crafting.Ingredient getString() { return this.string; }
+    public net.minecraft.world.item.crafting.Ingredient getRiser() {
+        return this.riser;
+    }
+
+    public net.minecraft.world.item.crafting.Ingredient getLimbs() {
+        return this.limbs;
+    }
+
+    public net.minecraft.world.item.crafting.Ingredient getString() {
+        return this.string;
+    }
 }

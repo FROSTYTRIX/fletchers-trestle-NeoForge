@@ -22,15 +22,15 @@ public class FlaxCropBlock extends CropBlock {
     public static final IntegerProperty AGE = IntegerProperty.create("age", 0, FIRST_STAGE_MAX_AGE + SECOND_STAGE_MAX_AGE);
 
     private static final VoxelShape[] SHAPE_BY_AGE = new VoxelShape[]{
-            FlaxCropBlock.box(0,0,0,16,2,16),
-            FlaxCropBlock.box(0,0,0,16,4,16),
-            FlaxCropBlock.box(0,0,0,16,6,16),
-            FlaxCropBlock.box(0,0,0,16,8,16),
-            FlaxCropBlock.box(0,0,0,16,10,16),
-            FlaxCropBlock.box(0,0,0,16,12,16),
-            FlaxCropBlock.box(0,0,0,16,14,16),
-            FlaxCropBlock.box(0,0,0,16,16,16),
-            FlaxCropBlock.box(0,0,0,16,16,16),
+            FlaxCropBlock.box(0, 0, 0, 16, 2, 16),
+            FlaxCropBlock.box(0, 0, 0, 16, 4, 16),
+            FlaxCropBlock.box(0, 0, 0, 16, 6, 16),
+            FlaxCropBlock.box(0, 0, 0, 16, 8, 16),
+            FlaxCropBlock.box(0, 0, 0, 16, 10, 16),
+            FlaxCropBlock.box(0, 0, 0, 16, 12, 16),
+            FlaxCropBlock.box(0, 0, 0, 16, 14, 16),
+            FlaxCropBlock.box(0, 0, 0, 16, 16, 16),
+            FlaxCropBlock.box(0, 0, 0, 16, 16, 16),
     };
 
 
@@ -57,7 +57,7 @@ public class FlaxCropBlock extends CropBlock {
             }
 
             float growthSpeed = getGrowthSpeed(state, level, pos);
-            if (net.neoforged.neoforge.common.CommonHooks.canCropGrow(level, pos, state, random.nextInt((int)(25.0F / growthSpeed) + 1) == 0)) {
+            if (net.neoforged.neoforge.common.CommonHooks.canCropGrow(level, pos, state, random.nextInt((int) (25.0F / growthSpeed) + 1) == 0)) {
 
                 if (currentAge == FIRST_STAGE_MAX_AGE) {
                     // Growing from Stage 7 to Stage 8 (Placing the top half!)
@@ -73,7 +73,6 @@ public class FlaxCropBlock extends CropBlock {
             }
         }
     }
-
 
 
     @Override

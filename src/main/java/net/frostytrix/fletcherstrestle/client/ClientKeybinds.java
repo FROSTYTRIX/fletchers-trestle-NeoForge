@@ -35,7 +35,6 @@ public class ClientKeybinds {
     }
 
 
-
     @SubscribeEvent
     public static void onClientTick(ClientTickEvent.Post event) {
         ClientState.isFreeLooking = ClientKeybinds.FREE_LOOK_KEY.isDown();

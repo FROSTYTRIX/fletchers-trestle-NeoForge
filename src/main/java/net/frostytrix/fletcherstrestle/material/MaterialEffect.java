@@ -10,7 +10,7 @@ import net.minecraft.world.phys.EntityHitResult;
 
 /**
  * A declarative behavior attached to a bow / arrow material via JSON.
- *
+ * <p>
  * Each implementation is a record (or near-record) holding parameters parsed
  * from JSON via its {@link MaterialEffectType#codec()}. Dispatch is by the
  * effect's registered type id; see {@link #CODEC}.
@@ -51,11 +51,17 @@ public interface MaterialEffect {
      */
     MaterialEffectType<? extends MaterialEffect> type();
 
-    /** Called once when the arrow is added to the world. */
-    default void onArrowSpawn(ModularArrowEntity arrow) {}
+    /**
+     * Called once when the arrow is added to the world.
+     */
+    default void onArrowSpawn(ModularArrowEntity arrow) {
+    }
 
-    /** Called every server-side tick while the arrow is in flight. */
-    default void onArrowTick(ModularArrowEntity arrow) {}
+    /**
+     * Called every server-side tick while the arrow is in flight.
+     */
+    default void onArrowTick(ModularArrowEntity arrow) {
+    }
 
     /**
      * Called BEFORE the vanilla hit resolution runs — use this for damage
@@ -63,7 +69,8 @@ public interface MaterialEffect {
      * need to affect THIS hit. Effects that don't care about ordering
      * should override {@link #onArrowHit} instead.
      */
-    default void onPreArrowHit(ModularArrowEntity arrow, EntityHitResult result) {}
+    default void onPreArrowHit(ModularArrowEntity arrow, EntityHitResult result) {
+    }
 
     /**
      * Called AFTER the vanilla hit resolution. Use this for post-damage
@@ -71,17 +78,22 @@ public interface MaterialEffect {
      * teleport, etc.) — anything that doesn't need to influence the
      * damage value being applied to this hit.
      */
-    default void onArrowHit(ModularArrowEntity arrow, EntityHitResult result) {}
+    default void onArrowHit(ModularArrowEntity arrow, EntityHitResult result) {
+    }
 
-    /** Called when the arrow collides with a block. */
-    default void onArrowHitBlock(ModularArrowEntity arrow, BlockHitResult result) {}
+    /**
+     * Called when the arrow collides with a block.
+     */
+    default void onArrowHitBlock(ModularArrowEntity arrow, BlockHitResult result) {
+    }
 
     /**
      * Called when a bow / crossbow releases a shot. The default no-op covers
      * the common case where a bow effect only modifies arrow stats via the
      * surrounding code rather than running its own logic on release.
      */
-    default void onBowRelease(LivingEntity shooter, ItemStack weapon) {}
+    default void onBowRelease(LivingEntity shooter, ItemStack weapon) {
+    }
 
     /**
      * Called from the bow / crossbow's {@code createProjectile} after the
@@ -89,5 +101,6 @@ public interface MaterialEffect {
      * effects mutate the fired projectile directly (set fire, drop gravity,
      * attach a persistent-data flag, etc.).
      */
-    default void onProjectileFired(LivingEntity shooter, ItemStack weapon, Entity projectile) {}
+    default void onProjectileFired(LivingEntity shooter, ItemStack weapon, Entity projectile) {
+    }
 }

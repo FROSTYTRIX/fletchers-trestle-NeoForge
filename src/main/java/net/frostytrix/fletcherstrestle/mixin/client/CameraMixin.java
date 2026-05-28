@@ -14,7 +14,8 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 @Mixin(Camera.class)
 public abstract class CameraMixin {
 
-    @Shadow private Entity entity;
+    @Shadow
+    private Entity entity;
 
     @Unique
     private double fletcherstrestle$lastY;

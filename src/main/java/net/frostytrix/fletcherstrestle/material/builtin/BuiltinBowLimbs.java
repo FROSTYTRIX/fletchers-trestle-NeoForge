@@ -36,36 +36,37 @@ import java.util.Optional;
  * </ul>
  */
 public final class BuiltinBowLimbs {
-    private BuiltinBowLimbs() {}
+    private BuiltinBowLimbs() {
+    }
 
-    public static final ResourceKey<BowLimbDef> OAK       = key("oak");
-    public static final ResourceKey<BowLimbDef> SPRUCE    = key("spruce");
-    public static final ResourceKey<BowLimbDef> BIRCH     = key("birch");
-    public static final ResourceKey<BowLimbDef> JUNGLE    = key("jungle");
-    public static final ResourceKey<BowLimbDef> ACACIA    = key("acacia");
-    public static final ResourceKey<BowLimbDef> DARK_OAK  = key("dark_oak");
-    public static final ResourceKey<BowLimbDef> MANGROVE  = key("mangrove");
-    public static final ResourceKey<BowLimbDef> CHERRY    = key("cherry");
-    public static final ResourceKey<BowLimbDef> PALE_OAK  = key("pale_oak");
-    public static final ResourceKey<BowLimbDef> CRIMSON   = key("crimson");
-    public static final ResourceKey<BowLimbDef> WARPED    = key("warped");
+    public static final ResourceKey<BowLimbDef> OAK = key("oak");
+    public static final ResourceKey<BowLimbDef> SPRUCE = key("spruce");
+    public static final ResourceKey<BowLimbDef> BIRCH = key("birch");
+    public static final ResourceKey<BowLimbDef> JUNGLE = key("jungle");
+    public static final ResourceKey<BowLimbDef> ACACIA = key("acacia");
+    public static final ResourceKey<BowLimbDef> DARK_OAK = key("dark_oak");
+    public static final ResourceKey<BowLimbDef> MANGROVE = key("mangrove");
+    public static final ResourceKey<BowLimbDef> CHERRY = key("cherry");
+    public static final ResourceKey<BowLimbDef> PALE_OAK = key("pale_oak");
+    public static final ResourceKey<BowLimbDef> CRIMSON = key("crimson");
+    public static final ResourceKey<BowLimbDef> WARPED = key("warped");
 
     public static void bootstrap(BootstrapContext<BowLimbDef> ctx) {
         // (id, item, drawTime, dmgMult, amphibious, slowFalling, effects)
-        register(ctx, OAK,      ModItems.PLIABLE_OAK_LIMB,      20.0f, 1.00f, false, false, List.of());
-        register(ctx, SPRUCE,   ModItems.PLIABLE_SPRUCE_LIMB,   22.0f, 1.00f, false, false,
+        register(ctx, OAK, ModItems.PLIABLE_OAK_LIMB, 20.0f, 1.00f, false, false, List.of());
+        register(ctx, SPRUCE, ModItems.PLIABLE_SPRUCE_LIMB, 22.0f, 1.00f, false, false,
                 List.of(new SetArrowFlagEffect("fletcherstrestle:punch", true)));
-        register(ctx, BIRCH,    ModItems.PLIABLE_BIRCH_LIMB,    10.0f, 0.70f, false, false, List.of());
-        register(ctx, JUNGLE,   ModItems.PLIABLE_JUNGLE_LIMB,   18.0f, 0.90f, false, false, List.of());
-        register(ctx, ACACIA,   ModItems.PLIABLE_ACACIA_LIMB,   20.0f, 1.00f, false, false,
+        register(ctx, BIRCH, ModItems.PLIABLE_BIRCH_LIMB, 10.0f, 0.70f, false, false, List.of());
+        register(ctx, JUNGLE, ModItems.PLIABLE_JUNGLE_LIMB, 18.0f, 0.90f, false, false, List.of());
+        register(ctx, ACACIA, ModItems.PLIABLE_ACACIA_LIMB, 20.0f, 1.00f, false, false,
                 List.of(new ApplyMobEffectToShooterEffect(MobEffects.MOVEMENT_SPEED, 30, 1)));
         register(ctx, DARK_OAK, ModItems.PLIABLE_DARK_OAK_LIMB, 35.0f, 1.60f, false, false, List.of());
-        register(ctx, MANGROVE, ModItems.PLIABLE_MANGROVE_LIMB, 22.0f, 1.00f, true,  false, List.of());
-        register(ctx, CHERRY,   ModItems.PLIABLE_CHERRY_LIMB,   20.0f, 0.85f, false, true,  List.of());
+        register(ctx, MANGROVE, ModItems.PLIABLE_MANGROVE_LIMB, 22.0f, 1.00f, true, false, List.of());
+        register(ctx, CHERRY, ModItems.PLIABLE_CHERRY_LIMB, 20.0f, 0.85f, false, true, List.of());
         register(ctx, PALE_OAK, ModItems.PLIABLE_PALE_OAK_LIMB, 26.0f, 1.00f, false, false, List.of());
-        register(ctx, CRIMSON,  ModItems.PLIABLE_CRIMSON_LIMB,  24.0f, 1.10f, false, false,
+        register(ctx, CRIMSON, ModItems.PLIABLE_CRIMSON_LIMB, 24.0f, 1.10f, false, false,
                 List.of(new IgniteArrowEffect(100)));
-        register(ctx, WARPED,   ModItems.PLIABLE_WARPED_LIMB,   20.0f, 1.00f, false, false,
+        register(ctx, WARPED, ModItems.PLIABLE_WARPED_LIMB, 20.0f, 1.00f, false, false,
                 List.of(new SetArrowNoGravityEffect()));
     }
 

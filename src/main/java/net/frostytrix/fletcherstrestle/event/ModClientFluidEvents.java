@@ -25,10 +25,14 @@ public class ModClientFluidEvents {
             private static final ResourceLocation WATER_FLOW = ResourceLocation.withDefaultNamespace("block/water_flow");
 
             @Override
-            public ResourceLocation getStillTexture() { return WATER_STILL; }
+            public ResourceLocation getStillTexture() {
+                return WATER_STILL;
+            }
 
             @Override
-            public ResourceLocation getFlowingTexture() { return WATER_FLOW; }
+            public ResourceLocation getFlowingTexture() {
+                return WATER_FLOW;
+            }
 
             // La magie de la couleur dynamique est ici
             @Override

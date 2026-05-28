@@ -1,8 +1,19 @@
 {
   "variants": {
-    "facing=north": { "model": "fletcherstrestle:block/perch" },
-    "facing=east":  { "model": "fletcherstrestle:block/perch", "y":  90 },
-    "facing=south": { "model": "fletcherstrestle:block/perch", "y": 180 },
-    "facing=west":  { "model": "fletcherstrestle:block/perch", "y": 270 }
+    "facing=north": {
+      "model": "fletcherstrestle:block/perch"
+    },
+    "facing=east": {
+      "model": "fletcherstrestle:block/perch",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "fletcherstrestle:block/perch",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "fletcherstrestle:block/perch",
+      "y": 270
+    }
   }
 }

@@ -24,15 +24,16 @@ import java.util.Optional;
  * entity's onHit handler reads that flag.
  */
 public final class BuiltinBowRisers {
-    private BuiltinBowRisers() {}
+    private BuiltinBowRisers() {
+    }
 
-    public static final ResourceKey<BowRiserDef> WOOD   = key("wood");
-    public static final ResourceKey<BowRiserDef> IRON   = key("iron");
+    public static final ResourceKey<BowRiserDef> WOOD = key("wood");
+    public static final ResourceKey<BowRiserDef> IRON = key("iron");
     public static final ResourceKey<BowRiserDef> COPPER = key("copper");
 
     public static void bootstrap(BootstrapContext<BowRiserDef> ctx) {
-        register(ctx, WOOD,   ModItems.WOOD_RISER,   250, 1.0f, List.of());
-        register(ctx, IRON,   ModItems.IRON_RISER,   750, 0.2f, List.of());
+        register(ctx, WOOD, ModItems.WOOD_RISER, 250, 1.0f, List.of());
+        register(ctx, IRON, ModItems.IRON_RISER, 750, 0.2f, List.of());
         register(ctx, COPPER, ModItems.COPPER_RISER, 400, 1.0f,
                 List.of(new SetArrowFlagEffect("fletcherstrestle:conductive", true)));
     }

@@ -3,7 +3,8 @@ package net.frostytrix.fletcherstrestle.recipe;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeInput;
 
-public record FletchingRecipeInput(ItemStack riser, ItemStack topLimb, ItemStack bottomLimb, ItemStack string) implements RecipeInput {
+public record FletchingRecipeInput(ItemStack riser, ItemStack topLimb, ItemStack bottomLimb,
+                                   ItemStack string) implements RecipeInput {
     @Override
     public ItemStack getItem(int index) {
         return switch (index) {

@@ -44,6 +44,7 @@ public class FletcherTrestleClient {
     private void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
         event.registerEntityRenderer(ModEntities.HEAVY_DUMMY.get(), HeavyDummyRenderer::new);
     }
+
     private void registerLayers(EntityRenderersEvent.RegisterLayerDefinitions event) {
         event.registerLayerDefinition(HeavyDummyModel.LAYER_LOCATION, HeavyDummyModel::createBodyLayer);
     }
@@ -63,7 +64,7 @@ public class FletcherTrestleClient {
 
                             // Calculate the visual pull based on OUR draw time, not the vanilla 20.0F
                             return entity.getUseItem() != stack ? 0.0F :
-                                    (float)(stack.getUseDuration(entity) - entity.getUseItemRemainingTicks()) / bow.getDrawTime(stack);
+                                    (float) (stack.getUseDuration(entity) - entity.getUseItemRemainingTicks()) / bow.getDrawTime(stack);
                         }
                     });
 
@@ -77,7 +78,7 @@ public class FletcherTrestleClient {
                 if (entity == null) {
                     return 0.0F;
                 } else {
-                    return CrossbowItem.isCharged(stack) ? 0.0F : (float)(stack.getUseDuration(entity) - entity.getUseItemRemainingTicks()) / (float)CrossbowItem.getChargeDuration(stack, entity);
+                    return CrossbowItem.isCharged(stack) ? 0.0F : (float) (stack.getUseDuration(entity) - entity.getUseItemRemainingTicks()) / (float) CrossbowItem.getChargeDuration(stack, entity);
                 }
             });
 

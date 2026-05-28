@@ -15,8 +15,8 @@ import java.util.Optional;
  *
  * <p>Every field is optional. {@code Optional.empty()} = "use the bow value".</p>
  *
- * @param stats   per-field overrides for {@link BowLimbStats}; absent fields
- *                inherit from the parent limb def.
+ * @param stats per-field overrides for {@link BowLimbStats}; absent fields
+ *              inherit from the parent limb def.
  */
 public record CrossbowOverrides(Optional<BowLimbStats> stats) {
 

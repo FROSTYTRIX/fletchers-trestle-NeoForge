@@ -7,30 +7,27 @@ import net.frostytrix.fletcherstrestle.component.ArrowAssembly;
 import net.frostytrix.fletcherstrestle.component.ModDataComponents;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.*;
+import net.minecraft.world.item.alchemy.PotionContents;
+import net.minecraft.world.item.component.CustomData;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 
 import java.util.Optional;
 
-public class DippingRecipe implements Recipe<DippingRecipeInput> {
-    public final Ingredient inputItem;
-    public final int inputCount;
-    public final Optional<String> requiredPotion; // NOUVEAU : Optionnel !
-    public final int fluidAmount;
-    public final ItemStack output;
-
-    public DippingRecipe(Ingredient inputItem, int inputCount, Optional<String> requiredPotion, int fluidAmount, ItemStack output) {
-        this.inputItem = inputItem;
-        this.inputCount = inputCount;
-        this.requiredPotion = requiredPotion;
-        this.fluidAmount = fluidAmount;
-        this.output = output;
-    }
+/**
+ * @param requiredPotion NOUVEAU : Optionnel !
+ */
+public record DippingRecipe(Ingredient inputItem, int inputCount, Optional<String> requiredPotion, int fluidAmount,
+                            ItemStack output) implements Recipe<DippingRecipeInput> {
 
     @Override
     public boolean matches(DippingRecipeInput input, Level level) {
@@ -50,7 +47,7 @@ public class DippingRecipe implements Recipe<DippingRecipeInput> {
 
         // 2. NOUVEAU : Si la recette exige une potion spécifique, on vérifie !
         if (this.requiredPotion.isPresent()) {
-            net.minecraft.world.item.component.CustomData customData = input.fluid().get(DataComponents.CUSTOM_DATA);
+            CustomData customData = input.fluid().get(DataComponents.CUSTOM_DATA);
             if (customData == null || !customData.contains("potion")) {
                 return false; // Pas de potion du tout dans le fluide
             }
@@ -77,14 +74,14 @@ public class DippingRecipe implements Recipe<DippingRecipeInput> {
         // (ex: une pomme en or reste une pomme en or, elle ne devient pas une "pomme en or de régénération")
         // Mais si c'est générique (requiredPotion est vide, ex: les flèches), on applique la magie :
         if (this.requiredPotion.isEmpty()) {
-            net.minecraft.world.item.component.CustomData customData = input.fluid().get(DataComponents.CUSTOM_DATA);
+            CustomData customData = input.fluid().get(DataComponents.CUSTOM_DATA);
             if (customData != null && customData.contains("potion")) {
                 String potionId = customData.copyTag().getString("potion");
-                var potionHolder = net.minecraft.core.registries.BuiltInRegistries.POTION
+                var potionHolder = BuiltInRegistries.POTION
                         .getHolder(ResourceLocation.parse(potionId)).orElse(null);
 
                 if (potionHolder != null) {
-                    result.set(DataComponents.POTION_CONTENTS, new net.minecraft.world.item.alchemy.PotionContents(potionHolder));
+                    result.set(DataComponents.POTION_CONTENTS, new PotionContents(potionHolder));
                 }
             }
         }

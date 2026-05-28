@@ -34,12 +34,12 @@ public class ArcheryTargetScreen extends AbstractContainerScreen<ArcheryTargetMe
     private static final int LIST_Y = 26;
     private static final int LIST_W = 53;  // leave 9px for scrollbar
     private static final int LIST_H = 165;
-    private static final int ROW_H  = 10;
+    private static final int ROW_H = 10;
 
     // Scrollbar
-    private static final int SB_X  = 236;
-    private static final int SB_Y  = 26;
-    private static final int SB_H  = 163;
+    private static final int SB_X = 236;
+    private static final int SB_Y = 26;
+    private static final int SB_H = 163;
 
     //Thumb
     private static final int THUMB_X = 0;
@@ -54,17 +54,17 @@ public class ArcheryTargetScreen extends AbstractContainerScreen<ArcheryTargetMe
     private static final int INFO_H = 38;
 
     // Clear button (centered)
-    private static final int BTN_W  = 120;
-    private static final int BTN_H  = 13;
-    private static final int BTN_X  = (GUI_W - BTN_W) / 2;  // = 68
-    private static final int BTN_Y  = 200;
+    private static final int BTN_W = 120;
+    private static final int BTN_H = 13;
+    private static final int BTN_X = (GUI_W - BTN_W) / 2;  // = 68
+    private static final int BTN_Y = 200;
 
     private int scrollOffset = 0;
     private int selectedShot = -1;
 
     public ArcheryTargetScreen(ArcheryTargetMenu menu, Inventory inv, Component title) {
         super(menu, inv, title);
-        this.imageWidth  = GUI_W;
+        this.imageWidth = GUI_W;
         this.imageHeight = GUI_H;
         this.inventoryLabelY = 10000;
         this.titleLabelX = 8;
@@ -74,7 +74,7 @@ public class ArcheryTargetScreen extends AbstractContainerScreen<ArcheryTargetMe
     @Override
     protected void init() {
         super.init();
-        ArcheryTargetMenu targetMenu = (ArcheryTargetMenu) this.menu;
+        ArcheryTargetMenu targetMenu = this.menu;
 
         addRenderableWidget(Button.builder(
                         Component.translatable("gui.fletcherstrestle.clear_shots"),
@@ -105,7 +105,7 @@ public class ArcheryTargetScreen extends AbstractContainerScreen<ArcheryTargetMe
 
     private void renderTargetCanvas(GuiGraphics g, int mx, int my) {
         int ox = leftPos + TC_X;
-        int oy = topPos  + TC_Y;
+        int oy = topPos + TC_Y;
         int cx = ox + TC_W / 2;
         int cy = oy + TC_H / 2;
 
@@ -125,10 +125,10 @@ public class ArcheryTargetScreen extends AbstractContainerScreen<ArcheryTargetMe
     private void renderShotList(GuiGraphics g, int mx, int my) {
         List<ShotRecord> shots = menu.getShots();
         int ox = leftPos + LIST_X;
-        int oy = topPos  + LIST_Y;
+        int oy = topPos + LIST_Y;
         int visibleRows = LIST_H / ROW_H;
-        int maxOffset   = Math.max(0, shots.size() - visibleRows);
-        scrollOffset    = Math.min(scrollOffset, maxOffset);
+        int maxOffset = Math.max(0, shots.size() - visibleRows);
+        scrollOffset = Math.min(scrollOffset, maxOffset);
 
         // "Point List" header
         g.drawString(font, "Point List", ox, topPos + 13, 0x333333, false);
@@ -137,9 +137,9 @@ public class ArcheryTargetScreen extends AbstractContainerScreen<ArcheryTargetMe
             int idx = i + scrollOffset;
             if (idx >= shots.size()) break;
             int ry = oy + i * ROW_H;
-            boolean hovered  = mx >= ox && mx < ox + LIST_W && my >= ry && my < ry + ROW_H;
+            boolean hovered = mx >= ox && mx < ox + LIST_W && my >= ry && my < ry + ROW_H;
             boolean selected = (idx == selectedShot);
-            if (selected)     g.fill(ox, ry, ox + LIST_W, ry + ROW_H, 0x8033AAFF);
+            if (selected) g.fill(ox, ry, ox + LIST_W, ry + ROW_H, 0x8033AAFF);
             else if (hovered) g.fill(ox, ry, ox + LIST_W, ry + ROW_H, 0x44FFFFFF);
             String label = "Point " + (idx + 1);
             g.drawString(font, label, ox + 2, ry + 1, 0x222222, false);
@@ -150,7 +150,7 @@ public class ArcheryTargetScreen extends AbstractContainerScreen<ArcheryTargetMe
 
     private void renderInfoBox(GuiGraphics g) {
         int ox = leftPos + INFO_X;
-        int oy = topPos  + INFO_Y;
+        int oy = topPos + INFO_Y;
 
         if (selectedShot >= 0 && selectedShot < menu.getShots().size()) {
             ShotRecord s = menu.getShots().get(selectedShot);
@@ -176,9 +176,9 @@ public class ArcheryTargetScreen extends AbstractContainerScreen<ArcheryTargetMe
         int visibleRows = LIST_H / ROW_H;
         if (shots.size() <= visibleRows) return;
         int ox = leftPos + SB_X;
-        int oy = topPos  + SB_Y;
-        float ratio  = (float) scrollOffset / Math.max(1, shots.size() - visibleRows);
-        int thumbY   = oy + (int)(ratio * (SB_H - THUMB_H));
+        int oy = topPos + SB_Y;
+        float ratio = (float) scrollOffset / Math.max(1, shots.size() - visibleRows);
+        int thumbY = oy + (int) (ratio * (SB_H - THUMB_H));
 
         g.blit(GUI_TEXTURE, ox, thumbY, THUMB_X, THUMB_Y, THUMB_W, THUMB_H, 256, 256);
     }
@@ -188,7 +188,7 @@ public class ArcheryTargetScreen extends AbstractContainerScreen<ArcheryTargetMe
     @Override
     public boolean mouseScrolled(double mx, double my, double dx, double dy) {
         int maxOffset = Math.max(0, menu.getShots().size() - LIST_H / ROW_H);
-        scrollOffset  = (int) Math.max(0, Math.min(maxOffset, scrollOffset - dy));
+        scrollOffset = (int) Math.max(0, Math.min(maxOffset, scrollOffset - dy));
         return true;
     }
 
@@ -196,9 +196,9 @@ public class ArcheryTargetScreen extends AbstractContainerScreen<ArcheryTargetMe
     public boolean mouseClicked(double mx, double my, int button) {
         // Click on list row
         int ox = leftPos + LIST_X;
-        int oy = topPos  + LIST_Y;
+        int oy = topPos + LIST_Y;
         if (mx >= ox && mx < ox + LIST_W && my >= oy && my < oy + LIST_H) {
-            int row = (int)((my - oy) / ROW_H);
+            int row = (int) ((my - oy) / ROW_H);
             int idx = row + scrollOffset;
             if (idx < menu.getShots().size()) {
                 selectedShot = (selectedShot == idx) ? -1 : idx;
@@ -207,14 +207,14 @@ public class ArcheryTargetScreen extends AbstractContainerScreen<ArcheryTargetMe
         }
         // Click on target point
         int tcox = leftPos + TC_X;
-        int tcoy = topPos  + TC_Y;
+        int tcoy = topPos + TC_Y;
         List<ShotRecord> shots = menu.getShots();
         for (int i = 0; i < shots.size(); i++) {
             ShotRecord s = shots.get(i);
             int px = tcox + Math.round(s.u() * (TC_W - 1));
             int py = tcoy + Math.round(s.v() * (TC_H - 1));
-            int ddx = (int)mx - px, ddy = (int)my - py;
-            if (ddx*ddx + ddy*ddy <= 16) {
+            int ddx = (int) mx - px, ddy = (int) my - py;
+            if (ddx * ddx + ddy * ddy <= 16) {
                 selectedShot = (selectedShot == i) ? -1 : i;
                 return true;
             }
@@ -229,7 +229,7 @@ public class ArcheryTargetScreen extends AbstractContainerScreen<ArcheryTargetMe
 
         // Hover tooltip on target points
         int tcox = leftPos + TC_X;
-        int tcoy = topPos  + TC_Y;
+        int tcoy = topPos + TC_Y;
         List<ShotRecord> shots = menu.getShots();
         for (int i = 0; i < shots.size(); i++) {
             if (i == selectedShot) continue;
@@ -237,9 +237,9 @@ public class ArcheryTargetScreen extends AbstractContainerScreen<ArcheryTargetMe
             int px = tcox + Math.round(s.u() * (TC_W - 1));
             int py = tcoy + Math.round(s.v() * (TC_H - 1));
             int ddx = mx - px, ddy = my - py;
-            if (ddx*ddx + ddy*ddy <= 16) {
+            if (ddx * ddx + ddy * ddy <= 16) {
                 List<FormattedCharSequence> lines = List.of(
-                        Component.literal("Point #" + (i+1)).getVisualOrderText(),
+                        Component.literal("Point #" + (i + 1)).getVisualOrderText(),
                         Component.literal("Dmg: " + String.format("%.2f", s.estimatedDamage())).getVisualOrderText(),
                         Component.literal("Spd: " + String.format("%.3f", s.speed())).getVisualOrderText()
                 );

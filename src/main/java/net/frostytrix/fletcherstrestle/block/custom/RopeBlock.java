@@ -117,8 +117,7 @@ public class RopeBlock extends Block implements SimpleWaterloggedBlock {
             if (!state.getValue(BOTTOM)) {
                 level.setBlockAndUpdate(pos, state.setValue(BOTTOM, true));
                 return InteractionResult.SUCCESS;
-            }
-            else  {
+            } else {
                 level.setBlockAndUpdate(pos, state.setValue(BOTTOM, false));
                 return InteractionResult.SUCCESS;
             }

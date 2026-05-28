@@ -7,12 +7,12 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.item.ArrowItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 
@@ -30,7 +30,7 @@ public class ModularArrowItem extends ArrowItem {
         super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
 
         ArrowAssembly assembly = stack.get(ModDataComponents.ARROW_ASSEMBLY.get());
-        PotionContents potion  = stack.get(DataComponents.POTION_CONTENTS);
+        PotionContents potion = stack.get(DataComponents.POTION_CONTENTS);
 
         if (assembly == null) {
             tooltipComponents.add(Component.literal("Unfinished Arrow").withStyle(ChatFormatting.RED, ChatFormatting.ITALIC));
@@ -92,7 +92,9 @@ public class ModularArrowItem extends ArrowItem {
     }
 
 
-    /** @deprecated see {@link ModularBowItem.LimbStats}. */
+    /**
+     * @deprecated see {@link ModularBowItem.LimbStats}.
+     */
     @Deprecated(forRemoval = true)
     public enum HeadStats {
         FLINT("flint", 1.0f, false, false),
@@ -124,12 +126,22 @@ public class ModularArrowItem extends ArrowItem {
             return FLINT;
         }
 
-        public float getDamageMult() { return damageMult; }
-        public boolean causesBleed() { return causesBleed; }
-        public boolean isArmorPiercing() { return armorPiercing; }
+        public float getDamageMult() {
+            return damageMult;
+        }
+
+        public boolean causesBleed() {
+            return causesBleed;
+        }
+
+        public boolean isArmorPiercing() {
+            return armorPiercing;
+        }
     }
 
-    /** @deprecated see {@link ModularBowItem.LimbStats}. */
+    /**
+     * @deprecated see {@link ModularBowItem.LimbStats}.
+     */
     @Deprecated(forRemoval = true)
     public enum ShaftStats {
         OAK("oak", 1.0f, 1.0f),
@@ -142,8 +154,7 @@ public class ModularArrowItem extends ArrowItem {
         CHERRY("cherry", 1f, 1.0f),
         PALE_OAK("pale_oak", 1f, 1.0f),
         CRIMSON("crimson", 1f, 1.0f),
-        WARPED("warped", 1f, 1.0f)
-        ;// Flies faster, drops less
+        WARPED("warped", 1f, 1.0f);// Flies faster, drops less
 
         private final String name;
         private final float velocityMult;
@@ -162,11 +173,18 @@ public class ModularArrowItem extends ArrowItem {
             return OAK;
         }
 
-        public float getVelocityMult() { return velocityMult; }
-        public float getGravityMult() { return gravityMult; }
+        public float getVelocityMult() {
+            return velocityMult;
+        }
+
+        public float getGravityMult() {
+            return gravityMult;
+        }
     }
 
-    /** @deprecated see {@link ModularBowItem.LimbStats}. */
+    /**
+     * @deprecated see {@link ModularBowItem.LimbStats}.
+     */
     @Deprecated(forRemoval = true)
     public enum FletchingStats {
         FEATHER("feather", 1.0f),
@@ -191,6 +209,8 @@ public class ModularArrowItem extends ArrowItem {
             return FEATHER;
         }
 
-        public float getInaccuracyMult() { return inaccuracyMult; }
+        public float getInaccuracyMult() {
+            return inaccuracyMult;
+        }
     }
 }

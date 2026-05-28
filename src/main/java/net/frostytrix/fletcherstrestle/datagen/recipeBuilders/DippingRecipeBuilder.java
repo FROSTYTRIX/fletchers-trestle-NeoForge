@@ -29,7 +29,8 @@ public class DippingRecipeBuilder implements RecipeBuilder {
     private Optional<String> requiredPotion = Optional.empty();
 
     private final Map<String, Criterion<?>> criteria = new LinkedHashMap<>();
-    @Nullable private String group;
+    @Nullable
+    private String group;
 
     private DippingRecipeBuilder(Ingredient input, ItemLike result, int resultCount) {
         this.input = input;

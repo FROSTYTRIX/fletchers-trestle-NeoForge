@@ -1,7 +1,6 @@
 package net.frostytrix.fletcherstrestle.event;
 
 import net.frostytrix.fletcherstrestle.FletcherTrestle;
-import net.frostytrix.fletcherstrestle.block.entity.DippingVatBlockEntity;
 import net.frostytrix.fletcherstrestle.block.entity.ModBlockEntities;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;

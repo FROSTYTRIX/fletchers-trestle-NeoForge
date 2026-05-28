@@ -37,10 +37,25 @@ public class SteamingRecipeCategory implements IRecipeCategory<SteamingRecipe> {
         this.arrow = helper.createAnimatedDrawable(staticArrow, 200, IDrawableAnimated.StartDirection.LEFT, false);
     }
 
-    @Override public RecipeType<SteamingRecipe> getRecipeType() { return STEAMING_TYPE; }
-    @Override public Component getTitle() { return Component.literal("Steam Box"); }
-    @Override public IDrawable getBackground() { return this.background; }
-    @Override public IDrawable getIcon() { return this.icon; }
+    @Override
+    public RecipeType<SteamingRecipe> getRecipeType() {
+        return STEAMING_TYPE;
+    }
+
+    @Override
+    public Component getTitle() {
+        return Component.literal("Steam Box");
+    }
+
+    @Override
+    public IDrawable getBackground() {
+        return this.background;
+    }
+
+    @Override
+    public IDrawable getIcon() {
+        return this.icon;
+    }
 
     @Override
     public void draw(SteamingRecipe recipe, mezz.jei.api.gui.ingredient.IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics, double mouseX, double mouseY) {

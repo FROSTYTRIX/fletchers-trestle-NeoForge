@@ -73,15 +73,15 @@ public class FletchersTrestleJeiPlugin implements IModPlugin {
             // into one synthetic recipe per vanilla potion so JEI indexes them
             // by their final item — searching "Jump Boost Arrow" finds the
             // jump-boost-specific variant.
-            boolean isGenericTipped  = recipe.requiredPotion.isEmpty() && recipe.output.is(Items.TIPPED_ARROW);
-            boolean isGenericModular = recipe.requiredPotion.isEmpty() && recipe.output.is(ModItems.MODULAR_ARROW.get());
+            boolean isGenericTipped = recipe.requiredPotion().isEmpty() && recipe.output().is(Items.TIPPED_ARROW);
+            boolean isGenericModular = recipe.requiredPotion().isEmpty() && recipe.output().is(ModItems.MODULAR_ARROW.get());
 
             if (isGenericTipped || isGenericModular) {
                 BuiltInRegistries.POTION.holders().forEach(potionHolder -> {
                     String potionId = BuiltInRegistries.POTION.getKey(potionHolder.value()).toString();
                     if (potionId.equals("minecraft:empty") || potionId.equals("minecraft:water")) return;
 
-                    ItemStack specificArrow = recipe.output.copy();
+                    ItemStack specificArrow = recipe.output().copy();
                     specificArrow.set(DataComponents.POTION_CONTENTS,
                             new net.minecraft.world.item.alchemy.PotionContents(potionHolder));
                     // For modular arrows, set a sample assembly so the model
@@ -93,10 +93,10 @@ public class FletchersTrestleJeiPlugin implements IModPlugin {
                     }
 
                     dippingRecipes.add(new DippingRecipe(
-                            recipe.inputItem,
-                            recipe.inputCount,
+                            recipe.inputItem(),
+                            recipe.inputCount(),
                             java.util.Optional.of(potionId),
-                            recipe.fluidAmount,
+                            recipe.fluidAmount(),
                             specificArrow
                     ));
                 });

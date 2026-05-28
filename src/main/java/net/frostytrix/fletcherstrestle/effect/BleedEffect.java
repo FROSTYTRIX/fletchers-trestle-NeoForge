@@ -15,7 +15,7 @@ public class BleedEffect extends MobEffect {
     public boolean applyEffectTick(LivingEntity entity, int amplifier) {
         // Deal 1.0f damage (half a heart) every time the tick hits.
         // The frequency is controlled by shouldApplyEffectTick below.
-        entity.hurt(entity.damageSources().generic(), 1.0f + (float)amplifier);
+        entity.hurt(entity.damageSources().generic(), 1.0f + (float) amplifier);
 
         // Spawn "Blood" particles (Redstone dust particles are the best vanilla substitute)
         if (entity.level() instanceof ServerLevel serverLevel) {

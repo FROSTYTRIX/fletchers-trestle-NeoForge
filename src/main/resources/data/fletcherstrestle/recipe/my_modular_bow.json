@@ -1,7 +1,15 @@
 {
   "type": "fletcherstrestle:modular_weapon_assembly",
-  "riser": { "tag": "fletcherstrestle:bow_risers" },
-  "limbs": { "tag": "fletcherstrestle:bow_limbs" },
-  "string": { "tag": "fletcherstrestle:bow_strings" },
-  "result": { "id": "fletcherstrestle:modular_bow" }
+  "riser": {
+    "tag": "fletcherstrestle:bow_risers"
+  },
+  "limbs": {
+    "tag": "fletcherstrestle:bow_limbs"
+  },
+  "string": {
+    "tag": "fletcherstrestle:bow_strings"
+  },
+  "result": {
+    "id": "fletcherstrestle:modular_bow"
+  }
 }

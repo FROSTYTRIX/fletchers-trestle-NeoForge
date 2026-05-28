@@ -7,7 +7,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 /**
  * Per-material numeric stats for an arrow fletching.
  *
- * @param inaccuracyMultiplier  multiplier on base inaccuracy (<1 = tighter group)
+ * @param inaccuracyMultiplier multiplier on base inaccuracy (<1 = tighter group)
  */
 public record ArrowFletchingStats(float inaccuracyMultiplier) {
 

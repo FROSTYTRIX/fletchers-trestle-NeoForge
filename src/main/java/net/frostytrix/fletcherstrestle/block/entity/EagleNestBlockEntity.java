@@ -25,26 +25,42 @@ import java.util.UUID;
 // and is auto-tamed to the nest's owner.
 public class EagleNestBlockEntity extends BlockEntity {
 
-    public static final int MAX_EGGS                  = 3;
-    public static final int MAX_CLAIMED_EAGLES        = 2;
+    public static final int MAX_EGGS = 3;
+    public static final int MAX_CLAIMED_EAGLES = 2;
     public static final long DEFAULT_HATCH_TIME_TICKS = 24000L; // ~20 in-game minutes
 
-    @Nullable private UUID ownerUUID;
-    @Nullable private String ownerName;          // cached so display works offline
+    @Nullable
+    private UUID ownerUUID;
+    @Nullable
+    private String ownerName;          // cached so display works offline
     private final List<UUID> claimedEagles = new ArrayList<>(MAX_CLAIMED_EAGLES);
-    private final List<EggData> eggs       = new ArrayList<>(MAX_EGGS);
+    private final List<EggData> eggs = new ArrayList<>(MAX_EGGS);
 
-    public record EggData(long laidAtTick, long hatchAtTick) {}
+    public record EggData(long laidAtTick, long hatchAtTick) {
+    }
 
     public EagleNestBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.EAGLE_NEST_BE.get(), pos, state);
     }
 
     // ----------------- Ownership / claim API -----------------
-    public boolean isClaimed()                  { return ownerUUID != null; }
-    @Nullable public UUID   getOwnerUUID()      { return ownerUUID; }
-    @Nullable public String getOwnerName()      { return ownerName; }
-    public List<UUID>       getClaimedEagles()  { return claimedEagles; }
+    public boolean isClaimed() {
+        return ownerUUID != null;
+    }
+
+    @Nullable
+    public UUID getOwnerUUID() {
+        return ownerUUID;
+    }
+
+    @Nullable
+    public String getOwnerName() {
+        return ownerName;
+    }
+
+    public List<UUID> getClaimedEagles() {
+        return claimedEagles;
+    }
 
     public void claim(UUID owner, String name) {
         this.ownerUUID = owner;
@@ -72,9 +88,17 @@ public class EagleNestBlockEntity extends BlockEntity {
     }
 
     // ----------------- Egg API -----------------
-    public boolean hasEggSpace()      { return eggs.size() < MAX_EGGS; }
-    public int eggCount()             { return eggs.size(); }
-    public List<EggData> getEggs()    { return eggs; }
+    public boolean hasEggSpace() {
+        return eggs.size() < MAX_EGGS;
+    }
+
+    public int eggCount() {
+        return eggs.size();
+    }
+
+    public List<EggData> getEggs() {
+        return eggs;
+    }
 
     // Drop a freshly-laid egg into the nest. Hatch time is gameTime + offset.
     public void addEgg(long currentGameTick) {

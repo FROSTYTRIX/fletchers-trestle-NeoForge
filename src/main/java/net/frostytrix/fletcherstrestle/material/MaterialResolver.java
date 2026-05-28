@@ -44,13 +44,15 @@ import java.util.function.Function;
  * land in a later phase if profile shows it's worth the lifecycle wiring.</p>
  */
 public final class MaterialResolver {
-    private MaterialResolver() {}
+    private MaterialResolver() {
+    }
 
     // ---- ItemStack → def ----
 
     public static Optional<Holder.Reference<BowLimbDef>> resolveBowLimb(HolderLookup.Provider lookups, ItemStack stack) {
         return byIngredient(lookups, ModMaterialRegistries.BOW_LIMB, stack, BowLimbDef::ingredient);
     }
+
     public static Optional<Holder.Reference<BowLimbDef>> resolveBowLimb(ItemStack stack) {
         HolderLookup.Provider a = pickAccess();
         return a == null ? Optional.empty() : resolveBowLimb(a, stack);
@@ -59,6 +61,7 @@ public final class MaterialResolver {
     public static Optional<Holder.Reference<BowRiserDef>> resolveBowRiser(HolderLookup.Provider lookups, ItemStack stack) {
         return byIngredient(lookups, ModMaterialRegistries.BOW_RISER, stack, BowRiserDef::ingredient);
     }
+
     public static Optional<Holder.Reference<BowRiserDef>> resolveBowRiser(ItemStack stack) {
         HolderLookup.Provider a = pickAccess();
         return a == null ? Optional.empty() : resolveBowRiser(a, stack);
@@ -67,6 +70,7 @@ public final class MaterialResolver {
     public static Optional<Holder.Reference<BowStringDef>> resolveBowString(HolderLookup.Provider lookups, ItemStack stack) {
         return byIngredient(lookups, ModMaterialRegistries.BOW_STRING, stack, BowStringDef::ingredient);
     }
+
     public static Optional<Holder.Reference<BowStringDef>> resolveBowString(ItemStack stack) {
         HolderLookup.Provider a = pickAccess();
         return a == null ? Optional.empty() : resolveBowString(a, stack);
@@ -75,6 +79,7 @@ public final class MaterialResolver {
     public static Optional<Holder.Reference<ArrowHeadDef>> resolveArrowHead(HolderLookup.Provider lookups, ItemStack stack) {
         return byIngredient(lookups, ModMaterialRegistries.ARROW_HEAD, stack, ArrowHeadDef::ingredient);
     }
+
     public static Optional<Holder.Reference<ArrowHeadDef>> resolveArrowHead(ItemStack stack) {
         HolderLookup.Provider a = pickAccess();
         return a == null ? Optional.empty() : resolveArrowHead(a, stack);
@@ -83,6 +88,7 @@ public final class MaterialResolver {
     public static Optional<Holder.Reference<ArrowShaftDef>> resolveArrowShaft(HolderLookup.Provider lookups, ItemStack stack) {
         return byIngredient(lookups, ModMaterialRegistries.ARROW_SHAFT, stack, ArrowShaftDef::ingredient);
     }
+
     public static Optional<Holder.Reference<ArrowShaftDef>> resolveArrowShaft(ItemStack stack) {
         HolderLookup.Provider a = pickAccess();
         return a == null ? Optional.empty() : resolveArrowShaft(a, stack);
@@ -91,6 +97,7 @@ public final class MaterialResolver {
     public static Optional<Holder.Reference<ArrowFletchingDef>> resolveArrowFletching(HolderLookup.Provider lookups, ItemStack stack) {
         return byIngredient(lookups, ModMaterialRegistries.ARROW_FLETCHING, stack, ArrowFletchingDef::ingredient);
     }
+
     public static Optional<Holder.Reference<ArrowFletchingDef>> resolveArrowFletching(ItemStack stack) {
         HolderLookup.Provider a = pickAccess();
         return a == null ? Optional.empty() : resolveArrowFletching(a, stack);
@@ -101,6 +108,7 @@ public final class MaterialResolver {
     public static Optional<Holder.Reference<BowLimbDef>> resolveBowLimbById(HolderLookup.Provider lookups, String idOrLegacy) {
         return byId(lookups, ModMaterialRegistries.BOW_LIMB, idOrLegacy);
     }
+
     public static Optional<Holder.Reference<BowLimbDef>> resolveBowLimbById(String idOrLegacy) {
         HolderLookup.Provider a = pickAccess();
         return a == null ? Optional.empty() : resolveBowLimbById(a, idOrLegacy);
@@ -109,6 +117,7 @@ public final class MaterialResolver {
     public static Optional<Holder.Reference<BowRiserDef>> resolveBowRiserById(HolderLookup.Provider lookups, String idOrLegacy) {
         return byId(lookups, ModMaterialRegistries.BOW_RISER, idOrLegacy);
     }
+
     public static Optional<Holder.Reference<BowRiserDef>> resolveBowRiserById(String idOrLegacy) {
         HolderLookup.Provider a = pickAccess();
         return a == null ? Optional.empty() : resolveBowRiserById(a, idOrLegacy);
@@ -117,6 +126,7 @@ public final class MaterialResolver {
     public static Optional<Holder.Reference<BowStringDef>> resolveBowStringById(HolderLookup.Provider lookups, String idOrLegacy) {
         return byId(lookups, ModMaterialRegistries.BOW_STRING, idOrLegacy);
     }
+
     public static Optional<Holder.Reference<BowStringDef>> resolveBowStringById(String idOrLegacy) {
         HolderLookup.Provider a = pickAccess();
         return a == null ? Optional.empty() : resolveBowStringById(a, idOrLegacy);
@@ -125,6 +135,7 @@ public final class MaterialResolver {
     public static Optional<Holder.Reference<ArrowHeadDef>> resolveArrowHeadById(HolderLookup.Provider lookups, String idOrLegacy) {
         return byId(lookups, ModMaterialRegistries.ARROW_HEAD, idOrLegacy);
     }
+
     public static Optional<Holder.Reference<ArrowHeadDef>> resolveArrowHeadById(String idOrLegacy) {
         HolderLookup.Provider a = pickAccess();
         return a == null ? Optional.empty() : resolveArrowHeadById(a, idOrLegacy);
@@ -133,6 +144,7 @@ public final class MaterialResolver {
     public static Optional<Holder.Reference<ArrowShaftDef>> resolveArrowShaftById(HolderLookup.Provider lookups, String idOrLegacy) {
         return byId(lookups, ModMaterialRegistries.ARROW_SHAFT, idOrLegacy);
     }
+
     public static Optional<Holder.Reference<ArrowShaftDef>> resolveArrowShaftById(String idOrLegacy) {
         HolderLookup.Provider a = pickAccess();
         return a == null ? Optional.empty() : resolveArrowShaftById(a, idOrLegacy);
@@ -141,6 +153,7 @@ public final class MaterialResolver {
     public static Optional<Holder.Reference<ArrowFletchingDef>> resolveArrowFletchingById(HolderLookup.Provider lookups, String idOrLegacy) {
         return byId(lookups, ModMaterialRegistries.ARROW_FLETCHING, idOrLegacy);
     }
+
     public static Optional<Holder.Reference<ArrowFletchingDef>> resolveArrowFletchingById(String idOrLegacy) {
         HolderLookup.Provider a = pickAccess();
         return a == null ? Optional.empty() : resolveArrowFletchingById(a, idOrLegacy);
@@ -157,7 +170,9 @@ public final class MaterialResolver {
         return "material." + entryId.getNamespace() + "." + entryId.getPath();
     }
 
-    /** {@link #displayKey(ResourceLocation)} wrapped in a {@link Component}. */
+    /**
+     * {@link #displayKey(ResourceLocation)} wrapped in a {@link Component}.
+     */
     public static Component displayName(ResourceLocation entryId) {
         return Component.translatable(displayKey(entryId));
     }

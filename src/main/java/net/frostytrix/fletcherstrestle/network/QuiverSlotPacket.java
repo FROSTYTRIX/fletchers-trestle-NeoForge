@@ -21,7 +21,9 @@ public record QuiverSlotPacket(boolean cycleRight) implements CustomPacketPayloa
     );
 
     @Override
-    public Type<? extends CustomPacketPayload> type() { return TYPE; }
+    public Type<? extends CustomPacketPayload> type() {
+        return TYPE;
+    }
 
     public static void handle(final QuiverSlotPacket payload, final IPayloadContext context) {
         context.enqueueWork(() -> {

@@ -1,8 +1,19 @@
 {
   "variants": {
-    "facing=north": { "model": "fletcherstrestle:block/shaving_horse" },
-    "facing=south": { "model": "fletcherstrestle:block/shaving_horse", "y": 180 },
-    "facing=east":  { "model": "fletcherstrestle:block/shaving_horse", "y": 90 },
-    "facing=west":  { "model": "fletcherstrestle:block/shaving_horse", "y": 270 }
+    "facing=north": {
+      "model": "fletcherstrestle:block/shaving_horse"
+    },
+    "facing=south": {
+      "model": "fletcherstrestle:block/shaving_horse",
+      "y": 180
+    },
+    "facing=east": {
+      "model": "fletcherstrestle:block/shaving_horse",
+      "y": 90
+    },
+    "facing=west": {
+      "model": "fletcherstrestle:block/shaving_horse",
+      "y": 270
+    }
   }
 }

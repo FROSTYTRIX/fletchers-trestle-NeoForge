@@ -11,7 +11,10 @@ import net.frostytrix.fletcherstrestle.component.ModDataComponents;
 import net.frostytrix.fletcherstrestle.item.custom.ModularBowItem;
 import net.frostytrix.fletcherstrestle.material.Materials;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.renderer.block.model.*;
+import net.minecraft.client.renderer.block.model.BakedQuad;
+import net.minecraft.client.renderer.block.model.ItemOverrides;
+import net.minecraft.client.renderer.block.model.ItemTransform;
+import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.resources.model.Material;
@@ -24,7 +27,6 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.item.component.ChargedProjectiles;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.client.model.ItemLayerModel;
@@ -122,15 +124,15 @@ public class ModularBakedModel implements BakedModel {
                 String pull = getPullSuffix(stack, entity, maxPull);
 
                 // FALLBACK LOGIC: if no assembly, render oak/wood/spider.
-                String limbMat   = bow != null ? bow.limbMaterial()   : "oak";
-                String riserMat  = bow != null ? bow.riserMaterial()  : "wood";
+                String limbMat = bow != null ? bow.limbMaterial() : "oak";
+                String riserMat = bow != null ? bow.riserMaterial() : "wood";
                 String stringMat = bow != null ? bow.stringMaterial() : "spider";
 
                 // Each texture lookup honors a def's optional "texture"
                 // override and otherwise falls back to
                 // <materialNamespace>:<basePath>/<folder>/<id><suffix>.
-                textures.add(Materials.bowLimbTexture(  limbMat,   basePath + "/limbs",   "_limb" + pull));
-                textures.add(Materials.bowRiserTexture( riserMat,  basePath + "/risers",  "_riser"));
+                textures.add(Materials.bowLimbTexture(limbMat, basePath + "/limbs", "_limb" + pull));
+                textures.add(Materials.bowRiserTexture(riserMat, basePath + "/risers", "_riser"));
                 textures.add(Materials.bowStringTexture(stringMat, basePath + "/strings", "_string" + pull));
                 if (!pull.isEmpty()) {
                     // The "arrow on the bow" silhouette stays in our namespace
@@ -147,11 +149,11 @@ public class ModularBakedModel implements BakedModel {
             else if (basePath.contains("crossbow")) {
                 String state = getCrossbowStateSuffix(stack, entity);
 
-                String limbMat   = bow != null ? bow.limbMaterial()   : "oak";
-                String riserMat  = bow != null ? bow.riserMaterial()  : "wood";
+                String limbMat = bow != null ? bow.limbMaterial() : "oak";
+                String riserMat = bow != null ? bow.riserMaterial() : "wood";
                 String stringMat = bow != null ? bow.stringMaterial() : "spider";
 
-                textures.add(Materials.bowLimbTexture( limbMat,  basePath + "/limbs",  "_limb"));
+                textures.add(Materials.bowLimbTexture(limbMat, basePath + "/limbs", "_limb"));
                 textures.add(Materials.bowRiserTexture(riserMat, basePath + "/risers", "_riser"));
 
                 String stringState = state.equals("_charged") ? "_pulling_2" : state;
@@ -180,13 +182,13 @@ public class ModularBakedModel implements BakedModel {
             }
             // --- 3. MODULAR ARROW ---
             else if (basePath.contains("arrow")) {
-                String headMat   = arrow != null ? arrow.head()      : "flint";
-                String shaftMat  = arrow != null ? arrow.shaft()     : "oak";
+                String headMat = arrow != null ? arrow.head() : "flint";
+                String shaftMat = arrow != null ? arrow.shaft() : "oak";
                 String fletchMat = arrow != null ? arrow.fletching() : "feather";
 
-                textures.add(Materials.arrowShaftTexture(   shaftMat,  basePath + "/shafts",     "_shaft"));     // tint idx 0
+                textures.add(Materials.arrowShaftTexture(shaftMat, basePath + "/shafts", "_shaft"));     // tint idx 0
                 textures.add(Materials.arrowFletchingTexture(fletchMat, basePath + "/fletchings", "_fletching")); // tint idx 1
-                textures.add(Materials.arrowHeadTexture(    headMat,   basePath + "/heads",      "_head"));      // tint idx 2
+                textures.add(Materials.arrowHeadTexture(headMat, basePath + "/heads", "_head"));      // tint idx 2
 
                 // Glass-vial arrows that have been dipped get a fourth layer:
                 // the "liquid" silhouette tinted to the potion's color via the
@@ -219,7 +221,7 @@ public class ModularBakedModel implements BakedModel {
 
         private String getPullSuffix(ItemStack stack, @Nullable LivingEntity entity, float maxPull) {
             if (entity != null && entity.isUsingItem() && entity.getUseItem() == stack) {
-                float pull = (float)(stack.getUseDuration(entity) - entity.getUseItemRemainingTicks()) / maxPull;
+                float pull = (float) (stack.getUseDuration(entity) - entity.getUseItemRemainingTicks()) / maxPull;
                 if (pull >= 0.9f) return "_pulling_2";
                 if (pull >= 0.65f) return "_pulling_1";
                 return "_pulling_0";
@@ -260,26 +262,86 @@ public class ModularBakedModel implements BakedModel {
         }
     }
 
-    private static class WrappedBakedModel implements BakedModel {
-        private final BakedModel original;
-        private final ItemTransforms transforms;
-        public WrappedBakedModel(BakedModel original, ItemTransforms transforms) { this.original = original; this.transforms = transforms; }
-        @Override public List<BakedQuad> getQuads(@Nullable BlockState s, @Nullable Direction d, RandomSource r) { return original.getQuads(s, d, r); }
-        @Override public boolean useAmbientOcclusion() { return false; }
-        @Override public boolean isGui3d() { return false; }
-        @Override public boolean usesBlockLight() { return false; }
-        @Override public boolean isCustomRenderer() { return false; }
-        @Override public TextureAtlasSprite getParticleIcon() { return original.getParticleIcon(); }
-        @Override public ItemOverrides getOverrides() { return ItemOverrides.EMPTY; }
-        @Override public ItemTransforms getTransforms() { return transforms; }
+    private record WrappedBakedModel(BakedModel original, ItemTransforms transforms) implements BakedModel {
+
+        @Override
+            public List<BakedQuad> getQuads(@Nullable BlockState s, @Nullable Direction d, RandomSource r) {
+                return original.getQuads(s, d, r);
+            }
+
+            @Override
+            public boolean useAmbientOcclusion() {
+                return false;
+            }
+
+            @Override
+            public boolean isGui3d() {
+                return false;
+            }
+
+            @Override
+            public boolean usesBlockLight() {
+                return false;
+            }
+
+            @Override
+            public boolean isCustomRenderer() {
+                return false;
+            }
+
+            @Override
+            public TextureAtlasSprite getParticleIcon() {
+                return original.getParticleIcon();
+            }
+
+            @Override
+            public ItemOverrides getOverrides() {
+                return ItemOverrides.EMPTY;
+            }
+
+            @Override
+            public ItemTransforms getTransforms() {
+                return transforms;
+            }
+        }
+
+    @Override
+    public List<BakedQuad> getQuads(@Nullable BlockState s, @Nullable Direction d, RandomSource r) {
+        return Collections.emptyList();
     }
 
-    @Override public List<BakedQuad> getQuads(@Nullable BlockState s, @Nullable Direction d, RandomSource r) { return Collections.emptyList(); }
-    @Override public boolean useAmbientOcclusion() { return false; }
-    @Override public boolean isGui3d() { return false; }
-    @Override public boolean usesBlockLight() { return false; }
-    @Override public boolean isCustomRenderer() { return false; }
-    @Override public TextureAtlasSprite getParticleIcon() { return spriteGetter.apply(new Material(InventoryMenu.BLOCK_ATLAS, context.getRenderTypeHint())); }
-    @Override public ItemOverrides getOverrides() { return this.overrides; }
-    @Override public ItemTransforms getTransforms() { return this.transforms; }
+    @Override
+    public boolean useAmbientOcclusion() {
+        return false;
+    }
+
+    @Override
+    public boolean isGui3d() {
+        return false;
+    }
+
+    @Override
+    public boolean usesBlockLight() {
+        return false;
+    }
+
+    @Override
+    public boolean isCustomRenderer() {
+        return false;
+    }
+
+    @Override
+    public TextureAtlasSprite getParticleIcon() {
+        return spriteGetter.apply(new Material(InventoryMenu.BLOCK_ATLAS, context.getRenderTypeHint()));
+    }
+
+    @Override
+    public ItemOverrides getOverrides() {
+        return this.overrides;
+    }
+
+    @Override
+    public ItemTransforms getTransforms() {
+        return this.transforms;
+    }
 }

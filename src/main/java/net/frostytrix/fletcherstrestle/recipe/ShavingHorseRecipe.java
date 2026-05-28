@@ -22,8 +22,13 @@ public class ShavingHorseRecipe implements Recipe<SingleRecipeInput> {
         this.shavesRequired = shavesRequired;
     }
 
-    public Ingredient getInput() { return input; }
-    public int getShavesRequired() { return shavesRequired; }
+    public Ingredient getInput() {
+        return input;
+    }
+
+    public int getShavesRequired() {
+        return shavesRequired;
+    }
 
     @Override
     public boolean matches(SingleRecipeInput input, Level level) {
@@ -36,16 +41,24 @@ public class ShavingHorseRecipe implements Recipe<SingleRecipeInput> {
     }
 
     @Override
-    public boolean canCraftInDimensions(int width, int height) { return true; }
+    public boolean canCraftInDimensions(int width, int height) {
+        return true;
+    }
 
     @Override
-    public ItemStack getResultItem(HolderLookup.Provider provider) { return this.result; }
+    public ItemStack getResultItem(HolderLookup.Provider provider) {
+        return this.result;
+    }
 
     @Override
-    public RecipeSerializer<?> getSerializer() { return ModRecipes.SHAVING_SERIALIZER.get(); }
+    public RecipeSerializer<?> getSerializer() {
+        return ModRecipes.SHAVING_SERIALIZER.get();
+    }
 
     @Override
-    public RecipeType<?> getType() { return ModRecipes.SHAVING_TYPE.get(); }
+    public RecipeType<?> getType() {
+        return ModRecipes.SHAVING_TYPE.get();
+    }
 
     public static class Serializer implements RecipeSerializer<ShavingHorseRecipe> {
         public static final MapCodec<ShavingHorseRecipe> CODEC = RecordCodecBuilder.mapCodec(inst -> inst.group(
@@ -58,8 +71,15 @@ public class ShavingHorseRecipe implements Recipe<SingleRecipeInput> {
                 ShavingHorseRecipe.Serializer::toNetwork, ShavingHorseRecipe.Serializer::fromNetwork
         );
 
-        @Override public MapCodec<ShavingHorseRecipe> codec() { return CODEC; }
-        @Override public StreamCodec<RegistryFriendlyByteBuf, ShavingHorseRecipe> streamCodec() { return STREAM_CODEC; }
+        @Override
+        public MapCodec<ShavingHorseRecipe> codec() {
+            return CODEC;
+        }
+
+        @Override
+        public StreamCodec<RegistryFriendlyByteBuf, ShavingHorseRecipe> streamCodec() {
+            return STREAM_CODEC;
+        }
 
         private static ShavingHorseRecipe fromNetwork(RegistryFriendlyByteBuf buf) {
             return new ShavingHorseRecipe(

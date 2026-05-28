@@ -4,9 +4,9 @@
   "package": "net.frostytrix.fletcherstrestle.mixin.client",
   "compatibilityLevel": "JAVA_21",
   "client": [
-    "MountSteeringMixin",
     "CameraMixin",
-    "ItemInHandRendererMixin"
+    "ItemInHandRendererMixin",
+    "MountSteeringMixin"
   ],
   "injectors": {
     "defaultRequire": 1

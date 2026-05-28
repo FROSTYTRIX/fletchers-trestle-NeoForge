@@ -37,10 +37,10 @@ public class ModDataComponents {
 
     public static final Supplier<DataComponentType<Integer>> QUIVER_SELECTED_SLOT =
             DATA_COMPONENT_TYPES.register("quiver_selected_slot",
-            () -> DataComponentType.<Integer>builder()
-                    .persistent(Codec.INT)
-                    .networkSynchronized(ByteBufCodecs.INT)
-                    .build());
+                    () -> DataComponentType.<Integer>builder()
+                            .persistent(Codec.INT)
+                            .networkSynchronized(ByteBufCodecs.INT)
+                            .build());
 
     // Inside ModDataComponents.java
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> MAX_QUIVER_SLOTS =
@@ -59,5 +59,7 @@ public class ModDataComponents {
                             .networkSynchronized(UUIDUtil.STREAM_CODEC)
                             .build());
 
-    public static void register(IEventBus bus) {DATA_COMPONENT_TYPES.register(bus);}
+    public static void register(IEventBus bus) {
+        DATA_COMPONENT_TYPES.register(bus);
+    }
 }

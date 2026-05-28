@@ -26,7 +26,8 @@ public class ShavingRecipeBuilder implements RecipeBuilder {
     private int shavesRequired = 3;
 
     private final Map<String, Criterion<?>> criteria = new LinkedHashMap<>();
-    @Nullable private String group;
+    @Nullable
+    private String group;
 
     private ShavingRecipeBuilder(Ingredient input, ItemLike result) {
         this.input = input;

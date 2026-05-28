@@ -7,9 +7,9 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 /**
  * Per-material numeric stats for a bow riser (the central grip).
  *
- * @param maxDurability       weapon-durability cap when this riser is used
- * @param inaccuracyMultiplier  multiplier applied to base arrow inaccuracy
- *                              (iron riser ≈ 0.2 = laser-precise)
+ * @param maxDurability        weapon-durability cap when this riser is used
+ * @param inaccuracyMultiplier multiplier applied to base arrow inaccuracy
+ *                             (iron riser ≈ 0.2 = laser-precise)
  */
 public record BowRiserStats(
         int maxDurability,

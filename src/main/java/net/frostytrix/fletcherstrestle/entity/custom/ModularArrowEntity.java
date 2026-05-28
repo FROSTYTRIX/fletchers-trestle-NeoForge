@@ -4,15 +4,12 @@ import net.frostytrix.fletcherstrestle.block.ModBlocks;
 import net.frostytrix.fletcherstrestle.block.custom.RopeBlock;
 import net.frostytrix.fletcherstrestle.component.ArrowAssembly;
 import net.frostytrix.fletcherstrestle.component.ModDataComponents;
-import net.frostytrix.fletcherstrestle.effect.ModEffects;
 import net.frostytrix.fletcherstrestle.entity.ModEntities;
 import net.frostytrix.fletcherstrestle.item.ModItems;
-import net.frostytrix.fletcherstrestle.item.custom.ModularArrowItem;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -20,15 +17,15 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LightningBolt;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
@@ -37,10 +34,8 @@ import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.List;
-
 public class ModularArrowEntity extends AbstractArrow {
-    private Vec3 startPos = null;
+    private final Vec3 startPos = null;
 
     // Echo Shard Head
     private int resonanceTicks = -1;
@@ -93,35 +88,45 @@ public class ModularArrowEntity extends AbstractArrow {
         return this.entityData.get(IS_HOOKED);
     }
 
-    /** Position at which this arrow was spawned. {@code null} until set
-     *  by the shooting code on the first tick. Used by distance-scaled
-     *  effects (e.g. {@link net.frostytrix.fletcherstrestle.material.effect.DamageMultiplierByDistanceEffect}). */
+    /**
+     * Position at which this arrow was spawned. {@code null} until set
+     * by the shooting code on the first tick. Used by distance-scaled
+     * effects (e.g. {@link net.frostytrix.fletcherstrestle.material.effect.DamageMultiplierByDistanceEffect}).
+     */
     public @Nullable Vec3 getStartPos() {
         return this.startPos;
     }
 
-    /** Public accessor for the protected vanilla
-     *  {@link net.minecraft.world.entity.projectile.AbstractArrow#getPickupItem()}.
-     *  Used by effects that need to drop the arrow stack on hit
-     *  (e.g. {@link net.frostytrix.fletcherstrestle.material.effect.DropSelfOnHitEffect}). */
+    /**
+     * Public accessor for the protected vanilla
+     * {@link net.minecraft.world.entity.projectile.AbstractArrow#getPickupItem()}.
+     * Used by effects that need to drop the arrow stack on hit
+     * (e.g. {@link net.frostytrix.fletcherstrestle.material.effect.DropSelfOnHitEffect}).
+     */
     public ItemStack getPickupItemPublic() {
         return this.getPickupItem();
     }
 
-    /** True once the arrow has stuck into a block / become a pickup-able
-     *  entity. Mirrors the protected {@code inGround} field on AbstractArrow.
-     *  Effects use this to gate tick-time work to in-flight only. */
+    /**
+     * True once the arrow has stuck into a block / become a pickup-able
+     * entity. Mirrors the protected {@code inGround} field on AbstractArrow.
+     * Effects use this to gate tick-time work to in-flight only.
+     */
     public boolean isInGroundPublic() {
         return this.inGround;
     }
 
-    /** Number of times this arrow has bounced off a block.
-     *  Read by {@link net.frostytrix.fletcherstrestle.material.effect.BounceOnBlockEffect}. */
+    /**
+     * Number of times this arrow has bounced off a block.
+     * Read by {@link net.frostytrix.fletcherstrestle.material.effect.BounceOnBlockEffect}.
+     */
     public int getBounceCount() {
         return bounceCount;
     }
 
-    /** Increment the bounce counter. Called from the bounce effect after a successful bounce. */
+    /**
+     * Increment the bounce counter. Called from the bounce effect after a successful bounce.
+     */
     public void incrementBounceCount() {
         this.bounceCount++;
     }
@@ -139,8 +144,8 @@ public class ModularArrowEntity extends AbstractArrow {
     private void applyFlightModifiers(ItemStack ammo) {
         ArrowAssembly assembly = ammo.get(ModDataComponents.ARROW_ASSEMBLY.get());
         if (assembly != null) {
-            var shaft     = net.frostytrix.fletcherstrestle.material.Materials.arrowShaft(assembly.shaft());
-            var head      = net.frostytrix.fletcherstrestle.material.Materials.arrowHead(assembly.head());
+            var shaft = net.frostytrix.fletcherstrestle.material.Materials.arrowShaft(assembly.shaft());
+            var head = net.frostytrix.fletcherstrestle.material.Materials.arrowHead(assembly.head());
             var fletching = net.frostytrix.fletcherstrestle.material.Materials.arrowFletching(assembly.fletching());
 
             // Stats: base damage scaled by head, initial velocity scaled by shaft.
@@ -200,8 +205,8 @@ public class ModularArrowEntity extends AbstractArrow {
 
         // --- PRE-HIT effects: damage modifiers that need to influence
         // the damage value vanilla is about to apply.
-        var head      = net.frostytrix.fletcherstrestle.material.Materials.arrowHead(assembly.head());
-        var shaft     = net.frostytrix.fletcherstrestle.material.Materials.arrowShaft(assembly.shaft());
+        var head = net.frostytrix.fletcherstrestle.material.Materials.arrowHead(assembly.head());
+        var shaft = net.frostytrix.fletcherstrestle.material.Materials.arrowShaft(assembly.shaft());
         var fletching = net.frostytrix.fletcherstrestle.material.Materials.arrowFletching(assembly.fletching());
         head.effects().forEach(e -> e.onPreArrowHit(this, result));
         shaft.effects().forEach(e -> e.onPreArrowHit(this, result));
@@ -279,11 +284,11 @@ public class ModularArrowEntity extends AbstractArrow {
         // Flight modifiers only apply when flying
         if (!this.inGround) {
             // Apply gravity Mult
-            this.setDeltaMovement(this.getDeltaMovement().add(0, -(shaft.stats().gravityMultiplier()-1)/10, 0));
+            this.setDeltaMovement(this.getDeltaMovement().add(0, -(shaft.stats().gravityMultiplier() - 1) / 10, 0));
 
             // Tick-time effects: acacia speed boost, serrated homing, and
             // anything else a modpack attaches.
-            var head      = net.frostytrix.fletcherstrestle.material.Materials.arrowHead(assembly.head());
+            var head = net.frostytrix.fletcherstrestle.material.Materials.arrowHead(assembly.head());
             var fletching = net.frostytrix.fletcherstrestle.material.Materials.arrowFletching(assembly.fletching());
             head.effects().forEach(e -> e.onArrowTick(this));
             shaft.effects().forEach(e -> e.onArrowTick(this));
@@ -419,8 +424,8 @@ public class ModularArrowEntity extends AbstractArrow {
             // of motion is enough for any 1-block obstacle.
             Vec3 dir = this.getDeltaMovement().normalize();
             this.setPos(this.getX() + dir.x * 0.6,
-                        this.getY() + dir.y * 0.6,
-                        this.getZ() + dir.z * 0.6);
+                    this.getY() + dir.y * 0.6,
+                    this.getZ() + dir.z * 0.6);
             return;
         }
 
@@ -459,8 +464,8 @@ public class ModularArrowEntity extends AbstractArrow {
         // state signal it by bumping bounceCount — if that happened,
         // skip the vanilla embed path.
         int bounceBefore = this.bounceCount;
-        var head      = net.frostytrix.fletcherstrestle.material.Materials.arrowHead(assembly.head());
-        var shaft     = net.frostytrix.fletcherstrestle.material.Materials.arrowShaft(assembly.shaft());
+        var head = net.frostytrix.fletcherstrestle.material.Materials.arrowHead(assembly.head());
+        var shaft = net.frostytrix.fletcherstrestle.material.Materials.arrowShaft(assembly.shaft());
         var fletching = net.frostytrix.fletcherstrestle.material.Materials.arrowFletching(assembly.fletching());
         head.effects().forEach(e -> e.onArrowHitBlock(this, result));
         shaft.effects().forEach(e -> e.onArrowHitBlock(this, result));
@@ -518,8 +523,8 @@ public class ModularArrowEntity extends AbstractArrow {
                 // Coloured cloud at the impact site so the splash is visible.
                 int color = potion.getColor();
                 float r = ((color >> 16) & 0xFF) / 255f;
-                float g = ((color >>  8) & 0xFF) / 255f;
-                float b = ( color        & 0xFF) / 255f;
+                float g = ((color >> 8) & 0xFF) / 255f;
+                float b = (color & 0xFF) / 255f;
                 sl.sendParticles(new net.minecraft.core.particles.DustParticleOptions(
                                 new org.joml.Vector3f(r, g, b), 1.0f),
                         hitPos.x, hitPos.y, hitPos.z,

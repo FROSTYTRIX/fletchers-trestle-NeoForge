@@ -18,7 +18,6 @@ import net.frostytrix.fletcherstrestle.item.ModItems;
 import net.frostytrix.fletcherstrestle.item.custom.ModularBowItem;
 import net.frostytrix.fletcherstrestle.item.custom.ModularCrossbowItem;
 import net.frostytrix.fletcherstrestle.item.custom.ModularQuiverItem;
-import net.frostytrix.fletcherstrestle.network.FletchingTabPayload;
 import net.frostytrix.fletcherstrestle.network.QuiverSlotPacket;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BiomeColors;

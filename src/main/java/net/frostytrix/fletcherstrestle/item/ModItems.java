@@ -90,16 +90,10 @@ public class ModItems {
     // Flax
 
     public static final DeferredItem<Item> FLAX_SEEDS = ITEMS.register("flax_seeds",
-            () -> new ItemNameBlockItem(ModBlocks.FLAX_CROP.get(),new Item.Properties()));
+            () -> new ItemNameBlockItem(ModBlocks.FLAX_CROP.get(), new Item.Properties()));
 
     public static final DeferredItem<Item> FLAX = ITEMS.register("flax",
             () -> new Item(new Item.Properties()));
-
-
-
-
-
-
 
 
     public static final DeferredItem<Item> MODULAR_BOW = ITEMS.register("modular_bow",
@@ -150,7 +144,6 @@ public class ModItems {
 
     public static final DeferredItem<Item> EAGLE_EGG = ITEMS.register("eagle_egg",
             () -> new EagleEggItem(new Item.Properties().stacksTo(16)));
-
 
 
     public static void register(IEventBus eventBus) {

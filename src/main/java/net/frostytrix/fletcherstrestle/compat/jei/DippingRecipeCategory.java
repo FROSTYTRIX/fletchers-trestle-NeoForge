@@ -6,11 +6,11 @@ import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.gui.drawable.IDrawableAnimated;
 import mezz.jei.api.gui.drawable.IDrawableStatic;
 import mezz.jei.api.helpers.IGuiHelper;
+import mezz.jei.api.neoforge.NeoForgeTypes;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
-import mezz.jei.api.neoforge.NeoForgeTypes;
 import net.frostytrix.fletcherstrestle.FletcherTrestle;
 import net.frostytrix.fletcherstrestle.block.ModBlocks;
 import net.frostytrix.fletcherstrestle.component.ArrowAssembly;
@@ -29,7 +29,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.item.component.CustomData;
-import net.minecraft.world.level.material.Fluids;
 import net.neoforged.neoforge.fluids.FluidStack;
 
 import java.util.ArrayList;
@@ -51,10 +50,25 @@ public class DippingRecipeCategory implements IRecipeCategory<DippingRecipe> {
         this.arrow = helper.createAnimatedDrawable(staticArrow, 200, IDrawableAnimated.StartDirection.LEFT, false);
     }
 
-    @Override public RecipeType<DippingRecipe> getRecipeType() { return DIPPING_TYPE; }
-    @Override public Component getTitle() { return Component.literal("Dipping Vat"); }
-    @Override public IDrawable getBackground() { return this.background; }
-    @Override public IDrawable getIcon() { return this.icon; }
+    @Override
+    public RecipeType<DippingRecipe> getRecipeType() {
+        return DIPPING_TYPE;
+    }
+
+    @Override
+    public Component getTitle() {
+        return Component.literal("Dipping Vat");
+    }
+
+    @Override
+    public IDrawable getBackground() {
+        return this.background;
+    }
+
+    @Override
+    public IDrawable getIcon() {
+        return this.icon;
+    }
 
     @Override
     public void draw(DippingRecipe recipe, mezz.jei.api.gui.ingredient.IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics, double mouseX, double mouseY) {
@@ -68,13 +82,13 @@ public class DippingRecipeCategory implements IRecipeCategory<DippingRecipe> {
         // Special-case the modular potion-arrow recipe so JEI shows a real
         // glass-vial arrow + sample potion + filled output instead of three
         // empty modular_arrow icons. Detected via the output item.
-        boolean isModularPotion = recipe.output.is(ModItems.MODULAR_ARROW.get());
+        boolean isModularPotion = recipe.output().is(ModItems.MODULAR_ARROW.get());
 
         // ---- 1. INPUT SLOT ----
         List<ItemStack> inputStacks = new ArrayList<>();
-        for (ItemStack stack : recipe.inputItem.getItems()) {
+        for (ItemStack stack : recipe.inputItem().getItems()) {
             ItemStack copy = stack.copy();
-            copy.setCount(recipe.inputCount);
+            copy.setCount(recipe.inputCount());
             if (isModularPotion && copy.is(ModItems.MODULAR_ARROW.get())) {
                 // Empty glass-vial arrow (no potion yet) — visualizes what
                 // you'd put in the vat.
@@ -90,11 +104,11 @@ public class DippingRecipeCategory implements IRecipeCategory<DippingRecipe> {
         // Pick a sample potion ID for the modular case so the fluid shows
         // a real color and the tooltip names it. Defaults to regeneration
         // because it's instantly recognisable pink.
-        String fluidPotionId = recipe.requiredPotion.orElse(
+        String fluidPotionId = recipe.requiredPotion().orElse(
                 isModularPotion ? "minecraft:strong_regeneration" : null);
 
         FluidStack fluidToDisplay = new FluidStack(
-                ModFluids.LIQUID_POTION_SOURCE.get(), recipe.fluidAmount);
+                ModFluids.LIQUID_POTION_SOURCE.get(), recipe.fluidAmount());
         if (fluidPotionId != null) {
             CompoundTag tag = new CompoundTag();
             tag.putString("potion", fluidPotionId);
@@ -103,7 +117,7 @@ public class DippingRecipeCategory implements IRecipeCategory<DippingRecipe> {
 
         builder.addSlot(RecipeIngredientRole.INPUT, 43, 22)
                 .addIngredient(NeoForgeTypes.FLUID_STACK, fluidToDisplay)
-                .setFluidRenderer(recipe.fluidAmount, false, 16, 16)
+                .setFluidRenderer(recipe.fluidAmount(), false, 16, 16)
                 .addTooltipCallback((recipeSlotView, tooltip) -> {
                     recipeSlotView.getDisplayedIngredient(NeoForgeTypes.FLUID_STACK).ifPresent(fluidStack -> {
                         net.minecraft.world.item.component.CustomData data = fluidStack.get(DataComponents.CUSTOM_DATA);
@@ -117,7 +131,7 @@ public class DippingRecipeCategory implements IRecipeCategory<DippingRecipe> {
                                 dummyPotion.set(DataComponents.POTION_CONTENTS, new PotionContents(potionHolder));
                                 // For modular arrows, the fluid is just an example —
                                 // any potion works. Make that clear in the tooltip.
-                                if (recipe.requiredPotion.isEmpty()) {
+                                if (recipe.requiredPotion().isEmpty()) {
                                     tooltip.add(0, Component.literal("Any potion (example: ")
                                             .append(dummyPotion.getHoverName())
                                             .append(Component.literal(")"))
@@ -132,7 +146,7 @@ public class DippingRecipeCategory implements IRecipeCategory<DippingRecipe> {
                 });
 
         // ---- 3. OUTPUT SLOT ----
-        ItemStack outputDisplay = recipe.output.copy();
+        ItemStack outputDisplay = recipe.output().copy();
         if (isModularPotion) {
             // Show what a filled glass-vial arrow looks like: same assembly
             // as the input + the example potion's effect contents.

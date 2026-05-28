@@ -25,26 +25,27 @@ import java.util.Optional;
  * coordination the simple effect hooks don't expose yet.</p>
  */
 public final class BuiltinArrowFletchings {
-    private BuiltinArrowFletchings() {}
+    private BuiltinArrowFletchings() {
+    }
 
-    public static final ResourceKey<ArrowFletchingDef> FEATHER  = key("feather");
-    public static final ResourceKey<ArrowFletchingDef> RIGID    = key("rigid");
+    public static final ResourceKey<ArrowFletchingDef> FEATHER = key("feather");
+    public static final ResourceKey<ArrowFletchingDef> RIGID = key("rigid");
     public static final ResourceKey<ArrowFletchingDef> TRAILING = key("trailing");
     public static final ResourceKey<ArrowFletchingDef> SERRATED = key("serrated");
-    public static final ResourceKey<ArrowFletchingDef> BOUND    = key("bound");
-    public static final ResourceKey<ArrowFletchingDef> VEX      = key("vex");
+    public static final ResourceKey<ArrowFletchingDef> BOUND = key("bound");
+    public static final ResourceKey<ArrowFletchingDef> VEX = key("vex");
 
     public static void bootstrap(BootstrapContext<ArrowFletchingDef> ctx) {
-        register(ctx, FEATHER,  Ingredient.of(Items.FEATHER),                          1.00f, List.of());
-        register(ctx, RIGID,    Ingredient.of(Items.FLINT),                            0.84f, List.of());
-        register(ctx, TRAILING, Ingredient.of(Items.STRING),                           0.75f, List.of());
+        register(ctx, FEATHER, Ingredient.of(Items.FEATHER), 1.00f, List.of());
+        register(ctx, RIGID, Ingredient.of(Items.FLINT), 0.84f, List.of());
+        register(ctx, TRAILING, Ingredient.of(Items.STRING), 0.75f, List.of());
         // SERRATED — mid-flight magnetism, pulls arrow toward nearest target
         // within 5 blocks. Skips the first 2 ticks so initial trajectory holds.
-        register(ctx, SERRATED, Ingredient.of(Items.PHANTOM_MEMBRANE),                 1.00f,
+        register(ctx, SERRATED, Ingredient.of(Items.PHANTOM_MEMBRANE), 1.00f,
                 List.of(new SubtleHomingEffect(5.0f, 1.0f, 2)));
-        register(ctx, BOUND,    Ingredient.of(Items.LEATHER),                          1.00f,
+        register(ctx, BOUND, Ingredient.of(Items.LEATHER), 1.00f,
                 List.of(new DropSelfOnHitEffect(0.25f)));
-        register(ctx, VEX,      Ingredient.of(Items.VEX_ARMOR_TRIM_SMITHING_TEMPLATE), 1.00f, List.of());
+        register(ctx, VEX, Ingredient.of(Items.VEX_ARMOR_TRIM_SMITHING_TEMPLATE), 1.00f, List.of());
     }
 
     private static void register(BootstrapContext<ArrowFletchingDef> ctx,

@@ -18,12 +18,17 @@ public record ClearShotsPacket(BlockPos pos, int containerId) implements CustomP
             new Type<>(ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "clear_shots"));
 
     public static final StreamCodec<FriendlyByteBuf, ClearShotsPacket> CODEC = StreamCodec.of(
-            (buf, pkt) -> { buf.writeBlockPos(pkt.pos()); buf.writeInt(pkt.containerId()); },
+            (buf, pkt) -> {
+                buf.writeBlockPos(pkt.pos());
+                buf.writeInt(pkt.containerId());
+            },
             buf -> new ClearShotsPacket(buf.readBlockPos(), buf.readInt())
     );
 
     @Override
-    public Type<? extends CustomPacketPayload> type() { return TYPE; }
+    public Type<? extends CustomPacketPayload> type() {
+        return TYPE;
+    }
 
     public void handle(Player player) {
         // 1. Check if the player currently has the ArcheryTargetMenu open and the IDs match

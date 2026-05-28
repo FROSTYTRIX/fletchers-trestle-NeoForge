@@ -24,9 +24,17 @@ public class SteamingRecipe implements Recipe<SingleRecipeInput> {
         this.processingTime = processingTime;
     }
 
-    public Ingredient getInput() { return input; }
-    public int getWaterAmount() { return waterAmount; }
-    public int getProcessingTime() { return processingTime; }
+    public Ingredient getInput() {
+        return input;
+    }
+
+    public int getWaterAmount() {
+        return waterAmount;
+    }
+
+    public int getProcessingTime() {
+        return processingTime;
+    }
 
     @Override
     public boolean matches(SingleRecipeInput input, Level level) {
@@ -39,16 +47,24 @@ public class SteamingRecipe implements Recipe<SingleRecipeInput> {
     }
 
     @Override
-    public boolean canCraftInDimensions(int width, int height) { return true; }
+    public boolean canCraftInDimensions(int width, int height) {
+        return true;
+    }
 
     @Override
-    public ItemStack getResultItem(HolderLookup.Provider provider) { return this.result; }
+    public ItemStack getResultItem(HolderLookup.Provider provider) {
+        return this.result;
+    }
 
     @Override
-    public RecipeSerializer<?> getSerializer() { return ModRecipes.STEAMING_SERIALIZER.get(); }
+    public RecipeSerializer<?> getSerializer() {
+        return ModRecipes.STEAMING_SERIALIZER.get();
+    }
 
     @Override
-    public RecipeType<?> getType() { return ModRecipes.STEAMING_TYPE.get(); }
+    public RecipeType<?> getType() {
+        return ModRecipes.STEAMING_TYPE.get();
+    }
 
     public static class Serializer implements RecipeSerializer<SteamingRecipe> {
         public static final MapCodec<SteamingRecipe> CODEC = RecordCodecBuilder.mapCodec(inst -> inst.group(
@@ -62,8 +78,15 @@ public class SteamingRecipe implements Recipe<SingleRecipeInput> {
                 SteamingRecipe.Serializer::toNetwork, SteamingRecipe.Serializer::fromNetwork
         );
 
-        @Override public MapCodec<SteamingRecipe> codec() { return CODEC; }
-        @Override public StreamCodec<RegistryFriendlyByteBuf, SteamingRecipe> streamCodec() { return STREAM_CODEC; }
+        @Override
+        public MapCodec<SteamingRecipe> codec() {
+            return CODEC;
+        }
+
+        @Override
+        public StreamCodec<RegistryFriendlyByteBuf, SteamingRecipe> streamCodec() {
+            return STREAM_CODEC;
+        }
 
         private static SteamingRecipe fromNetwork(RegistryFriendlyByteBuf buf) {
             return new SteamingRecipe(

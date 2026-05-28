@@ -42,7 +42,7 @@ public class FletchingScreen extends AbstractContainerScreen<FletchingMenu> {
         this.assembleButton = net.minecraft.client.gui.components.Button.builder(Component.literal("Assemble"), b -> {
             if (canAssemble()) {
                 this.isTuning = true;
-                this.targetPosition = 0.15f + (float)(Math.random() * 0.70f);
+                this.targetPosition = 0.15f + (float) (Math.random() * 0.70f);
                 this.barPosition = 0.0f;
             }
         }).bounds(getGuiLeft() + 100, getGuiTop() + 60, 60, 20).build();
@@ -157,7 +157,7 @@ public class FletchingScreen extends AbstractContainerScreen<FletchingMenu> {
         int yOffset = 0;
         float distance = Math.abs(barPosition - targetPosition);
         if (distance < 0.1f && Minecraft.getInstance().level != null) {
-            yOffset = (int)(Math.sin(Minecraft.getInstance().level.getGameTime() * 2) * 1.5);
+            yOffset = (int) (Math.sin(Minecraft.getInstance().level.getGameTime() * 2) * 1.5);
         }
 
         guiGraphics.blit(MINIGAME_TEXTURE, pointerX, (y - 2) + yOffset, 0, 32, pointerWidth, 20);

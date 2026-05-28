@@ -7,9 +7,15 @@
     "PPP"
   ],
   "key": {
-    "R": { "tag": "minecraft:logs" },
-    "S": { "item": "minecraft:stick" },
-    "P": { "tag": "minecraft:planks" }
+    "R": {
+      "tag": "minecraft:logs"
+    },
+    "S": {
+      "item": "minecraft:stick"
+    },
+    "P": {
+      "tag": "minecraft:planks"
+    }
   },
   "result": {
     "id": "fletcherstrestle:eagle_perch",

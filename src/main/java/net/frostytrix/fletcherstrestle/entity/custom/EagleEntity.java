@@ -1,7 +1,6 @@
 package net.frostytrix.fletcherstrestle.entity.custom;
 
 import net.frostytrix.fletcherstrestle.block.entity.EagleNestBlockEntity;
-import net.frostytrix.fletcherstrestle.entity.ModEntities;
 import net.frostytrix.fletcherstrestle.sound.ModSounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -12,7 +11,6 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.SimpleContainer;
@@ -32,7 +30,6 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.pathfinder.PathType;
-import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
@@ -58,10 +55,10 @@ public class EagleEntity extends TamableAnimal {
             SynchedEntityData.defineId(EagleEntity.class, EntityDataSerializers.BOOLEAN);
 
     // Eagle states (stored as int for sync simplicity)
-    public static final int STATE_IDLE     = 0;
-    public static final int STATE_PERCHED  = 1;
+    public static final int STATE_IDLE = 0;
+    public static final int STATE_PERCHED = 1;
     public static final int STATE_FETCHING = 2;
-    public static final int STATE_HUNTING  = 3;
+    public static final int STATE_HUNTING = 3;
     public static final int STATE_RETURNING = 4;
 
     // Hunt target — not synced, server-only logic
@@ -83,7 +80,7 @@ public class EagleEntity extends TamableAnimal {
     // per slot if needed; matching types still stack). Capacity is enforced
     // by total item count via hasFetchSpace(), not by full slots.
     private static final int FETCH_INVENTORY_SIZE = 16;
-    private static final int FETCH_CAPACITY       = 16;
+    private static final int FETCH_CAPACITY = 16;
     private final SimpleContainer fetchInventory = new SimpleContainer(FETCH_INVENTORY_SIZE);
 
     // Hysteresis counters for the IS_FLYING flag. With no gravity, the eagle
@@ -104,8 +101,8 @@ public class EagleEntity extends TamableAnimal {
         // Eagles never despawn once tamed
         this.setPersistenceRequired();
         this.setPathfindingMalus(PathType.DANGER_FIRE, -1f);
-        this.setPathfindingMalus(PathType.WATER,        -1f);
-        this.setPathfindingMalus(PathType.OPEN,          0f);
+        this.setPathfindingMalus(PathType.WATER, -1f);
+        this.setPathfindingMalus(PathType.OPEN, 0f);
     }
 
     // ---------------------------------------------------------------
@@ -123,8 +120,7 @@ public class EagleEntity extends TamableAnimal {
         if (pos.getY() < 80) return false;
         if (!level.canSeeSky(pos)) return false;
         // Daylight only — keeps them from popping in at night.
-        if (level.getBrightness(net.minecraft.world.level.LightLayer.SKY, pos) < 12) return false;
-        return true;
+        return level.getBrightness(net.minecraft.world.level.LightLayer.SKY, pos) >= 12;
     }
 
     // ---------------------------------------------------------------
@@ -132,11 +128,11 @@ public class EagleEntity extends TamableAnimal {
     // ---------------------------------------------------------------
     public static AttributeSupplier.Builder createAttributes() {
         return Animal.createLivingAttributes()
-                .add(Attributes.MAX_HEALTH,     20.0)
+                .add(Attributes.MAX_HEALTH, 20.0)
                 .add(Attributes.MOVEMENT_SPEED, 0.3)
-                .add(Attributes.FLYING_SPEED,   0.17)
-                .add(Attributes.FOLLOW_RANGE,   32.0)
-                .add(Attributes.ATTACK_DAMAGE,  3.0);
+                .add(Attributes.FLYING_SPEED, 0.17)
+                .add(Attributes.FOLLOW_RANGE, 32.0)
+                .add(Attributes.ATTACK_DAMAGE, 3.0);
     }
 
     // ---------------------------------------------------------------
@@ -145,9 +141,9 @@ public class EagleEntity extends TamableAnimal {
     @Override
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
         super.defineSynchedData(builder); // TamableAnimal registers its own fields first
-        builder.define(EAGLE_STATE,         STATE_IDLE);
-        builder.define(IS_FLYING,           false);
-        builder.define(FETCH_MODE_ENABLED,  true);
+        builder.define(EAGLE_STATE, STATE_IDLE);
+        builder.define(IS_FLYING, false);
+        builder.define(FETCH_MODE_ENABLED, true);
     }
 
     // ---------------------------------------------------------------
@@ -287,7 +283,7 @@ public class EagleEntity extends TamableAnimal {
         super.readAdditionalSaveData(tag);
         this.setEagleState(tag.getInt("EagleState"));
         // Default to true for eagles tamed before this field existed.
-        this.setFetchModeEnabled(tag.contains("FetchMode") ? tag.getBoolean("FetchMode") : true);
+        this.setFetchModeEnabled(!tag.contains("FetchMode") || tag.getBoolean("FetchMode"));
 
         fetchInventory.clearContent();
         ListTag items = tag.getList("FetchInventory", Tag.TAG_COMPOUND);
@@ -312,12 +308,22 @@ public class EagleEntity extends TamableAnimal {
     }
 
     @Nullable
-    public BlockPos getPerchPos() { return this.perchPos; }
-    public void setPerchPos(@Nullable BlockPos pos) { this.perchPos = pos; }
+    public BlockPos getPerchPos() {
+        return this.perchPos;
+    }
+
+    public void setPerchPos(@Nullable BlockPos pos) {
+        this.perchPos = pos;
+    }
 
     @Nullable
-    public BlockPos getNestPos() { return this.nestPos; }
-    public void setNestPos(@Nullable BlockPos pos) { this.nestPos = pos; }
+    public BlockPos getNestPos() {
+        return this.nestPos;
+    }
+
+    public void setNestPos(@Nullable BlockPos pos) {
+        this.nestPos = pos;
+    }
 
     // ---------------------------------------------------------------
     // Step 12 — Flying navigation
@@ -492,7 +498,7 @@ public class EagleEntity extends TamableAnimal {
         net.minecraft.world.phys.AABB bb = this.getBoundingBox();
         net.minecraft.world.phys.AABB probe = new net.minecraft.world.phys.AABB(
                 bb.minX, bb.minY - 0.3, bb.minZ,
-                bb.maxX, bb.minY,       bb.maxZ);
+                bb.maxX, bb.minY, bb.maxZ);
         return !this.level().noCollision(this, probe);
     }
 
@@ -504,11 +510,25 @@ public class EagleEntity extends TamableAnimal {
     // ---------------------------------------------------------------
     // Public API used by goals and renderer
     // ---------------------------------------------------------------
-    public int getEagleState()                       { return this.entityData.get(EAGLE_STATE); }
-    public void setEagleState(int state)             { this.entityData.set(EAGLE_STATE, state); }
-    public boolean isFlying()                        { return this.entityData.get(IS_FLYING); }
-    public boolean isFetchModeEnabled()              { return this.entityData.get(FETCH_MODE_ENABLED); }
-    public void setFetchModeEnabled(boolean enabled) { this.entityData.set(FETCH_MODE_ENABLED, enabled); }
+    public int getEagleState() {
+        return this.entityData.get(EAGLE_STATE);
+    }
+
+    public void setEagleState(int state) {
+        this.entityData.set(EAGLE_STATE, state);
+    }
+
+    public boolean isFlying() {
+        return this.entityData.get(IS_FLYING);
+    }
+
+    public boolean isFetchModeEnabled() {
+        return this.entityData.get(FETCH_MODE_ENABLED);
+    }
+
+    public void setFetchModeEnabled(boolean enabled) {
+        this.entityData.set(FETCH_MODE_ENABLED, enabled);
+    }
 
     public void setHuntTarget(@Nullable LivingEntity target) {
         this.huntTarget = target;
@@ -516,7 +536,9 @@ public class EagleEntity extends TamableAnimal {
     }
 
     @Nullable
-    public LivingEntity getHuntTarget() { return huntTarget; }
+    public LivingEntity getHuntTarget() {
+        return huntTarget;
+    }
 
     // ---------------------------------------------------------------
     // Fetch inventory API — used by EagleFetchGoal.
@@ -627,7 +649,9 @@ public class EagleEntity extends TamableAnimal {
     }
 
     @Override
-    protected float getSoundVolume() { return 0.8f; }
+    protected float getSoundVolume() {
+        return 0.8f;
+    }
 
     // ---------------------------------------------------------------
     // Inner Goal classes (Steps 5 & 6 from roadmap)
@@ -718,7 +742,10 @@ public class EagleEntity extends TamableAnimal {
             giveUpTimer++;
             // 20-second budget per phase. The timer resets when we transition
             // FETCH→RETURN or chain to a new arrow, so a long full cycle is fine.
-            if (giveUpTimer > 400) { stop(); return; }
+            if (giveUpTimer > 400) {
+                stop();
+                return;
+            }
 
             int state = eagle.getEagleState();
             if (state == STATE_FETCHING) {
@@ -743,7 +770,10 @@ public class EagleEntity extends TamableAnimal {
                 }
                 return;
             }
-            if (!eagle.level().isLoaded(targetArrow.blockPosition())) { stop(); return; }
+            if (!eagle.level().isLoaded(targetArrow.blockPosition())) {
+                stop();
+                return;
+            }
 
             double tx = targetArrow.getX();
             double ty = targetArrow.getY() + 0.3;
@@ -782,7 +812,7 @@ public class EagleEntity extends TamableAnimal {
                     targetArrow = next;
                     eagle.getNavigation().stop();
                     repathCooldown = 0;
-                    giveUpTimer  = 0;
+                    giveUpTimer = 0;
                 } else {
                     transitionToReturn();
                 }
@@ -793,13 +823,19 @@ public class EagleEntity extends TamableAnimal {
             eagle.setEagleState(STATE_RETURNING);
             eagle.getNavigation().stop();
             repathCooldown = 0;
-            giveUpTimer    = 0;
+            giveUpTimer = 0;
         }
 
         // RETURN phase — carry everything back to the owner and deposit it.
         private void tickReturn() {
-            if (eagle.isFetchInventoryEmpty()) { stop(); return; }
-            if (!(eagle.getOwner() instanceof Player owner) || !owner.isAlive()) { stop(); return; }
+            if (eagle.isFetchInventoryEmpty()) {
+                stop();
+                return;
+            }
+            if (!(eagle.getOwner() instanceof Player owner) || !owner.isAlive()) {
+                stop();
+                return;
+            }
             if (!eagle.level().isLoaded(owner.blockPosition())) return;
 
             double tx = owner.getX();
@@ -835,14 +871,14 @@ public class EagleEntity extends TamableAnimal {
         private static net.minecraft.world.entity.projectile.AbstractArrow findNearestArrow(EagleEntity eagle, Player owner) {
             double range = 24.0;
             return eagle.level().getEntitiesOfClass(
-                    net.minecraft.world.entity.projectile.AbstractArrow.class,
-                    owner.getBoundingBox().inflate(range),
-                    arrow -> arrow.tickCount > 5
-                            && arrow.inGround
-                            && arrow.getOwner() != null
-                            && arrow.getOwner().getUUID().equals(owner.getUUID())
-                            && eagle.level().isLoaded(arrow.blockPosition())
-            ).stream()
+                            net.minecraft.world.entity.projectile.AbstractArrow.class,
+                            owner.getBoundingBox().inflate(range),
+                            arrow -> arrow.tickCount > 5
+                                    && arrow.inGround
+                                    && arrow.getOwner() != null
+                                    && arrow.getOwner().getUUID().equals(owner.getUUID())
+                                    && eagle.level().isLoaded(arrow.blockPosition())
+                    ).stream()
                     .min((a, b) -> Double.compare(eagle.distanceToSqr(a), eagle.distanceToSqr(b)))
                     .orElse(null);
         }
@@ -892,7 +928,10 @@ public class EagleEntity extends TamableAnimal {
         @Override
         public void tick() {
             LivingEntity target = eagle.getHuntTarget();
-            if (target == null) { stop(); return; }
+            if (target == null) {
+                stop();
+                return;
+            }
             // Skip orbit work if the target's chunk is unloaded — wait until
             // it comes back into range rather than pathing into nowhere.
             if (!eagle.level().isLoaded(target.blockPosition())) return;
@@ -911,7 +950,7 @@ public class EagleEntity extends TamableAnimal {
 
             // Orbit 5 blocks above the target in a circle.
             orbitTick++;
-            double angle  = orbitTick * 0.08; // radians per tick
+            double angle = orbitTick * 0.08; // radians per tick
             double radius = 5.0;
             double orbitX = target.getX() + Math.sin(angle) * radius;
             double orbitY = target.getY() + 5.0;
@@ -945,13 +984,13 @@ public class EagleEntity extends TamableAnimal {
         private static final double OWNER_FAR_THRESHOLD_SQR = 32.0 * 32.0;
         // Y of the top of the crossbar in the perch model (14 / 16 of a block
         // above the perch's base position). Eagle's feet should land here.
-        private static final double CROSSBAR_Y               = 14.0 / 16.0;
+        private static final double CROSSBAR_Y = 14.0 / 16.0;
         // Once within this radius of the exact landing spot, we stop using
         // pathfinding and drive the eagle directly — flying nav can't path
         // to a thin decorative crossbar.
-        private static final double APPROACH_RANGE_SQR       = 16.0;  // 4 blocks
+        private static final double APPROACH_RANGE_SQR = 16.0;  // 4 blocks
         // Inside this radius the eagle snaps to position and sits.
-        private static final double LAND_SNAP_RANGE_SQR      = 0.36;  // 0.6 blocks
+        private static final double LAND_SNAP_RANGE_SQR = 0.36;  // 0.6 blocks
 
         private final EagleEntity eagle;
         private int repathCooldown = 0;
@@ -1059,7 +1098,7 @@ public class EagleEntity extends TamableAnimal {
      * same owner's adult eagles enter love mode and a claimed nest is in
      * range, both fly to the nest, perform a short ritual, and add an egg.
      * The egg incubates inside the nest and hatches into a baby eagle.
-     *
+     * <p>
      * The "leader" eagle (the one with the lower UUID) is responsible for
      * actually depositing the egg, so we don't double-lay when both partners
      * arrive on the same tick.
@@ -1077,8 +1116,10 @@ public class EagleEntity extends TamableAnimal {
         private static final int FAILED_ATTEMPT_COOLDOWN_TICKS = 1200;  // 1 minute
 
         private final EagleEntity eagle;
-        @Nullable private EagleEntity partner;
-        @Nullable private BlockPos nestPos;
+        @Nullable
+        private EagleEntity partner;
+        @Nullable
+        private BlockPos nestPos;
         private int ritualTicks = 0;
         private int repathCooldown = 0;
         private boolean eggLaid = false;
@@ -1131,9 +1172,9 @@ public class EagleEntity extends TamableAnimal {
             double offsetX = rightSide ? 1.0 : -1.0;
 
             double centerX = nestPos.getX() + 0.5;
-            double landY   = nestPos.getY() + 4.0 / 16.0;  // top of the nest rim
+            double landY = nestPos.getY() + 4.0 / 16.0;  // top of the nest rim
             double centerZ = nestPos.getZ() + 0.5;
-            double navX    = centerX + offsetX;
+            double navX = centerX + offsetX;
 
             eagle.getMoveControl().setWantedPosition(navX, landY, centerZ, 1.0);
             if (--repathCooldown <= 0) {
@@ -1142,7 +1183,7 @@ public class EagleEntity extends TamableAnimal {
                 repathCooldown = 8;
             }
 
-            boolean selfAtNest    = eagle.distanceToSqr(centerX, landY, centerZ)   < NEST_ARRIVAL_DIST_SQR;
+            boolean selfAtNest = eagle.distanceToSqr(centerX, landY, centerZ) < NEST_ARRIVAL_DIST_SQR;
             boolean partnerAtNest = partner.distanceToSqr(centerX, landY, centerZ) < NEST_ARRIVAL_DIST_SQR;
             if (selfAtNest && partnerAtNest) {
                 ritualTicks++;
@@ -1259,18 +1300,18 @@ public class EagleEntity extends TamableAnimal {
      * random points within a "territory" around the nest and fly to them.
      * Combines "stay near home" with "wander around" so they don't just
      * hover in one spot.
-     *
+     * <p>
      * Only active for UNTAMED eagles with a nestPos. Tamed eagles have their
      * own perch/follow behaviors.
      */
     static class EagleNestPatrolGoal extends Goal {
         // Territory radius. Eagles pick random patrol points inside this disc
         // around their nest (XZ) with a small vertical range.
-        private static final double PATROL_RADIUS    = 20.0;
-        private static final double VERTICAL_RANGE   = 6.0;
+        private static final double PATROL_RADIUS = 20.0;
+        private static final double VERTICAL_RANGE = 6.0;
         // Ticks between picking new patrol points. Random within this range.
-        private static final int    MIN_REST_TICKS   = 80;   // 4 sec
-        private static final int    MAX_REST_TICKS   = 240;  // 12 sec
+        private static final int MIN_REST_TICKS = 80;   // 4 sec
+        private static final int MAX_REST_TICKS = 240;  // 12 sec
 
         private final EagleEntity eagle;
         private double tx, ty, tz;
@@ -1289,7 +1330,10 @@ public class EagleEntity extends TamableAnimal {
             if (eagle.isOrderedToSit()) return false;
             if (eagle.getNestPos() == null) return false;
             // Wait between patrol legs so they don't constantly recompute.
-            if (restTicks > 0) { restTicks--; return false; }
+            if (restTicks > 0) {
+                restTicks--;
+                return false;
+            }
             pickNextTarget();
             return true;
         }
@@ -1327,7 +1371,7 @@ public class EagleEntity extends TamableAnimal {
             BlockPos nest = eagle.getNestPos();
             if (nest == null) return;
             double angle = eagle.getRandom().nextDouble() * Math.PI * 2.0;
-            double dist  = 3.0 + eagle.getRandom().nextDouble() * PATROL_RADIUS;
+            double dist = 3.0 + eagle.getRandom().nextDouble() * PATROL_RADIUS;
             tx = nest.getX() + 0.5 + Math.cos(angle) * dist;
             tz = nest.getZ() + 0.5 + Math.sin(angle) * dist;
             // Patrol mostly above the nest with some altitude variation.

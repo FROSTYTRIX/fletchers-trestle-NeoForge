@@ -19,7 +19,6 @@ import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.AABB;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
@@ -191,14 +190,14 @@ public class DippingVatBlockEntity extends BlockEntity {
                 DippingRecipe recipe = match.get().value();
 
                 // Vérification supplémentaire : a-t-on le bon nombre d'items en main ?
-                if (itemInHand.getCount() >= recipe.inputCount) {
+                if (itemInHand.getCount() >= recipe.inputCount()) {
 
                     // On assemble le résultat (ce qui transfère magiquement la couleur de la potion)
                     ItemStack result = recipe.assemble(input, level.registryAccess());
 
                     // Consommation
-                    itemInHand.shrink(recipe.inputCount);
-                    fluidTank.drain(recipe.fluidAmount, IFluidHandler.FluidAction.EXECUTE);
+                    itemInHand.shrink(recipe.inputCount());
+                    fluidTank.drain(recipe.fluidAmount(), IFluidHandler.FluidAction.EXECUTE);
 
                     // Restitution au joueur
                     if (!player.getInventory().add(result)) {

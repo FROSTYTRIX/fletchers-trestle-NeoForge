@@ -30,9 +30,17 @@ public class ModularArrowRecipe implements Recipe<ArrowRecipeInput> {
     }
 
     // Getters for JEI
-    public Ingredient getHead() { return head; }
-    public Ingredient getShaft() { return shaft; }
-    public Ingredient getFletching() { return fletching; }
+    public Ingredient getHead() {
+        return head;
+    }
+
+    public Ingredient getShaft() {
+        return shaft;
+    }
+
+    public Ingredient getFletching() {
+        return fletching;
+    }
 
     @Override
     public boolean matches(ArrowRecipeInput input, Level level) {
@@ -51,7 +59,7 @@ public class ModularArrowRecipe implements Recipe<ArrowRecipeInput> {
         // — same string the legacy hardcoded chains used to return, so
         // ArrowAssembly's storage format and downstream string-matching
         // branches in ModularArrowEntity are unchanged.
-        String headName  = resolveHead(provider, input.head());
+        String headName = resolveHead(provider, input.head());
         String shaftName = resolveShaft(provider, input.shaft());
         String fletchName = resolveFletching(provider, input.fletching());
 
@@ -61,7 +69,9 @@ public class ModularArrowRecipe implements Recipe<ArrowRecipeInput> {
         return output;
     }
 
-    /** Returns the id-path of the matching head def, or {@code "flint"} as fallback. */
+    /**
+     * Returns the id-path of the matching head def, or {@code "flint"} as fallback.
+     */
     private static String resolveHead(HolderLookup.Provider provider, ItemStack stack) {
         return MaterialResolver.resolveArrowHead(provider, stack)
                 .map(h -> h.key().location().toString())
@@ -81,16 +91,24 @@ public class ModularArrowRecipe implements Recipe<ArrowRecipeInput> {
     }
 
     @Override
-    public boolean canCraftInDimensions(int width, int height) { return true; }
+    public boolean canCraftInDimensions(int width, int height) {
+        return true;
+    }
 
     @Override
-    public ItemStack getResultItem(HolderLookup.Provider provider) { return this.result; }
+    public ItemStack getResultItem(HolderLookup.Provider provider) {
+        return this.result;
+    }
 
     @Override
-    public RecipeSerializer<?> getSerializer() { return ModRecipes.MODULAR_ARROW_SERIALIZER.get(); }
+    public RecipeSerializer<?> getSerializer() {
+        return ModRecipes.MODULAR_ARROW_SERIALIZER.get();
+    }
 
     @Override
-    public RecipeType<?> getType() { return ModRecipes.MODULAR_ARROW_TYPE.get(); }
+    public RecipeType<?> getType() {
+        return ModRecipes.MODULAR_ARROW_TYPE.get();
+    }
 
     public static class Serializer implements RecipeSerializer<ModularArrowRecipe> {
         public static final MapCodec<ModularArrowRecipe> CODEC = RecordCodecBuilder.mapCodec(inst -> inst.group(
@@ -104,8 +122,15 @@ public class ModularArrowRecipe implements Recipe<ArrowRecipeInput> {
                 ModularArrowRecipe.Serializer::toNetwork, ModularArrowRecipe.Serializer::fromNetwork
         );
 
-        @Override public MapCodec<ModularArrowRecipe> codec() { return CODEC; }
-        @Override public StreamCodec<RegistryFriendlyByteBuf, ModularArrowRecipe> streamCodec() { return STREAM_CODEC; }
+        @Override
+        public MapCodec<ModularArrowRecipe> codec() {
+            return CODEC;
+        }
+
+        @Override
+        public StreamCodec<RegistryFriendlyByteBuf, ModularArrowRecipe> streamCodec() {
+            return STREAM_CODEC;
+        }
 
         private static ModularArrowRecipe fromNetwork(RegistryFriendlyByteBuf buf) {
             return new ModularArrowRecipe(

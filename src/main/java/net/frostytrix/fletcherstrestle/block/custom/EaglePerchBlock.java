@@ -2,7 +2,6 @@ package net.frostytrix.fletcherstrestle.block.custom;
 
 import com.mojang.serialization.MapCodec;
 import net.frostytrix.fletcherstrestle.block.entity.EaglePerchBlockEntity;
-import net.frostytrix.fletcherstrestle.block.entity.ModBlockEntities;
 import net.frostytrix.fletcherstrestle.entity.custom.EagleEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -20,7 +19,6 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -48,7 +46,7 @@ public class EaglePerchBlock extends BaseEntityBlock {
     // Collision = just base + pole. The crossbar is decorative so the
     // player doesn't catch on it while walking past.
     private static final VoxelShape SHAPE = Shapes.or(
-            Block.box(2, 0, 2, 14,  2, 14),  // base
+            Block.box(2, 0, 2, 14, 2, 14),  // base
             Block.box(6, 2, 6, 10, 12, 10)   // pole
     );
 
@@ -150,7 +148,10 @@ public class EaglePerchBlock extends BaseEntityBlock {
         double bestDistSqr = best.distanceToSqr(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
         for (int i = 1; i < nearby.size(); i++) {
             double d = nearby.get(i).distanceToSqr(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
-            if (d < bestDistSqr) { best = nearby.get(i); bestDistSqr = d; }
+            if (d < bestDistSqr) {
+                best = nearby.get(i);
+                bestDistSqr = d;
+            }
         }
         return best;
     }

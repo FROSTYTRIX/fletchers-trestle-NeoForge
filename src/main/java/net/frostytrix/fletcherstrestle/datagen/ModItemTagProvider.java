@@ -7,7 +7,6 @@ import net.frostytrix.fletcherstrestle.tags.ModTags;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.ItemTagsProvider;
-import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
@@ -55,13 +54,13 @@ public class ModItemTagProvider extends ItemTagsProvider {
                 .add(ModItems.WOOD_RISER.get())
                 .add(ModItems.COPPER_RISER.get())
                 .add(ModItems.IRON_RISER.get())
-                ;
+        ;
 
         tag(ModTags.Items.BOW_STRINGS)
                 .add(Items.STRING)
                 .add(ModItems.HIGH_TENSION_STRING.get())
                 .add(ModItems.FLAX_STRING.get())
-                ;
+        ;
 
         tag(ModTags.Items.ARROW_HEADS)
                 .add(Items.FLINT)
@@ -73,7 +72,7 @@ public class ModItemTagProvider extends ItemTagsProvider {
                 .add(ModItems.WEIGHTED_HOOK.get())
                 .add(ModBlocks.ROPE.asItem())
                 .add(Items.GLASS_BOTTLE)
-                ;
+        ;
 
         tag(ModTags.Items.ARROW_FLETCHING)
                 .add(Items.FEATHER)

@@ -14,7 +14,9 @@ public record TuningPacket(float quality) implements CustomPacketPayload {
     public static final Type<TuningPacket> TYPE = new Type<>(ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "tuning_packet"));
 
     @Override
-    public Type<? extends CustomPacketPayload> type() { return TYPE; }
+    public Type<? extends CustomPacketPayload> type() {
+        return TYPE;
+    }
 
     public static final StreamCodec<FriendlyByteBuf, TuningPacket> CODEC = StreamCodec.composite(
             ByteBufCodecs.FLOAT, TuningPacket::quality,

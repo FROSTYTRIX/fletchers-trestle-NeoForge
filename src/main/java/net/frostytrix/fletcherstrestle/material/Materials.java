@@ -1,12 +1,7 @@
 package net.frostytrix.fletcherstrestle.material;
 
-import net.frostytrix.fletcherstrestle.material.stats.ArrowFletchingStats;
-import net.frostytrix.fletcherstrestle.material.stats.ArrowHeadStats;
-import net.frostytrix.fletcherstrestle.material.stats.ArrowShaftStats;
-import net.frostytrix.fletcherstrestle.material.stats.BowLimbStats;
-import net.frostytrix.fletcherstrestle.material.stats.BowRiserStats;
-import net.frostytrix.fletcherstrestle.material.stats.BowStringStats;
 import net.frostytrix.fletcherstrestle.FletcherTrestle;
+import net.frostytrix.fletcherstrestle.material.stats.*;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -32,7 +27,8 @@ import java.util.Optional;
  * {@link MaterialResolver} can't find a {@code RegistryAccess}.</p>
  */
 public final class Materials {
-    private Materials() {}
+    private Materials() {
+    }
 
     public static final BowLimbDef DEFAULT_BOW_LIMB = new BowLimbDef(
             Ingredient.EMPTY,
@@ -191,7 +187,9 @@ public final class Materials {
                 h -> h.value().texture(), basePathPrefix, suffix, idString);
     }
 
-    /** Implementation shared by every per-part texture helper. */
+    /**
+     * Implementation shared by every per-part texture helper.
+     */
     private static <T> ResourceLocation textureOf(
             Optional<Holder.Reference<T>> resolved,
             java.util.function.Function<Holder.Reference<T>, Optional<ResourceLocation>> overrideExtractor,

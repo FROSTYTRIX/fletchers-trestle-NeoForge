@@ -14,11 +14,10 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.alchemy.PotionContents;
 import org.joml.Matrix4f;
 
 public class ModularArrowRenderer extends ArrowRenderer<ModularArrowEntity> {
@@ -37,7 +36,7 @@ public class ModularArrowRenderer extends ArrowRenderer<ModularArrowEntity> {
         poseStack.mulPose(Axis.YP.rotationDegrees(Mth.lerp(partialTicks, entity.yRotO, entity.getYRot()) - 90.0F));
         poseStack.mulPose(Axis.ZP.rotationDegrees(Mth.lerp(partialTicks, entity.xRotO, entity.getXRot())));
 
-        float shake = (float)entity.shakeTime - partialTicks;
+        float shake = (float) entity.shakeTime - partialTicks;
         if (shake > 0.0F) {
             poseStack.mulPose(Axis.ZP.rotationDegrees(-Mth.sin(shake * 3.0F) * shake));
         }
@@ -67,8 +66,8 @@ public class ModularArrowRenderer extends ArrowRenderer<ModularArrowEntity> {
             if (potion != null) {
                 int color = potion.getColor();
                 int r = (color >> 16) & 0xFF;
-                int g = (color >>  8) & 0xFF;
-                int b =  color        & 0xFF;
+                int g = (color >> 8) & 0xFF;
+                int b = color & 0xFF;
                 poseStack.scale(1.001F, 1.001F, 1.001F);
                 ResourceLocation liquidTex = ResourceLocation.fromNamespaceAndPath(
                         FletcherTrestle.MOD_ID,
@@ -90,7 +89,7 @@ public class ModularArrowRenderer extends ArrowRenderer<ModularArrowEntity> {
     private void renderPart(PoseStack poseStack, MultiBufferSource buffer, int packedLight, ResourceLocation texture) {
         VertexConsumer vertexConsumer = buffer.getBuffer(RenderType.entityCutout(texture));
         // Drawing the 4 vanes/sides of the arrow
-        for(int j = 0; j < 4; ++j) {
+        for (int j = 0; j < 4; ++j) {
             poseStack.mulPose(Axis.XP.rotationDegrees(90.0F));
             this.vertex(poseStack, vertexConsumer, -8, -2, 0, 0.0F, 0.0F, 0, 1, 0, packedLight);
             this.vertex(poseStack, vertexConsumer, 8, -2, 0, 0.5F, 0.0F, 0, 1, 0, packedLight);
@@ -109,22 +108,22 @@ public class ModularArrowRenderer extends ArrowRenderer<ModularArrowEntity> {
         VertexConsumer vc = buffer.getBuffer(RenderType.entityCutout(texture));
         for (int j = 0; j < 4; ++j) {
             poseStack.mulPose(Axis.XP.rotationDegrees(90.0F));
-            this.vertexColored(poseStack, vc, -8, -2, 0, 0.0F,     0.0F,     0, 1, 0, packedLight, r, g, b, a);
-            this.vertexColored(poseStack, vc,  8, -2, 0, 0.5F,     0.0F,     0, 1, 0, packedLight, r, g, b, a);
-            this.vertexColored(poseStack, vc,  8,  2, 0, 0.5F,     0.15625F, 0, 1, 0, packedLight, r, g, b, a);
-            this.vertexColored(poseStack, vc, -8,  2, 0, 0.0F,     0.15625F, 0, 1, 0, packedLight, r, g, b, a);
+            this.vertexColored(poseStack, vc, -8, -2, 0, 0.0F, 0.0F, 0, 1, 0, packedLight, r, g, b, a);
+            this.vertexColored(poseStack, vc, 8, -2, 0, 0.5F, 0.0F, 0, 1, 0, packedLight, r, g, b, a);
+            this.vertexColored(poseStack, vc, 8, 2, 0, 0.5F, 0.15625F, 0, 1, 0, packedLight, r, g, b, a);
+            this.vertexColored(poseStack, vc, -8, 2, 0, 0.0F, 0.15625F, 0, 1, 0, packedLight, r, g, b, a);
         }
     }
 
     private void vertexColored(PoseStack poseStack, VertexConsumer consumer, int x, int y, int z,
                                float u, float v, int normalX, int normalZ, int normalY,
                                int packedLight, int r, int g, int b, int a) {
-        consumer.addVertex(poseStack.last().pose(), (float)x, (float)y, (float)z)
+        consumer.addVertex(poseStack.last().pose(), (float) x, (float) y, (float) z)
                 .setColor(r, g, b, a)
                 .setUv(u, v)
                 .setOverlay(OverlayTexture.NO_OVERLAY)
                 .setLight(packedLight)
-                .setNormal(poseStack.last(), (float)normalX, (float)normalY, (float)normalZ);
+                .setNormal(poseStack.last(), (float) normalX, (float) normalY, (float) normalZ);
     }
 
     private void renderGrapplingLine(ModularArrowEntity arrow, float partialTicks, PoseStack poseStack, MultiBufferSource buffer, Player player, int packedLight) {
@@ -162,10 +161,10 @@ public class ModularArrowRenderer extends ArrowRenderer<ModularArrowEntity> {
         // entity renderer expects a full texture path including extension.
         return switch (part) {
             case "shaft" -> net.frostytrix.fletcherstrestle.material.Materials.arrowShaftTexture(
-                    assembly.shaft(),     "textures/entity/projectiles/shaft",     ".png");
-            case "head"  -> net.frostytrix.fletcherstrestle.material.Materials.arrowHeadTexture(
-                    assembly.head(),      "textures/entity/projectiles/head",      ".png");
-            default       -> net.frostytrix.fletcherstrestle.material.Materials.arrowFletchingTexture(
+                    assembly.shaft(), "textures/entity/projectiles/shaft", ".png");
+            case "head" -> net.frostytrix.fletcherstrestle.material.Materials.arrowHeadTexture(
+                    assembly.head(), "textures/entity/projectiles/head", ".png");
+            default -> net.frostytrix.fletcherstrestle.material.Materials.arrowFletchingTexture(
                     assembly.fletching(), "textures/entity/projectiles/fletching", ".png");
         };
     }
@@ -177,11 +176,11 @@ public class ModularArrowRenderer extends ArrowRenderer<ModularArrowEntity> {
     }
 
     public void vertex(PoseStack poseStack, VertexConsumer consumer, int x, int y, int z, float u, float v, int normalX, int normalZ, int normalY, int packedLight) {
-        consumer.addVertex(poseStack.last().pose(), (float)x, (float)y, (float)z)
+        consumer.addVertex(poseStack.last().pose(), (float) x, (float) y, (float) z)
                 .setColor(255, 255, 255, 255)
                 .setUv(u, v)
                 .setOverlay(OverlayTexture.NO_OVERLAY)
                 .setLight(packedLight)
-                .setNormal(poseStack.last(), (float)normalX, (float)normalY, (float)normalZ);
+                .setNormal(poseStack.last(), (float) normalX, (float) normalY, (float) normalZ);
     }
 }

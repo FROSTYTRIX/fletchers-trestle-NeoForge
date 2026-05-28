@@ -51,7 +51,10 @@ public class FletchingMenu extends AbstractContainerMenu {
         // OUTPUT SLOT (Index 0)
         // ==========================================
         this.addSlot(new Slot(this.resultSlots, 0, 124, 35) {
-            @Override public boolean mayPlace(@NotNull ItemStack stack) { return false; }
+            @Override
+            public boolean mayPlace(@NotNull ItemStack stack) {
+                return false;
+            }
 
             // This fixes the vanishing bow! Items are ONLY consumed when you actually pick up the result.
             @Override
@@ -66,36 +69,85 @@ public class FletchingMenu extends AbstractContainerMenu {
         // TAB 0: BOW SLOTS (Indices 0, 1, 2, 3)
         // ==========================================
         this.addSlot(new Slot(craftSlots, 0, 45, 17) { // Top Limb
-            @Override public boolean mayPlace(@NotNull ItemStack stack) { return stack.is(ModTags.Items.BOW_LIMBS); }
-            @Override public boolean isActive() { return FletchingMenu.this.activeTab == 0; }
+            @Override
+            public boolean mayPlace(@NotNull ItemStack stack) {
+                return stack.is(ModTags.Items.BOW_LIMBS);
+            }
+
+            @Override
+            public boolean isActive() {
+                return FletchingMenu.this.activeTab == 0;
+            }
         });
         this.addSlot(new Slot(craftSlots, 1, 45, 53) { // Bottom Limb
-            @Override public boolean mayPlace(@NotNull ItemStack stack) { return stack.is(ModTags.Items.BOW_LIMBS); }
-            @Override public boolean isActive() { return FletchingMenu.this.activeTab == 0; }
+            @Override
+            public boolean mayPlace(@NotNull ItemStack stack) {
+                return stack.is(ModTags.Items.BOW_LIMBS);
+            }
+
+            @Override
+            public boolean isActive() {
+                return FletchingMenu.this.activeTab == 0;
+            }
         });
         this.addSlot(new Slot(craftSlots, 2, 21, 35) { // Riser
-            @Override public boolean mayPlace(@NotNull ItemStack stack) { return stack.is(ModTags.Items.BOW_RISERS); }
-            @Override public boolean isActive() { return FletchingMenu.this.activeTab == 0; }
+            @Override
+            public boolean mayPlace(@NotNull ItemStack stack) {
+                return stack.is(ModTags.Items.BOW_RISERS);
+            }
+
+            @Override
+            public boolean isActive() {
+                return FletchingMenu.this.activeTab == 0;
+            }
         });
         this.addSlot(new Slot(craftSlots, 3, 69, 35) { // String
-            @Override public boolean mayPlace(@NotNull ItemStack stack) { return stack.is(ModTags.Items.BOW_STRINGS); }
-            @Override public boolean isActive() { return FletchingMenu.this.activeTab == 0; }
+            @Override
+            public boolean mayPlace(@NotNull ItemStack stack) {
+                return stack.is(ModTags.Items.BOW_STRINGS);
+            }
+
+            @Override
+            public boolean isActive() {
+                return FletchingMenu.this.activeTab == 0;
+            }
         });
 
         // ==========================================
         // TAB 1: ARROW SLOTS (Indices 4, 5, 6)
         // ==========================================
         this.addSlot(new Slot(craftSlots, 4, 66, 17) { // Arrow Head
-            @Override public boolean mayPlace(@NotNull ItemStack stack) { return stack.is(ModTags.Items.ARROW_HEADS); }
-            @Override public boolean isActive() { return FletchingMenu.this.activeTab == 1; }
+            @Override
+            public boolean mayPlace(@NotNull ItemStack stack) {
+                return stack.is(ModTags.Items.ARROW_HEADS);
+            }
+
+            @Override
+            public boolean isActive() {
+                return FletchingMenu.this.activeTab == 1;
+            }
         });
         this.addSlot(new Slot(craftSlots, 5, 48, 35) { // Arrow Shaft
-            @Override public boolean mayPlace(@NotNull ItemStack stack) { return stack.is(ModTags.Items.ROUGH_LIMBS); }
-            @Override public boolean isActive() { return FletchingMenu.this.activeTab == 1; }
+            @Override
+            public boolean mayPlace(@NotNull ItemStack stack) {
+                return stack.is(ModTags.Items.ROUGH_LIMBS);
+            }
+
+            @Override
+            public boolean isActive() {
+                return FletchingMenu.this.activeTab == 1;
+            }
         });
         this.addSlot(new Slot(craftSlots, 6, 30, 53) { // Arrow Fletching
-            @Override public boolean mayPlace(@NotNull ItemStack stack) { return stack.is(ModTags.Items.ARROW_FLETCHING); }
-            @Override public boolean isActive() { return FletchingMenu.this.activeTab == 1; }
+            @Override
+            public boolean mayPlace(@NotNull ItemStack stack) {
+                return stack.is(ModTags.Items.ARROW_FLETCHING);
+            }
+
+            @Override
+            public boolean isActive() {
+                return FletchingMenu.this.activeTab == 1;
+            }
         });
 
         // Player Inventory
@@ -183,7 +235,9 @@ public class FletchingMenu extends AbstractContainerMenu {
     }
 
     @Override
-    public boolean stillValid(@NotNull Player player) { return true; }
+    public boolean stillValid(@NotNull Player player) {
+        return true;
+    }
 
     @Override
     public void removed(@NotNull Player player) {
@@ -235,7 +289,8 @@ public class FletchingMenu extends AbstractContainerMenu {
                     }
                 }
             }
-            if (itemstack1.isEmpty()) slot.setByPlayer(ItemStack.EMPTY); else slot.setChanged();
+            if (itemstack1.isEmpty()) slot.setByPlayer(ItemStack.EMPTY);
+            else slot.setChanged();
             if (itemstack1.getCount() == itemstack.getCount()) return ItemStack.EMPTY;
             slot.onTake(player, itemstack1);
         }

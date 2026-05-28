@@ -47,7 +47,7 @@ import java.util.concurrent.ConcurrentHashMap;
  *         }
  *     );
  * }</pre>
- *
+ * <p>
  * The corresponding material JSON:
  *
  * <pre>
@@ -68,7 +68,8 @@ import java.util.concurrent.ConcurrentHashMap;
  * missing KubeJS callback to crash the game.
  */
 public final class ScriptedEffectCallbacks {
-    private ScriptedEffectCallbacks() {}
+    private ScriptedEffectCallbacks() {
+    }
 
     /**
      * Lifecycle-handler interface for scripted callbacks. Mirror of
@@ -76,21 +77,39 @@ public final class ScriptedEffectCallbacks {
      * no-op so a handler only overrides what it needs.
      */
     public interface Handler {
-        default void onArrowSpawn(ModularArrowEntity arrow) {}
-        default void onArrowTick(ModularArrowEntity arrow) {}
-        default void onPreArrowHit(ModularArrowEntity arrow, EntityHitResult result) {}
-        default void onArrowHit(ModularArrowEntity arrow, EntityHitResult result) {}
-        default void onArrowHitBlock(ModularArrowEntity arrow, BlockHitResult result) {}
-        default void onBowRelease(LivingEntity shooter, ItemStack weapon) {}
-        default void onProjectileFired(LivingEntity shooter, ItemStack weapon, Entity projectile) {}
+        default void onArrowSpawn(ModularArrowEntity arrow) {
+        }
+
+        default void onArrowTick(ModularArrowEntity arrow) {
+        }
+
+        default void onPreArrowHit(ModularArrowEntity arrow, EntityHitResult result) {
+        }
+
+        default void onArrowHit(ModularArrowEntity arrow, EntityHitResult result) {
+        }
+
+        default void onArrowHitBlock(ModularArrowEntity arrow, BlockHitResult result) {
+        }
+
+        default void onBowRelease(LivingEntity shooter, ItemStack weapon) {
+        }
+
+        default void onProjectileFired(LivingEntity shooter, ItemStack weapon, Entity projectile) {
+        }
     }
 
-    /** Empty handler returned for unknown ids — every method no-ops. */
-    public static final Handler NOOP = new Handler() {};
+    /**
+     * Empty handler returned for unknown ids — every method no-ops.
+     */
+    public static final Handler NOOP = new Handler() {
+    };
 
-    /** Concurrent because registration may race with script-engine init. */
+    /**
+     * Concurrent because registration may race with script-engine init.
+     */
     private static final Map<ResourceLocation, Handler> HANDLERS = new ConcurrentHashMap<>();
-    private static final Map<ResourceLocation, Boolean> WARNED   = new ConcurrentHashMap<>();
+    private static final Map<ResourceLocation, Boolean> WARNED = new ConcurrentHashMap<>();
 
     /**
      * Register a callback handler for a string id. Subsequent lookups
@@ -101,14 +120,16 @@ public final class ScriptedEffectCallbacks {
         HANDLERS.put(id, handler);
     }
 
-    /** Looks up the handler for an id, or returns {@link #NOOP}. */
+    /**
+     * Looks up the handler for an id, or returns {@link #NOOP}.
+     */
     public static Handler get(ResourceLocation id) {
         Handler h = HANDLERS.get(id);
         if (h != null) return h;
         if (WARNED.putIfAbsent(id, true) == null) {
             net.frostytrix.fletcherstrestle.FletcherTrestle.LOGGER.warn(
                     "Unknown scripted_callback id '{}' referenced by a material def. " +
-                    "Register the handler via ScriptedEffectCallbacks.register() or fix the JSON.",
+                            "Register the handler via ScriptedEffectCallbacks.register() or fix the JSON.",
                     id);
         }
         return NOOP;

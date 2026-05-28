@@ -4,7 +4,6 @@ import net.frostytrix.fletcherstrestle.FletcherTrestle;
 import net.frostytrix.fletcherstrestle.entity.custom.EagleEntity;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.SpyglassItem;
@@ -13,7 +12,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -34,23 +32,24 @@ import java.util.UUID;
 @EventBusSubscriber(modid = FletcherTrestle.MOD_ID)
 public final class SpyglassHuntHandler {
 
-    private SpyglassHuntHandler() {}
+    private SpyglassHuntHandler() {
+    }
 
     // Tunables — kept here so they're easy to find when iterating on feel.
-    private static final int    LOCK_ON_TICKS  = 60;    // 3 seconds at 20 tps
-    private static final double RAY_RANGE      = 128.0; // blocks — spyglass-scale spotting range
-    private static final double EAGLE_RANGE    = 48.0;  // owner -> eagle search radius
+    private static final int LOCK_ON_TICKS = 60;    // 3 seconds at 20 tps
+    private static final double RAY_RANGE = 128.0; // blocks — spyglass-scale spotting range
+    private static final double EAGLE_RANGE = 48.0;  // owner -> eagle search radius
 
     // Per-player lock-on state. Lives on the server only.
     private static final Map<UUID, LockOnData> LOCK_DATA = new HashMap<>();
 
     private static final class LockOnData {
         int targetEntityId = -1;
-        int ticksLooking   = 0;
+        int ticksLooking = 0;
 
         void reset() {
             targetEntityId = -1;
-            ticksLooking   = 0;
+            ticksLooking = 0;
         }
     }
 
@@ -83,7 +82,7 @@ public final class SpyglassHuntHandler {
             }
         } else {
             data.targetEntityId = hit.getId();
-            data.ticksLooking   = 1;
+            data.ticksLooking = 1;
         }
     }
 
@@ -91,9 +90,9 @@ public final class SpyglassHuntHandler {
     // entity in the line of sight, or null. We use the player's actual look
     // vector and check entity hitboxes along the way.
     private static LivingEntity raycastLivingTarget(Player player) {
-        Vec3 eye  = player.getEyePosition();
+        Vec3 eye = player.getEyePosition();
         Vec3 look = player.getViewVector(1.0f);
-        Vec3 end  = eye.add(look.x * RAY_RANGE, look.y * RAY_RANGE, look.z * RAY_RANGE);
+        Vec3 end = eye.add(look.x * RAY_RANGE, look.y * RAY_RANGE, look.z * RAY_RANGE);
 
         // Find how far the ray reaches before hitting a truly opaque block.
         // Leaves, glass, iron bars, ice, etc. are skipped — they don't block
@@ -172,7 +171,10 @@ public final class SpyglassHuntHandler {
         double bestDistSqr = chosen.distanceToSqr(player);
         for (int i = 1; i < nearby.size(); i++) {
             double d = nearby.get(i).distanceToSqr(player);
-            if (d < bestDistSqr) { chosen = nearby.get(i); bestDistSqr = d; }
+            if (d < bestDistSqr) {
+                chosen = nearby.get(i);
+                bestDistSqr = d;
+            }
         }
         chosen.setHuntTarget(target);
         player.displayClientMessage(

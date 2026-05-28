@@ -98,7 +98,6 @@ public class HeavyDummyEntity extends LivingEntity {
         ItemStack heldItem = player.getItemInHand(hand);
 
 
-
         // 1. Equip Armor
         if (heldItem.getItem() instanceof ArmorItem armorItem) {
             EquipmentSlot slot = armorItem.getEquipmentSlot();
@@ -254,8 +253,13 @@ public class HeavyDummyEntity extends LivingEntity {
         this.entityData.set(DATA_SKIN_UUID, Optional.ofNullable(uuid));
     }
 
-    public String getSkinName() { return this.entityData.get(DATA_SKIN_NAME); }
-    public Optional<UUID> getSkinUUID() { return this.entityData.get(DATA_SKIN_UUID); }
+    public String getSkinName() {
+        return this.entityData.get(DATA_SKIN_NAME);
+    }
+
+    public Optional<UUID> getSkinUUID() {
+        return this.entityData.get(DATA_SKIN_UUID);
+    }
 
     // Save/Load so skins persist after a restart
     @Override

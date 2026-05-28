@@ -7,9 +7,15 @@
     "LLL"
   ],
   "key": {
-    "F": { "item": "minecraft:feather" },
-    "S": { "item": "minecraft:stick" },
-    "L": { "tag": "minecraft:leaves" }
+    "F": {
+      "item": "minecraft:feather"
+    },
+    "S": {
+      "item": "minecraft:stick"
+    },
+    "L": {
+      "tag": "minecraft:leaves"
+    }
   },
   "result": {
     "id": "fletcherstrestle:eagle_nest",
