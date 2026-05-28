@@ -259,13 +259,6 @@ public class ModularCrossbowItem extends CrossbowItem {
                 if (limb.stats().givesSlowFalling() && !player.onGround()) {
                     player.addEffect(new MobEffectInstance(MobEffects.SLOW_FALLING, 5, 2, false, false, false));
                 }
-
-                // Acacia's onUseTick speed buff and any other "tick while
-                // drawing" effects would land via a dedicated onBowDrawTick
-                // hook in a future sub-phase. For now this branch is dispatch-
-                // ready but does nothing extra — the acacia release-time
-                // speed buff is attached as onBowRelease on the limb def and
-                // fires when the shot leaves.
             }
         }
     }

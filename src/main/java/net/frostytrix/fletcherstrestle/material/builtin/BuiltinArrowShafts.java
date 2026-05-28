@@ -30,8 +30,8 @@ import java.util.Optional;
 /**
  * Built-in arrow-shaft material defs.
  *
- * <p>Beyond the legacy velocity/gravity stats, each shaft now carries its
- * thematic on-hit effect as a {@code MaterialEffect}:</p>
+ * <p>Beyond the velocity/gravity stats, each shaft carries its thematic
+ * behavior as a {@code MaterialEffect}:</p>
  * <ul>
  *   <li>dark_oak — pierce level 1</li>
  *   <li>crimson — executioner bonus damage on low-HP targets</li>
@@ -39,11 +39,9 @@ import java.util.Optional;
  *   <li>mangrove — slowness on hit</li>
  *   <li>cherry — heals shooter + cherry-leaves particle</li>
  *   <li>warped — teleport-swap with target</li>
+ *   <li>acacia — mid-flight speed boost at tick 10</li>
+ *   <li>jungle — chance to bounce off blocks</li>
  * </ul>
- *
- * <p>The acacia mid-flight speed boost is a tick-time effect and stays
- * hardcoded in {@code ModularArrowEntity.tick} for now — Phase E's
- * {@code on_tick} effects need a tick-specific lifecycle hook.</p>
  */
 public final class BuiltinArrowShafts {
     private BuiltinArrowShafts() {}

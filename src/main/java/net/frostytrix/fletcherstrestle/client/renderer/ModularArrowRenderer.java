@@ -157,11 +157,9 @@ public class ModularArrowRenderer extends ArrowRenderer<ModularArrowEntity> {
     }
 
     private ResourceLocation getTexture(ArrowAssembly assembly, String part) {
-        // Phase F: route through Materials.<part>Texture so a modpack-added
-        // material can override the texture path, and a material in a
-        // non-fletcherstrestle namespace pulls its texture from the right
-        // assets folder. The suffix is ".png" — the renderer expects a full
-        // texture-path including extension.
+        // Honors a def's texture override; otherwise builds the conventional
+        // path in the material's own namespace. ".png" suffix because the
+        // entity renderer expects a full texture path including extension.
         return switch (part) {
             case "shaft" -> net.frostytrix.fletcherstrestle.material.Materials.arrowShaftTexture(
                     assembly.shaft(),     "textures/entity/projectiles/shaft",     ".png");

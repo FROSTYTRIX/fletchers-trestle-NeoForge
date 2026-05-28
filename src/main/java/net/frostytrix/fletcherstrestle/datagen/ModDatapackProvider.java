@@ -21,9 +21,7 @@ public class ModDatapackProvider extends DatapackBuiltinEntriesProvider {
 
     public static final RegistrySetBuilder BUILDER = new RegistrySetBuilder()
             .add(Registries.ENCHANTMENT, ModEnchantments::bootstrap)
-            // Phase C: ship every existing bow/arrow material as a built-in
-            // datapack entry so the mod jar contains its own "vanilla"
-            // material set. Modpacks layer their JSONs on top.
+            // Built-in bow/arrow materials. Modpacks layer their JSONs on top.
             .add(ModMaterialRegistries.BOW_LIMB,        BuiltinBowLimbs::bootstrap)
             .add(ModMaterialRegistries.BOW_RISER,       BuiltinBowRisers::bootstrap)
             .add(ModMaterialRegistries.BOW_STRING,      BuiltinBowStrings::bootstrap)

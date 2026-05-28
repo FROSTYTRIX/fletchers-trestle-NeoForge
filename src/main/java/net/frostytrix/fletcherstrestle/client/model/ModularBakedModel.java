@@ -126,10 +126,9 @@ public class ModularBakedModel implements BakedModel {
                 String riserMat  = bow != null ? bow.riserMaterial()  : "wood";
                 String stringMat = bow != null ? bow.stringMaterial() : "spider";
 
-                // Phase F: each texture lookup goes through Materials.*Texture,
-                // which honors a def's optional "texture" override and falls
-                // back to <materialNamespace>:<basePath>/<folder>/<id><suffix>
-                // for modpack-supplied materials with no override.
+                // Each texture lookup honors a def's optional "texture"
+                // override and otherwise falls back to
+                // <materialNamespace>:<basePath>/<folder>/<id><suffix>.
                 textures.add(Materials.bowLimbTexture(  limbMat,   basePath + "/limbs",   "_limb" + pull));
                 textures.add(Materials.bowRiserTexture( riserMat,  basePath + "/risers",  "_riser"));
                 textures.add(Materials.bowStringTexture(stringMat, basePath + "/strings", "_string" + pull));

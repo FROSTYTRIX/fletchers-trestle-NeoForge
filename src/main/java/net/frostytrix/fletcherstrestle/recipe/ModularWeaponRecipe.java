@@ -44,11 +44,10 @@ public class ModularWeaponRecipe implements Recipe<FletchingRecipeInput> {
     public ItemStack assemble(FletchingRecipeInput input, HolderLookup.Provider provider) {
         ItemStack output = this.result.copy();
 
-        // Phase D: resolve each part by Ingredient match against the
-        // datapack registries; store the canonical registry-id path
-        // (e.g. "dark_oak", "high_tension") rather than a display name.
-        // Existing worlds saved with the legacy "Dark Oak" form are still
-        // resolvable — see MaterialResolver's three-tier fallback.
+        // Resolve each part by Ingredient match and store its full
+        // namespaced id (e.g. "fletcherstrestle:dark_oak", "mypack:steel").
+        // Pre-2.0.0 worlds with bare-path or display-form strings still
+        // resolve via MaterialResolver's fallback tiers.
         String limbMat = MaterialResolver.resolveBowLimb(provider, input.topLimb())
                 .map(h -> h.key().location().toString())
                 .orElse("oak");

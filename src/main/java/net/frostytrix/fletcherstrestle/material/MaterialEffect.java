@@ -24,8 +24,7 @@ import net.minecraft.world.phys.EntityHitResult;
  * <h3>Lifecycle hooks</h3>
  * Each hook is a {@code default} no-op; an effect only overrides the ones it
  * cares about. This keeps a tiny effect like {@code apply_effect} from having
- * to stub out four irrelevant methods. The actual call sites are wired in
- * Phase E — for Phase A we just want the codec system to round-trip.
+ * to stub out irrelevant methods.
  *
  * <p>Hooks:</p>
  * <ul>

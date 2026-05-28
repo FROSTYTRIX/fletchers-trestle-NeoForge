@@ -16,9 +16,7 @@ import net.minecraft.world.phys.EntityHitResult;
 /**
  * On-hit effect: applies a MobEffect to the entity the arrow hit.
  *
- * <p>Replaces hardcoded broadhead {@code BLEED} and mangrove {@code SLOWNESS}
- * branches in {@code ModularArrowEntity}. Phase A only defines the codec;
- * Phase E wires {@link #onArrowHit} into the call site.</p>
+ * <p>Used by the broadhead head (bleed) and mangrove shaft (slowness).</p>
  *
  * <p>JSON shape:</p>
  * <pre>

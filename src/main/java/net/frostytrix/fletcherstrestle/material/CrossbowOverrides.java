@@ -9,16 +9,11 @@ import java.util.Optional;
 
 /**
  * Optional sub-record on {@link BowLimbDef} that lets a single limb material
- * tune individual stats *just for the crossbow*. Picked over the user's
- * "shared def + optional override" answer in the roadmap — one source of
- * truth, with a tiny escape hatch for the cases (if any) where a designer
- * wants crossbow draw-time to diverge from bow draw-time.
+ * tune individual stats just for the crossbow — one shared limb def with a
+ * small escape hatch for when crossbow draw-time should diverge from bow
+ * draw-time.
  *
  * <p>Every field is optional. {@code Optional.empty()} = "use the bow value".</p>
- *
- * <p>Phase A only defines the codec; no consumer reads
- * {@code crossbowOverrides} yet. Phase D wires it into the crossbow
- * stat-lookup path.</p>
  *
  * @param stats   per-field overrides for {@link BowLimbStats}; absent fields
  *                inherit from the parent limb def.

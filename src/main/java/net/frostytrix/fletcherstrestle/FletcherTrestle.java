@@ -67,13 +67,10 @@ public class FletcherTrestle {
         ModFluids.FLUIDS.register(modEventBus);
         ModSounds.register(modEventBus);
         ModFeatures.register(modEventBus);
-        // Phase A: register the MaterialEffectType registry. Built-in effect
-        // types are registered onto it here; modpack-side def JSONs will
-        // reference them once the per-part datapack registries land in Phase B.
+        // MaterialEffectType registry + the six datapack-driven material
+        // registries. JSON in data/<ns>/fletcherstrestle/{bow_limb,
+        // arrow_head,...}/<id>.json loads into these and syncs to clients.
         ModMaterialEffectTypes.register(modEventBus);
-        // Phase B: register the six datapack-driven material registries.
-        // JSON in data/<ns>/fletcherstrestle/{bow_limb,arrow_head,...}/<id>.json
-        // will be loaded into these and synced to clients.
         ModMaterialRegistries.register(modEventBus);
 
 
@@ -100,16 +97,13 @@ public class FletcherTrestle {
         event.put(ModEntities.HEAVY_DUMMY.get(), HeavyDummyEntity.createAttributes().build());
     }
 
-    // Phase B — Restrict where wild eagles spawn. The biome modifier already
-    // narrows them to the mountain-biome tag; this predicate adds altitude,
-    // sky-visibility, and sky-light checks so they only appear on exposed
-    // ridges in daylight, not under leaves at sea level.
+    // Restrict where wild eagles spawn. The biome modifier narrows them to
+    // the mountain-biome tag; this predicate adds altitude, sky-visibility,
+    // and sky-light checks so they only appear on exposed ridges in daylight.
     //
-    // Gated by FletcherConfig.EAGLES_NATURAL_SPAWNING. When the toggle is
-    // off (the current default — eagle model is WIP) the registration is
-    // skipped entirely so the spawn pool never gets told about eagles.
-    // The full predicate + the supporting EagleEntity#checkEagleSpawnRules
-    // method stay intact for when the toggle flips back on.
+    // Gated by FletcherConfig.EAGLES_NATURAL_SPAWNING — off by default while
+    // the eagle model is WIP. When off, registration is skipped so the spawn
+    // pool never gets told about eagles; flip the config to restore it.
     private void onRegisterSpawnPlacements(RegisterSpawnPlacementsEvent event) {
         if (!FletcherConfig.EAGLES_NATURAL_SPAWNING.get()) {
             return;

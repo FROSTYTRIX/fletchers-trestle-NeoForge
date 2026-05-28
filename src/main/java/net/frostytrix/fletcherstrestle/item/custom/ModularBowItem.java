@@ -271,8 +271,7 @@ public class ModularBowItem extends BowItem {
                 int ticksDrawn = this.getUseDuration(stack, player) - count;
                 float maxDrawTime = getDrawTime(stack);
 
-                // Flax string: jitters the aim if the player overdraws. Phase
-                // E will move this into a string-attached MaterialEffect.
+                // Flax string: jitters the aim if the player overdraws.
                 if ("flax".equals(stringId) && ticksDrawn > (maxDrawTime + 40)) {
                     player.setYRot(player.getYRot() + (level.random.nextFloat() - 0.5F) * 3.0F);
                     player.setXRot(player.getXRot() + (level.random.nextFloat() - 0.5F) * 3.0F);
@@ -318,10 +317,9 @@ public class ModularBowItem extends BowItem {
     /**
      * @deprecated superseded by {@link net.frostytrix.fletcherstrestle.material.Materials#bowLimb}
      *             and the {@code fletcherstrestle:bow_limb} datapack registry.
-     *             No internal call site still references this enum after Phase D;
-     *             slated for deletion in a later phase. External consumers
-     *             (e.g. {@link net.frostytrix.fletcherstrestle.trades.RandomModularArrowTrade})
-     *             will migrate alongside.
+     *             Slated for deletion once the remaining external consumer
+     *             ({@link net.frostytrix.fletcherstrestle.trades.RandomModularArrowTrade})
+     *             migrates.
      */
     @Deprecated(forRemoval = true)
     public enum LimbStats {

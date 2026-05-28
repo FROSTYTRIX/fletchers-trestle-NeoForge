@@ -19,10 +19,10 @@ import java.util.Optional;
 /**
  * Built-in arrow-fletching material defs.
  *
- * <p>{@code bound} now carries its 25% drop-on-hit chance as an effect.
- * {@code serrated} (homing) and {@code vex} (block-phase) need tick-time
- * lifecycle hooks — they stay hardcoded in {@code ModularArrowEntity}
- * until Phase E expands the effect vocabulary with tick-time variants.</p>
+ * <p>{@code bound} carries its 25% drop-on-hit chance and {@code serrated}
+ * its mid-flight homing as effects. {@code vex} (block-phase) is still
+ * keyed off its id in {@code ModularArrowEntity} — it needs stateful
+ * coordination the simple effect hooks don't expose yet.</p>
  */
 public final class BuiltinArrowFletchings {
     private BuiltinArrowFletchings() {}

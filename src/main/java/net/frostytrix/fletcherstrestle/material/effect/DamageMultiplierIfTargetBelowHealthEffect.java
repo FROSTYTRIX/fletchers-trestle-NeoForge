@@ -13,8 +13,7 @@ import net.minecraft.world.phys.EntityHitResult;
 /**
  * On-hit: if the target is below {@code threshold} fraction of max health,
  * multiply the arrow's base damage by {@code multiplier} before vanilla
- * damage resolves. Used by the crimson shaft's "executioner" trait — Phase D
- * had this as a hardcoded {@code if ("crimson".equals(...))} branch.
+ * damage resolves. Used by the crimson shaft's "executioner" trait.
  *
  * <p>JSON:</p>
  * <pre>

@@ -17,8 +17,8 @@ import net.minecraft.world.level.Level;
 import java.util.List;
 import java.util.UUID;
 
-// Phase A — Eagle Whistle. Owner-side remote control for tamed eagles so the
-// player isn't forced to walk over to the eagle to toggle fetch mode.
+// Eagle Whistle. Owner-side remote control for tamed eagles so the player
+// isn't forced to walk over to the eagle to toggle fetch mode.
 //
 //   - Right-click an eagle               → bind the whistle to that eagle (UUID
 //                                          stored as a data component). When

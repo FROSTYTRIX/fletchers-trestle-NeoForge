@@ -26,7 +26,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-// Phase 6 — Spyglass-driven hunt activation.
+// Spyglass-driven hunt activation.
 // Server-side per-player state tracks how long the player has been steadily
 // looking at the same living entity through a spyglass. Once the threshold
 // is reached, a nearby tamed eagle owned by that player is sent into hunt

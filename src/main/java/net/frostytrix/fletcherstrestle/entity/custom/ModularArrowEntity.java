@@ -175,10 +175,8 @@ public class ModularArrowEntity extends AbstractArrow {
 
         // Glass-vial arrows shatter on impact and splash whatever potion they
         // were dipped in. Resolves before everything else so it can't be
-        // combined with other head effects. Still hardcoded — splashing
-        // a potion needs the arrow's POTION_CONTENTS component and the
-        // current stateful coordination; lifts to a "splash_potion" effect
-        // in a later sub-phase.
+        // combined with other head effects. Kept id-keyed (not an effect) —
+        // it reads the arrow's POTION_CONTENTS and needs stateful handling.
         if ("glass_vial".equals(assembly.head())) {
             applyGlassVialEffect(result.getLocation());
             return;
@@ -218,10 +216,8 @@ public class ModularArrowEntity extends AbstractArrow {
         shaft.effects().forEach(e -> e.onArrowHit(this, result));
         fletching.effects().forEach(e -> e.onArrowHit(this, result));
 
-        // Riser-driven Copper "conductive" lightning — still keyed off the
-        // persistent flag set by ModularBowItem.createProjectile. Phase E
-        // (a later sub-phase that adds bow-release effects) will move
-        // this into a riser-attached effect.
+        // Copper "conductive" lightning — reads the persistent flag stamped
+        // by the copper riser's set_arrow_flag effect at fire time.
         if (result.getEntity() instanceof LivingEntity target
                 && this.getPersistentData().getBoolean("fletcherstrestle:conductive")
                 && this.level().isThundering()) {

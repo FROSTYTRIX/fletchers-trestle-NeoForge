@@ -96,7 +96,7 @@ public class EagleEntity extends TamableAnimal {
         super(type, level);
         // Use flying move control and allow path-finding in air
         this.moveControl = new FlyingMoveControl(this, 10, false);
-        // Phase 5 — gravity off; travel() and tick() handle all motion.
+        // Gravity off; travel() and tick() handle all motion.
         // A bird is always in control of its descent: when actively pathing
         // it glides toward the target; when idle it settles gently via the
         // descent term in tick(). Real birds don't drop like rocks.
@@ -347,7 +347,7 @@ public class EagleEntity extends TamableAnimal {
     }
 
     // ---------------------------------------------------------------
-    // Phase 5 — Travel & gravity suppression
+    // Travel & gravity suppression
     // ---------------------------------------------------------------
 
     // Birds are always in control of their own motion. Vanilla travel() applies
@@ -730,8 +730,8 @@ public class EagleEntity extends TamableAnimal {
             }
         }
 
-        // Phase 1 — fly out to the arrow, grab it, then either chain to the
-        // next nearby arrow or transition to RETURNING.
+        // FETCH phase — fly out to the arrow, grab it, then either chain to
+        // the next nearby arrow or transition to RETURNING.
         private void tickFetch() {
             if (targetArrow == null || !targetArrow.isAlive()) {
                 // Lost the arrow. If we already collected something, head
@@ -796,7 +796,7 @@ public class EagleEntity extends TamableAnimal {
             giveUpTimer    = 0;
         }
 
-        // Phase 2 — carry everything back to the owner and deposit it.
+        // RETURN phase — carry everything back to the owner and deposit it.
         private void tickReturn() {
             if (eagle.isFetchInventoryEmpty()) { stop(); return; }
             if (!(eagle.getOwner() instanceof Player owner) || !owner.isAlive()) { stop(); return; }

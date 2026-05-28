@@ -5,9 +5,7 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 /**
- * Per-material numeric stats for a bow limb. Mirrors the closed schema in
- * the legacy {@code ModularBowItem.LimbStats} enum so the datagen migration
- * in Phase C is purely a 1:1 dump.
+ * Per-material numeric stats for a bow limb.
  *
  * @param drawTimeTicks    ticks needed for a full draw (vanilla bow is ~20)
  * @param damageMultiplier multiplier applied to base arrow damage

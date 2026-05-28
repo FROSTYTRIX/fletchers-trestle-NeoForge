@@ -89,10 +89,8 @@ public class FletchingRecipeCategory implements IRecipeCategory<ModularWeaponRec
 
             ItemStack out = recipe.getResultItem(null).copy();
 
-            // Phase G: route through MaterialResolver so a modpack-added
-            // ingredient resolves to the matching def's registry id
-            // (including non-fletcherstrestle namespaces). Falls back to
-            // the legacy stripping for items the resolver can't bridge.
+            // Resolve each ingredient to its matching def's registry id
+            // (any namespace); fall back to legacy stripping otherwise.
             String limbMat   = resolveOrLegacy(currentLimb,
                     s -> MaterialResolver.resolveBowLimb(s).map(h -> h.key().location().toString()));
             String riserMat  = resolveOrLegacy(currentRiser,

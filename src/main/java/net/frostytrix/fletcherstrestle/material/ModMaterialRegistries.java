@@ -25,10 +25,6 @@ import net.neoforged.neoforge.registries.DataPackRegistryEvent;
  * which fires on the mod-event bus during init. Call
  * {@link #register(IEventBus)} from the mod constructor to hook the
  * listener.</p>
- *
- * <p>Phase B scope: declare the keys + listener. Lookup helpers
- * ({@code MaterialResolver}) and consumers land in Phase D; built-in
- * material JSONs land in Phase C.</p>
  */
 public final class ModMaterialRegistries {
     private ModMaterialRegistries() {}

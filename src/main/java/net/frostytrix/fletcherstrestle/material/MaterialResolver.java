@@ -29,7 +29,7 @@ import java.util.function.Function;
  *       {@code ArrowAssembly} / {@code BowAssembly} component, find the
  *       def. Tolerates both modern id form ({@code "dark_oak"},
  *       {@code "mypack:steel"}) and legacy display form
- *       ({@code "Dark Oak"}) so worlds saved before Phase D keep working.</li>
+ *       ({@code "Dark Oak"}) so worlds saved before 2.0.0 keep working.</li>
  * </ul>
  *
  * <p>Most callers don't have a {@link RegistryAccess} handy, so each public
@@ -198,11 +198,11 @@ public final class MaterialResolver {
 
         // Every ResourceLocation build below goes through tryBuild / tryParse,
         // which return null on invalid characters instead of throwing. This
-        // matters: BowAssemblies saved before Phase D store legacy display
-        // form ("Wood", "Dark Oak", "High Tension") which contain capitals
-        // and spaces — both rejected by ResourceLocation's strict path check.
-        // The legacy-form fallback at step (3) is what handles those, but it
-        // can only run if steps (1) and (2) don't throw first.
+        // matters: pre-2.0.0 BowAssemblies store legacy display form
+        // ("Wood", "Dark Oak", "High Tension") which contain capitals and
+        // spaces — both rejected by ResourceLocation's strict path check.
+        // The legacy-form fallback at step (3) handles those, but it can
+        // only run if steps (1) and (2) don't throw first.
 
         // (1) explicit namespace e.g. "mypack:steel"
         if (idOrLegacy.indexOf(':') >= 0) {

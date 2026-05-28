@@ -139,7 +139,7 @@ public final class Materials {
                 .orElseGet(() -> Component.literal(idOrLegacy));
     }
 
-    // ---- Texture resolution (Phase F) ----
+    // ---- Texture resolution ----
 
     /**
      * Resolves a texture {@link ResourceLocation} for a material slot,
@@ -158,7 +158,7 @@ public final class Materials {
      * (e.g. {@code _limb_pulling_0}) works.</p>
      *
      * <p>Falls back to the mod's own namespace + the supplied id string if
-     * the def can't be resolved (e.g. an empty assembly or pre-Phase-D
+     * the def can't be resolved (e.g. an empty assembly or a legacy
      * display-form string that doesn't normalise to anything known).</p>
      */
     public static ResourceLocation bowLimbTexture(String idString, String basePathPrefix, String suffix) {
@@ -221,10 +221,8 @@ public final class Materials {
 
     /**
      * Normalises a stored id-or-legacy string to its underscore-path form,
-     * stripping any namespace. Used by Phase D code that still compares
-     * material identity by string ({@code "crimson".equals(normaliseId(...))}).
-     * Phase E will replace most of those compares with effect-driven
-     * dispatch and this helper will lose most of its callers.
+     * stripping any namespace. Used where code still compares material
+     * identity by string ({@code "crimson".equals(normaliseId(...))}).
      */
     public static String normaliseId(String idOrLegacy) {
         if (idOrLegacy == null || idOrLegacy.isEmpty()) return "";

@@ -29,20 +29,15 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 import java.util.function.Supplier;
 
 /**
- * Custom NeoForge registry of {@link MaterialEffectType}s. This is the
- * extension point for 3rd-party mods that want to add new declarative
- * material behaviors — register a new effect type here and modpack JSONs can
- * reference it immediately.
+ * Custom NeoForge registry of {@link MaterialEffectType}s — the extension
+ * point for mods that want to add new declarative material behaviors.
+ * Register a new effect type here (or against {@link #REGISTRY_KEY} from a
+ * companion mod) and modpack JSONs can reference it immediately.
  *
  * <p>The registry is created via {@link DeferredRegister#makeRegistry} which
  * fires {@code NewRegistryEvent} for us — no extra wiring in
  * {@link FletcherTrestle} beyond the standard {@code REGISTRY.register(bus)}
  * call.</p>
- *
- * <p>Phase A ships four representative effects so the data model can be
- * exercised end-to-end (codec, registry, list-of-effects on a def). The full
- * ~20-effect vocabulary lands in Phase E along with the call-site refactor;
- * adding effects later is purely additive.</p>
  */
 public final class ModMaterialEffectTypes {
     private ModMaterialEffectTypes() {}
@@ -63,11 +58,9 @@ public final class ModMaterialEffectTypes {
      * registered after class-load are still discoverable.
      */
     public static final Registry<MaterialEffectType<?>> REGISTRY =
-            EFFECT_TYPES.makeRegistry(builder -> builder
-                    .sync(true) // material defs are server-side, but synced effects are friendlier
-            );
+            EFFECT_TYPES.makeRegistry(builder -> builder.sync(true));
 
-    // --- Built-in effect types (Phase A: 4 representative implementations) ---
+    // --- On-spawn / on-hit effect types ---
 
     /** {@code fletcherstrestle:apply_effect} — applies a MobEffect to the hit target. */
     public static final Supplier<MaterialEffectType<ApplyMobEffectEffect>> APPLY_EFFECT =
@@ -88,8 +81,6 @@ public final class ModMaterialEffectTypes {
     public static final Supplier<MaterialEffectType<BounceOnBlockEffect>> BOUNCE_ON_BLOCK =
             EFFECT_TYPES.register("bounce_on_block",
                     () -> new MaterialEffectType<>(BounceOnBlockEffect.CODEC));
-
-    // --- Phase E on-hit effect types ---
 
     /** {@code fletcherstrestle:damage_multiplier_if_target_below_health} — crimson shaft executioner. */
     public static final Supplier<MaterialEffectType<DamageMultiplierIfTargetBelowHealthEffect>> DAMAGE_MULTIPLIER_IF_TARGET_BELOW_HEALTH =
@@ -131,7 +122,7 @@ public final class ModMaterialEffectTypes {
             EFFECT_TYPES.register("drop_self_on_hit",
                     () -> new MaterialEffectType<>(DropSelfOnHitEffect.CODEC));
 
-    // --- Phase E.2 tick + block-hit effect types ---
+    // --- Tick + block-hit effect types ---
 
     /** {@code fletcherstrestle:set_velocity_multiplier_at_tick} — acacia shaft mid-flight boost. */
     public static final Supplier<MaterialEffectType<SetVelocityMultiplierAtTickEffect>> SET_VELOCITY_MULTIPLIER_AT_TICK =
@@ -143,7 +134,7 @@ public final class ModMaterialEffectTypes {
             EFFECT_TYPES.register("subtle_homing",
                     () -> new MaterialEffectType<>(SubtleHomingEffect.CODEC));
 
-    // --- Phase E.3 bow/crossbow release effect types ---
+    // --- Bow / crossbow release effect types ---
 
     /** {@code fletcherstrestle:ignite_arrow} — crimson bow/crossbow limb. */
     public static final Supplier<MaterialEffectType<IgniteArrowEffect>> IGNITE_ARROW =
@@ -165,7 +156,7 @@ public final class ModMaterialEffectTypes {
             EFFECT_TYPES.register("apply_effect_to_shooter",
                     () -> new MaterialEffectType<>(ApplyMobEffectToShooterEffect.CODEC));
 
-    // --- Phase H: KubeJS / companion-mod extension hook ---
+    // --- Scripted escape hatch (KubeJS / companion mods) ---
 
     /**
      * {@code fletcherstrestle:scripted_callback} — looks up a
