@@ -12,9 +12,11 @@ import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.ProjectileImpactEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 
 // Game-bus events for things that can't easily live on items/entities:
@@ -37,6 +39,21 @@ public class ModServerEvents {
                     (id, inv, player) -> new FletchingMenu(id, inv),
                     Component.translatable("block.minecraft.fletching_table")
             ));
+        }
+    }
+
+    // Items sitting in a transient workstation menu (e.g. the Fletching Table,
+    // which is the vanilla block with no block entity to persist them) are
+    // otherwise lost if the player logs out / quits with the GUI open: the
+    // menu container never gets returned to the inventory before it's saved.
+    // PlayerLoggedOutEvent fires in PlayerList.remove BEFORE the player save,
+    // so force-closing the open menu here runs the menu's removed() — which
+    // returns the craft slots to the inventory — in time to be persisted.
+    @SubscribeEvent
+    public static void onPlayerLoggedOut(PlayerEvent.PlayerLoggedOutEvent event) {
+        if (event.getEntity() instanceof ServerPlayer player
+                && player.containerMenu != player.inventoryMenu) {
+            player.doCloseContainer();
         }
     }
 

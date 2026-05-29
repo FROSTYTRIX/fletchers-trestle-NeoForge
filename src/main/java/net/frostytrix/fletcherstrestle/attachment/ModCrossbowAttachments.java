@@ -32,4 +32,14 @@ public final class ModCrossbowAttachments {
     private static void onNewDataPackRegistry(DataPackRegistryEvent.NewRegistry event) {
         event.dataPackRegistry(CROSSBOW_ATTACHMENT, CrossbowAttachmentDef.CODEC, CrossbowAttachmentDef.CODEC);
     }
+
+    /** Translation key for an attachment's display name: {@code attachment.<ns>.<path>}. */
+    public static String displayKey(ResourceLocation id) {
+        return "attachment." + id.getNamespace() + "." + id.getPath();
+    }
+
+    /** Localized display name for an attachment def id. */
+    public static net.minecraft.network.chat.Component displayName(ResourceLocation id) {
+        return net.minecraft.network.chat.Component.translatable(displayKey(id));
+    }
 }

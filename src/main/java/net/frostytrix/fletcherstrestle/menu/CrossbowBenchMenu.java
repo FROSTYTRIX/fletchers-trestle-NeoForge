@@ -1,12 +1,14 @@
 package net.frostytrix.fletcherstrestle.menu;
 
-import net.frostytrix.fletcherstrestle.block.ModBlocks;
+import net.frostytrix.fletcherstrestle.attachment.CrossbowAttachmentDef;
 import net.frostytrix.fletcherstrestle.attachment.ModCrossbowAttachments;
+import net.frostytrix.fletcherstrestle.block.ModBlocks;
 import net.frostytrix.fletcherstrestle.component.ModDataComponents;
 import net.frostytrix.fletcherstrestle.item.ModItems;
+import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.Container;
+import net.minecraft.world.ContainerListener;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -14,53 +16,89 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
+import org.jetbrains.annotations.Nullable;
 
 public class CrossbowBenchMenu extends AbstractContainerMenu {
 
+    // Container (block-entity inventory) indices.
     public static final int SLOT_INPUT = 0;       // bow / crossbow
     public static final int SLOT_ATTACHMENT = 1;
     public static final int SLOT_TRIGGER = 2;
     private static final int FUNCTIONAL_SLOTS = 3;
 
+    // Menu-slot indices (order the slots are added below).
+    private static final int MENU_INPUT = 0;
+    private static final int MENU_TRIGGER = 1;
+    private static final int MENU_ATTACHMENT = 2;
+
+    private final Container container;
+    private final ContainerLevelAccess access;
+    private final Registry<CrossbowAttachmentDef> attachments;
+
     private boolean mutating = false;
-    // Previous-state snapshot, used to tell "a crossbow was just placed" (unpack)
-    // apart from "the trigger was just removed" (disassemble) — the two look
-    // identical in the resulting slots, so we diff against the prior state.
+    // Previous-state snapshot — lets us tell "a crossbow was just placed"
+    // (unpack) apart from "the trigger was just removed" (disassemble), which
+    // produce identical slot contents.
     private boolean lastInputCrossbow = false;
     private boolean lastTriggerPresent = false;
-    private final Container container = new SimpleContainer(FUNCTIONAL_SLOTS) {
-        @Override
-        public void setChanged() {
-            super.setChanged();
-            CrossbowBenchMenu.this.slotsChanged(this);
-        }
-    };
-    private final ContainerLevelAccess access;
 
+    private final ContainerListener listener = c -> this.slotsChanged(c);
+
+    /** Client-side constructor (MenuType factory). */
     public CrossbowBenchMenu(int id, Inventory playerInv) {
-        this(id, playerInv, ContainerLevelAccess.NULL);
+        this(id, playerInv, new SimpleContainer(FUNCTIONAL_SLOTS), ContainerLevelAccess.NULL);
     }
 
-    public CrossbowBenchMenu(int id, Inventory playerInv, ContainerLevelAccess access) {
+    /** Server-side constructor — {@code container} is the block entity's inventory. */
+    public CrossbowBenchMenu(int id, Inventory playerInv, Container container, ContainerLevelAccess access) {
         super(ModMenuTypes.CROSSBOW_BENCH_MENU.get(), id);
+        checkContainerSize(container, FUNCTIONAL_SLOTS);
+        this.container = container;
         this.access = access;
+        this.attachments = playerInv.player.level().registryAccess()
+                .registryOrThrow(ModCrossbowAttachments.CROSSBOW_ATTACHMENT);
 
-        // Functional slots — coordinates match the GUI texture.
-        // The input slot consumes the fitted parts when a finished crossbow is
-        // taken out (they were only slot representations of what it contains).
-        this.addSlot(new Slot(this.container, SLOT_INPUT, 81, 23) {
+        // Input slot — bow or crossbow. Taking a finished crossbow consumes the
+        // fitted-part representations (they are baked into the crossbow).
+        this.addSlot(new Slot(container, SLOT_INPUT, 81, 23) {
             @Override
-            public void onTake(Player p, ItemStack stack) {
-                if (stack.is(ModItems.MODULAR_CROSSBOW.get())) {
+            public boolean mayPlace(ItemStack s) {
+                return s.is(ModItems.MODULAR_BOW.get()) || s.is(ModItems.MODULAR_CROSSBOW.get());
+            }
+
+            @Override
+            public void onTake(Player p, ItemStack s) {
+                if (s.is(ModItems.MODULAR_CROSSBOW.get())) {
                     CrossbowBenchMenu.this.consumeFittedParts();
                 }
-                super.onTake(p, stack);
+                super.onTake(p, s);
             }
         });
-        this.addSlot(new Slot(this.container, SLOT_TRIGGER, 64, 46));
-        this.addSlot(new Slot(this.container, SLOT_ATTACHMENT, 98, 46));
+        // Trigger slot — exactly one mechanical trigger.
+        this.addSlot(new Slot(container, SLOT_TRIGGER, 64, 46) {
+            @Override
+            public boolean mayPlace(ItemStack s) {
+                return s.is(ModItems.MECHANICAL_TRIGGER.get());
+            }
 
-        // Player inventory + hotbar.
+            @Override
+            public int getMaxStackSize() {
+                return 1;
+            }
+        });
+        // Attachment slot — one item that some attachment def accepts.
+        this.addSlot(new Slot(container, SLOT_ATTACHMENT, 98, 46) {
+            @Override
+            public boolean mayPlace(ItemStack s) {
+                return CrossbowBenchMenu.this.isAttachmentItem(s);
+            }
+
+            @Override
+            public int getMaxStackSize() {
+                return 1;
+            }
+        });
+
         int invY = 84;
         for (int row = 0; row < 3; row++) {
             for (int col = 0; col < 9; col++) {
@@ -69,6 +107,15 @@ public class CrossbowBenchMenu extends AbstractContainerMenu {
         }
         for (int col = 0; col < 9; col++) {
             this.addSlot(new Slot(playerInv, col, 8 + col * 18, invY + 58));
+        }
+
+        // Seed the diff snapshot from current (possibly reloaded) contents so
+        // the first interaction after opening compares against the real state.
+        this.lastInputCrossbow = container.getItem(SLOT_INPUT).is(ModItems.MODULAR_CROSSBOW.get());
+        this.lastTriggerPresent = container.getItem(SLOT_TRIGGER).is(ModItems.MECHANICAL_TRIGGER.get());
+
+        if (container instanceof SimpleContainer sc) {
+            sc.addListener(this.listener);
         }
     }
 
@@ -82,20 +129,15 @@ public class CrossbowBenchMenu extends AbstractContainerMenu {
         this.access.execute((level, pos) -> {
             this.mutating = true;
             try {
-                this.updateBench(level);
+                this.updateBench();
             } finally {
                 this.mutating = false;
             }
         });
     }
 
-    /**
-     * Keeps the input item consistent with the trigger/attachment slots:
-     * trigger present &lt;-&gt; crossbow, trigger absent &lt;-&gt; bow. The slot contents are
-     * representations of what the crossbow contains; they're consumed when the
-     * finished crossbow leaves the input slot (see {@link #consumeFittedParts}).
-     */
-    private void updateBench(Level level) {
+    /** Keeps the input item consistent with the trigger/attachment slots. */
+    private void updateBench() {
         ItemStack input = this.container.getItem(SLOT_INPUT);
         ItemStack attachment = this.container.getItem(SLOT_ATTACHMENT);
         ItemStack trigger = this.container.getItem(SLOT_TRIGGER);
@@ -105,21 +147,21 @@ public class CrossbowBenchMenu extends AbstractContainerMenu {
         boolean triggerPresent = trigger.is(ModItems.MECHANICAL_TRIGGER.get());
 
         if (inputCrossbow && !this.lastInputCrossbow && !triggerPresent) {
-            // A finished crossbow was just placed -> unpack its parts into the slots.
+            // A finished crossbow was just placed -> unpack its parts into slots.
             this.container.setItem(SLOT_TRIGGER, new ItemStack(ModItems.MECHANICAL_TRIGGER.get()));
             ResourceLocation att = input.get(ModDataComponents.CROSSBOW_ATTACHMENT.get());
             if (att != null && attachment.isEmpty()) {
-                ItemStack attItem = attachmentItemFor(level, att);
+                ItemStack attItem = attachmentItemFor(att);
                 if (!attItem.isEmpty()) {
                     this.container.setItem(SLOT_ATTACHMENT, attItem);
                 }
             }
         } else if (inputBow && triggerPresent && !this.lastTriggerPresent) {
-            // Trigger added to a bow -> assemble into a crossbow (carry the assembly).
+            // Trigger added to a bow -> assemble into a crossbow (carry assembly).
             this.container.setItem(SLOT_INPUT, withAssemblyOf(input, ModItems.MODULAR_CROSSBOW.get()));
         } else if (inputCrossbow && !triggerPresent && this.lastTriggerPresent) {
-            // Trigger pulled out of a crossbow -> revert to a bow. The attachment
-            // can't stay on a bow; it's left sitting in the attachment slot.
+            // Trigger pulled out of a crossbow -> revert to a bow. Any attachment
+            // can't stay on a bow; it's left as a real item in the slot.
             this.container.setItem(SLOT_INPUT, withAssemblyOf(input, ModItems.MODULAR_BOW.get()));
         }
 
@@ -128,7 +170,7 @@ public class CrossbowBenchMenu extends AbstractContainerMenu {
         if (current.is(ModItems.MODULAR_CROSSBOW.get())) {
             ItemStack att = this.container.getItem(SLOT_ATTACHMENT);
             if (!att.isEmpty()) {
-                ResourceLocation id = findAttachmentId(level, att);
+                ResourceLocation id = findAttachmentId(att);
                 if (id != null) {
                     current.set(ModDataComponents.CROSSBOW_ATTACHMENT.get(), id);
                 }
@@ -141,7 +183,6 @@ public class CrossbowBenchMenu extends AbstractContainerMenu {
         this.lastTriggerPresent = this.container.getItem(SLOT_TRIGGER).is(ModItems.MECHANICAL_TRIGGER.get());
     }
 
-    /** A new {@code resultItem} stack carrying {@code source}'s bow assembly. */
     private static ItemStack withAssemblyOf(ItemStack source, net.minecraft.world.item.Item resultItem) {
         ItemStack out = new ItemStack(resultItem);
         var assembly = source.get(ModDataComponents.BOW_ASSEMBLY.get());
@@ -151,20 +192,23 @@ public class CrossbowBenchMenu extends AbstractContainerMenu {
         return out;
     }
 
-    /** Clears the trigger + attachment slot representations (their item is baked into the taken crossbow). */
+    /** Clears the trigger + attachment representations (baked into the taken crossbow). */
     private void consumeFittedParts() {
         this.mutating = true;
         this.container.setItem(SLOT_TRIGGER, ItemStack.EMPTY);
         this.container.setItem(SLOT_ATTACHMENT, ItemStack.EMPTY);
         this.lastTriggerPresent = false;
+        this.lastInputCrossbow = false;
         this.mutating = false;
     }
 
-    /** The crossbow_attachment def id whose ingredient accepts {@code stack}, or null. */
-    @org.jetbrains.annotations.Nullable
-    private static ResourceLocation findAttachmentId(Level level, ItemStack stack) {
-        var registry = level.registryAccess().registryOrThrow(ModCrossbowAttachments.CROSSBOW_ATTACHMENT);
-        for (var entry : registry.entrySet()) {
+    private boolean isAttachmentItem(ItemStack stack) {
+        return !stack.isEmpty() && findAttachmentId(stack) != null;
+    }
+
+    @Nullable
+    private ResourceLocation findAttachmentId(ItemStack stack) {
+        for (var entry : this.attachments.entrySet()) {
             if (entry.getValue().ingredient().test(stack)) {
                 return entry.getKey().location();
             }
@@ -172,10 +216,9 @@ public class CrossbowBenchMenu extends AbstractContainerMenu {
         return null;
     }
 
-    /** A representative item that installs the attachment def {@code id} (its ingredient's first item). */
-    private static ItemStack attachmentItemFor(Level level, ResourceLocation id) {
-        var registry = level.registryAccess().registryOrThrow(ModCrossbowAttachments.CROSSBOW_ATTACHMENT);
-        var def = registry.get(id);
+    /** A representative item that installs the attachment def {@code id}. */
+    private ItemStack attachmentItemFor(ResourceLocation id) {
+        CrossbowAttachmentDef def = this.attachments.get(id);
         if (def == null) {
             return ItemStack.EMPTY;
         }
@@ -186,15 +229,11 @@ public class CrossbowBenchMenu extends AbstractContainerMenu {
     @Override
     public void removed(Player player) {
         super.removed(player);
-        // A finished crossbow in the input slot already contains its trigger +
-        // attachment, so drop the slot representations before returning items.
-        if (this.container.getItem(SLOT_INPUT).is(ModItems.MODULAR_CROSSBOW.get())) {
-            this.mutating = true;
-            this.container.setItem(SLOT_TRIGGER, ItemStack.EMPTY);
-            this.container.setItem(SLOT_ATTACHMENT, ItemStack.EMPTY);
-            this.mutating = false;
+        if (this.container instanceof SimpleContainer sc) {
+            sc.removeListener(this.listener);
         }
-        this.access.execute((level, pos) -> this.clearContainer(player, this.container));
+        // Items intentionally stay in the block entity (persist); nothing is
+        // returned to the player here.
     }
 
     @Override
@@ -212,23 +251,43 @@ public class CrossbowBenchMenu extends AbstractContainerMenu {
         if (slot != null && slot.hasItem()) {
             ItemStack stack = slot.getItem();
             result = stack.copy();
+
             if (index < FUNCTIONAL_SLOTS) {
+                // Functional slot -> player inventory.
                 if (!this.moveItemStackTo(stack, FUNCTIONAL_SLOTS, this.slots.size(), true)) {
                     return ItemStack.EMPTY;
                 }
-            } else if (!this.moveItemStackTo(stack, 0, FUNCTIONAL_SLOTS, false)) {
-                return ItemStack.EMPTY;
+                if (index == MENU_INPUT && result.is(ModItems.MODULAR_CROSSBOW.get()) && !slot.hasItem()) {
+                    this.consumeFittedParts();
+                }
+            } else {
+                // Player inventory -> the one matching functional slot.
+                int target = targetSlotFor(stack);
+                if (target < 0 || !this.moveItemStackTo(stack, target, target + 1, false)) {
+                    return ItemStack.EMPTY;
+                }
             }
+
             if (stack.isEmpty()) {
                 slot.setByPlayer(ItemStack.EMPTY);
             } else {
                 slot.setChanged();
             }
-            // Shift-taking a finished crossbow consumes its fitted-part representations.
-            if (index == SLOT_INPUT && result.is(ModItems.MODULAR_CROSSBOW.get()) && !slot.hasItem()) {
-                this.consumeFittedParts();
-            }
         }
         return result;
+    }
+
+    /** Menu-slot index a shift-clicked inventory item should go to, or -1. */
+    private int targetSlotFor(ItemStack stack) {
+        if (stack.is(ModItems.MODULAR_BOW.get()) || stack.is(ModItems.MODULAR_CROSSBOW.get())) {
+            return MENU_INPUT;
+        }
+        if (stack.is(ModItems.MECHANICAL_TRIGGER.get())) {
+            return MENU_TRIGGER;
+        }
+        if (isAttachmentItem(stack)) {
+            return MENU_ATTACHMENT;
+        }
+        return -1;
     }
 }

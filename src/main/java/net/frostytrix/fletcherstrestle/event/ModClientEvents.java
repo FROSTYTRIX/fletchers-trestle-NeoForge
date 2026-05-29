@@ -204,13 +204,20 @@ public class ModClientEvents {
                 progress = progress * progress;
             }
 
-            // Standard vanilla zoom (up to 15%), deepened by a fitted scope.
-            float fov = 1.0F - (progress * 0.15F);
-            float scopeZoom = scopeZoomFor(player, stack);
+            // Standard vanilla zoom (up to 15%) while charging.
+            event.setNewFovModifier(event.getFovModifier() * (1.0F - (progress * 0.15F)));
+        }
+
+        // Scope ADS — a loaded crossbow with a scope fitted zooms while the
+        // scope toggle (keybind) is on. This is the "aim to shoot" zoom.
+        ItemStack held = player.getMainHandItem();
+        if (ClientState.scopeActive
+                && held.getItem() instanceof ModularCrossbowItem
+                && net.minecraft.world.item.CrossbowItem.isCharged(held)) {
+            float scopeZoom = scopeZoomFor(player, held);
             if (scopeZoom < 1.0F) {
-                fov = Math.min(fov, 1.0F - (1.0F - scopeZoom) * progress);
+                event.setNewFovModifier(event.getFovModifier() * scopeZoom);
             }
-            event.setNewFovModifier(event.getFovModifier() * fov);
         }
 
         if (player.isUsingItem() && stack.getItem() instanceof ModularBowItem bow) {

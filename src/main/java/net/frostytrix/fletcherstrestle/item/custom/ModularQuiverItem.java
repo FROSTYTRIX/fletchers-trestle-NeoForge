@@ -82,13 +82,14 @@ public class ModularQuiverItem extends Item {
     @Override
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
         int selected = stack.getOrDefault(ModDataComponents.QUIVER_SELECTED_SLOT.get(), 0);
-        tooltipComponents.add(Component.literal("Selected Slot: " + (selected + 1)).withStyle(ChatFormatting.GOLD));
+        tooltipComponents.add(Component.translatable("gui.fletcherstrestle.selected_slot", selected + 1).withStyle(ChatFormatting.GOLD));
 
         List<ItemStack> list = getQuiverContents(stack);
         if (!list.get(selected).isEmpty()) {
-            tooltipComponents.add(Component.literal("Loaded: ").withStyle(ChatFormatting.GRAY).append(list.get(selected).getHoverName()));
+            tooltipComponents.add(Component.translatable("gui.fletcherstrestle.loaded", list.get(selected).getHoverName()).withStyle(ChatFormatting.GRAY));
         } else {
-            tooltipComponents.add(Component.literal("Loaded: Empty").withStyle(ChatFormatting.DARK_GRAY));
+            tooltipComponents.add(Component.translatable("gui.fletcherstrestle.loaded",
+                    Component.translatable("gui.fletcherstrestle.empty")).withStyle(ChatFormatting.DARK_GRAY));
         }
     }
 
@@ -112,7 +113,7 @@ public class ModularQuiverItem extends Item {
             player.openMenu(new SimpleMenuProvider(
                     // We removed the 'hand' parameter here!
                     (id, inv, p) -> new QuiverMenu(id, inv),
-                    Component.literal("Quiver")
+                    Component.translatable("gui.fletcherstrestle.quiver")
             ));
         }
         return InteractionResultHolder.sidedSuccess(stack, level.isClientSide());

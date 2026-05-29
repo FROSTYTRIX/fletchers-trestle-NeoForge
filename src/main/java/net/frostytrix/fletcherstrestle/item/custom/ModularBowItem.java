@@ -130,26 +130,26 @@ public class ModularBowItem extends BowItem {
         BowAssembly assembly = stack.get(ModDataComponents.BOW_ASSEMBLY.get());
 
         if (assembly == null) {
-            tooltipComponents.add(Component.literal("Unfinished Bow").withStyle(ChatFormatting.RED, ChatFormatting.ITALIC));
+            tooltipComponents.add(Component.translatable("gui.fletcherstrestle.unfinished_bow").withStyle(ChatFormatting.RED, ChatFormatting.ITALIC));
             return;
         }
 
         if (!Screen.hasShiftDown()) {
-            tooltipComponents.add(Component.literal("Hold Shift for details")
+            tooltipComponents.add(Component.translatable("gui.fletcherstrestle.hold_shift")
                     .withStyle(ChatFormatting.DARK_GRAY, ChatFormatting.ITALIC));
             return;
         }
 
-        tooltipComponents.add(Component.literal("Assembly Parts:").withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD));
-        tooltipComponents.add(Component.literal("- Limbs: ")
+        tooltipComponents.add(Component.translatable("gui.fletcherstrestle.assembly_parts").withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD));
+        tooltipComponents.add(Component.literal("- ").append(Component.translatable("gui.fletcherstrestle.limbs")).append(": ")
                 .append(Materials.bowLimbName(assembly.limbMaterial())).withStyle(ChatFormatting.GRAY));
-        tooltipComponents.add(Component.literal("- Riser: ")
+        tooltipComponents.add(Component.literal("- ").append(Component.translatable("gui.fletcherstrestle.riser")).append(": ")
                 .append(Materials.bowRiserName(assembly.riserMaterial())).withStyle(ChatFormatting.GRAY));
-        tooltipComponents.add(Component.literal("- String: ")
+        tooltipComponents.add(Component.literal("- ").append(Component.translatable("gui.fletcherstrestle.string")).append(": ")
                 .append(Materials.bowStringName(assembly.stringMaterial())).withStyle(ChatFormatting.GRAY));
 
         int tuningPercent = (int) (assembly.tuning() * 100);
-        tooltipComponents.add(Component.literal("Tuning: " + tuningPercent + "%").withStyle(ChatFormatting.GREEN));
+        tooltipComponents.add(Component.translatable("gui.fletcherstrestle.tuning").append(": " + tuningPercent + "%").withStyle(ChatFormatting.GREEN));
     }
 
 

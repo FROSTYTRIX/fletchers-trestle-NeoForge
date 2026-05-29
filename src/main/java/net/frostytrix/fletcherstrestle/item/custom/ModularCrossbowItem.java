@@ -1,7 +1,9 @@
 package net.frostytrix.fletcherstrestle.item.custom;
 
+import net.frostytrix.fletcherstrestle.attachment.ModCrossbowAttachments;
 import net.frostytrix.fletcherstrestle.component.BowAssembly;
 import net.frostytrix.fletcherstrestle.component.ModDataComponents;
+import net.minecraft.resources.ResourceLocation;
 import net.frostytrix.fletcherstrestle.material.BowLimbDef;
 import net.frostytrix.fletcherstrestle.material.BowRiserDef;
 import net.frostytrix.fletcherstrestle.material.BowStringDef;
@@ -37,26 +39,32 @@ public class ModularCrossbowItem extends CrossbowItem {
         BowAssembly assembly = stack.get(ModDataComponents.BOW_ASSEMBLY.get());
 
         if (assembly == null) {
-            tooltipComponents.add(Component.literal("Unfinished Crossbow").withStyle(ChatFormatting.RED, ChatFormatting.ITALIC));
+            tooltipComponents.add(Component.translatable("gui.fletcherstrestle.unfinished_crossbow").withStyle(ChatFormatting.RED, ChatFormatting.ITALIC));
             return;
         }
 
         if (!Screen.hasShiftDown()) {
-            tooltipComponents.add(Component.literal("Hold Shift for details")
+            tooltipComponents.add(Component.translatable("gui.fletcherstrestle.hold_shift")
                     .withStyle(ChatFormatting.DARK_GRAY, ChatFormatting.ITALIC));
             return;
         }
 
-        tooltipComponents.add(Component.literal("Assembly Parts:").withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD));
-        tooltipComponents.add(Component.literal("- Limbs: ")
+        tooltipComponents.add(Component.translatable("gui.fletcherstrestle.assembly_parts").withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD));
+        tooltipComponents.add(Component.literal("- ").append(Component.translatable("gui.fletcherstrestle.limbs")).append(": ")
                 .append(Materials.bowLimbName(assembly.limbMaterial())).withStyle(ChatFormatting.GRAY));
-        tooltipComponents.add(Component.literal("- Riser: ")
+        tooltipComponents.add(Component.literal("- ").append(Component.translatable("gui.fletcherstrestle.riser")).append(": ")
                 .append(Materials.bowRiserName(assembly.riserMaterial())).withStyle(ChatFormatting.GRAY));
-        tooltipComponents.add(Component.literal("- String: ")
+        tooltipComponents.add(Component.literal("- ").append(Component.translatable("gui.fletcherstrestle.string")).append(": ")
                 .append(Materials.bowStringName(assembly.stringMaterial())).withStyle(ChatFormatting.GRAY));
 
         int tuningPercent = (int) (assembly.tuning() * 100);
-        tooltipComponents.add(Component.literal("Tuning: " + tuningPercent + "%").withStyle(ChatFormatting.GREEN));
+        tooltipComponents.add(Component.translatable("gui.fletcherstrestle.tuning").append(": " + tuningPercent + "%").withStyle(ChatFormatting.GREEN));
+
+        ResourceLocation attId = stack.get(ModDataComponents.CROSSBOW_ATTACHMENT.get());
+        if (attId != null) {
+            tooltipComponents.add(Component.translatable("gui.fletcherstrestle.attachment").append(": ")
+                    .append(ModCrossbowAttachments.displayName(attId)).withStyle(ChatFormatting.AQUA));
+        }
     }
 
     // --- 1. CHARGING TIME LOGIC ---

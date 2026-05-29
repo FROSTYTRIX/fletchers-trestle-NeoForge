@@ -46,6 +46,11 @@ public class ModBlockEntities {
                     BlockEntityType.Builder.of(EagleNestBlockEntity::new, ModBlocks.EAGLE_NEST.get()).build(null)
             );
 
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<CrossbowBenchBlockEntity>> CROSSBOW_BENCH_BE =
+            BLOCK_ENTITIES.register("crossbow_bench_be", () ->
+                    BlockEntityType.Builder.of(CrossbowBenchBlockEntity::new, ModBlocks.CROSSBOW_BENCH.get()).build(null)
+            );
+
     public static void register(IEventBus eventBus) {
         System.out.println("====== FLETCHER'S TRESTLE: REGISTERING BLOCK ENTITIES NOW ======");
         BLOCK_ENTITIES.register(eventBus);

@@ -20,6 +20,7 @@ public class ClientKeybinds {
 
     public static final KeyMapping FREE_LOOK_KEY = new KeyMapping("key.fletcherstrestle.free_look", KeyConflictContext.IN_GAME, InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_LEFT_ALT, "key.categories.fletcherstrestle");
     public static final KeyMapping GALLOP_LOCK_KEY = new KeyMapping("key.fletcherstrestle.gallop_lock_key", KeyConflictContext.IN_GAME, InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_G, "key.categories.fletcherstrestle");
+    public static final KeyMapping SCOPE_TOGGLE = new KeyMapping("key.fletcherstrestle.scope_toggle", KeyConflictContext.IN_GAME, InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_V, "key.categories.fletcherstrestle");
 
 
     // Note: The bus = Bus.MOD is required for Registration events, but Bus.GAME is used for Tick events.
@@ -31,6 +32,7 @@ public class ClientKeybinds {
             event.register(CYCLE_RIGHT);
             event.register(FREE_LOOK_KEY);
             event.register(GALLOP_LOCK_KEY);
+            event.register(SCOPE_TOGGLE);
         }
     }
 
@@ -66,6 +68,10 @@ public class ClientKeybinds {
         while (CYCLE_RIGHT.consumeClick()) {
             net.neoforged.neoforge.network.PacketDistributor.sendToServer(new QuiverSlotPacket(true));
             QuiverHudOverlay.displayTicks = 60;
+        }
+
+        while (SCOPE_TOGGLE.consumeClick()) {
+            ClientState.scopeActive = !ClientState.scopeActive;
         }
     }
 
