@@ -1,32 +1,32 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_bow": {
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "fletcherstrestle:crossbow_bench"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    },
+    "has_tripwire_hook": {
       "conditions": {
         "items": [
           {
-            "items": "minecraft:bow"
+            "items": "minecraft:tripwire_hook"
           }
         ]
       },
       "trigger": "minecraft:inventory_changed"
-    },
-    "has_the_recipe": {
-      "conditions": {
-        "recipe": "fletcherstrestle:crossbow_smithing"
-      },
-      "trigger": "minecraft:recipe_unlocked"
     }
   },
   "requirements": [
     [
       "has_the_recipe",
-      "has_bow"
+      "has_tripwire_hook"
     ]
   ],
   "rewards": {
     "recipes": [
-      "fletcherstrestle:crossbow_smithing"
+      "fletcherstrestle:crossbow_bench"
     ]
   }
 }

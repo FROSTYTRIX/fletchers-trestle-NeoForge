@@ -9,8 +9,13 @@ import net.frostytrix.fletcherstrestle.material.BowRiserDef;
 import net.frostytrix.fletcherstrestle.material.BowStringDef;
 import net.frostytrix.fletcherstrestle.material.Materials;
 import net.minecraft.ChatFormatting;
+import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -19,12 +24,15 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.Projectile;
+import net.minecraft.world.item.ArrowItem;
 import net.minecraft.world.item.CrossbowItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.ChargedProjectiles;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ModularCrossbowItem extends CrossbowItem {
@@ -141,6 +149,98 @@ public class ModularCrossbowItem extends CrossbowItem {
             list.set(quiverSelectedIdx, modifiedArrow.isEmpty() ? ItemStack.EMPTY : modifiedArrow);
             ModularQuiverItem.saveQuiverContents(quiverStack, list);
             player.getInventory().setItem(quiverInvSlot, quiverStack);
+        }
+
+        // 4. MAGAZINE: top up the charge to magazine_size, consuming one extra
+        // arrow per added bolt (creative doesn't consume). Only magazine
+        // crossbows enter this; normal crossbows are unaffected.
+        int mag = magazineSize(stack, entityLiving);
+        if (mag > 1 && isCharged(stack)) {
+            ChargedProjectiles cp = stack.get(DataComponents.CHARGED_PROJECTILES);
+            if (cp != null && !cp.isEmpty()) {
+                List<ItemStack> bolts = new ArrayList<>(cp.getItems());
+                while (bolts.size() < mag) {
+                    if (player.getAbilities().instabuild) {
+                        bolts.add(bolts.get(0).copy());
+                        continue;
+                    }
+                    ItemStack arrow = tryConsumeOneArrow(player);
+                    if (arrow.isEmpty()) break;
+                    bolts.add(arrow);
+                }
+                stack.set(DataComponents.CHARGED_PROJECTILES, ChargedProjectiles.of(bolts));
+            }
+        }
+    }
+
+    // ---------------- Magazine attachment ----------------
+
+    /** Magazine capacity from the installed attachment def, or 1 if none. */
+    private static int magazineSize(ItemStack stack, LivingEntity entity) {
+        ResourceLocation id = stack.get(ModDataComponents.CROSSBOW_ATTACHMENT.get());
+        if (id == null) return 1;
+        var def = entity.level().registryAccess()
+                .registryOrThrow(ModCrossbowAttachments.CROSSBOW_ATTACHMENT).get(id);
+        return def != null ? Math.max(1, def.stats().magazineSize()) : 1;
+    }
+
+    /** Pulls a single arrow from the selected quiver slot, else plain inventory. */
+    private static ItemStack tryConsumeOneArrow(Player player) {
+        for (int i = 0; i < player.getInventory().getContainerSize(); i++) {
+            ItemStack inv = player.getInventory().getItem(i);
+            if (inv.getItem() instanceof ModularQuiverItem) {
+                int sel = inv.getOrDefault(ModDataComponents.QUIVER_SELECTED_SLOT.get(), 0);
+                List<ItemStack> list = ModularQuiverItem.getQuiverContents(inv);
+                if (sel >= 0 && sel < list.size() && !list.get(sel).isEmpty()
+                        && list.get(sel).getItem() instanceof ArrowItem) {
+                    ItemStack one = list.get(sel).copy();
+                    one.setCount(1);
+                    ItemStack remaining = list.get(sel).copy();
+                    remaining.shrink(1);
+                    list.set(sel, remaining.isEmpty() ? ItemStack.EMPTY : remaining);
+                    ModularQuiverItem.saveQuiverContents(inv, list);
+                    return one;
+                }
+            }
+        }
+        for (int i = 0; i < player.getInventory().getContainerSize(); i++) {
+            ItemStack inv = player.getInventory().getItem(i);
+            if (!inv.isEmpty() && inv.getItem() instanceof ArrowItem) {
+                ItemStack one = inv.copy();
+                one.setCount(1);
+                inv.shrink(1);
+                return one;
+            }
+        }
+        return ItemStack.EMPTY;
+    }
+
+    // Repeating fire: a magazine crossbow shoots ONE bolt per click and keeps
+    // the rest charged, instead of vanilla's fire-all-at-once. Normal crossbows
+    // fall through to super.
+    @Override
+    public void performShooting(Level level, LivingEntity shooter, InteractionHand hand,
+                                ItemStack weapon, float velocity, float inaccuracy, @Nullable LivingEntity target) {
+        if (magazineSize(weapon, shooter) <= 1) {
+            super.performShooting(level, shooter, hand, weapon, velocity, inaccuracy, target);
+            return;
+        }
+        if (!(level instanceof ServerLevel serverLevel)) {
+            return;
+        }
+        ChargedProjectiles cp = weapon.get(DataComponents.CHARGED_PROJECTILES);
+        if (cp == null || cp.isEmpty()) {
+            return;
+        }
+        List<ItemStack> items = new ArrayList<>(cp.getItems());
+        ItemStack first = items.remove(0);
+        weapon.set(DataComponents.CHARGED_PROJECTILES,
+                items.isEmpty() ? ChargedProjectiles.EMPTY : ChargedProjectiles.of(items));
+        this.shoot(serverLevel, shooter, hand, weapon, List.of(first), velocity, inaccuracy,
+                shooter instanceof Player, target);
+        if (shooter instanceof ServerPlayer sp) {
+            CriteriaTriggers.SHOT_CROSSBOW.trigger(sp, weapon);
+            sp.awardStat(Stats.ITEM_USED.get(weapon.getItem()));
         }
     }
 

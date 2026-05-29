@@ -112,23 +112,17 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                 .unlockedBy("has_string", has(Items.STRING))
                 .save(recipeOutput);
 
-        SmithingTransformRecipeBuilder.smithing(
-                        Ingredient.of(ModItems.MECHANICAL_TRIGGER.get()),
-                        Ingredient.of(ModItems.MODULAR_BOW.get()),
-                        Ingredient.of(Items.TRIPWIRE_HOOK),
-                        RecipeCategory.COMBAT,
-                        ModItems.MODULAR_CROSSBOW.get())
-                .unlocks("has_modular_bow", has(ModItems.MODULAR_BOW.get()))
-                .save(recipeOutput, FletcherTrestle.MOD_ID + ":modular_crossbow_smithing");
-
-        SmithingTransformRecipeBuilder.smithing(
-                        Ingredient.of(ModItems.MECHANICAL_TRIGGER.get()),
-                        Ingredient.of(Items.BOW),
-                        Ingredient.of(Items.TRIPWIRE_HOOK),
-                        RecipeCategory.COMBAT,
-                        Items.CROSSBOW)
-                .unlocks("has_bow", has(Items.BOW))
-                .save(recipeOutput, FletcherTrestle.MOD_ID + ":crossbow_smithing");
+        // Bow -> crossbow assembly moved off the Smithing Table onto the
+        // Crossbow Bench (handled in CrossbowBenchMenu). The bench is the single
+        // source of truth, so the old smithing recipes are intentionally gone.
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModBlocks.CROSSBOW_BENCH.get())
+                .pattern("PPP")
+                .pattern("PHP")
+                .pattern("I I")
+                .define('P', ItemTags.PLANKS)
+                .define('H', Items.TRIPWIRE_HOOK)
+                .define('I', Items.IRON_INGOT)
+                .unlockedBy("has_tripwire_hook", has(Items.TRIPWIRE_HOOK)).save(recipeOutput);
 
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModItems.HEAVY_DUMMY_ITEM.get())
                 .pattern("HTH")

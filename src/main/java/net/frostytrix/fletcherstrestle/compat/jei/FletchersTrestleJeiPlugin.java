@@ -37,7 +37,8 @@ public class FletchersTrestleJeiPlugin implements IModPlugin {
                 new ArrowRecipeCategory(registration.getJeiHelpers().getGuiHelper()),
                 new SteamingRecipeCategory(registration.getJeiHelpers().getGuiHelper()),
                 new ShavingRecipeCategory(registration.getJeiHelpers().getGuiHelper()),
-                new DippingRecipeCategory(registration.getJeiHelpers().getGuiHelper())
+                new DippingRecipeCategory(registration.getJeiHelpers().getGuiHelper()),
+                new CrossbowBenchRecipeCategory(registration.getJeiHelpers().getGuiHelper())
         );
     }
 
@@ -107,6 +108,39 @@ public class FletchersTrestleJeiPlugin implements IModPlugin {
             }
         }
         registration.addRecipes(DippingRecipeCategory.DIPPING_TYPE, dippingRecipes);
+
+        // Crossbow Bench: bow + trigger -> crossbow, and one entry per
+        // attachment def (crossbow + attachment -> attached crossbow).
+        registration.addRecipes(CrossbowBenchRecipeCategory.TYPE, buildCrossbowBenchRecipes());
+    }
+
+    private static List<CrossbowBenchJeiRecipe> buildCrossbowBenchRecipes() {
+        List<CrossbowBenchJeiRecipe> recipes = new ArrayList<>();
+        var assembly = new net.frostytrix.fletcherstrestle.component.BowAssembly("oak", "wood", "flax", 1.0f);
+
+        ItemStack sampleBow = new ItemStack(ModItems.MODULAR_BOW.get());
+        sampleBow.set(ModDataComponents.BOW_ASSEMBLY.get(), assembly);
+        ItemStack sampleCrossbow = new ItemStack(ModItems.MODULAR_CROSSBOW.get());
+        sampleCrossbow.set(ModDataComponents.BOW_ASSEMBLY.get(), assembly);
+
+        // Assembly: bow + mechanical trigger -> crossbow.
+        recipes.add(new CrossbowBenchJeiRecipe(
+                List.of(sampleBow, new ItemStack(ModItems.MECHANICAL_TRIGGER.get())),
+                sampleCrossbow.copy()));
+
+        // One entry per attachment def in the datapack registry.
+        var registry = Minecraft.getInstance().level.registryAccess()
+                .registryOrThrow(net.frostytrix.fletcherstrestle.attachment.ModCrossbowAttachments.CROSSBOW_ATTACHMENT);
+        for (var entry : registry.entrySet()) {
+            ItemStack[] items = entry.getValue().ingredient().getItems();
+            if (items.length == 0) continue;
+            ItemStack attached = sampleCrossbow.copy();
+            attached.set(ModDataComponents.CROSSBOW_ATTACHMENT.get(), entry.getKey().location());
+            recipes.add(new CrossbowBenchJeiRecipe(
+                    List.of(sampleCrossbow.copy(), items[0].copy()),
+                    attached));
+        }
+        return recipes;
     }
 
     @Override
@@ -123,5 +157,8 @@ public class FletchersTrestleJeiPlugin implements IModPlugin {
 
         // Dipping Vat Catalyst
         registration.addRecipeCatalyst(new ItemStack(ModBlocks.DIPPING_VAT.get()), DippingRecipeCategory.DIPPING_TYPE);
+
+        // Crossbow Bench Catalyst
+        registration.addRecipeCatalyst(new ItemStack(ModBlocks.CROSSBOW_BENCH.get()), CrossbowBenchRecipeCategory.TYPE);
     }
 }

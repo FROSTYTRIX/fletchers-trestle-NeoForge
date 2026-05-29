@@ -34,6 +34,7 @@ public class ModBlockLootTableProvider extends BlockLootSubProvider {
         // here or BlockLootSubProvider.generate throws on datagen.
         dropSelf(ModBlocks.EAGLE_PERCH.get());
         dropSelf(ModBlocks.EAGLE_NEST.get());
+        dropSelf(ModBlocks.CROSSBOW_BENCH.get());
 
         LootItemCondition.Builder lootitemcondition$builder = LootItemBlockStatePropertyCondition
                 .hasBlockStateProperties(ModBlocks.FLAX_CROP.get())
