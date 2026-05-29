@@ -78,7 +78,17 @@ public class ModularCrossbowItem extends CrossbowItem {
     // --- 1. CHARGING TIME LOGIC ---
     @Override
     public int getUseDuration(ItemStack stack, LivingEntity entity) {
+        // A magazine makes the draw take reload_multiplier times as long; the
+        // hold window has to match so the player can hold until it loads.
+        if (magazineSize(stack, entity) > 1) {
+            return magazineChargeTicks(stack, entity) + 3;
+        }
         return (int) getDrawTime(stack) + 3;
+    }
+
+    /** Ticks a magazine crossbow must be drawn before it loads (slower reload). */
+    private int magazineChargeTicks(ItemStack stack, LivingEntity entity) {
+        return Math.round(getChargeDuration(stack, entity) * reloadMultiplier(stack, entity));
     }
 
     public float getDrawTime(ItemStack stack) {
@@ -105,10 +115,17 @@ public class ModularCrossbowItem extends CrossbowItem {
     public void releaseUsing(ItemStack stack, Level level, LivingEntity entityLiving, int timeLeft) {
         if (!(entityLiving instanceof Player player)) return;
 
-        // Ensure we actually pulled it back far enough to load!
+        // Ensure we actually pulled it back far enough to load. A magazine
+        // crossbow requires the longer (reload_multiplier) draw; until then we
+        // must NOT fall through to super, which would load at the normal time.
+        boolean magazine = magazineSize(stack, entityLiving) > 1;
+        int required = magazine ? magazineChargeTicks(stack, entityLiving)
+                                : getChargeDuration(stack, entityLiving);
         int chargeTicks = this.getUseDuration(stack, entityLiving) - timeLeft;
-        if (chargeTicks < getChargeDuration(stack, entityLiving)) {
-            super.releaseUsing(stack, level, entityLiving, timeLeft);
+        if (chargeTicks < required) {
+            if (!magazine) {
+                super.releaseUsing(stack, level, entityLiving, timeLeft);
+            }
             return;
         }
 
@@ -182,6 +199,15 @@ public class ModularCrossbowItem extends CrossbowItem {
         var def = entity.level().registryAccess()
                 .registryOrThrow(ModCrossbowAttachments.CROSSBOW_ATTACHMENT).get(id);
         return def != null ? Math.max(1, def.stats().magazineSize()) : 1;
+    }
+
+    /** Charge-time multiplier from the installed attachment def, or 1.0 if none. */
+    private static float reloadMultiplier(ItemStack stack, LivingEntity entity) {
+        ResourceLocation id = stack.get(ModDataComponents.CROSSBOW_ATTACHMENT.get());
+        if (id == null) return 1.0f;
+        var def = entity.level().registryAccess()
+                .registryOrThrow(ModCrossbowAttachments.CROSSBOW_ATTACHMENT).get(id);
+        return def != null ? Math.max(1.0f, def.stats().reloadMultiplier()) : 1.0f;
     }
 
     /** Pulls a single arrow from the selected quiver slot, else plain inventory. */
