@@ -98,13 +98,14 @@ public class FletcherTrestle {
     // the mountain-biome tag; this predicate adds altitude, sky-visibility,
     // and sky-light checks so they only appear on exposed ridges in daylight.
     //
-    // Gated by FletcherConfig.EAGLES_NATURAL_SPAWNING — off by default while
-    // the eagle model is WIP. When off, registration is skipped so the spawn
-    // pool never gets told about eagles; flip the config to restore it.
+    // The EAGLES_NATURAL_SPAWNING gate (off by default while the eagle model
+    // is WIP) lives inside checkEagleSpawnRules, NOT here: this event fires
+    // during mod-loading registration, before the SERVER config is loaded, so
+    // reading the config value here throws "Cannot get config value before
+    // config is loaded." The placement is always registered; the predicate —
+    // which runs at spawn-attempt time, once config is available — decides
+    // whether any eagle actually spawns.
     private void onRegisterSpawnPlacements(RegisterSpawnPlacementsEvent event) {
-        if (!FletcherConfig.EAGLES_NATURAL_SPAWNING.get()) {
-            return;
-        }
         event.register(
                 ModEntities.EAGLE.get(),
                 net.minecraft.world.entity.SpawnPlacementTypes.NO_RESTRICTIONS,

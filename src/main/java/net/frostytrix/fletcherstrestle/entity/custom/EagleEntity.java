@@ -116,6 +116,11 @@ public class EagleEntity extends TamableAnimal {
             net.minecraft.world.entity.MobSpawnType reason,
             BlockPos pos,
             net.minecraft.util.RandomSource random) {
+        // Natural spawning is config-gated (off by default while the model is
+        // WIP). This predicate runs at spawn-attempt time, when the SERVER
+        // config is loaded — unlike RegisterSpawnPlacementsEvent, so it's the
+        // correct place to read the flag.
+        if (!net.frostytrix.fletcherstrestle.config.FletcherConfig.EAGLES_NATURAL_SPAWNING.get()) return false;
         // Bottom layers / cave biomes are off-limits regardless of biome tag.
         if (pos.getY() < 80) return false;
         if (!level.canSeeSky(pos)) return false;
