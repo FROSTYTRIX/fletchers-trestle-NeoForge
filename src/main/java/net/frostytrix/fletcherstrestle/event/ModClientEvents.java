@@ -10,6 +10,7 @@ import net.frostytrix.fletcherstrestle.client.ClientState;
 import net.frostytrix.fletcherstrestle.client.QuiverHudOverlay;
 import net.frostytrix.fletcherstrestle.client.model.ModularModelLoader;
 import net.frostytrix.fletcherstrestle.client.renderer.ModularArrowRenderer;
+import net.frostytrix.fletcherstrestle.attachment.ModCrossbowAttachments;
 import net.frostytrix.fletcherstrestle.component.ModDataComponents;
 import net.frostytrix.fletcherstrestle.entity.ModEntities;
 import net.frostytrix.fletcherstrestle.entity.client.EagleModel;
@@ -175,6 +176,18 @@ public class ModClientEvents {
         }, ModBlocks.STEAM_BOX.get());
     }
 
+    /** FOV multiplier from a fitted scope (optic) attachment, or 1.0 if none. */
+    private static float scopeZoomFor(Player player, ItemStack stack) {
+        ResourceLocation attId = stack.get(ModDataComponents.CROSSBOW_ATTACHMENT.get());
+        if (attId == null) {
+            return 1.0F;
+        }
+        var registry = player.level().registryAccess()
+                .registryOrThrow(ModCrossbowAttachments.CROSSBOW_ATTACHMENT);
+        var def = registry.get(attId);
+        return def != null ? def.stats().zoom() : 1.0F;
+    }
+
     @SubscribeEvent
     public static void onFovModify(ComputeFovModifierEvent event) {
         Player player = event.getPlayer();
@@ -191,8 +204,13 @@ public class ModClientEvents {
                 progress = progress * progress;
             }
 
-            // Standard Vanilla Zoom Math (reduces FOV by up to 15%)
-            event.setNewFovModifier(event.getFovModifier() * (1.0F - (progress * 0.15F)));
+            // Standard vanilla zoom (up to 15%), deepened by a fitted scope.
+            float fov = 1.0F - (progress * 0.15F);
+            float scopeZoom = scopeZoomFor(player, stack);
+            if (scopeZoom < 1.0F) {
+                fov = Math.min(fov, 1.0F - (1.0F - scopeZoom) * progress);
+            }
+            event.setNewFovModifier(event.getFovModifier() * fov);
         }
 
         if (player.isUsingItem() && stack.getItem() instanceof ModularBowItem bow) {
