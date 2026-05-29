@@ -25,6 +25,10 @@ public class ModMenuTypes {
             MENUS.register("archery_target_menu",
                     () -> new MenuType<>(ArcheryTargetMenu::new, FeatureFlags.DEFAULT_FLAGS));
 
+    public static final DeferredHolder<MenuType<?>, MenuType<CrossbowBenchMenu>> CROSSBOW_BENCH_MENU =
+            MENUS.register("crossbow_bench_menu",
+                    () -> new MenuType<>(CrossbowBenchMenu::new, FeatureFlags.DEFAULT_FLAGS));
+
     public static void register(IEventBus bus) {
         MENUS.register(bus);
     }

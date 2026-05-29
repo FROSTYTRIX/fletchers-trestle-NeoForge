@@ -1,0 +1,7 @@
+{
+  "comment": "Placeholder model — reuses the vanilla fletching table top until custom art is added.",
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "all": "minecraft:block/fletching_table_top"
+  }
+}

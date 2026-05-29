@@ -28,6 +28,7 @@ public class ModClientEvents {
         event.register(ModMenuTypes.FLETCHING_MENU.get(), FletchingScreen::new);
         event.register(ModMenuTypes.QUIVER_MENU.get(), QuiverScreen::new);
         event.register(ModMenuTypes.ARCHERY_TARGET_MENU.get(), ArcheryTargetScreen::new);
+        event.register(ModMenuTypes.CROSSBOW_BENCH_MENU.get(), CrossbowBenchScreen::new);
     }
 
     @SubscribeEvent

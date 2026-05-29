@@ -109,6 +109,7 @@ public class ModCreativeModeTabs {
                         output.accept(ModItems.EAGLE_WHISTLE.get());
 
                         output.accept(ModItems.MAGAZINE.get());
+                        output.accept(ModBlocks.CROSSBOW_BENCH);
 
                     })
                     .build());

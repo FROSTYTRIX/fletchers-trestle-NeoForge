@@ -59,6 +59,12 @@ public class ModBlocks {
                     .sound(SoundType.GRASS)
                     .noOcclusion()));
 
+    public static final DeferredBlock<Block> CROSSBOW_BENCH = registerBlock("crossbow_bench",
+            () -> new CrossbowBenchBlock(Block.Properties.of()
+                    .strength(2.5f)
+                    .sound(SoundType.WOOD)
+                    .noOcclusion()));
+
     private static <T extends Block> DeferredBlock<T> registerBlock(String name, Supplier<T> block) {
         DeferredBlock<T> toReturn = BLOCKS.register(name, block);
         registerBlockItem(name, toReturn);
