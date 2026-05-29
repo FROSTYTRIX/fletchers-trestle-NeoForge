@@ -333,7 +333,12 @@ public class ModularCrossbowItem extends CrossbowItem {
             }
         }
 
-        super.shootProjectile(shooter, projectile, index, velocity, inaccuracy, angle, target);
+        // Archery skill: steadier aim with level (Phase 2 passive).
+        if (shooter instanceof Player p) {
+            finalInaccuracy *= net.frostytrix.fletcherstrestle.progression.ArcheryProgression.inaccuracyMultiplier(p);
+        }
+
+        super.shootProjectile(shooter, projectile, index, finalVelocity, finalInaccuracy, angle, target);
         if (shooter instanceof Player player) {
             int quiverInvSlot = -1;
             ItemStack quiverStack = ItemStack.EMPTY;

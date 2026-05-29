@@ -118,6 +118,11 @@ public class ModularBowItem extends BowItem {
             finalInaccuracy = inaccuracy * riser.stats().inaccuracyMultiplier() * fletchInacc;
         }
 
+        // Archery skill: steadier aim with level (Phase 2 passive).
+        if (shooter instanceof net.minecraft.world.entity.player.Player p) {
+            finalInaccuracy *= net.frostytrix.fletcherstrestle.progression.ArcheryProgression.inaccuracyMultiplier(p);
+        }
+
         // Call super with our modified values
         super.shootProjectile(shooter, projectile, index, finalVelocity, finalInaccuracy, angle, target);
     }

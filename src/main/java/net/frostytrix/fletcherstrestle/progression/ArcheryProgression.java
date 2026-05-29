@@ -6,6 +6,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
 
 /**
@@ -64,6 +65,27 @@ public final class ArcheryProgression {
                             .withStyle(ChatFormatting.GOLD), true);
             player.level().playSound(null, player.getX(), player.getY(), player.getZ(),
                     SoundEvents.PLAYER_LEVELUP, SoundSource.PLAYERS, 0.6f, 1.4f);
+        } else {
+            // Brief progress readout on the action bar (XP into the current level).
+            int into = after - xpForLevel(newLevel);
+            int span = Math.max(1, xpForLevel(newLevel + 1) - xpForLevel(newLevel));
+            player.displayClientMessage(
+                    Component.translatable("gui.fletcherstrestle.archery_progress", newLevel, into, span)
+                            .withStyle(ChatFormatting.GRAY), true);
         }
+    }
+
+    /**
+     * Aim-steadiness multiplier from archery level: 1.0 at level 0, scaling
+     * down to 0.5 (50% tighter spread) at the configured max level. Returns
+     * 1.0 when the skill system is disabled.
+     */
+    public static float inaccuracyMultiplier(Player player) {
+        if (!FletcherConfig.ARCHERY_SKILL_ENABLED.get()) {
+            return 1.0f;
+        }
+        int max = FletcherConfig.ARCHERY_MAX_LEVEL.get();
+        float t = max <= 0 ? 0f : Mth.clamp((float) getLevel(player) / max, 0f, 1f);
+        return 1.0f - 0.5f * t;
     }
 }

@@ -77,6 +77,7 @@
   "gui.fletcherstrestle.empty": "Vide",
   "gui.fletcherstrestle.quiver": "Carquois",
   "gui.fletcherstrestle.archery_level_up": "Niveau de tir à l'arc %s",
+  "gui.fletcherstrestle.archery_progress": "Tir à l'arc Niv %s  (%s/%s XP)",
   "entity.fletcherstrestle.eagle": "Aigle",
   "creative_tab.fletcherstrestle.fletchers_trestle_tab": "Fletcher's Trestle",
   "enchantment.fletcherstrestle.photosynthesis": "Photosynthèse",
