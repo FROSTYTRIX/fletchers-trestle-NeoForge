@@ -76,6 +76,7 @@
   "gui.fletcherstrestle.loaded": "Loaded: %s",
   "gui.fletcherstrestle.empty": "Empty",
   "gui.fletcherstrestle.quiver": "Quiver",
+  "gui.fletcherstrestle.archery_level_up": "Archery Level %s",
   "entity.fletcherstrestle.eagle": "Eagle",
   "creative_tab.fletcherstrestle.fletchers_trestle_tab": "Fletcher's Trestle",
   "enchantment.fletcherstrestle.photosynthesis": "Photosynthesis",

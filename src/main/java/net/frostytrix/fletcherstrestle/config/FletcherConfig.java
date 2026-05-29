@@ -16,6 +16,13 @@ public class FletcherConfig {
      */
     public static final ModConfigSpec.BooleanValue EAGLES_NATURAL_SPAWNING;
 
+    // --- MARKSMANSHIP (Phase 2): per-player archery XP / leveling ---
+    public static final ModConfigSpec.BooleanValue ARCHERY_SKILL_ENABLED;
+    public static final ModConfigSpec.IntValue ARCHERY_XP_PER_HIT;
+    public static final ModConfigSpec.IntValue ARCHERY_XP_HEADSHOT_BONUS;
+    public static final ModConfigSpec.IntValue ARCHERY_XP_PER_KILL;
+    public static final ModConfigSpec.IntValue ARCHERY_MAX_LEVEL;
+
     // --- CLIENT CONFIG (Local UI only) ---
     public static final ModConfigSpec CLIENT_SPEC;
     public static final ModConfigSpec.DoubleValue QUIVER_HUD_X;
@@ -31,6 +38,24 @@ public class FletcherConfig {
                 .defineInRange("punish_multiplier", 3.0, 0.0, 10.0);
         MINIGAME_MIN_SCORE = serverBuilder.comment("Minimum quality score if you miss completely. (Default: 0.2)")
                 .defineInRange("minimum_score", 0.2, 0.0, 1.0);
+        serverBuilder.pop();
+
+        serverBuilder.push("marksmanship");
+        ARCHERY_SKILL_ENABLED = serverBuilder
+                .comment("Master toggle for the archery skill / XP system.")
+                .define("archery_skill_enabled", true);
+        ARCHERY_XP_PER_HIT = serverBuilder
+                .comment("XP gained for landing an arrow on a living target.")
+                .defineInRange("xp_per_hit", 2, 0, 1000);
+        ARCHERY_XP_HEADSHOT_BONUS = serverBuilder
+                .comment("Extra XP when the arrow hits the top of the target's hitbox (a headshot).")
+                .defineInRange("xp_headshot_bonus", 3, 0, 1000);
+        ARCHERY_XP_PER_KILL = serverBuilder
+                .comment("Extra XP when an arrow hit kills the target.")
+                .defineInRange("xp_per_kill", 5, 0, 1000);
+        ARCHERY_MAX_LEVEL = serverBuilder
+                .comment("Maximum archery level a player can reach.")
+                .defineInRange("max_level", 50, 1, 1000);
         serverBuilder.pop();
 
         serverBuilder.push("eagles");

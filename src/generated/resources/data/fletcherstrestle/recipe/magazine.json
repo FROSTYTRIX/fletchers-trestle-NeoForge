@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "I": {
+      "item": "minecraft:iron_ingot"
+    },
+    "R": {
+      "item": "minecraft:redstone"
+    }
+  },
+  "pattern": [
+    "I I",
+    "IRI",
+    "III"
+  ],
+  "result": {
+    "count": 1,
+    "id": "fletcherstrestle:magazine"
+  }
+}

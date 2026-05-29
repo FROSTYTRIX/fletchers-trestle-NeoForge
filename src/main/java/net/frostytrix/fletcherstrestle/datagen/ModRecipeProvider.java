@@ -124,6 +124,15 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                 .define('I', Items.IRON_INGOT)
                 .unlockedBy("has_tripwire_hook", has(Items.TRIPWIRE_HOOK)).save(recipeOutput);
 
+        // Magazine attachment — an iron clip with a redstone feed spring.
+        ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, ModItems.MAGAZINE.get())
+                .pattern("I I")
+                .pattern("IRI")
+                .pattern("III")
+                .define('I', Items.IRON_INGOT)
+                .define('R', Items.REDSTONE)
+                .unlockedBy("has_iron_ingot", has(Items.IRON_INGOT)).save(recipeOutput);
+
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModItems.HEAVY_DUMMY_ITEM.get())
                 .pattern("HTH")
                 .pattern("HTH")

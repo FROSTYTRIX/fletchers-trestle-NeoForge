@@ -4,10 +4,15 @@ import net.frostytrix.fletcherstrestle.FletcherTrestle;
 import net.frostytrix.fletcherstrestle.block.ModBlocks;
 import net.frostytrix.fletcherstrestle.block.entity.ArcheryTargetBlockEntity;
 import net.frostytrix.fletcherstrestle.block.entity.ShotRecord;
+import net.frostytrix.fletcherstrestle.config.FletcherConfig;
+import net.frostytrix.fletcherstrestle.entity.custom.HeavyDummyEntity;
 import net.frostytrix.fletcherstrestle.menu.FletchingMenu;
+import net.frostytrix.fletcherstrestle.progression.ArcheryProgression;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.SimpleMenuProvider;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
@@ -16,6 +21,8 @@ import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.ProjectileImpactEvent;
+import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
+import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 
@@ -55,6 +62,43 @@ public class ModServerEvents {
                 && player.containerMenu != player.inventoryMenu) {
             player.doCloseContainer();
         }
+    }
+
+    // --- Marksmanship XP (Phase 2) ---
+
+    /** Awards archery XP when a player's arrow lands on a living target. */
+    @SubscribeEvent
+    public static void onArrowDamage(LivingDamageEvent.Post event) {
+        if (!FletcherConfig.ARCHERY_SKILL_ENABLED.get()) return;
+        LivingEntity target = event.getEntity();
+        if (target.level().isClientSide() || target instanceof HeavyDummyEntity) return; // dummy gives no XP
+
+        Entity direct = event.getSource().getDirectEntity();
+        if (!(direct instanceof AbstractArrow arrow)) return;
+        if (!(arrow.getOwner() instanceof ServerPlayer shooter)) return;
+
+        int xp = FletcherConfig.ARCHERY_XP_PER_HIT.get();
+        // Headshot: arrow impact lands in the top ~30% of the target's hitbox.
+        float height = Math.max(0.1f, target.getBbHeight());
+        double fraction = (arrow.getY() - target.getY()) / height;
+        if (fraction >= 0.7) {
+            xp += FletcherConfig.ARCHERY_XP_HEADSHOT_BONUS.get();
+        }
+        ArcheryProgression.addXp(shooter, xp);
+    }
+
+    /** Bonus archery XP when a player's arrow kills the target. */
+    @SubscribeEvent
+    public static void onArrowKill(LivingDeathEvent event) {
+        if (!FletcherConfig.ARCHERY_SKILL_ENABLED.get()) return;
+        LivingEntity target = event.getEntity();
+        if (target.level().isClientSide() || target instanceof HeavyDummyEntity) return;
+
+        Entity direct = event.getSource().getDirectEntity();
+        if (!(direct instanceof AbstractArrow arrow)) return;
+        if (!(arrow.getOwner() instanceof ServerPlayer shooter)) return;
+
+        ArcheryProgression.addXp(shooter, FletcherConfig.ARCHERY_XP_PER_KILL.get());
     }
 
     @SubscribeEvent
