@@ -6,6 +6,7 @@ import net.minecraft.core.UUIDUtil;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.resources.ResourceLocation;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -57,6 +58,16 @@ public class ModDataComponents {
                     DataComponentType.<UUID>builder()
                             .persistent(UUIDUtil.CODEC)
                             .networkSynchronized(UUIDUtil.STREAM_CODEC)
+                            .build());
+
+    // Crossbow attachment (Phase 1) — id of the installed attachment def,
+    // resolved against the crossbow_attachment datapack registry at aim/fire
+    // time. One universal slot, so a single id is enough.
+    public static final Supplier<DataComponentType<ResourceLocation>> CROSSBOW_ATTACHMENT =
+            DATA_COMPONENT_TYPES.register("crossbow_attachment", () ->
+                    DataComponentType.<ResourceLocation>builder()
+                            .persistent(ResourceLocation.CODEC)
+                            .networkSynchronized(ResourceLocation.STREAM_CODEC)
                             .build());
 
     public static void register(IEventBus bus) {

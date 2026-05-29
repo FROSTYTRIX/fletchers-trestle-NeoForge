@@ -59,17 +59,17 @@ bow→crossbow assembly (see below).
     reload, traded against heavier reload time.
 - Behavior/stats resolve from the installed attachment at aim/fire time.
 - **Install via a dedicated bench (decided).** A new workstation block —
-  working name **Gunsmith's Bench** (alt: Crossbow Bench / Tinker's
-  Bench) — handles **both** crossbow jobs:
+  the **Crossbow Bench** (id `crossbow_bench`) — handles **both**
+  crossbow jobs:
   1. **Bow → Crossbow assembly** (Modular Bow + Tripwire Hook +
      Mechanical Trigger → Modular Crossbow). This **moves off the
      Smithing Table**, consolidating all crossbow work in one themed
      block with a purpose-built UI.
   2. **Attachment install / removal** into the single slot — reversible,
      so players can swap their one choice freely.
-- **Migration note:** the Smithing Table currently does bow→crossbow.
-  Moving it means removing that path (and updating the wiki + the
-  advancement node + the guide). Decision flagged below.
+- **Migration (decided):** the Smithing Table bow→crossbow path is
+  **removed** — the Crossbow Bench is the single source of truth. Update
+  the wiki note, the advancement node, and the guide to match.
 
 ### New data / registries — DATA-DRIVEN FROM THE START (decided)
 
@@ -115,18 +115,16 @@ bow→crossbow assembly (see below).
 | Attachment items | scope + magazine textures/models |
 | Attachment JSON defs | the two built-ins (reference examples) |
 | Scope reticle overlay | drawn when scoped |
-| **Gunsmith's Bench** | block model + blockstate + block entity + menu + screen + GUI texture + loot table + recipe |
+| **Crossbow Bench** | block model + blockstate + block entity + menu + screen + GUI texture + loot table + recipe |
 | Crossbow-assembly recipe type | Recipe + RecipeType + Serializer; assembly recipe JSON |
+| Remove Smithing Table recipe | delete the existing bow→crossbow smithing recipe + update advancement/wiki/guide |
 | JEI categories | Crossbow Assembly + Attachments |
 | Recipes, lang (en + fr) | standard |
 
 ### Still open
 
-- **Bench name** — Gunsmith's Bench / Crossbow Bench / Tinker's Bench?
-- **Remove the Smithing Table bow→crossbow path**, or leave it as a
-  legacy alias? (Recommend remove for a single source of truth, with
-  wiki + advancement + guide updated to match.)
-- Exact **attachment stat schema** field list (draft above).
+- Exact **attachment stat schema** field list (draft above) — proposing
+  to lock it as drafted.
 
 ---
 
@@ -300,10 +298,11 @@ Kept so the work isn't lost:
 2. **Attachment slot count** → one universal slot to start; expand later.
 3. **Attachments are data-driven from the start** → `crossbow_attachment`
    datapack registry; the two built-ins ship as JSON.
-4. **Attachment install → dedicated Gunsmith's Bench**, which **also
-   takes over bow→crossbow assembly** (off the Smithing Table) via a
-   custom `crossbow_assembly` recipe type, with JEI categories. Attachment
-   install is registry-driven menu logic, not a vanilla recipe.
+4. **Attachment install → the Crossbow Bench** (id `crossbow_bench`),
+   which **also takes over bow→crossbow assembly — the Smithing Table
+   path is removed** — via a custom `crossbow_assembly` recipe type, with
+   JEI categories. Attachment install is registry-driven menu logic, not
+   a vanilla recipe.
 5. **XP on death** → never lost. **Dummy XP** → none.
 6. **Headshots** → universal height-fraction check, no per-entity setup.
 7. **Skill tree** → linear passives first; data shaped so a perk tree can
@@ -317,7 +316,5 @@ Kept so the work isn't lost:
 
 ## ❓ Still open
 
-1. **Bench name** — Gunsmith's Bench / Crossbow Bench / Tinker's Bench?
-2. **Remove the Smithing Table bow→crossbow path** vs keep as legacy
-   alias (recommend remove + update wiki/advancement/guide).
-3. Attachment **stat schema** field list.
+1. Attachment **stat schema** field list (draft in Phase 1 — proposing to
+   lock as drafted).

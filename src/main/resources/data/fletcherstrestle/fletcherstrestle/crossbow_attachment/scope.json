@@ -1,0 +1,11 @@
+{
+  "ingredient": {
+    "item": "minecraft:spyglass"
+  },
+  "type": "optic",
+  "stats": {
+    "zoom": 0.5,
+    "sway_multiplier": 0.5,
+    "inaccuracy_multiplier": 0.6
+  }
+}

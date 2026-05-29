@@ -108,6 +108,8 @@ public class ModCreativeModeTabs {
                         output.accept(ModItems.EAGLE_SPAWN_EGG.get());
                         output.accept(ModItems.EAGLE_WHISTLE.get());
 
+                        output.accept(ModItems.MAGAZINE.get());
+
                     })
                     .build());
 

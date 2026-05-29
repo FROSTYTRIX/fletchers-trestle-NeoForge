@@ -1,6 +1,7 @@
 package net.frostytrix.fletcherstrestle;
 
 import com.mojang.logging.LogUtils;
+import net.frostytrix.fletcherstrestle.attachment.ModCrossbowAttachments;
 import net.frostytrix.fletcherstrestle.block.ModBlocks;
 import net.frostytrix.fletcherstrestle.block.entity.ModBlockEntities;
 import net.frostytrix.fletcherstrestle.component.ModDataComponents;
@@ -69,6 +70,10 @@ public class FletcherTrestle {
         // arrow_head,...}/<id>.json loads into these and syncs to clients.
         ModMaterialEffectTypes.register(modEventBus);
         ModMaterialRegistries.register(modEventBus);
+        // Phase 1 (Marksmanship roadmap): data-driven crossbow attachments,
+        // loaded from data/<ns>/fletcherstrestle/crossbow_attachment/<id>.json
+        // and synced to clients like the material registries.
+        ModCrossbowAttachments.register(modEventBus);
 
 
         // Register the item to a creative tab

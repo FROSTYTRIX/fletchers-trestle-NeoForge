@@ -19,6 +19,11 @@ public class ModItems {
     public static final DeferredItem<Item> DRAWKNIFE = ITEMS.register("drawknife",
             () -> new Item(new Item.Properties().durability(250)));
 
+    // Crossbow attachment: magazine (placeholder texture). The scope attachment
+    // reuses the vanilla spyglass, so no separate item is needed for it.
+    public static final DeferredItem<Item> MAGAZINE = ITEMS.register("magazine",
+            () -> new Item(new Item.Properties()));
+
     // 1. Limbs
     public static final DeferredItem<Item> ROUGH_OAK_LIMB = ITEMS.register("rough_oak_limb",
             () -> new Item(new Item.Properties()));

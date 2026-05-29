@@ -1,0 +1,10 @@
+{
+  "ingredient": {
+    "item": "fletcherstrestle:magazine"
+  },
+  "type": "mechanism",
+  "stats": {
+    "magazine_size": 3,
+    "reload_multiplier": 1.5
+  }
+}
