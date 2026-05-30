@@ -1,9 +1,9 @@
 {
-  "parent": "fletcherstrestle:marksmanship/skill_5",
+  "parent": "fletcherstrestle:marksmanship/skill_10",
   "display": {
     "icon": { "id": "minecraft:experience_bottle" },
-    "title": { "translate": "advancement.fletcherstrestle.skill_10.title" },
-    "description": { "translate": "advancement.fletcherstrestle.skill_10.description" },
+    "title": { "translate": "advancement.fletcherstrestle.skill_20.title" },
+    "description": { "translate": "advancement.fletcherstrestle.skill_20.description" },
     "frame": "goal",
     "show_toast": true,
     "announce_to_chat": true
@@ -11,7 +11,7 @@
   "criteria": {
     "reach_level": {
       "trigger": "fletcherstrestle:archery_level",
-      "conditions": { "level": { "min": 10 } }
+      "conditions": { "level": { "min": 20 } }
     }
   },
   "requirements": [ [ "reach_level" ] ]

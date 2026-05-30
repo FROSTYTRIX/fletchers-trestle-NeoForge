@@ -6,7 +6,7 @@
     "frame": "task",
     "show_toast": true,
     "announce_to_chat": true,
-    "background": "minecraft:gui/advancements/backgrounds/adventure"
+    "background": "minecraft:textures/block/fletching_table_side.png"
   },
   "criteria": {
     "has_drawknife": {
