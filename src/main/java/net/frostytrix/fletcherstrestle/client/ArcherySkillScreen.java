@@ -52,9 +52,17 @@ public class ArcherySkillScreen extends Screen {
     public void render(GuiGraphics g, int mouseX, int mouseY, float partialTick) {
         this.renderBackground(g, mouseX, mouseY, partialTick);
 
+        // Flat opaque panel so text renders crisp instead of over the live,
+        // blurred world background.
+        g.fill(this.left, this.top, this.left + WIDTH, this.top + HEIGHT, 0xF0100A06);
+        g.fill(this.left, this.top, this.left + WIDTH, this.top + 1, 0xFF5A4632);            // top border
+        g.fill(this.left, this.top + HEIGHT - 1, this.left + WIDTH, this.top + HEIGHT, 0xFF5A4632);
+        g.fill(this.left, this.top, this.left + 1, this.top + HEIGHT, 0xFF5A4632);           // left border
+        g.fill(this.left + WIDTH - 1, this.top, this.left + WIDTH, this.top + HEIGHT, 0xFF5A4632);
+
         int points = ClientArcheryData.pointsAvailable();
 
-        // Title + points.
+        // Title + points (shadowed for legibility).
         g.drawCenteredString(this.font, this.title, this.left + WIDTH / 2, this.top + 8, 0xFFFFFF);
         g.drawCenteredString(this.font,
                 Component.translatable("gui.fletcherstrestle.skill_points", points),
@@ -67,9 +75,9 @@ public class ArcherySkillScreen extends Screen {
             this.plusButtons[i].active = points > 0 && !maxed;
 
             int rowY = this.top + 36 + i * ROW_H;
-            g.drawString(this.font, branchName(skills[i]), this.left + 12, rowY + 1, 0xFFFFFF, false);
+            g.drawString(this.font, branchName(skills[i]), this.left + 12, rowY + 1, 0xFFFFFF, true);
             g.drawString(this.font, rank + "/" + ArcherySkill.MAX_RANK + "  " + effectText(skills[i], rank),
-                    this.left + 12, rowY + 12, 0xA0A0A0, false);
+                    this.left + 12, rowY + 12, 0xB0B0B0, true);
         }
 
         super.render(g, mouseX, mouseY, partialTick);
