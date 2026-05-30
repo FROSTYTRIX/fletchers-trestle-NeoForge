@@ -222,6 +222,11 @@ The guide should render, not just describe:
 - **Auto-generated "Materials & Stats" page** built from the loaded
   material (and now attachment) registries, so it never goes stale as
   packs add content.
+- **Archery skill-tree page** — the Phase 2 skill tree (currently a
+  keybind-opened screen, `ArcherySkillScreen`) should become a chapter
+  in this guide: show level/points and let the player spend points
+  inline. Decision for when this lands: keep the keybind, move the tree
+  into the book, or offer both.
 - Keep an "Open Wiki" button as a secondary link to the full online ref.
 
 ### Assets needed
