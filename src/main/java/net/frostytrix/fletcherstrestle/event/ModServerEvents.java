@@ -91,6 +91,8 @@ public class ModServerEvents {
         double fraction = (arrow.getY() - target.getY()) / height;
         if (fraction >= 0.7) {
             xp += FletcherConfig.ARCHERY_XP_HEADSHOT_BONUS.get();
+            net.frostytrix.fletcherstrestle.progression.ModCriteria.HEADSHOT.get()
+                    .trigger(shooter, shooter.distanceTo(target));
         }
         ArcheryProgression.addXp(shooter, xp);
     }

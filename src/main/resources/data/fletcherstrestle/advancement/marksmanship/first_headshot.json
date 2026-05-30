@@ -1,0 +1,18 @@
+{
+  "parent": "fletcherstrestle:marksmanship/first_bow",
+  "display": {
+    "icon": { "id": "minecraft:arrow" },
+    "title": { "translate": "advancement.fletcherstrestle.first_headshot.title" },
+    "description": { "translate": "advancement.fletcherstrestle.first_headshot.description" },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "headshot": {
+      "trigger": "fletcherstrestle:headshot",
+      "conditions": {}
+    }
+  },
+  "requirements": [ [ "headshot" ] ]
+}

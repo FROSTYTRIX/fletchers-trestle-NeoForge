@@ -1,0 +1,18 @@
+{
+  "parent": "fletcherstrestle:marksmanship/first_bow",
+  "display": {
+    "icon": { "id": "fletcherstrestle:crossbow_bench" },
+    "title": { "translate": "advancement.fletcherstrestle.crossbow_bench.title" },
+    "description": { "translate": "advancement.fletcherstrestle.crossbow_bench.description" },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "has_bench": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": { "items": [ { "items": "fletcherstrestle:crossbow_bench" } ] }
+    }
+  },
+  "requirements": [ [ "has_bench" ] ]
+}

@@ -1,0 +1,18 @@
+{
+  "display": {
+    "icon": { "id": "fletcherstrestle:drawknife" },
+    "title": { "translate": "advancement.fletcherstrestle.root.title" },
+    "description": { "translate": "advancement.fletcherstrestle.root.description" },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "background": "minecraft:gui/advancements/backgrounds/adventure"
+  },
+  "criteria": {
+    "has_drawknife": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": { "items": [ { "items": "fletcherstrestle:drawknife" } ] }
+    }
+  },
+  "requirements": [ [ "has_drawknife" ] ]
+}

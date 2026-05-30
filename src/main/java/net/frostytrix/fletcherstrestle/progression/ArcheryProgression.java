@@ -64,6 +64,7 @@ public final class ArcheryProgression {
                             .withStyle(ChatFormatting.GOLD), true);
             player.level().playSound(null, player.getX(), player.getY(), player.getZ(),
                     SoundEvents.PLAYER_LEVELUP, SoundSource.PLAYERS, 0.6f, 1.4f);
+            ModCriteria.ARCHERY_LEVEL.get().trigger(player, newLevel);
         } else {
             // Brief progress readout on the action bar (XP into the current level).
             int into = after - xpForLevel(newLevel);

@@ -1,0 +1,18 @@
+{
+  "parent": "fletcherstrestle:marksmanship/first_headshot",
+  "display": {
+    "icon": { "id": "minecraft:spectral_arrow" },
+    "title": { "translate": "advancement.fletcherstrestle.long_shot.title" },
+    "description": { "translate": "advancement.fletcherstrestle.long_shot.description" },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "long_headshot": {
+      "trigger": "fletcherstrestle:headshot",
+      "conditions": { "distance": { "min": 50.0 } }
+    }
+  },
+  "requirements": [ [ "long_headshot" ] ]
+}

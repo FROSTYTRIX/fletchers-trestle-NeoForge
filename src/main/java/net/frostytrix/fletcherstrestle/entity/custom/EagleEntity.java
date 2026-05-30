@@ -205,6 +205,9 @@ public class EagleEntity extends TamableAnimal {
                     if (this.random.nextInt(10) < 3) {
                         this.tame(player);
                         this.setOrderedToSit(false);
+                        if (player instanceof net.minecraft.server.level.ServerPlayer sp) {
+                            net.minecraft.advancements.CriteriaTriggers.TAME_ANIMAL.trigger(sp, this);
+                        }
                         this.playSound(ModSounds.EAGLE_TAME.get(), 0.8f, 1.0f);
                         this.level().broadcastEntityEvent(this, (byte) 7); // tame success particles
                     } else {

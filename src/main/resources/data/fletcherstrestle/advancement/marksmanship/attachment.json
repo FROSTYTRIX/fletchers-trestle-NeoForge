@@ -1,0 +1,18 @@
+{
+  "parent": "fletcherstrestle:marksmanship/first_crossbow",
+  "display": {
+    "icon": { "id": "minecraft:spyglass" },
+    "title": { "translate": "advancement.fletcherstrestle.attachment.title" },
+    "description": { "translate": "advancement.fletcherstrestle.attachment.description" },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "installed": {
+      "trigger": "fletcherstrestle:attachment_installed",
+      "conditions": {}
+    }
+  },
+  "requirements": [ [ "installed" ] ]
+}

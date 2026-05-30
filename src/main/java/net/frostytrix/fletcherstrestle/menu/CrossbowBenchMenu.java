@@ -43,6 +43,7 @@ public class CrossbowBenchMenu extends AbstractContainerMenu {
     private boolean lastTriggerPresent = false;
 
     private final ContainerListener listener = c -> this.slotsChanged(c);
+    private final Player owner;
 
     /** Client-side constructor (MenuType factory). */
     public CrossbowBenchMenu(int id, Inventory playerInv) {
@@ -55,6 +56,7 @@ public class CrossbowBenchMenu extends AbstractContainerMenu {
         checkContainerSize(container, FUNCTIONAL_SLOTS);
         this.container = container;
         this.access = access;
+        this.owner = playerInv.player;
         this.attachments = playerInv.player.level().registryAccess()
                 .registryOrThrow(ModCrossbowAttachments.CROSSBOW_ATTACHMENT);
 
@@ -172,7 +174,11 @@ public class CrossbowBenchMenu extends AbstractContainerMenu {
             if (!att.isEmpty()) {
                 ResourceLocation id = findAttachmentId(att);
                 if (id != null) {
+                    boolean wasInstalled = current.has(ModDataComponents.CROSSBOW_ATTACHMENT.get());
                     current.set(ModDataComponents.CROSSBOW_ATTACHMENT.get(), id);
+                    if (!wasInstalled && this.owner instanceof net.minecraft.server.level.ServerPlayer sp) {
+                        net.frostytrix.fletcherstrestle.progression.ModCriteria.ATTACHMENT_INSTALLED.get().trigger(sp);
+                    }
                 }
             } else {
                 current.remove(ModDataComponents.CROSSBOW_ATTACHMENT.get());

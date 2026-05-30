@@ -1,0 +1,18 @@
+{
+  "parent": "fletcherstrestle:marksmanship/root",
+  "display": {
+    "icon": { "id": "fletcherstrestle:eagle_spawn_egg" },
+    "title": { "translate": "advancement.fletcherstrestle.tame_eagle.title" },
+    "description": { "translate": "advancement.fletcherstrestle.tame_eagle.description" },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "tamed": {
+      "trigger": "minecraft:tame_animal",
+      "conditions": { "entity": { "type": "fletcherstrestle:eagle" } }
+    }
+  },
+  "requirements": [ [ "tamed" ] ]
+}
