@@ -44,12 +44,23 @@ public final class GuideContent {
                                         GuideElement.text(P + "woodworking.steam.desc"),
                                         GuideElement.recipe(of(ModBlocks.STEAM_BOX.get()))))),
                         new GuideSubchapter(P + "sub.fletching_table", of(Items.FLETCHING_TABLE), List.of(
-                                GuidePage.of(GuideElement.text(P + "woodworking.fletch.desc")))))),
+                                GuidePage.of(
+                                        GuideElement.text(P + "woodworking.fletch.desc"),
+                                        GuideElement.recipe(of(Items.FLETCHING_TABLE))),
+                                GuidePage.of(
+                                        GuideElement.heading(P + "woodworking.bow_example"),
+                                        GuideElement.assembly(of(ModItems.MODULAR_BOW.get()),
+                                                of(ModItems.PLIABLE_OAK_LIMB.get()), of(ModItems.PLIABLE_OAK_LIMB.get()),
+                                                of(ModItems.WOOD_RISER.get()), of(ModItems.FLAX_STRING.get()))))))),
 
                 // --- Arrows ---
                 new GuideChapter(P + "arrows.title", of(ModItems.MODULAR_ARROW.get()), List.of(
                         new GuideSubchapter(P + "sub.modular_arrows", of(ModItems.MODULAR_ARROW.get()), List.of(
-                                GuidePage.of(GuideElement.text(P + "arrows.b1")))),
+                                GuidePage.of(
+                                        GuideElement.text(P + "arrows.b1"),
+                                        GuideElement.heading(P + "arrows.example"),
+                                        GuideElement.assembly(of(ModItems.MODULAR_ARROW.get()),
+                                                of(Items.FLINT), of(Items.STICK), of(Items.FEATHER))))),
                         new GuideSubchapter(P + "sub.potion_arrows", of(ModBlocks.DIPPING_VAT.get()), List.of(
                                 GuidePage.of(
                                         GuideElement.text(P + "arrows.dip.desc"),
@@ -62,7 +73,10 @@ public final class GuideContent {
                                         GuideElement.text(P + "crossbow.b1"),
                                         GuideElement.recipe(of(ModBlocks.CROSSBOW_BENCH.get()))),
                                 GuidePage.of(
-                                        GuideElement.item(of(ModItems.MECHANICAL_TRIGGER.get()), P + "crossbow.trigger")))),
+                                        GuideElement.item(of(ModItems.MECHANICAL_TRIGGER.get()), P + "crossbow.trigger"),
+                                        GuideElement.heading(P + "crossbow.example"),
+                                        GuideElement.assembly(of(ModItems.MODULAR_CROSSBOW.get()),
+                                                of(ModItems.MODULAR_BOW.get()), of(ModItems.MECHANICAL_TRIGGER.get()))))),
                         new GuideSubchapter(P + "sub.attachments", of(Items.SPYGLASS), List.of(
                                 GuidePage.of(
                                         GuideElement.item(of(Items.SPYGLASS), P + "crossbow.scope"),

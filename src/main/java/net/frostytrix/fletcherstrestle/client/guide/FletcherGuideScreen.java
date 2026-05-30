@@ -30,13 +30,13 @@ public class FletcherGuideScreen extends Screen {
     private static final int WIDTH = 256;
     private static final int HEIGHT = 200;
 
-    // Parchment palette.
-    private static final int PAGE = 0xFFE9D8B0;
+    // Parchment palette — light page, near-black ink for strong contrast.
+    private static final int PAGE = 0xFFF6EDD6;
     private static final int PAGE_EDGE = 0xFF8A6A3A;
-    private static final int INK = 0xFF3A2A18;
-    private static final int INK_HEAD = 0xFF7A3B10;
-    private static final int INK_FAINT = 0xFF6A5A40;
-    private static final int SLOT_BG = 0xFFB59E72;
+    private static final int INK = 0xFF201509;
+    private static final int INK_HEAD = 0xFF7A2E0A;
+    private static final int INK_FAINT = 0xFF574730;
+    private static final int SLOT_BG = 0xFFCBB78A;
 
     private enum View { CHAPTERS, SUBS, PAGES }
 
@@ -96,11 +96,13 @@ public class FletcherGuideScreen extends Screen {
                 if (sub.skillTree()) {
                     buildSkillButtons();
                 } else if (sub.pages().size() > 1) {
+                    // Page arrows on the left/right edges (clear of the footer/wiki button).
+                    int arrowY = this.top + HEIGHT / 2 - 9;
                     this.addRenderableWidget(Button.builder(Component.literal("<"), b -> { if (pageIdx > 0) pageIdx--; })
-                            .bounds(cx - 60, this.top + HEIGHT - 24, 20, 18).build());
+                            .bounds(this.left + 4, arrowY, 16, 18).build());
                     this.addRenderableWidget(Button.builder(Component.literal(">"),
                                     b -> { if (pageIdx < sub.pages().size() - 1) pageIdx++; })
-                            .bounds(cx + 40, this.top + HEIGHT - 24, 20, 18).build());
+                            .bounds(this.left + WIDTH - 20, arrowY, 16, 18).build());
                 }
             }
         }
@@ -210,8 +212,24 @@ public class FletcherGuideScreen extends Screen {
                     y = Math.max(y + 20, ty) + 4;
                 }
                 case RECIPE -> y = renderRecipe(g, el.icon(), x, y) + 6;
+                case ASSEMBLY -> y = renderAssembly(g, el, x, y) + 6;
             }
         }
+    }
+
+    /** Draws an inputs -> result strip (e.g. limbs + riser + string -> bow). */
+    private int renderAssembly(GuiGraphics g, GuideElement el, int x, int y) {
+        int sx = x;
+        for (ItemStack in : el.stacks()) {
+            g.fill(sx, y, sx + 16, y + 16, SLOT_BG);
+            g.renderItem(in, sx, y);
+            sx += 18;
+        }
+        g.drawString(this.font, "→", sx + 2, y + 4, INK, false);
+        sx += 12;
+        g.fill(sx, y, sx + 16, y + 16, SLOT_BG);
+        g.renderItem(el.icon(), sx, y);
+        return y + 20;
     }
 
     /** Draws a crafting recipe for {@code result}; returns the y below it. */
