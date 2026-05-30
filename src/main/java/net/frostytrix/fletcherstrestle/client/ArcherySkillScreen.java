@@ -49,12 +49,18 @@ public class ArcherySkillScreen extends Screen {
     }
 
     @Override
+    public void renderBackground(GuiGraphics g, int mouseX, int mouseY, float partialTick) {
+        // Plain dim overlay — deliberately NOT calling super, which applies the
+        // 1.21 gaussian blur post-process (that's what made the screen blurry).
+        g.fill(0, 0, this.width, this.height, 0xB0000000);
+    }
+
+    @Override
     public void render(GuiGraphics g, int mouseX, int mouseY, float partialTick) {
         this.renderBackground(g, mouseX, mouseY, partialTick);
 
-        // Flat opaque panel so text renders crisp instead of over the live,
-        // blurred world background.
-        g.fill(this.left, this.top, this.left + WIDTH, this.top + HEIGHT, 0xF0100A06);
+        // Flat fully-opaque panel so text renders crisp.
+        g.fill(this.left, this.top, this.left + WIDTH, this.top + HEIGHT, 0xFF1A130C);
         g.fill(this.left, this.top, this.left + WIDTH, this.top + 1, 0xFF5A4632);            // top border
         g.fill(this.left, this.top + HEIGHT - 1, this.left + WIDTH, this.top + HEIGHT, 0xFF5A4632);
         g.fill(this.left, this.top, this.left + 1, this.top + HEIGHT, 0xFF5A4632);           // left border
