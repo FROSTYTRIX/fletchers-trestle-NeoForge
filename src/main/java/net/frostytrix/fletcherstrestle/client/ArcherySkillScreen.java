@@ -86,7 +86,11 @@ public class ArcherySkillScreen extends Screen {
                     this.left + 12, rowY + 12, 0xB0B0B0, true);
         }
 
-        super.render(g, mouseX, mouseY, partialTick);
+        // Render widgets directly — calling super.render() would re-draw the
+        // dim overlay over the panel.
+        for (net.minecraft.client.gui.components.Renderable r : this.renderables) {
+            r.render(g, mouseX, mouseY, partialTick);
+        }
     }
 
     private static Component branchName(ArcherySkill skill) {

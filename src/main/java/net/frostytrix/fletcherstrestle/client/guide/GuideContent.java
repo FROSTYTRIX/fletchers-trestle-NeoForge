@@ -51,7 +51,7 @@ public final class GuideContent {
                                         GuideElement.heading(P + "woodworking.bow_example"),
                                         GuideElement.assembly(of(ModItems.MODULAR_BOW.get()),
                                                 of(ModItems.PLIABLE_OAK_LIMB.get()), of(ModItems.PLIABLE_OAK_LIMB.get()),
-                                                of(ModItems.WOOD_RISER.get()), of(ModItems.FLAX_STRING.get()))))))),
+                                                of(ModItems.WOOD_RISER.get()), of(Items.STRING))))))),
 
                 // --- Arrows ---
                 new GuideChapter(P + "arrows.title", of(ModItems.MODULAR_ARROW.get()), List.of(

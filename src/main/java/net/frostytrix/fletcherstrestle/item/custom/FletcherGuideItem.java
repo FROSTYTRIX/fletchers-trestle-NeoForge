@@ -18,6 +18,11 @@ public class FletcherGuideItem extends Item {
     }
 
     @Override
+    public boolean isFoil(ItemStack stack) {
+        return true; // always show the enchantment glint
+    }
+
+    @Override
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
 

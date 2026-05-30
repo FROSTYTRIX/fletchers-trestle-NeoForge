@@ -1,6 +1,3 @@
 {
-  "parent": "minecraft:item/handheld",
-  "textures": {
-    "layer0": "fletcherstrestle:item/fletcher_guide"
-  }
+  "parent": "minecraft:item/book"
 }

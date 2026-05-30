@@ -108,8 +108,8 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                 .save(recipeOutput);
 
         ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, ModItems.FLETCHER_GUIDE.get())
-                .requires(Items.BOOK).requires(ModTags.Items.BOW_STRINGS)
-                .unlockedBy("has_string", has(Items.STRING))
+                .requires(Items.BOOK).requires(Items.FEATHER)
+                .unlockedBy("has_book", has(Items.BOOK))
                 .save(recipeOutput);
 
         // Bow -> crossbow assembly moved off the Smithing Table onto the

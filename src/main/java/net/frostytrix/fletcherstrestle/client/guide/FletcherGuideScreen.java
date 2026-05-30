@@ -182,7 +182,12 @@ public class FletcherGuideScreen extends Screen {
             }
         }
 
-        super.render(g, mouseX, mouseY, partialTick);
+        // Render widgets directly. Do NOT call super.render(), which calls
+        // renderBackground() again and would re-draw the dim overlay over the
+        // parchment (turning it gray).
+        for (net.minecraft.client.gui.components.Renderable r : this.renderables) {
+            r.render(g, mouseX, mouseY, partialTick);
+        }
     }
 
     private void renderPage(GuiGraphics g, GuidePage page) {
