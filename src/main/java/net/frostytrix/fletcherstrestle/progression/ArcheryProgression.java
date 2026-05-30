@@ -6,7 +6,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
 
 /**
@@ -73,19 +72,94 @@ public final class ArcheryProgression {
                     Component.translatable("gui.fletcherstrestle.archery_progress", newLevel, into, span)
                             .withStyle(ChatFormatting.GRAY), true);
         }
+        syncToClient(player);
+    }
+
+    // ---------------- Skill tree ----------------
+
+    public static ArcherySkills getSkills(Player player) {
+        return player.getData(ModAttachments.ARCHERY_SKILLS.get());
+    }
+
+    public static int getRank(Player player, ArcherySkill skill) {
+        return skill.rank(getSkills(player));
+    }
+
+    public static int pointsSpent(Player player) {
+        return getSkills(player).total();
+    }
+
+    /** Unspent skill points: one earned per level. */
+    public static int pointsAvailable(Player player) {
+        return Math.max(0, getLevel(player) - pointsSpent(player));
     }
 
     /**
-     * Aim-steadiness multiplier from archery level: 1.0 at level 0, scaling
-     * down to 0.5 (50% tighter spread) at the configured max level. Returns
-     * 1.0 when the skill system is disabled.
+     * Spends one point in {@code skill} if the player has a point free and the
+     * branch isn't maxed. Returns true on success. Server-side.
      */
+    public static boolean trySpend(ServerPlayer player, ArcherySkill skill) {
+        if (!FletcherConfig.ARCHERY_SKILL_ENABLED.get()) {
+            return false;
+        }
+        ArcherySkills skills = getSkills(player);
+        if (pointsAvailable(player) <= 0 || skill.rank(skills) >= ArcherySkill.MAX_RANK) {
+            return false;
+        }
+        player.setData(ModAttachments.ARCHERY_SKILLS.get(), skill.increment(skills));
+        syncToClient(player);
+        return true;
+    }
+
+    // ---------------- Branch effects ----------------
+
+    /** Draw-time multiplier: 1.0 down to 0.8 at DRAW max rank. */
+    public static float drawMultiplier(Player player) {
+        if (!FletcherConfig.ARCHERY_SKILL_ENABLED.get()) {
+            return 1.0f;
+        }
+        return 1.0f - 0.02f * getRank(player, ArcherySkill.DRAW);
+    }
+
+    /** Crit chance: 0 up to 0.30 at CRIT max rank. */
+    public static float critChance(Player player) {
+        if (!FletcherConfig.ARCHERY_SKILL_ENABLED.get()) {
+            return 0.0f;
+        }
+        return 0.03f * getRank(player, ArcherySkill.CRIT);
+    }
+
+    /** Aim spread multiplier: 1.0 down to 0.7 at AIM max rank. */
     public static float inaccuracyMultiplier(Player player) {
         if (!FletcherConfig.ARCHERY_SKILL_ENABLED.get()) {
             return 1.0f;
         }
-        int max = FletcherConfig.ARCHERY_MAX_LEVEL.get();
-        float t = max <= 0 ? 0f : Mth.clamp((float) getLevel(player) / max, 0f, 1f);
-        return 1.0f - 0.5f * t;
+        return 1.0f - 0.03f * getRank(player, ArcherySkill.AIM);
+    }
+
+    /** Rolls a crit from CRIT rank; on success boosts arrow damage 1.5x and marks it crit. */
+    public static void rollCrit(Player player, net.minecraft.world.entity.projectile.AbstractArrow arrow) {
+        float chance = critChance(player);
+        if (chance > 0 && player.getRandom().nextFloat() < chance) {
+            arrow.setBaseDamage(arrow.getBaseDamage() * 1.5);
+            arrow.setCritArrow(true);
+        }
+    }
+
+    /** Extra ticks before a flax string starts shaking the aim (40 base, +8/AIM rank). */
+    public static int flaxGraceTicks(Player player) {
+        int base = 40;
+        if (!FletcherConfig.ARCHERY_SKILL_ENABLED.get()) {
+            return base;
+        }
+        return base + 8 * getRank(player, ArcherySkill.AIM);
+    }
+
+    /** Pushes current XP + skill ranks to the owning client (for the HUD/skill screen). */
+    public static void syncToClient(ServerPlayer player) {
+        ArcherySkills skills = getSkills(player);
+        net.neoforged.neoforge.network.PacketDistributor.sendToPlayer(player,
+                new net.frostytrix.fletcherstrestle.network.ArcherySyncPacket(
+                        getXp(player), skills.draw(), skills.crit(), skills.aim()));
     }
 }

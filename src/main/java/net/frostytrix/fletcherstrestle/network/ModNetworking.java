@@ -60,6 +60,20 @@ public class ModNetworking {
                 MountSyncPayload.CODEC,
                 ModNetworking::handleMountSync
         );
+
+        // Server → Client : sync archery XP + skill ranks
+        registrar.playToClient(
+                ArcherySyncPacket.TYPE,
+                ArcherySyncPacket.CODEC,
+                ArcherySyncPacket::handle
+        );
+
+        // Client → Server : spend a skill point
+        registrar.playToServer(
+                SpendSkillPacket.TYPE,
+                SpendSkillPacket.CODEC,
+                SpendSkillPacket::handle
+        );
     }
 
     public static void handleMountSync(final MountSyncPayload payload, final IPayloadContext context) {

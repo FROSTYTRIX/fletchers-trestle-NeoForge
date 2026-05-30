@@ -30,6 +30,13 @@ public final class ModAttachments {
                             .copyOnDeath()
                             .build());
 
+    public static final Supplier<AttachmentType<ArcherySkills>> ARCHERY_SKILLS =
+            ATTACHMENT_TYPES.register("archery_skills", () ->
+                    AttachmentType.builder(() -> ArcherySkills.EMPTY)
+                            .serialize(ArcherySkills.CODEC)
+                            .copyOnDeath()
+                            .build());
+
     public static void register(IEventBus bus) {
         ATTACHMENT_TYPES.register(bus);
     }

@@ -79,6 +79,11 @@ public class ModularBowItem extends BowItem {
                 // --- DAMAGE MODIFIER ---
                 arrow.setBaseDamage(arrow.getBaseDamage() * limb.stats().damageMultiplier());
 
+                // Archery skill: crit chance (Phase 2 passive).
+                if (shooter instanceof net.minecraft.world.entity.player.Player p) {
+                    net.frostytrix.fletcherstrestle.progression.ArcheryProgression.rollCrit(p, arrow);
+                }
+
                 // --- PERSISTENT DATA TAG: amphibious lives on stats, not effects.
                 if (limb.stats().amphibious()) {
                     arrow.getPersistentData().putBoolean("fletcherstrestle:amphibious", true);
@@ -195,7 +200,9 @@ public class ModularBowItem extends BowItem {
         // --- 2. VANILLA FIRING LOGIC ---
         // Vanilla will find the arrow we just placed, shoot it, and consume it naturally!
         int chargeTicks = this.getUseDuration(stack, entityLiving) - timeLeft;
-        float customDrawTime = getDrawTime(stack);
+        // Archery skill: faster draw (Phase 2 passive) shrinks the effective draw time.
+        float customDrawTime = getDrawTime(stack)
+                * net.frostytrix.fletcherstrestle.progression.ArcheryProgression.drawMultiplier(player);
         int scaledCharge = (int) ((chargeTicks / customDrawTime) * 20.0f);
         int fakeTimeLeft = this.getUseDuration(stack, entityLiving) - scaledCharge;
 
@@ -274,10 +281,13 @@ public class ModularBowItem extends BowItem {
                 }
 
                 int ticksDrawn = this.getUseDuration(stack, player) - count;
-                float maxDrawTime = getDrawTime(stack);
+                float maxDrawTime = getDrawTime(stack)
+                        * net.frostytrix.fletcherstrestle.progression.ArcheryProgression.drawMultiplier(player);
 
-                // Flax string: jitters the aim if the player overdraws.
-                if ("flax".equals(stringId) && ticksDrawn > (maxDrawTime + 40)) {
+                // Flax string: jitters the aim if the player overdraws. The AIM
+                // skill elongates the grace period before the shake kicks in.
+                int flaxGrace = net.frostytrix.fletcherstrestle.progression.ArcheryProgression.flaxGraceTicks(player);
+                if ("flax".equals(stringId) && ticksDrawn > (maxDrawTime + flaxGrace)) {
                     player.setYRot(player.getYRot() + (level.random.nextFloat() - 0.5F) * 3.0F);
                     player.setXRot(player.getXRot() + (level.random.nextFloat() - 0.5F) * 3.0F);
                 }

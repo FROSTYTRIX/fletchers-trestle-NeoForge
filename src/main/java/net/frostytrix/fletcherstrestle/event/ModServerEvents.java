@@ -64,6 +64,14 @@ public class ModServerEvents {
         }
     }
 
+    /** Push archery XP + skills to the client when the player joins. */
+    @SubscribeEvent
+    public static void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
+        if (event.getEntity() instanceof ServerPlayer player) {
+            ArcheryProgression.syncToClient(player);
+        }
+    }
+
     // --- Marksmanship XP (Phase 2) ---
 
     /** Awards archery XP when a player's arrow lands on a living target. */

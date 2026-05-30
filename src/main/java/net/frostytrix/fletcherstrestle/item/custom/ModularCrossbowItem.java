@@ -287,6 +287,11 @@ public class ModularCrossbowItem extends CrossbowItem {
             // --- DAMAGE MODIFIER ---
             arrow.setBaseDamage(arrow.getBaseDamage() * limb.stats().damageMultiplier());
 
+            // Archery skill: crit chance (Phase 2 passive).
+            if (shooter instanceof Player p) {
+                net.frostytrix.fletcherstrestle.progression.ArcheryProgression.rollCrit(p, arrow);
+            }
+
             // --- AMPHIBIOUS FLAG (stats-driven; not an effect) ---
             if (limb.stats().amphibious()) {
                 arrow.getPersistentData().putBoolean("fletcherstrestle:amphibious", true);
