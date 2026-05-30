@@ -376,8 +376,13 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                 .unlockedBy("has_modular_arrow", has(ModItems.MODULAR_ARROW.get()))
                 .save(recipeOutput, ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "modular_potion_arrow_dipping"));
 
-        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, ModBlocks.DIPPING_VAT.get())
-                .requires(Items.BUCKET).requires(Blocks.CAULDRON)
-                .unlockedBy("has_arrow", has(Items.ARROW)).save(recipeOutput);
+        // Upside-down "pants" of any planks with a bucket in the middle.
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModBlocks.DIPPING_VAT.get())
+                .pattern("P P")
+                .pattern("PBP")
+                .pattern("PPP")
+                .define('P', ItemTags.PLANKS)
+                .define('B', Items.BUCKET)
+                .unlockedBy("has_bucket", has(Items.BUCKET)).save(recipeOutput);
     }
 }

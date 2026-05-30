@@ -166,7 +166,7 @@ public class FletcherGuideScreen extends Screen {
             case SUBS -> chapters.get(chapterIdx).title();
             case PAGES -> currentSub().title();
         };
-        g.drawCenteredString(this.font, header, this.left + WIDTH / 2, this.top + 12, INK_HEAD);
+        drawCenteredNoShadow(g, header, this.left + WIDTH / 2, this.top + 12, INK_HEAD);
         g.fill(this.left + 16, this.top + 24, this.left + WIDTH - 16, this.top + 25, PAGE_EDGE);
 
         if (this.view == View.PAGES) {
@@ -176,7 +176,7 @@ public class FletcherGuideScreen extends Screen {
             } else {
                 renderPage(g, sub.pages().get(pageIdx));
                 if (sub.pages().size() > 1) {
-                    g.drawCenteredString(this.font, (pageIdx + 1) + "/" + sub.pages().size(),
+                    drawCenteredNoShadow(g, Component.literal((pageIdx + 1) + "/" + sub.pages().size()),
                             this.left + WIDTH / 2, this.top + HEIGHT - 20, INK_FAINT);
                 }
             }
@@ -222,27 +222,37 @@ public class FletcherGuideScreen extends Screen {
         }
     }
 
-    /** Draws an inputs -> result strip (e.g. limbs + riser + string -> bow). */
-    private int renderAssembly(GuiGraphics g, GuideElement el, int x, int y) {
-        int sx = x;
+    private void drawCenteredNoShadow(GuiGraphics g, Component c, int cx, int y, int color) {
+        g.drawString(this.font, c, cx - this.font.width(c) / 2, y, color, false);
+    }
+
+    /** Draws a centered inputs -> result strip (e.g. limbs + riser + string -> bow). */
+    private int renderAssembly(GuiGraphics g, GuideElement el, int unusedX, int y) {
+        int n = el.stacks().size();
+        int totalW = n * 18 + 14 + 16;        // inputs + arrow + result
+        int sx = this.left + (WIDTH - totalW) / 2;
         for (ItemStack in : el.stacks()) {
             g.fill(sx, y, sx + 16, y + 16, SLOT_BG);
             g.renderItem(in, sx, y);
             sx += 18;
         }
         g.drawString(this.font, "→", sx + 2, y + 4, INK, false);
-        sx += 12;
+        sx += 14;
         g.fill(sx, y, sx + 16, y + 16, SLOT_BG);
         g.renderItem(el.icon(), sx, y);
         return y + 20;
     }
 
-    /** Draws a crafting recipe for {@code result}; returns the y below it. */
-    private int renderRecipe(GuiGraphics g, ItemStack result, int x, int y) {
+    /** Draws a centered crafting recipe for {@code result}; returns the y below it. */
+    private int renderRecipe(GuiGraphics g, ItemStack result, int unusedX, int y) {
         CraftingRecipe recipe = findCrafting(result);
+        // Layout: 3x3 grid (54) + arrow (~20) + result slot (16) = 90 wide.
+        int totalW = 90;
+        int x = this.left + (WIDTH - totalW) / 2;
         if (recipe == null) {
-            g.renderItem(result, x + 80, y);
-            return y + 20;
+            g.fill(x + 74, y + 16, x + 90, y + 32, SLOT_BG);
+            g.renderItem(result, x + 74, y + 16);
+            return y + 40;
         }
         // 3x3 grid.
         for (int r = 0; r < 3; r++) {

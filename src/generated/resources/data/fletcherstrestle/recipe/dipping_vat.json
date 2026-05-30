@@ -1,13 +1,18 @@
 {
-  "type": "minecraft:crafting_shapeless",
+  "type": "minecraft:crafting_shaped",
   "category": "misc",
-  "ingredients": [
-    {
+  "key": {
+    "B": {
       "item": "minecraft:bucket"
     },
-    {
-      "item": "minecraft:cauldron"
+    "P": {
+      "tag": "minecraft:planks"
     }
+  },
+  "pattern": [
+    "P P",
+    "PBP",
+    "PPP"
   ],
   "result": {
     "count": 1,
