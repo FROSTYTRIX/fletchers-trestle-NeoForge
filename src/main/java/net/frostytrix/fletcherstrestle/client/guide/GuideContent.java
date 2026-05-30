@@ -8,9 +8,9 @@ import net.minecraft.world.item.Items;
 import java.util.List;
 
 /**
- * In-code guide chapters (Phase 4 foundation). Kept as a Java registry for
- * now; a datapack-driven loader can replace this later without changing the
- * screen. Text is translatable so it localises to en/fr.
+ * In-code guide content (Phase 4): Chapters -> Sub-chapters -> Pages. Kept as
+ * a Java registry for now; a datapack loader can replace it later without
+ * touching the screen.
  */
 public final class GuideContent {
     private GuideContent() {
@@ -18,47 +18,82 @@ public final class GuideContent {
 
     private static final String P = "gui.fletcherstrestle.guide.";
 
+    private static ItemStack of(net.minecraft.world.level.ItemLike item) {
+        return new ItemStack(item);
+    }
+
     public static List<GuideChapter> chapters() {
         return List.of(
-                new GuideChapter(P + "getting_started.title",
-                        new ItemStack(ModItems.FLETCHER_GUIDE.get()),
-                        List.of(
-                                GuideElement.text(P + "getting_started.b1"),
-                                GuideElement.item(new ItemStack(ModItems.DRAWKNIFE.get()), P + "getting_started.drawknife"),
-                                GuideElement.text(P + "getting_started.b2"))),
+                // --- Getting Started ---
+                new GuideChapter(P + "getting_started.title", of(ModItems.FLETCHER_GUIDE.get()), List.of(
+                        new GuideSubchapter(P + "sub.overview", of(ModItems.FLETCHER_GUIDE.get()), List.of(
+                                GuidePage.of(
+                                        GuideElement.text(P + "getting_started.b1"),
+                                        GuideElement.item(of(ModItems.DRAWKNIFE.get()), P + "getting_started.drawknife"),
+                                        GuideElement.recipe(of(ModItems.DRAWKNIFE.get())),
+                                        GuideElement.text(P + "getting_started.b2")))))),
 
-                new GuideChapter(P + "woodworking.title",
-                        new ItemStack(ModBlocks.STEAM_BOX.get()),
-                        List.of(
-                                GuideElement.heading(P + "woodworking.h1"),
-                                GuideElement.item(new ItemStack(ModBlocks.SHAVING_HORSE.get()), P + "woodworking.shave"),
-                                GuideElement.item(new ItemStack(ModBlocks.STEAM_BOX.get()), P + "woodworking.steam"),
-                                GuideElement.item(new ItemStack(ModItems.MODULAR_BOW.get()), P + "woodworking.fletch"))),
+                // --- Woodworking ---
+                new GuideChapter(P + "woodworking.title", of(ModBlocks.STEAM_BOX.get()), List.of(
+                        new GuideSubchapter(P + "sub.shaving_horse", of(ModBlocks.SHAVING_HORSE.get()), List.of(
+                                GuidePage.of(
+                                        GuideElement.text(P + "woodworking.shave.desc"),
+                                        GuideElement.recipe(of(ModBlocks.SHAVING_HORSE.get()))))),
+                        new GuideSubchapter(P + "sub.steam_box", of(ModBlocks.STEAM_BOX.get()), List.of(
+                                GuidePage.of(
+                                        GuideElement.text(P + "woodworking.steam.desc"),
+                                        GuideElement.recipe(of(ModBlocks.STEAM_BOX.get()))))),
+                        new GuideSubchapter(P + "sub.fletching_table", of(Items.FLETCHING_TABLE), List.of(
+                                GuidePage.of(GuideElement.text(P + "woodworking.fletch.desc")))))),
 
-                new GuideChapter(P + "arrows.title",
-                        new ItemStack(ModItems.MODULAR_ARROW.get()),
-                        List.of(
-                                GuideElement.text(P + "arrows.b1"),
-                                GuideElement.item(new ItemStack(ModBlocks.DIPPING_VAT.get()), P + "arrows.dip"))),
+                // --- Arrows ---
+                new GuideChapter(P + "arrows.title", of(ModItems.MODULAR_ARROW.get()), List.of(
+                        new GuideSubchapter(P + "sub.modular_arrows", of(ModItems.MODULAR_ARROW.get()), List.of(
+                                GuidePage.of(GuideElement.text(P + "arrows.b1")))),
+                        new GuideSubchapter(P + "sub.potion_arrows", of(ModBlocks.DIPPING_VAT.get()), List.of(
+                                GuidePage.of(
+                                        GuideElement.text(P + "arrows.dip.desc"),
+                                        GuideElement.recipe(of(ModBlocks.DIPPING_VAT.get()))))))),
 
-                new GuideChapter(P + "crossbow.title",
-                        new ItemStack(ModBlocks.CROSSBOW_BENCH.get()),
-                        List.of(
-                                GuideElement.text(P + "crossbow.b1"),
-                                GuideElement.item(new ItemStack(ModItems.MECHANICAL_TRIGGER.get()), P + "crossbow.trigger"),
-                                GuideElement.item(new ItemStack(Items.SPYGLASS), P + "crossbow.scope"),
-                                GuideElement.item(new ItemStack(ModItems.MAGAZINE.get()), P + "crossbow.magazine"))),
+                // --- Crossbow Bench ---
+                new GuideChapter(P + "crossbow.title", of(ModBlocks.CROSSBOW_BENCH.get()), List.of(
+                        new GuideSubchapter(P + "sub.bench", of(ModBlocks.CROSSBOW_BENCH.get()), List.of(
+                                GuidePage.of(
+                                        GuideElement.text(P + "crossbow.b1"),
+                                        GuideElement.recipe(of(ModBlocks.CROSSBOW_BENCH.get()))),
+                                GuidePage.of(
+                                        GuideElement.item(of(ModItems.MECHANICAL_TRIGGER.get()), P + "crossbow.trigger")))),
+                        new GuideSubchapter(P + "sub.attachments", of(Items.SPYGLASS), List.of(
+                                GuidePage.of(
+                                        GuideElement.item(of(Items.SPYGLASS), P + "crossbow.scope"),
+                                        GuideElement.item(of(ModItems.MAGAZINE.get()), P + "crossbow.magazine"),
+                                        GuideElement.recipe(of(ModItems.MAGAZINE.get()))))))),
 
-                new GuideChapter(P + "skills.title",
-                        new ItemStack(Items.EXPERIENCE_BOTTLE),
-                        List.of(GuideElement.text(P + "skills.b1")),
-                        true),
+                // --- Archery Skills (interactive) ---
+                new GuideChapter(P + "skills.title", of(Items.EXPERIENCE_BOTTLE), List.of(
+                        new GuideSubchapter(P + "sub.skill_tree", of(Items.EXPERIENCE_BOTTLE),
+                                List.of(GuidePage.of(GuideElement.text(P + "skills.b1"))), true))),
 
-                new GuideChapter(P + "eagles.title",
-                        new ItemStack(ModItems.EAGLE_SPAWN_EGG.get()),
-                        List.of(
-                                GuideElement.text(P + "eagles.b1"),
-                                GuideElement.item(new ItemStack(ModItems.EAGLE_WHISTLE.get()), P + "eagles.whistle")))
+                // --- Eagles ---
+                new GuideChapter(P + "eagles.title", of(ModItems.EAGLE_SPAWN_EGG.get()), List.of(
+                        new GuideSubchapter(P + "sub.taming", of(ModItems.EAGLE_SPAWN_EGG.get()), List.of(
+                                GuidePage.of(GuideElement.text(P + "eagles.taming")))),
+                        new GuideSubchapter(P + "sub.fetch_hunt", of(ModItems.MODULAR_ARROW.get()), List.of(
+                                GuidePage.of(
+                                        GuideElement.text(P + "eagles.fetch"),
+                                        GuideElement.text(P + "eagles.hunt")))),
+                        new GuideSubchapter(P + "sub.perch", of(ModBlocks.EAGLE_PERCH.get()), List.of(
+                                GuidePage.of(
+                                        GuideElement.text(P + "eagles.perch.desc"),
+                                        GuideElement.recipe(of(ModBlocks.EAGLE_PERCH.get()))))),
+                        new GuideSubchapter(P + "sub.nest", of(ModBlocks.EAGLE_NEST.get()), List.of(
+                                GuidePage.of(
+                                        GuideElement.text(P + "eagles.nest.desc"),
+                                        GuideElement.recipe(of(ModBlocks.EAGLE_NEST.get()))))),
+                        new GuideSubchapter(P + "sub.whistle", of(ModItems.EAGLE_WHISTLE.get()), List.of(
+                                GuidePage.of(
+                                        GuideElement.text(P + "eagles.whistle.desc"),
+                                        GuideElement.recipe(of(ModItems.EAGLE_WHISTLE.get())))))))
         );
     }
 }

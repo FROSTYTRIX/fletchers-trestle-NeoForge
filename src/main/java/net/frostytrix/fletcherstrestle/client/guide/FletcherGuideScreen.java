@@ -4,35 +4,50 @@ import net.frostytrix.fletcherstrestle.client.ClientArcheryData;
 import net.frostytrix.fletcherstrestle.network.SpendSkillPacket;
 import net.frostytrix.fletcherstrestle.progression.ArcherySkill;
 import net.minecraft.Util;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.ConfirmLinkScreen;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.FormattedCharSequence;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.CraftingRecipe;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.item.crafting.ShapedRecipe;
 import net.neoforged.neoforge.network.PacketDistributor;
 
 import java.util.List;
 
-/** The in-game Fletcher's Guide (Phase 4). */
+/** The in-game Fletcher's Guide (Phase 4): chapters -> sub-chapters -> pages. */
 public class FletcherGuideScreen extends Screen {
 
     private static final String WIKI_URL =
             "https://github.com/FROSTYTRIX/fletchers-trestle-NeoForge/wiki";
 
-    private static final int WIDTH = 260;
-    private static final int HEIGHT = 188;
-    private static final int CONTENT_X = 96;     // content pane left, relative to panel
-    private static final int CONTENT_W = 156;
-    private static final int CONTENT_TOP = 26;
-    private static final int CONTENT_H = 140;
+    private static final int WIDTH = 256;
+    private static final int HEIGHT = 200;
+
+    // Parchment palette.
+    private static final int PAGE = 0xFFE9D8B0;
+    private static final int PAGE_EDGE = 0xFF8A6A3A;
+    private static final int INK = 0xFF3A2A18;
+    private static final int INK_HEAD = 0xFF7A3B10;
+    private static final int INK_FAINT = 0xFF6A5A40;
+    private static final int SLOT_BG = 0xFFB59E72;
+
+    private enum View { CHAPTERS, SUBS, PAGES }
 
     private final List<GuideChapter> chapters = GuideContent.chapters();
     private int left;
     private int top;
-    private int selected = 0;
-    private int scrollY = 0;
-    private int contentHeight = 0;
+
+    private View view = View.CHAPTERS;
+    private int chapterIdx = 0;
+    private int subIdx = 0;
+    private int pageIdx = 0;
 
     private final Button[] skillButtons = new Button[ArcherySkill.values().length];
 
@@ -44,128 +59,230 @@ public class FletcherGuideScreen extends Screen {
     protected void init() {
         this.left = (this.width - WIDTH) / 2;
         this.top = (this.height - HEIGHT) / 2;
+        rebuild();
+    }
 
-        // Chapter list (left column).
-        for (int i = 0; i < chapters.size(); i++) {
-            final int idx = i;
-            this.addRenderableWidget(Button.builder(chapters.get(i).title(), b -> select(idx))
-                    .bounds(this.left + 8, this.top + 26 + i * 20, 80, 18)
-                    .build());
+    private void rebuild() {
+        this.clearWidgets();
+        int cx = this.left + WIDTH / 2;
+
+        // Back / wiki on the footer row.
+        if (this.view != View.CHAPTERS) {
+            this.addRenderableWidget(Button.builder(Component.literal("←"), b -> goBack())
+                    .bounds(this.left + 8, this.top + HEIGHT - 24, 20, 18).build());
         }
-
-        // Open-wiki button (bottom-left).
         this.addRenderableWidget(Button.builder(Component.translatable("gui.fletcherstrestle.guide.open_wiki"),
-                        b -> this.minecraft.setScreen(new ConfirmLinkScreen(confirmed -> {
-                            if (confirmed) {
-                                Util.getPlatform().openUri(WIKI_URL);
-                            }
-                            this.minecraft.setScreen(this);
-                        }, WIKI_URL, true)))
-                .bounds(this.left + 8, this.top + HEIGHT - 22, 80, 18)
-                .build());
+                        b -> openWiki())
+                .bounds(this.left + WIDTH - 88, this.top + HEIGHT - 24, 80, 18).build());
 
-        // Skill-tree spend buttons (only shown on the skills chapter).
+        switch (this.view) {
+            case CHAPTERS -> {
+                for (int i = 0; i < chapters.size(); i++) {
+                    final int idx = i;
+                    this.addRenderableWidget(Button.builder(chapters.get(i).title(), b -> openChapter(idx))
+                            .bounds(cx - 90, this.top + 30 + i * 21, 180, 18).build());
+                }
+            }
+            case SUBS -> {
+                List<GuideSubchapter> subs = chapters.get(chapterIdx).subchapters();
+                for (int i = 0; i < subs.size(); i++) {
+                    final int idx = i;
+                    this.addRenderableWidget(Button.builder(subs.get(i).title(), b -> openSub(idx))
+                            .bounds(cx - 90, this.top + 30 + i * 21, 180, 18).build());
+                }
+            }
+            case PAGES -> {
+                GuideSubchapter sub = currentSub();
+                if (sub.skillTree()) {
+                    buildSkillButtons();
+                } else if (sub.pages().size() > 1) {
+                    this.addRenderableWidget(Button.builder(Component.literal("<"), b -> { if (pageIdx > 0) pageIdx--; })
+                            .bounds(cx - 60, this.top + HEIGHT - 24, 20, 18).build());
+                    this.addRenderableWidget(Button.builder(Component.literal(">"),
+                                    b -> { if (pageIdx < sub.pages().size() - 1) pageIdx++; })
+                            .bounds(cx + 40, this.top + HEIGHT - 24, 20, 18).build());
+                }
+            }
+        }
+    }
+
+    private void buildSkillButtons() {
         ArcherySkill[] skills = ArcherySkill.values();
+        int rowTop = this.top + 70;
         for (int i = 0; i < skills.length; i++) {
             final int branch = i;
             this.skillButtons[i] = Button.builder(Component.literal("+"),
                             b -> PacketDistributor.sendToServer(new SpendSkillPacket(branch)))
-                    .bounds(this.left + CONTENT_X + CONTENT_W - 22, this.top + CONTENT_TOP + 24 + i * 24, 20, 20)
-                    .build();
+                    .bounds(this.left + WIDTH - 40, rowTop + i * 24, 20, 20).build();
             this.addRenderableWidget(this.skillButtons[i]);
         }
     }
 
-    private void select(int idx) {
-        this.selected = idx;
-        this.scrollY = 0;
+    private void goBack() {
+        if (this.view == View.PAGES) {
+            this.view = View.SUBS;
+        } else if (this.view == View.SUBS) {
+            this.view = View.CHAPTERS;
+        }
+        rebuild();
+    }
+
+    private void openChapter(int idx) { this.chapterIdx = idx; this.view = View.SUBS; rebuild(); }
+    private void openSub(int idx) { this.subIdx = idx; this.pageIdx = 0; this.view = View.PAGES; rebuild(); }
+
+    private void openWiki() {
+        this.minecraft.setScreen(new ConfirmLinkScreen(confirmed -> {
+            if (confirmed) {
+                Util.getPlatform().openUri(WIKI_URL);
+            }
+            this.minecraft.setScreen(this);
+        }, WIKI_URL, true));
+    }
+
+    private GuideSubchapter currentSub() {
+        return chapters.get(chapterIdx).subchapters().get(subIdx);
     }
 
     @Override
     public void renderBackground(GuiGraphics g, int mouseX, int mouseY, float partialTick) {
-        g.fill(0, 0, this.width, this.height, 0xB0000000); // plain dim, no blur
+        g.fill(0, 0, this.width, this.height, 0xB0000000);
     }
 
     @Override
     public void render(GuiGraphics g, int mouseX, int mouseY, float partialTick) {
         this.renderBackground(g, mouseX, mouseY, partialTick);
 
-        // Panel + borders.
-        g.fill(this.left, this.top, this.left + WIDTH, this.top + HEIGHT, 0xFF1A130C);
-        g.fill(this.left, this.top, this.left + WIDTH, this.top + 1, 0xFF5A4632);
-        g.fill(this.left, this.top + HEIGHT - 1, this.left + WIDTH, this.top + HEIGHT, 0xFF5A4632);
-        g.fill(this.left, this.top, this.left + 1, this.top + HEIGHT, 0xFF5A4632);
-        g.fill(this.left + WIDTH - 1, this.top, this.left + WIDTH, this.top + HEIGHT, 0xFF5A4632);
-        g.fill(this.left + CONTENT_X - 4, this.top + 24, this.left + CONTENT_X - 3, this.top + HEIGHT - 6, 0xFF5A4632); // divider
+        // Parchment page.
+        g.fill(this.left, this.top, this.left + WIDTH, this.top + HEIGHT, PAGE);
+        g.fill(this.left, this.top, this.left + WIDTH, this.top + 1, PAGE_EDGE);
+        g.fill(this.left, this.top + HEIGHT - 1, this.left + WIDTH, this.top + HEIGHT, PAGE_EDGE);
+        g.fill(this.left, this.top, this.left + 1, this.top + HEIGHT, PAGE_EDGE);
+        g.fill(this.left + WIDTH - 1, this.top, this.left + WIDTH, this.top + HEIGHT, PAGE_EDGE);
 
-        GuideChapter chapter = this.chapters.get(this.selected);
-        g.drawString(this.font, chapter.title(), this.left + CONTENT_X, this.top + 12, 0xFFD27D, false);
+        Component header = switch (this.view) {
+            case CHAPTERS -> Component.translatable("gui.fletcherstrestle.guide.title");
+            case SUBS -> chapters.get(chapterIdx).title();
+            case PAGES -> currentSub().title();
+        };
+        g.drawCenteredString(this.font, header, this.left + WIDTH / 2, this.top + 12, INK_HEAD);
+        g.fill(this.left + 16, this.top + 24, this.left + WIDTH - 16, this.top + 25, PAGE_EDGE);
 
-        boolean skill = chapter.skillTree();
-        for (Button b : this.skillButtons) {
-            b.visible = skill;
+        if (this.view == View.PAGES) {
+            GuideSubchapter sub = currentSub();
+            if (sub.skillTree()) {
+                renderSkillPage(g);
+            } else {
+                renderPage(g, sub.pages().get(pageIdx));
+                if (sub.pages().size() > 1) {
+                    g.drawCenteredString(this.font, (pageIdx + 1) + "/" + sub.pages().size(),
+                            this.left + WIDTH / 2, this.top + HEIGHT - 20, INK_FAINT);
+                }
+            }
         }
-
-        int cx = this.left + CONTENT_X;
-        int cyTop = this.top + CONTENT_TOP;
-        g.enableScissor(cx, cyTop, cx + CONTENT_W, cyTop + CONTENT_H);
-        if (skill) {
-            renderSkillChapter(g, cx, cyTop - this.scrollY);
-        } else {
-            this.contentHeight = renderElements(g, chapter, cx, cyTop - this.scrollY);
-        }
-        g.disableScissor();
 
         super.render(g, mouseX, mouseY, partialTick);
     }
 
-    /** Draws a chapter's elements; returns total content height for scroll clamping. */
-    private int renderElements(GuiGraphics g, GuideChapter chapter, int x, int y) {
-        int cursor = y;
-        for (GuideElement el : chapter.elements()) {
+    private void renderPage(GuiGraphics g, GuidePage page) {
+        int x = this.left + 18;
+        int y = this.top + 32;
+        int wrap = WIDTH - 36;
+        for (GuideElement el : page.elements()) {
             switch (el.type()) {
                 case HEADING -> {
-                    g.drawString(this.font, el.text(), x, cursor, 0xFFE0A0, false);
-                    cursor += 14;
+                    g.drawString(this.font, el.text(), x, y, INK_HEAD, false);
+                    y += 13;
                 }
                 case TEXT -> {
-                    for (FormattedCharSequence line : this.font.split(el.text(), CONTENT_W - 4)) {
-                        g.drawString(this.font, line, x, cursor, 0xCFCFCF, false);
-                        cursor += 10;
+                    for (FormattedCharSequence line : this.font.split(el.text(), wrap)) {
+                        g.drawString(this.font, line, x, y, INK, false);
+                        y += 10;
                     }
-                    cursor += 4;
+                    y += 4;
                 }
                 case ITEM -> {
-                    g.renderItem(el.icon(), x, cursor);
-                    int textX = x + 20;
-                    for (FormattedCharSequence line : this.font.split(el.text(), CONTENT_W - 24)) {
-                        g.drawString(this.font, line, textX, cursor + 1, 0xCFCFCF, false);
-                        cursor += 10;
+                    g.renderItem(el.icon(), x, y);
+                    int ty = y + 1;
+                    for (FormattedCharSequence line : this.font.split(el.text(), wrap - 22)) {
+                        g.drawString(this.font, line, x + 22, ty, INK, false);
+                        ty += 10;
                     }
-                    cursor = Math.max(cursor, cursor) + 8;
+                    y = Math.max(y + 20, ty) + 4;
                 }
+                case RECIPE -> y = renderRecipe(g, el.icon(), x, y) + 6;
             }
         }
-        return cursor - y;
     }
 
-    private void renderSkillChapter(GuiGraphics g, int x, int y) {
+    /** Draws a crafting recipe for {@code result}; returns the y below it. */
+    private int renderRecipe(GuiGraphics g, ItemStack result, int x, int y) {
+        CraftingRecipe recipe = findCrafting(result);
+        if (recipe == null) {
+            g.renderItem(result, x + 80, y);
+            return y + 20;
+        }
+        // 3x3 grid.
+        for (int r = 0; r < 3; r++) {
+            for (int c = 0; c < 3; c++) {
+                int sx = x + c * 18;
+                int sy = y + r * 18;
+                g.fill(sx, sy, sx + 16, sy + 16, SLOT_BG);
+            }
+        }
+        List<Ingredient> ings = recipe.getIngredients();
+        int w = recipe instanceof ShapedRecipe shaped ? shaped.getWidth() : 3;
+        for (int i = 0; i < ings.size(); i++) {
+            ItemStack[] items = ings.get(i).getItems();
+            if (items.length == 0) {
+                continue;
+            }
+            int r = recipe instanceof ShapedRecipe ? i / w : i / 3;
+            int c = recipe instanceof ShapedRecipe ? i % w : i % 3;
+            g.renderItem(items[0], x + c * 18, y + r * 18);
+        }
+        // Arrow + result.
+        g.drawString(this.font, "→", x + 58, y + 20, INK, false);
+        HolderLookup.Provider reg = this.minecraft.level.registryAccess();
+        g.fill(x + 74, y + 16, x + 90, y + 32, SLOT_BG);
+        g.renderItem(recipe.getResultItem(reg), x + 74, y + 16);
+        return y + 56;
+    }
+
+    private CraftingRecipe findCrafting(ItemStack result) {
+        if (this.minecraft.level == null) {
+            return null;
+        }
+        HolderLookup.Provider reg = this.minecraft.level.registryAccess();
+        for (var holder : this.minecraft.level.getRecipeManager().getAllRecipesFor(RecipeType.CRAFTING)) {
+            if (holder.value().getResultItem(reg).is(result.getItem())) {
+                return holder.value();
+            }
+        }
+        return null;
+    }
+
+    private void renderSkillPage(GuiGraphics g) {
+        int x = this.left + 18;
+        int y = this.top + 32;
         for (FormattedCharSequence line : this.font.split(
-                Component.translatable("gui.fletcherstrestle.guide.skills.b1"), CONTENT_W - 4)) {
-            g.drawString(this.font, line, x, y, 0xCFCFCF, false);
+                Component.translatable("gui.fletcherstrestle.guide.skills.b1"), WIDTH - 36)) {
+            g.drawString(this.font, line, x, y, INK, false);
             y += 10;
         }
-        y += 6;
         int points = ClientArcheryData.pointsAvailable();
-        g.drawString(this.font, Component.translatable("gui.fletcherstrestle.skill_points", points), x, y, 0xFFD700, false);
+        g.drawString(this.font, Component.translatable("gui.fletcherstrestle.skill_points", points),
+                x, this.top + 56, INK_HEAD, false);
 
         ArcherySkill[] skills = ArcherySkill.values();
+        int rowTop = this.top + 70;
         for (int i = 0; i < skills.length; i++) {
             int rank = ClientArcheryData.rank(skills[i]);
-            this.skillButtons[i].active = points > 0 && rank < ArcherySkill.MAX_RANK;
-            int rowY = this.top + CONTENT_TOP + 24 + i * 24; // matches button bounds (unscrolled)
-            g.drawString(this.font, branchName(skills[i]), x, rowY + 1, 0xFFFFFF, false);
-            g.drawString(this.font, rank + "/" + ArcherySkill.MAX_RANK, x, rowY + 11, 0xA0A0A0, false);
+            if (this.skillButtons[i] != null) {
+                this.skillButtons[i].active = points > 0 && rank < ArcherySkill.MAX_RANK;
+            }
+            int rowY = rowTop + i * 24;
+            g.drawString(this.font, branchName(skills[i]), x, rowY + 1, INK, false);
+            g.drawString(this.font, rank + "/" + ArcherySkill.MAX_RANK, x, rowY + 11, INK_FAINT, false);
         }
     }
 
@@ -178,20 +295,11 @@ public class FletcherGuideScreen extends Screen {
     }
 
     @Override
-    public boolean mouseScrolled(double mouseX, double mouseY, double scrollX, double scrollY) {
-        if (!this.chapters.get(this.selected).skillTree()) {
-            int max = Math.max(0, this.contentHeight - CONTENT_H);
-            this.scrollY = (int) Math.max(0, Math.min(max, this.scrollY - scrollY * 12));
-        }
-        return true;
-    }
-
-    @Override
     public boolean isPauseScreen() {
         return false;
     }
 
     public static void open() {
-        net.minecraft.client.Minecraft.getInstance().setScreen(new FletcherGuideScreen());
+        Minecraft.getInstance().setScreen(new FletcherGuideScreen());
     }
 }
