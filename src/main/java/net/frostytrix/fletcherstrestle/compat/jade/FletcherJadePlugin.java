@@ -4,7 +4,6 @@ import net.frostytrix.fletcherstrestle.FletcherTrestle;
 import net.frostytrix.fletcherstrestle.block.custom.SteamBoxBlock;
 import net.frostytrix.fletcherstrestle.block.entity.SteamBoxBlockEntity;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import snownee.jade.api.BlockAccessor;
 import snownee.jade.api.IBlockComponentProvider;
@@ -44,6 +43,7 @@ public class FletcherJadePlugin implements IWailaPlugin {
             if (accessor.getBlockEntity() instanceof SteamBoxBlockEntity box) {
                 data.putBoolean("ft_heat", SteamBoxBlockEntity.hasHeatBelow(accessor.getLevel(), accessor.getPosition()));
                 data.putBoolean("ft_busy", box.hasCookingItems());
+                data.putBoolean("ft_water", box.hasWaterToSteam());
                 data.putInt("ft_progress", box.getDisplayProgress());
             }
         }
@@ -52,15 +52,11 @@ public class FletcherJadePlugin implements IWailaPlugin {
         public void appendTooltip(ITooltip tooltip, BlockAccessor accessor, IPluginConfig config) {
             CompoundTag data = accessor.getServerData();
             if (!data.contains("ft_busy")) return;
-            boolean busy = data.getBoolean("ft_busy");
-            boolean heat = data.getBoolean("ft_heat");
-            if (busy && heat) {
-                tooltip.add(Component.translatable("fletcherstrestle.tooltip.steam_box.steaming", data.getInt("ft_progress")));
-            } else if (busy) {
-                tooltip.add(Component.translatable("fletcherstrestle.tooltip.steam_box.no_heat"));
-            } else {
-                tooltip.add(Component.translatable("fletcherstrestle.tooltip.steam_box.idle"));
-            }
+            tooltip.add(SteamBoxBlockEntity.statusLine(
+                    data.getBoolean("ft_busy"),
+                    data.getBoolean("ft_heat"),
+                    data.getBoolean("ft_water"),
+                    data.getInt("ft_progress")));
         }
 
         @Override

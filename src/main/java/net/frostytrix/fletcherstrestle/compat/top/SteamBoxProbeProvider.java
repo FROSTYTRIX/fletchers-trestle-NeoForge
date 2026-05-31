@@ -6,7 +6,6 @@ import mcjty.theoneprobe.api.IProbeInfoProvider;
 import mcjty.theoneprobe.api.ProbeMode;
 import net.frostytrix.fletcherstrestle.FletcherTrestle;
 import net.frostytrix.fletcherstrestle.block.entity.SteamBoxBlockEntity;
-import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
@@ -26,16 +25,11 @@ public class SteamBoxProbeProvider implements IProbeInfoProvider {
     @Override
     public void addProbeInfo(ProbeMode mode, IProbeInfo info, Player player, Level world, BlockState blockState, IProbeHitData data) {
         if (world.getBlockEntity(data.getPos()) instanceof SteamBoxBlockEntity box) {
-            boolean heat = SteamBoxBlockEntity.hasHeatBelow(world, data.getPos());
-            if (box.hasCookingItems()) {
-                if (heat) {
-                    info.text(Component.translatable("fletcherstrestle.tooltip.steam_box.steaming", box.getDisplayProgress()));
-                } else {
-                    info.text(Component.translatable("fletcherstrestle.tooltip.steam_box.no_heat"));
-                }
-            } else {
-                info.text(Component.translatable("fletcherstrestle.tooltip.steam_box.idle"));
-            }
+            info.text(SteamBoxBlockEntity.statusLine(
+                    box.hasCookingItems(),
+                    SteamBoxBlockEntity.hasHeatBelow(world, data.getPos()),
+                    box.hasWaterToSteam(),
+                    box.getDisplayProgress()));
         }
     }
 }

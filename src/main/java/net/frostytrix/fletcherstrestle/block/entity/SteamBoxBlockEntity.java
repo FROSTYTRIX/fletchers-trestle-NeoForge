@@ -12,7 +12,6 @@ import net.minecraft.world.item.crafting.SingleRecipeInput;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.entity.HopperBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
@@ -134,34 +133,26 @@ public class SteamBoxBlockEntity extends BlockEntity {
                     int requiredWater = recipe.getWaterAmount();
                     int requiredTime = recipe.getProcessingTime();
 
-                    cookingTimes[i]++;
+                    // Progress only advances while there's enough water in the tank.
+                    if (fluidTank.getFluidAmount() >= requiredWater) {
+                        cookingTimes[i]++;
 
-                    if (cookingTimes[i] >= requiredTime) {
-                        if (fluidTank.getFluidAmount() >= requiredWater) {
+                        if (cookingTimes[i] >= requiredTime) {
                             // Consume water
                             fluidTank.drain(requiredWater, IFluidHandler.FluidAction.EXECUTE);
 
                             ItemStack result = recipe.assemble(input, level.registryAccess());
 
-                            if (level.getBlockEntity(pos.below()) instanceof HopperBlockEntity) {
-                                // A hopper is waiting below: keep the finished limb in its
-                                // slot so the hopper can pull it through the item capability.
-                                itemHandler.setStackInSlot(i, result);
-                            } else {
-                                // No automation underneath — clear the slot and pop the
-                                // finished limb out just above the box, like before.
-                                itemHandler.extractItem(i, 1, false);
-                                ItemEntity drop = new ItemEntity(level,
-                                        pos.getX() + 0.5, pos.getY() + 1.0, pos.getZ() + 0.5, result);
-                                drop.setDeltaMovement(0.0, 0.05, 0.0);
-                                drop.setDefaultPickUpDelay();
-                                level.addFreshEntity(drop);
-                            }
+                            // Clear the slot and pop the finished limb out just above the
+                            // box (the heat source sits underneath, so nothing collects below).
+                            itemHandler.extractItem(i, 1, false);
+                            ItemEntity drop = new ItemEntity(level,
+                                    pos.getX() + 0.5, pos.getY() + 1.0, pos.getZ() + 0.5, result);
+                            drop.setDeltaMovement(0.0, 0.05, 0.0);
+                            drop.setDefaultPickUpDelay();
+                            level.addFreshEntity(drop);
 
                             cookingTimes[i] = 0;
-                        } else {
-                            // Pause progress just before finishing if waiting on water
-                            cookingTimes[i] = requiredTime - 1;
                         }
                     }
                 } else {
@@ -207,6 +198,35 @@ public class SteamBoxBlockEntity extends BlockEntity {
     public boolean hasCookingItems() {
         for (int i = 0; i < 16; i++) {
             if (hasSteamingRecipe(itemHandler.getStackInSlot(i))) return true;
+        }
+        return false;
+    }
+
+    /** Shared status line for the tooltip-mod integrations (Jade / TOP / WTHIT). */
+    public static net.minecraft.network.chat.Component statusLine(boolean busy, boolean heat, boolean water, int progress) {
+        if (!busy) {
+            return net.minecraft.network.chat.Component.translatable("fletcherstrestle.tooltip.steam_box.idle");
+        }
+        if (!heat) {
+            return net.minecraft.network.chat.Component.translatable("fletcherstrestle.tooltip.steam_box.no_heat");
+        }
+        if (!water) {
+            return net.minecraft.network.chat.Component.translatable("fletcherstrestle.tooltip.steam_box.no_water");
+        }
+        return net.minecraft.network.chat.Component.translatable("fletcherstrestle.tooltip.steam_box.steaming", progress);
+    }
+
+    /** True if the tank holds enough water to advance at least one steaming limb. */
+    public boolean hasWaterToSteam() {
+        if (level == null) return false;
+        for (int i = 0; i < 16; i++) {
+            ItemStack stack = itemHandler.getStackInSlot(i);
+            if (stack.isEmpty()) continue;
+            var holder = level.getRecipeManager()
+                    .getRecipeFor(ModRecipes.STEAMING_TYPE.get(), new SingleRecipeInput(stack), level);
+            if (holder.isPresent() && fluidTank.getFluidAmount() >= holder.get().value().getWaterAmount()) {
+                return true;
+            }
         }
         return false;
     }

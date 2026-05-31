@@ -24,6 +24,7 @@ public class WthitCommonPlugin implements IWailaPlugin, IDataProvider<SteamBoxBl
         SteamBoxBlockEntity box = accessor.getTarget();
         data.raw().putBoolean("ft_heat", SteamBoxBlockEntity.hasHeatBelow(accessor.getWorld(), box.getBlockPos()));
         data.raw().putBoolean("ft_busy", box.hasCookingItems());
+        data.raw().putBoolean("ft_water", box.hasWaterToSteam());
         data.raw().putInt("ft_progress", box.getDisplayProgress());
     }
 }

@@ -7,8 +7,8 @@ import mcp.mobius.waila.api.IRegistrar;
 import mcp.mobius.waila.api.ITooltip;
 import mcp.mobius.waila.api.IWailaPlugin;
 import net.frostytrix.fletcherstrestle.block.custom.SteamBoxBlock;
+import net.frostytrix.fletcherstrestle.block.entity.SteamBoxBlockEntity;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.Component;
 
 /**
  * WTHIT client-side plugin: renders the Steam Box's status line from the data
@@ -25,14 +25,10 @@ public class WthitClientPlugin implements IWailaPlugin, IBlockComponentProvider 
     public void appendBody(ITooltip tooltip, IBlockAccessor accessor, IPluginConfig config) {
         CompoundTag data = accessor.getData().raw();
         if (!data.contains("ft_busy")) return;
-        boolean busy = data.getBoolean("ft_busy");
-        boolean heat = data.getBoolean("ft_heat");
-        if (busy && heat) {
-            tooltip.addLine(Component.translatable("fletcherstrestle.tooltip.steam_box.steaming", data.getInt("ft_progress")));
-        } else if (busy) {
-            tooltip.addLine(Component.translatable("fletcherstrestle.tooltip.steam_box.no_heat"));
-        } else {
-            tooltip.addLine(Component.translatable("fletcherstrestle.tooltip.steam_box.idle"));
-        }
+        tooltip.addLine(SteamBoxBlockEntity.statusLine(
+                data.getBoolean("ft_busy"),
+                data.getBoolean("ft_heat"),
+                data.getBoolean("ft_water"),
+                data.getInt("ft_progress")));
     }
 }

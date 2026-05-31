@@ -222,5 +222,6 @@
   "material.fletcherstrestle.vex": "Vex",
   "fletcherstrestle.tooltip.steam_box.steaming": "Cuisson vapeur : %s%%",
   "fletcherstrestle.tooltip.steam_box.no_heat": "Vapeur en pause — aucune source de chaleur",
-  "fletcherstrestle.tooltip.steam_box.idle": "Inactif"
+  "fletcherstrestle.tooltip.steam_box.idle": "Inactif",
+  "fletcherstrestle.tooltip.steam_box.no_water": "Vapeur en pause — manque d'eau"
 }
