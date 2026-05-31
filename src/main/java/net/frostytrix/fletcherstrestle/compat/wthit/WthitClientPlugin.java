@@ -2,10 +2,10 @@ package net.frostytrix.fletcherstrestle.compat.wthit;
 
 import mcp.mobius.waila.api.IBlockAccessor;
 import mcp.mobius.waila.api.IBlockComponentProvider;
+import mcp.mobius.waila.api.IClientRegistrar;
 import mcp.mobius.waila.api.IPluginConfig;
-import mcp.mobius.waila.api.IRegistrar;
 import mcp.mobius.waila.api.ITooltip;
-import mcp.mobius.waila.api.IWailaPlugin;
+import mcp.mobius.waila.api.IWailaClientPlugin;
 import net.frostytrix.fletcherstrestle.block.custom.SteamBoxBlock;
 import net.frostytrix.fletcherstrestle.block.entity.SteamBoxBlockEntity;
 import net.minecraft.nbt.CompoundTag;
@@ -14,10 +14,10 @@ import net.minecraft.nbt.CompoundTag;
  * WTHIT client-side plugin: renders the Steam Box's status line from the data
  * sent by {@link WthitCommonPlugin}. Referenced from {@code waila_plugins.json}.
  */
-public class WthitClientPlugin implements IWailaPlugin, IBlockComponentProvider {
+public class WthitClientPlugin implements IWailaClientPlugin, IBlockComponentProvider {
 
     @Override
-    public void register(IRegistrar registrar) {
+    public void register(IClientRegistrar registrar) {
         registrar.body(this, SteamBoxBlock.class);
     }
 
