@@ -1,6 +1,8 @@
 package net.frostytrix.fletcherstrestle.client.guide;
 
 import net.frostytrix.fletcherstrestle.block.ModBlocks;
+import net.frostytrix.fletcherstrestle.component.ArrowAssembly;
+import net.frostytrix.fletcherstrestle.component.ModDataComponents;
 import net.frostytrix.fletcherstrestle.item.ModItems;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -20,6 +22,13 @@ public final class GuideContent {
 
     private static ItemStack of(net.minecraft.world.level.ItemLike item) {
         return new ItemStack(item);
+    }
+
+    /** A modular arrow with a glass-vial head, so it renders as a potion arrow. */
+    private static ItemStack glassVialArrow() {
+        ItemStack arrow = new ItemStack(ModItems.MODULAR_ARROW.get());
+        arrow.set(ModDataComponents.ARROW_ASSEMBLY.get(), new ArrowAssembly("glass_vial", "oak", "feather"));
+        return arrow;
     }
 
     public static List<GuideChapter> chapters() {
@@ -61,9 +70,14 @@ public final class GuideContent {
                                         GuideElement.heading(P + "arrows.example"),
                                         GuideElement.assembly(of(ModItems.MODULAR_ARROW.get()),
                                                 of(Items.FLINT), of(Items.STICK), of(Items.FEATHER))))),
-                        new GuideSubchapter(P + "sub.potion_arrows", of(ModBlocks.DIPPING_VAT.get()), List.of(
+                        new GuideSubchapter(P + "sub.potion_arrows", glassVialArrow(), List.of(
                                 GuidePage.of(
                                         GuideElement.text(P + "arrows.dip.desc"),
+                                        GuideElement.heading(P + "arrows.vial_craft"),
+                                        GuideElement.assembly(glassVialArrow(),
+                                                of(Items.GLASS_BOTTLE), of(Items.STICK), of(Items.FEATHER))),
+                                GuidePage.of(
+                                        GuideElement.heading(P + "arrows.vat_craft"),
                                         GuideElement.recipe(of(ModBlocks.DIPPING_VAT.get()))))))),
 
                 // --- Crossbow Bench ---

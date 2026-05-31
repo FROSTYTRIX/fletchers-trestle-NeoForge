@@ -153,6 +153,8 @@
   "gui.fletcherstrestle.guide.woodworking.fletch.desc": "À la table du fléchier, insérez deux branches, une poignée et une corde, puis jouez au mini-jeu de réglage pour assembler un arc. Un meilleur score donne un arc mieux réglé.",
   "gui.fletcherstrestle.guide.woodworking.bow_example": "Exemple d'arc :",
   "gui.fletcherstrestle.guide.arrows.example": "Exemple de flèche :",
+  "gui.fletcherstrestle.guide.arrows.vial_craft": "Flèche à fiole :",
+  "gui.fletcherstrestle.guide.arrows.vat_craft": "Cuve de trempage :",
   "gui.fletcherstrestle.guide.crossbow.example": "Exemple d'arbalète :",
   "gui.fletcherstrestle.guide.arrows.dip.desc": "Remplissez la cuve de trempage d'une potion, puis trempez une flèche à fiole pour l'imprégner. À l'impact, elle se brise et asperge la potion.",
   "gui.fletcherstrestle.guide.eagles.taming": "Apprivoisez un aigle sauvage en lui donnant du lapin, de la morue ou du saumon cru (environ 1 chance sur 3 par tentative). Un aigle apprivoisé s'attache à vous et vous suit.",
