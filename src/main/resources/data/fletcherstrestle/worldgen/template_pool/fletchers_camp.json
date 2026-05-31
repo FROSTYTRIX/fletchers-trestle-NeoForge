@@ -1,0 +1,15 @@
+{
+  "name": "fletcherstrestle:fletchers_camp",
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "fletcherstrestle:fletchers_camp",
+        "processors": "minecraft:empty",
+        "projection": "rigid"
+      }
+    }
+  ]
+}

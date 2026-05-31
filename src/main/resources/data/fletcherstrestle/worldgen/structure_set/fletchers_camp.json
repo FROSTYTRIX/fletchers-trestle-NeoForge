@@ -1,0 +1,14 @@
+{
+  "structures": [
+    {
+      "structure": "fletcherstrestle:fletchers_camp",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "spacing": 28,
+    "separation": 9,
+    "salt": 1276358422
+  }
+}
