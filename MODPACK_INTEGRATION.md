@@ -707,13 +707,16 @@ tab-completes from the loaded registries, so you only ever pick valid ids
 Examples:
 
 ```
-/ft give bow mypack:steel iron spider 0.9
 /ft give arrow broadhead oak feather 16
 /ft give crossbow oak iron spider scope
+/ft give bow "mypack:steel" iron spider 0.9
 ```
 
-An unknown id still produces an item — it just renders as "unfinished" —
-so tab-completion is the reliable way to reference your materials.
+Use the **bare path** for this mod's own materials (`oak`, `spider`,
+`scope`) and a **quoted** `"namespace:path"` for materials from another
+namespace — tab-completion fills in the right form automatically. (A
+command argument can't contain an unquoted colon, hence the quotes.) An
+unknown id still produces an item — it just renders as "unfinished".
 
 > There is also `/ft archery xp|reset|max|info` (alias `/archery …`) for
 > the marksmanship skill system — not material-related, but handy.

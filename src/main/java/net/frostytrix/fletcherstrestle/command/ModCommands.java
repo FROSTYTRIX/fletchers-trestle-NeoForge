@@ -131,7 +131,10 @@ public final class ModCommands {
                 StringArgumentType.getString(c, "riser"),
                 StringArgumentType.getString(c, "string"), 1.0f));
         if (attachment != null) {
-            ResourceLocation id = ResourceLocation.tryParse(attachment);
+            // Bare path -> this mod's namespace; explicit "ns:path" parsed as-is.
+            ResourceLocation id = attachment.indexOf(':') >= 0
+                    ? ResourceLocation.tryParse(attachment)
+                    : ResourceLocation.tryBuild(FletcherTrestle.MOD_ID, attachment);
             if (id == null) {
                 c.getSource().sendFailure(Component.literal("Invalid attachment id: " + attachment));
                 return 0;
@@ -255,9 +258,13 @@ public final class ModCommands {
     }
 
     private static <T> SuggestionProvider<CommandSourceStack> suggest(ResourceKey<Registry<T>> key) {
+        // Suggest the bare path for this mod's own entries (a String arg can't
+        // contain an unquoted colon); other namespaces are quoted so they
+        // still parse. The resolver defaults a bare id to this mod's namespace.
         return (ctx, builder) -> SharedSuggestionProvider.suggest(
                 ctx.getSource().registryAccess().registryOrThrow(key).keySet().stream()
-                        .map(ResourceLocation::toString),
+                        .map(rl -> rl.getNamespace().equals(FletcherTrestle.MOD_ID)
+                                ? rl.getPath() : "\"" + rl + "\""),
                 builder);
     }
 }
