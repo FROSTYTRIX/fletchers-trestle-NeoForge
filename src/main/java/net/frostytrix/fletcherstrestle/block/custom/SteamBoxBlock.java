@@ -22,8 +22,6 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -40,21 +38,13 @@ public class SteamBoxBlock extends BaseEntityBlock {
         return SHAPE;
     }
 
-    public static final IntegerProperty WATER_LEVEL = IntegerProperty.create("water_level", 0, 4);
-
     public SteamBoxBlock(Properties properties) {
         super(properties);
-        this.registerDefaultState(this.stateDefinition.any().setValue(WATER_LEVEL, 0));
     }
 
     @Override
     protected MapCodec<? extends BaseEntityBlock> codec() {
         return null;
-    }
-
-    @Override
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(WATER_LEVEL);
     }
 
     @Override

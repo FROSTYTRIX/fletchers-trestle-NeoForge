@@ -5,6 +5,7 @@ import net.frostytrix.fletcherstrestle.block.ModBlocks;
 import net.frostytrix.fletcherstrestle.block.entity.ModBlockEntities;
 import net.frostytrix.fletcherstrestle.block.entity.renderer.DippingVatRenderer;
 import net.frostytrix.fletcherstrestle.block.entity.renderer.ShavingHorseRenderer;
+import net.frostytrix.fletcherstrestle.block.entity.renderer.SteamBoxRenderer;
 import net.frostytrix.fletcherstrestle.client.ClientKeybinds;
 import net.frostytrix.fletcherstrestle.client.ClientState;
 import net.frostytrix.fletcherstrestle.client.QuiverHudOverlay;
@@ -43,6 +44,7 @@ public class ModClientEvents {
         event.registerBlockEntityRenderer(ModBlockEntities.SHAVING_HORSE_BE.get(), ShavingHorseRenderer::new);
         event.registerEntityRenderer(ModEntities.MODULAR_ARROW.get(), ModularArrowRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntities.DIPPING_VAT_BE.get(), DippingVatRenderer::new);
+        event.registerBlockEntityRenderer(ModBlockEntities.STEAM_BOX_BE.get(), SteamBoxRenderer::new);
         event.registerEntityRenderer(ModEntities.EAGLE.get(), EagleRenderer::new);
     }
 

@@ -1,6 +1,5 @@
 package net.frostytrix.fletcherstrestle.block.entity;
 
-import net.frostytrix.fletcherstrestle.block.custom.SteamBoxBlock;
 import net.frostytrix.fletcherstrestle.recipe.ModRecipes;
 import net.frostytrix.fletcherstrestle.recipe.SteamingRecipe;
 import net.minecraft.core.BlockPos;
@@ -39,8 +38,10 @@ public class SteamBoxBlockEntity extends BlockEntity {
         @Override
         protected void onContentsChanged() {
             setChanged();
+            // Push the new fluid amount to clients so the renderer's water
+            // surface updates immediately (incl. external pipe/pump fills).
             if (level != null && !level.isClientSide()) {
-                updateWaterLevelState();
+                level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 3);
             }
         }
     };
@@ -66,8 +67,6 @@ public class SteamBoxBlockEntity extends BlockEntity {
         } else if (blockBelow.is(BlockTags.FIRE) || blockBelow.is(Blocks.MAGMA_BLOCK) || blockBelow.is(Blocks.LAVA) || blockBelow.is(Blocks.LAVA_CAULDRON)) {
             hasHeat = true;
         }
-
-        updateWaterLevelState();
 
         if (!hasHeat) return; // Stop processing if fire goes out
 
@@ -114,24 +113,17 @@ public class SteamBoxBlockEntity extends BlockEntity {
         }
     }
 
-    /** Mirrors the tank's contents onto the visual {@code water_level} blockstate (0-4). */
-    private void updateWaterLevelState() {
-        if (level == null || level.isClientSide()) return;
+    // --- NETWORK SYNC FOR THE RENDERER ---
+    @Override
+    public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
+        CompoundTag tag = super.getUpdateTag(registries);
+        saveAdditional(tag, registries);
+        return tag;
+    }
 
-        BlockState state = getBlockState();
-        if (!state.hasProperty(SteamBoxBlock.WATER_LEVEL)) return;
-
-        int amount = fluidTank.getFluidAmount();
-        int newLevel = 0;
-
-        if (amount > 3000) newLevel = 4;
-        else if (amount > 2000) newLevel = 3;
-        else if (amount > 1000) newLevel = 2;
-        else if (amount > 0) newLevel = 1;
-
-        if (state.getValue(SteamBoxBlock.WATER_LEVEL) != newLevel) {
-            level.setBlock(worldPosition, state.setValue(SteamBoxBlock.WATER_LEVEL, newLevel), 3);
-        }
+    @Override
+    public net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket getUpdatePacket() {
+        return net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket.create(this);
     }
 
     @Override
