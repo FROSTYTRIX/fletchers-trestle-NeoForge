@@ -118,16 +118,7 @@ public class SteamBoxBlockEntity extends BlockEntity {
     public void tick(Level level, BlockPos pos, BlockState state) {
         if (level == null || level.isClientSide()) return;
 
-        BlockState blockBelow = level.getBlockState(pos.below());
-
-        boolean hasHeat = false;
-        if (blockBelow.is(net.minecraft.tags.BlockTags.CAMPFIRES) && blockBelow.hasProperty(net.minecraft.world.level.block.CampfireBlock.LIT)) {
-            hasHeat = blockBelow.getValue(net.minecraft.world.level.block.CampfireBlock.LIT);
-        } else if (blockBelow.is(BlockTags.FIRE) || blockBelow.is(Blocks.MAGMA_BLOCK) || blockBelow.is(Blocks.LAVA) || blockBelow.is(Blocks.LAVA_CAULDRON)) {
-            hasHeat = true;
-        }
-
-        if (!hasHeat) return; // Stop processing if fire goes out
+        if (!hasHeatBelow(level, pos)) return; // Stop processing if fire goes out
 
         for (int i = 0; i < 16; i++) {
             ItemStack currentItem = itemHandler.getStackInSlot(i);
@@ -167,6 +158,43 @@ public class SteamBoxBlockEntity extends BlockEntity {
                 cookingTimes[i] = 0;
             }
         }
+    }
+
+    /** True if there's an active heat source directly under the block. */
+    public static boolean hasHeatBelow(Level level, BlockPos pos) {
+        BlockState below = level.getBlockState(pos.below());
+        if (below.is(BlockTags.CAMPFIRES) && below.hasProperty(net.minecraft.world.level.block.CampfireBlock.LIT)) {
+            return below.getValue(net.minecraft.world.level.block.CampfireBlock.LIT);
+        }
+        return below.is(BlockTags.FIRE) || below.is(Blocks.MAGMA_BLOCK)
+                || below.is(Blocks.LAVA) || below.is(Blocks.LAVA_CAULDRON);
+    }
+
+    /** Highest cooking progress across all slots, 0-100 (for tooltip mods). */
+    public int getDisplayProgress() {
+        if (level == null) return 0;
+        int best = 0;
+        for (int i = 0; i < 16; i++) {
+            ItemStack stack = itemHandler.getStackInSlot(i);
+            if (stack.isEmpty()) continue;
+            var holder = level.getRecipeManager()
+                    .getRecipeFor(ModRecipes.STEAMING_TYPE.get(), new SingleRecipeInput(stack), level);
+            if (holder.isPresent()) {
+                int time = holder.get().value().getProcessingTime();
+                if (time > 0) {
+                    best = Math.max(best, Math.min(100, cookingTimes[i] * 100 / time));
+                }
+            }
+        }
+        return best;
+    }
+
+    /** True if at least one raw limb is currently steaming. */
+    public boolean hasCookingItems() {
+        for (int i = 0; i < 16; i++) {
+            if (hasSteamingRecipe(itemHandler.getStackInSlot(i))) return true;
+        }
+        return false;
     }
 
     // --- NETWORK SYNC FOR THE RENDERER ---

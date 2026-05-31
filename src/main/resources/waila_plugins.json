@@ -1,0 +1,10 @@
+{
+  "fletcherstrestle:steam_box": {
+    "entrypoints": {
+      "common": "net.frostytrix.fletcherstrestle.compat.wthit.WthitCommonPlugin",
+      "client": "net.frostytrix.fletcherstrestle.compat.wthit.WthitClientPlugin"
+    },
+    "side": "*",
+    "required": ["fletcherstrestle"]
+  }
+}

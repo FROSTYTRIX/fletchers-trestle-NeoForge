@@ -219,5 +219,8 @@
   "material.fletcherstrestle.trailing": "Traînant",
   "material.fletcherstrestle.serrated": "Dentelé",
   "material.fletcherstrestle.bound": "Lié",
-  "material.fletcherstrestle.vex": "Vex"
+  "material.fletcherstrestle.vex": "Vex",
+  "fletcherstrestle.tooltip.steam_box.steaming": "Cuisson vapeur : %s%%",
+  "fletcherstrestle.tooltip.steam_box.no_heat": "Vapeur en pause — aucune source de chaleur",
+  "fletcherstrestle.tooltip.steam_box.idle": "Inactif"
 }

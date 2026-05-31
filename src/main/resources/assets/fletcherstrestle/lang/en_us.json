@@ -219,5 +219,8 @@
   "material.fletcherstrestle.trailing": "Trailing",
   "material.fletcherstrestle.serrated": "Serrated",
   "material.fletcherstrestle.bound": "Bound",
-  "material.fletcherstrestle.vex": "Vex"
+  "material.fletcherstrestle.vex": "Vex",
+  "fletcherstrestle.tooltip.steam_box.steaming": "Steaming: %s%%",
+  "fletcherstrestle.tooltip.steam_box.no_heat": "Steaming paused — no heat below",
+  "fletcherstrestle.tooltip.steam_box.idle": "Idle"
 }
