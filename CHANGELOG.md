@@ -46,7 +46,7 @@ a three-branch **skill tree** (open with **K**, or from the guidebook):
   a flax string starts shaking your aim.
 
 XP comes from hits, **headshots** (the top of any mob's hitbox — no
-per-mob setup), and kills; the practice dummy gives none, and XP is kept
+per-mob setup for now...), and kills; the practice dummy gives none, and XP is kept
 on death. Points and ranks are server-validated and sync to your client.
 Admins can use `/archery xp|reset|info` for testing.
 
@@ -55,8 +55,7 @@ Admins can use `/archery xp|reset|info` for testing.
 A new **"Fletcher's Trestle"** advancement tab guides you through the
 mod: woodworking → bow → arrow, the crossbow bench → crossbow →
 attachment, headshots and long shots, archery levels 5/10/20/30, and
-taming an eagle. Backed by custom triggers for the things vanilla can't
-detect.
+taming an eagle.
 
 ## 📖 In-Game Guidebook
 
@@ -83,8 +82,6 @@ linking out:
 - **Fixed crossbow stats that never applied** — the modular crossbow's
   string-velocity and riser-accuracy multipliers were computed but
   discarded; they now actually affect the shot.
-- Per-slot input rules and stack-safety on the bench (a stack of
-  triggers can no longer be consumed at once).
 - The **Dipping Vat** recipe is now an upside-down "pants" of planks
   with a bucket in the middle.
 - **JEI** gains a Crossbow Bench category (assembly + attachments).
