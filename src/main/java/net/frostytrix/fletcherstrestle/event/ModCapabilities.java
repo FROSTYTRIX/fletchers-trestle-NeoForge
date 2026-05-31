@@ -18,5 +18,12 @@ public class ModCapabilities {
                 ModBlockEntities.DIPPING_VAT_BE.get(), // Ton BlockEntityType enregistré
                 (blockEntity, direction) -> blockEntity.getFluidTank() // Ce qu'on fournit au tuyau
         );
+
+        // Steam Box: water-only tank exposed to pipes/pumps from other mods.
+        event.registerBlockEntity(
+                Capabilities.FluidHandler.BLOCK,
+                ModBlockEntities.STEAM_BOX_BE.get(),
+                (blockEntity, direction) -> blockEntity.getFluidTank()
+        );
     }
 }

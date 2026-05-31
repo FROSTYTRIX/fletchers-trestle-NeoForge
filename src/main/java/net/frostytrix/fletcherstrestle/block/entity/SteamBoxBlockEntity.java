@@ -32,12 +32,22 @@ public class SteamBoxBlockEntity extends BlockEntity {
         }
     };
 
-    public final FluidTank fluidTank = new FluidTank(4000) {
+    // Water-only tank so it plays nice with other mods' pipes/pumps:
+    // the validator rejects every fluid except water on insertion.
+    public final FluidTank fluidTank = new FluidTank(4000,
+            fluidStack -> fluidStack.getFluid() == net.minecraft.world.level.material.Fluids.WATER) {
         @Override
         protected void onContentsChanged() {
             setChanged();
+            if (level != null && !level.isClientSide()) {
+                updateWaterLevelState();
+            }
         }
     };
+
+    public FluidTank getFluidTank() {
+        return this.fluidTank;
+    }
 
     public int[] cookingTimes = new int[16];
 
@@ -57,7 +67,7 @@ public class SteamBoxBlockEntity extends BlockEntity {
             hasHeat = true;
         }
 
-        updateWaterLevelState(level, pos, state);
+        updateWaterLevelState();
 
         if (!hasHeat) return; // Stop processing if fire goes out
 
@@ -104,7 +114,13 @@ public class SteamBoxBlockEntity extends BlockEntity {
         }
     }
 
-    private void updateWaterLevelState(Level level, BlockPos pos, BlockState state) {
+    /** Mirrors the tank's contents onto the visual {@code water_level} blockstate (0-4). */
+    private void updateWaterLevelState() {
+        if (level == null || level.isClientSide()) return;
+
+        BlockState state = getBlockState();
+        if (!state.hasProperty(SteamBoxBlock.WATER_LEVEL)) return;
+
         int amount = fluidTank.getFluidAmount();
         int newLevel = 0;
 
@@ -114,7 +130,7 @@ public class SteamBoxBlockEntity extends BlockEntity {
         else if (amount > 0) newLevel = 1;
 
         if (state.getValue(SteamBoxBlock.WATER_LEVEL) != newLevel) {
-            level.setBlock(pos, state.setValue(SteamBoxBlock.WATER_LEVEL, newLevel), 3);
+            level.setBlock(worldPosition, state.setValue(SteamBoxBlock.WATER_LEVEL, newLevel), 3);
         }
     }
 
