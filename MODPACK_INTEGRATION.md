@@ -672,6 +672,54 @@ controls **whether the slot accepts the item at all**.
 
 ---
 
+## Commands & debugging
+
+All commands live under `/fletcherstrestle` (alias `/ft`) and require op
+permission level 2. They're built for exactly this workflow — adding and
+verifying materials without grinding the craft pipeline.
+
+### Inspecting what loaded
+
+| Command           | What it does                                                              |
+|-------------------|--------------------------------------------------------------------------|
+| `/ft materials`   | Lists every loaded def per registry (`bow_limb`, `arrow_head`, …) with counts and ids. |
+| `/ft attachments` | Lists loaded `crossbow_attachment` ids.                                  |
+| `/ft dump`        | Writes every id **and its translation key** to `fletcherstrestle_registry_dump.txt` in the game directory. |
+
+If your new material's id doesn't show up in `/ft materials`, the JSON
+failed to load — check the path, the codec fields, and the server log.
+The `dump` file is the fastest way to scaffold a lang file: it lists the
+exact `material.<pack>.<id>` / `attachment.<pack>.<id>` keys you need.
+
+### Spawning test gear
+
+Skip the shave → steam → fletch pipeline and the minigame; spawn finished
+gear with the materials you want. Every material/attachment argument
+tab-completes from the loaded registries, so you only ever pick valid ids
+(including yours).
+
+```
+/ft give bow <limb> <riser> <string> [tuning 0–1]
+/ft give arrow <head> <shaft> <fletching> [count 1–64]
+/ft give crossbow <limb> <riser> <string> [attachment]
+```
+
+Examples:
+
+```
+/ft give bow mypack:steel iron spider 0.9
+/ft give arrow broadhead oak feather 16
+/ft give crossbow oak iron spider scope
+```
+
+An unknown id still produces an item — it just renders as "unfinished" —
+so tab-completion is the reliable way to reference your materials.
+
+> There is also `/ft archery xp|reset|max|info` (alias `/archery …`) for
+> the marksmanship skill system — not material-related, but handy.
+
+---
+
 ## Sanity checklist when adding a material
 
 1. JSON at `data/<pack>/fletcherstrestle/<part>/<id>.json` ✓
