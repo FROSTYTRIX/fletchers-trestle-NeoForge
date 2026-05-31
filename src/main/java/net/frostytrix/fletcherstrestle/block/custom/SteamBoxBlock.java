@@ -52,6 +52,23 @@ public class SteamBoxBlock extends BaseEntityBlock {
         return RenderShape.MODEL;
     }
 
+    // A comparator reads the water tank's fill level (0 = empty, 15 = full).
+    @Override
+    protected boolean hasAnalogOutputSignal(BlockState state) {
+        return true;
+    }
+
+    @Override
+    protected int getAnalogOutputSignal(BlockState state, Level level, BlockPos pos) {
+        if (level.getBlockEntity(pos) instanceof SteamBoxBlockEntity steamBox) {
+            int amount = steamBox.fluidTank.getFluidAmount();
+            int capacity = steamBox.fluidTank.getCapacity();
+            if (amount <= 0 || capacity <= 0) return 0;
+            return Math.max(1, amount * 15 / capacity);
+        }
+        return 0;
+    }
+
     @Nullable
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {

@@ -7,7 +7,7 @@
   ],
   "textures": {
     "0": "fletcherstrestle:block/dipping_vat",
-    "particle": "minecraft:block/barrel"
+    "particle": "minecraft:block/spruce_planks"
   },
   "elements": [
     {

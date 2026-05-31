@@ -42,6 +42,8 @@ public class SteamBoxBlockEntity extends BlockEntity {
             // surface updates immediately (incl. external pipe/pump fills).
             if (level != null && !level.isClientSide()) {
                 level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 3);
+                // Keep any attached comparator in sync with the tank level.
+                level.updateNeighbourForOutputSignal(worldPosition, getBlockState().getBlock());
             }
         }
     };
