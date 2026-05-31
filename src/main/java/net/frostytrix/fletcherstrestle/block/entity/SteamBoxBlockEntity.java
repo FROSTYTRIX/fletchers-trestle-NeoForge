@@ -6,7 +6,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.SingleRecipeInput;
 import net.minecraft.world.level.Level;
@@ -15,6 +14,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
+import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.ItemStackHandler;
 
 public class SteamBoxBlockEntity extends BlockEntity {
@@ -50,6 +50,63 @@ public class SteamBoxBlockEntity extends BlockEntity {
 
     public FluidTank getFluidTank() {
         return this.fluidTank;
+    }
+
+    // View of the inventory exposed to hoppers/pipes: it only accepts raw
+    // (steamable) limbs and only releases finished ones, so automation can't
+    // pull half-cooked items or jam finished slots with new inputs.
+    private IItemHandler automationHandler;
+
+    public IItemHandler getAutomationHandler() {
+        if (automationHandler == null) {
+            automationHandler = new AutomationItemHandler();
+        }
+        return automationHandler;
+    }
+
+    /** True if the stack has a steaming recipe (i.e. it's a raw input). */
+    private boolean hasSteamingRecipe(ItemStack stack) {
+        if (stack.isEmpty() || level == null) return false;
+        return level.getRecipeManager()
+                .getRecipeFor(ModRecipes.STEAMING_TYPE.get(), new SingleRecipeInput(stack), level)
+                .isPresent();
+    }
+
+    private class AutomationItemHandler implements IItemHandler {
+        @Override
+        public int getSlots() {
+            return itemHandler.getSlots();
+        }
+
+        @Override
+        public ItemStack getStackInSlot(int slot) {
+            return itemHandler.getStackInSlot(slot);
+        }
+
+        @Override
+        public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
+            // Only raw, steamable inputs may be inserted by automation.
+            if (stack.isEmpty() || !hasSteamingRecipe(stack)) return stack;
+            return itemHandler.insertItem(slot, stack, simulate);
+        }
+
+        @Override
+        public ItemStack extractItem(int slot, int amount, boolean simulate) {
+            // Only finished limbs (no steaming recipe left) may be pulled out.
+            ItemStack inSlot = itemHandler.getStackInSlot(slot);
+            if (inSlot.isEmpty() || hasSteamingRecipe(inSlot)) return ItemStack.EMPTY;
+            return itemHandler.extractItem(slot, amount, simulate);
+        }
+
+        @Override
+        public int getSlotLimit(int slot) {
+            return itemHandler.getSlotLimit(slot);
+        }
+
+        @Override
+        public boolean isItemValid(int slot, ItemStack stack) {
+            return hasSteamingRecipe(stack);
+        }
     }
 
     public int[] cookingTimes = new int[16];
@@ -91,13 +148,10 @@ public class SteamBoxBlockEntity extends BlockEntity {
                             // Consume water
                             fluidTank.drain(requiredWater, IFluidHandler.FluidAction.EXECUTE);
 
-                            // Get output from JSON and clear input slot
+                            // Replace the raw limb with the finished one in-place so it
+                            // can be pulled out by hand or by a hopper underneath.
                             ItemStack result = recipe.assemble(input, level.registryAccess());
-                            itemHandler.extractItem(i, 1, false);
-
-                            // Drop item on top of the block
-                            ItemEntity droppedItem = new ItemEntity(level, pos.getX() + 0.5, pos.getY() + 1.0, pos.getZ() + 0.5, result);
-                            level.addFreshEntity(droppedItem);
+                            itemHandler.setStackInSlot(i, result);
 
                             cookingTimes[i] = 0;
                         } else {
