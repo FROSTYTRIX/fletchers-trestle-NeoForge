@@ -6,11 +6,13 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.SingleRecipeInput;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.HopperBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
@@ -139,10 +141,22 @@ public class SteamBoxBlockEntity extends BlockEntity {
                             // Consume water
                             fluidTank.drain(requiredWater, IFluidHandler.FluidAction.EXECUTE);
 
-                            // Replace the raw limb with the finished one in-place so it
-                            // can be pulled out by hand or by a hopper underneath.
                             ItemStack result = recipe.assemble(input, level.registryAccess());
-                            itemHandler.setStackInSlot(i, result);
+
+                            if (level.getBlockEntity(pos.below()) instanceof HopperBlockEntity) {
+                                // A hopper is waiting below: keep the finished limb in its
+                                // slot so the hopper can pull it through the item capability.
+                                itemHandler.setStackInSlot(i, result);
+                            } else {
+                                // No automation underneath — clear the slot and pop the
+                                // finished limb out just above the box, like before.
+                                itemHandler.extractItem(i, 1, false);
+                                ItemEntity drop = new ItemEntity(level,
+                                        pos.getX() + 0.5, pos.getY() + 1.0, pos.getZ() + 0.5, result);
+                                drop.setDeltaMovement(0.0, 0.05, 0.0);
+                                drop.setDefaultPickUpDelay();
+                                level.addFreshEntity(drop);
+                            }
 
                             cookingTimes[i] = 0;
                         } else {
