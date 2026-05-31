@@ -73,12 +73,12 @@ public final class GuideContent {
                         new GuideSubchapter(P + "sub.potion_arrows", glassVialArrow(), List.of(
                                 GuidePage.of(
                                         GuideElement.text(P + "arrows.dip.desc"),
+                                        GuideElement.heading(P + "arrows.vat_craft"),
+                                        GuideElement.recipe(of(ModBlocks.DIPPING_VAT.get()))),
+                                GuidePage.of(
                                         GuideElement.heading(P + "arrows.vial_craft"),
                                         GuideElement.assembly(glassVialArrow(),
-                                                of(Items.GLASS_BOTTLE), of(Items.STICK), of(Items.FEATHER))),
-                                GuidePage.of(
-                                        GuideElement.heading(P + "arrows.vat_craft"),
-                                        GuideElement.recipe(of(ModBlocks.DIPPING_VAT.get()))))))),
+                                                of(Items.GLASS_BOTTLE), of(Items.STICK), of(Items.FEATHER))))))),
 
                 // --- Crossbow Bench ---
                 new GuideChapter(P + "crossbow.title", of(ModBlocks.CROSSBOW_BENCH.get()), List.of(

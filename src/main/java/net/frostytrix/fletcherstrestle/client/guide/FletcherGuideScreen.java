@@ -188,6 +188,19 @@ public class FletcherGuideScreen extends Screen {
         for (net.minecraft.client.gui.components.Renderable r : this.renderables) {
             r.render(g, mouseX, mouseY, partialTick);
         }
+
+        // Draw the chapter / sub-chapter icons on top of their list buttons.
+        int listX = this.left + WIDTH / 2 - 88;
+        if (this.view == View.CHAPTERS) {
+            for (int i = 0; i < chapters.size(); i++) {
+                g.renderItem(chapters.get(i).icon(), listX, this.top + 31 + i * 21);
+            }
+        } else if (this.view == View.SUBS) {
+            List<GuideSubchapter> subs = chapters.get(chapterIdx).subchapters();
+            for (int i = 0; i < subs.size(); i++) {
+                g.renderItem(subs.get(i).icon(), listX, this.top + 31 + i * 21);
+            }
+        }
     }
 
     private void renderPage(GuiGraphics g, GuidePage page) {
