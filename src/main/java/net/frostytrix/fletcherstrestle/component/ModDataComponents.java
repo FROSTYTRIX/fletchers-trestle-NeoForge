@@ -70,6 +70,16 @@ public class ModDataComponents {
                             .networkSynchronized(ResourceLocation.STREAM_CODEC)
                             .build());
 
+    // The actual item that was installed as the attachment (e.g. the bayonet
+    // sword), kept so it can be handed back intact on removal — preserving its
+    // own durability/enchantments instead of returning a fresh copy.
+    public static final Supplier<DataComponentType<net.minecraft.world.item.ItemStack>> CROSSBOW_ATTACHMENT_ITEM =
+            DATA_COMPONENT_TYPES.register("crossbow_attachment_item", () ->
+                    DataComponentType.<net.minecraft.world.item.ItemStack>builder()
+                            .persistent(net.minecraft.world.item.ItemStack.CODEC)
+                            .networkSynchronized(net.minecraft.world.item.ItemStack.STREAM_CODEC)
+                            .build());
+
     public static void register(IEventBus bus) {
         DATA_COMPONENT_TYPES.register(bus);
     }

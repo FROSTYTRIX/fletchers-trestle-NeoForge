@@ -95,7 +95,9 @@ public final class GuideContent {
                                 GuidePage.of(
                                         GuideElement.item(of(Items.SPYGLASS), P + "crossbow.scope"),
                                         GuideElement.item(of(ModItems.MAGAZINE.get()), P + "crossbow.magazine"),
-                                        GuideElement.recipe(of(ModItems.MAGAZINE.get()))))))),
+                                        GuideElement.recipe(of(ModItems.MAGAZINE.get()))),
+                                GuidePage.of(
+                                        GuideElement.item(of(Items.IRON_SWORD), P + "crossbow.bayonet")))))),
 
                 // --- Archery Skills (interactive) ---
                 new GuideChapter(P + "skills.title", of(Items.EXPERIENCE_BOTTLE), List.of(

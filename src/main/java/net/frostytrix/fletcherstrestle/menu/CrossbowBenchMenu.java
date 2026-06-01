@@ -3,10 +3,16 @@ package net.frostytrix.fletcherstrestle.menu;
 import net.frostytrix.fletcherstrestle.attachment.CrossbowAttachmentDef;
 import net.frostytrix.fletcherstrestle.attachment.ModCrossbowAttachments;
 import net.frostytrix.fletcherstrestle.block.ModBlocks;
+import net.frostytrix.fletcherstrestle.FletcherTrestle;
 import net.frostytrix.fletcherstrestle.component.ModDataComponents;
 import net.frostytrix.fletcherstrestle.item.ModItems;
 import net.minecraft.core.Registry;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.EquipmentSlotGroup;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.Container;
 import net.minecraft.world.ContainerListener;
 import net.minecraft.world.SimpleContainer;
@@ -153,8 +159,26 @@ public class CrossbowBenchMenu extends AbstractContainerMenu {
             this.container.setItem(SLOT_TRIGGER, new ItemStack(ModItems.MECHANICAL_TRIGGER.get()));
             ResourceLocation att = input.get(ModDataComponents.CROSSBOW_ATTACHMENT.get());
             if (att != null && attachment.isEmpty()) {
-                ItemStack attItem = attachmentItemFor(att);
+                // Prefer the exact item that was installed (keeps its durability /
+                // enchantments); fall back to a representative item for legacy data.
+                ItemStack stored = input.get(ModDataComponents.CROSSBOW_ATTACHMENT_ITEM.get());
+                ItemStack attItem = (stored != null && !stored.isEmpty()) ? stored.copy() : attachmentItemFor(att);
                 if (!attItem.isEmpty()) {
+                    // A damageable attachment (a bayonet sword) shares the crossbow's
+                    // wear: it loses the crossbow's wear-% of the durability it had
+                    // LEFT when it was installed. That only ever adds damage (so it
+                    // can never be repaired), and the % is measured against its
+                    // remaining durability at install, not its factory max.
+                    if (attItem.isDamageableItem()) {
+                        int crossbowMax = input.getMaxDamage();
+                        if (crossbowMax > 0) {
+                            float wornPct = input.getDamageValue() / (float) crossbowMax;
+                            int remainingAtInstall = attItem.getMaxDamage() - attItem.getDamageValue();
+                            int added = Math.round(remainingAtInstall * wornPct);
+                            int finalDamage = attItem.getDamageValue() + added;
+                            attItem.setDamageValue(Math.min(attItem.getMaxDamage() - 1, finalDamage));
+                        }
+                    }
                     this.container.setItem(SLOT_ATTACHMENT, attItem);
                 }
             }
@@ -176,12 +200,16 @@ public class CrossbowBenchMenu extends AbstractContainerMenu {
                 if (id != null) {
                     boolean wasInstalled = current.has(ModDataComponents.CROSSBOW_ATTACHMENT.get());
                     current.set(ModDataComponents.CROSSBOW_ATTACHMENT.get(), id);
+                    current.set(ModDataComponents.CROSSBOW_ATTACHMENT_ITEM.get(), att.copy());
+                    applyMeleeModifiers(current, id);
                     if (!wasInstalled && this.owner instanceof net.minecraft.server.level.ServerPlayer sp) {
                         net.frostytrix.fletcherstrestle.progression.ModCriteria.ATTACHMENT_INSTALLED.get().trigger(sp);
                     }
                 }
             } else {
                 current.remove(ModDataComponents.CROSSBOW_ATTACHMENT.get());
+                current.remove(ModDataComponents.CROSSBOW_ATTACHMENT_ITEM.get());
+                applyMeleeModifiers(current, null);
             }
         }
 
@@ -206,6 +234,40 @@ public class CrossbowBenchMenu extends AbstractContainerMenu {
         this.lastTriggerPresent = false;
         this.lastInputCrossbow = false;
         this.mutating = false;
+    }
+
+    private static final ResourceLocation BAYONET_DAMAGE_ID =
+            ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "bayonet_attack_damage");
+    private static final ResourceLocation BAYONET_SPEED_ID =
+            ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "bayonet_attack_speed");
+
+    /**
+     * Sets (or clears) the crossbow's mainhand attack-damage modifiers based on the
+     * fitted attachment's {@code melee_damage} stat — this is what makes a bayonet
+     * a real melee weapon. The bench is the only place attachments change, so this
+     * can never desync from the {@code CROSSBOW_ATTACHMENT} component.
+     */
+    private void applyMeleeModifiers(ItemStack crossbow, @Nullable ResourceLocation attachmentId) {
+        float melee = 0.0f;
+        if (attachmentId != null) {
+            CrossbowAttachmentDef def = this.attachments.get(attachmentId);
+            if (def != null) {
+                melee = def.stats().meleeDamage();
+            }
+        }
+        if (melee > 0.0f) {
+            ItemAttributeModifiers mods = ItemAttributeModifiers.builder()
+                    .add(Attributes.ATTACK_DAMAGE,
+                            new AttributeModifier(BAYONET_DAMAGE_ID, melee, AttributeModifier.Operation.ADD_VALUE),
+                            EquipmentSlotGroup.MAINHAND)
+                    .add(Attributes.ATTACK_SPEED,
+                            new AttributeModifier(BAYONET_SPEED_ID, -2.4, AttributeModifier.Operation.ADD_VALUE),
+                            EquipmentSlotGroup.MAINHAND)
+                    .build();
+            crossbow.set(DataComponents.ATTRIBUTE_MODIFIERS, mods);
+        } else {
+            crossbow.remove(DataComponents.ATTRIBUTE_MODIFIERS);
+        }
     }
 
     private boolean isAttachmentItem(ItemStack stack) {

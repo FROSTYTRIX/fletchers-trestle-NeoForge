@@ -1,0 +1,9 @@
+{
+  "ingredient": {
+    "item": "minecraft:iron_sword"
+  },
+  "type": "mechanism",
+  "stats": {
+    "melee_damage": 4.0
+  }
+}

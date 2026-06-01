@@ -20,6 +20,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
@@ -188,6 +189,28 @@ public class ModularCrossbowItem extends CrossbowItem {
                 stack.set(DataComponents.CHARGED_PROJECTILES, ChargedProjectiles.of(bolts));
             }
         }
+    }
+
+    // ---------------- Bayonet attachment ----------------
+
+    /** Bonus melee damage from the installed attachment def, or 0 if none. */
+    private static float meleeDamage(ItemStack stack, LivingEntity entity) {
+        ResourceLocation id = stack.get(ModDataComponents.CROSSBOW_ATTACHMENT.get());
+        if (id == null) return 0.0f;
+        var def = entity.level().registryAccess()
+                .registryOrThrow(ModCrossbowAttachments.CROSSBOW_ATTACHMENT).get(id);
+        return def != null ? def.stats().meleeDamage() : 0.0f;
+    }
+
+    @Override
+    public boolean hurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker) {
+        // A fitted bayonet makes the crossbow a real melee weapon (attack damage is
+        // applied via the bench-set attribute modifiers); stabbing wears it down.
+        if (meleeDamage(stack, attacker) > 0.0f) {
+            stack.hurtAndBreak(1, attacker, EquipmentSlot.MAINHAND);
+            return true;
+        }
+        return super.hurtEnemy(stack, target, attacker);
     }
 
     // ---------------- Magazine attachment ----------------

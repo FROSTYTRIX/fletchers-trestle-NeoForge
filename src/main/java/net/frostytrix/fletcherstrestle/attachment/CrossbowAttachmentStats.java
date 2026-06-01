@@ -13,23 +13,26 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
  * @param inaccuracyMultiplier projectile spread multiplier. &lt;1.0 = tighter.
  * @param reloadMultiplier     reload-time multiplier. &gt;1.0 = slower (magazines).
  * @param magazineSize         shots before a reload is required (magazines).
+ * @param meleeDamage          bonus melee attack damage while wielded (bayonets). 0 = none.
  */
 public record CrossbowAttachmentStats(
         float zoom,
         float swayMultiplier,
         float inaccuracyMultiplier,
         float reloadMultiplier,
-        int magazineSize) {
+        int magazineSize,
+        float meleeDamage) {
 
     /** No-op stats — used as the default when a def omits the `stats` block. */
     public static final CrossbowAttachmentStats DEFAULT =
-            new CrossbowAttachmentStats(1.0f, 1.0f, 1.0f, 1.0f, 1);
+            new CrossbowAttachmentStats(1.0f, 1.0f, 1.0f, 1.0f, 1, 0.0f);
 
     public static final Codec<CrossbowAttachmentStats> CODEC = RecordCodecBuilder.create(inst -> inst.group(
             Codec.FLOAT.optionalFieldOf("zoom", 1.0f).forGetter(CrossbowAttachmentStats::zoom),
             Codec.FLOAT.optionalFieldOf("sway_multiplier", 1.0f).forGetter(CrossbowAttachmentStats::swayMultiplier),
             Codec.FLOAT.optionalFieldOf("inaccuracy_multiplier", 1.0f).forGetter(CrossbowAttachmentStats::inaccuracyMultiplier),
             Codec.FLOAT.optionalFieldOf("reload_multiplier", 1.0f).forGetter(CrossbowAttachmentStats::reloadMultiplier),
-            Codec.INT.optionalFieldOf("magazine_size", 1).forGetter(CrossbowAttachmentStats::magazineSize)
+            Codec.INT.optionalFieldOf("magazine_size", 1).forGetter(CrossbowAttachmentStats::magazineSize),
+            Codec.FLOAT.optionalFieldOf("melee_damage", 0.0f).forGetter(CrossbowAttachmentStats::meleeDamage)
     ).apply(inst, CrossbowAttachmentStats::new));
 }

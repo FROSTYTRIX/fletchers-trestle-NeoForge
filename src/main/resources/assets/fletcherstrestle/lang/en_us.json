@@ -224,5 +224,7 @@
   "fletcherstrestle.tooltip.steam_box.no_heat": "Steaming paused — no heat below",
   "fletcherstrestle.tooltip.steam_box.idle": "Idle",
   "fletcherstrestle.tooltip.steam_box.no_water": "Steaming paused — needs water",
-  "config.jade.plugin_fletcherstrestle.steam_box": "Steam Box"
+  "config.jade.plugin_fletcherstrestle.steam_box": "Steam Box",
+  "attachment.fletcherstrestle.bayonet": "Bayonet",
+  "gui.fletcherstrestle.guide.crossbow.bayonet": "Bayonet (Iron Sword): makes the crossbow a melee weapon. It wears with the crossbow — pull it off and the sword is as worn as the crossbow."
 }
