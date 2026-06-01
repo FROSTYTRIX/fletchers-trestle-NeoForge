@@ -204,16 +204,27 @@ public class SteamBoxBlockEntity extends BlockEntity {
 
     /**
      * True if any side <i>except the bottom</i> has a block exposing an item
-     * handler (a chest, barrel, pipe, hopper, …). Used to decide whether to keep
-     * a finished limb buffered (something might pull it) or pop it out. The
-     * bottom is excluded because the heat source lives there — and a lit campfire
-     * exposes an item handler too.
+     * handler that could pull from us (a pipe, a chest/barrel that's full, …).
+     * Used to decide whether to keep a finished limb buffered or pop it out.
+     *
+     * <p>Skipped:
+     * <ul>
+     *   <li>the bottom — the heat source lives there (a lit campfire has an inventory);</li>
+     *   <li>hoppers — a side hopper can't pull from us (hoppers only pull from above);</li>
+     *   <li>other steam boxes — their input handler would falsely look like a pipe.</li>
+     * </ul>
      */
     private static boolean hasItemHandlerNeighbor(Level level, BlockPos pos) {
         for (net.minecraft.core.Direction dir : net.minecraft.core.Direction.values()) {
             if (dir == net.minecraft.core.Direction.DOWN) continue;
+            BlockPos neighbor = pos.relative(dir);
+            BlockEntity be = level.getBlockEntity(neighbor);
+            if (be instanceof net.minecraft.world.level.block.entity.HopperBlockEntity
+                    || be instanceof SteamBoxBlockEntity) {
+                continue;
+            }
             if (level.getCapability(net.neoforged.neoforge.capabilities.Capabilities.ItemHandler.BLOCK,
-                    pos.relative(dir), dir.getOpposite()) != null) {
+                    neighbor, dir.getOpposite()) != null) {
                 return true;
             }
         }
