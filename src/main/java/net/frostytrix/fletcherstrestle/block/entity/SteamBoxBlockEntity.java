@@ -160,11 +160,12 @@ public class SteamBoxBlockEntity extends BlockEntity {
 
         // Move finished limbs out of the (GUI-less) box:
         //   1. push them into an adjacent chest or barrel that has room,
-        //   2. if a chest/barrel IS next to it but full, leave them buffered (wait for room),
-        //   3. if no chest/barrel is attached, pop them out on top.
+        //   2. if an item pipe is attached (or the chest/barrel is full), leave them
+        //      buffered in the slot so the pipe can pull them out / there's room later,
+        //   3. if nothing is attached at all, pop them out on top.
         if (hasFinishedLimbs()) {
             pushFinishedLimbsToNeighbors(level, pos);
-            if (hasFinishedLimbs() && !hasChestOrBarrelNeighbor(level, pos)) {
+            if (hasFinishedLimbs() && !hasItemHandlerNeighbor(level, pos)) {
                 ejectFinishedLimbs(level, pos);
             }
         }
@@ -201,11 +202,20 @@ public class SteamBoxBlockEntity extends BlockEntity {
                 || block instanceof net.minecraft.world.level.block.BarrelBlock;
     }
 
-    /** True if any non-bottom side has a chest or barrel. */
-    private static boolean hasChestOrBarrelNeighbor(Level level, BlockPos pos) {
+    /**
+     * True if any side <i>except the bottom</i> has a block exposing an item
+     * handler (a chest, barrel, pipe, hopper, …). Used to decide whether to keep
+     * a finished limb buffered (something might pull it) or pop it out. The
+     * bottom is excluded because the heat source lives there — and a lit campfire
+     * exposes an item handler too.
+     */
+    private static boolean hasItemHandlerNeighbor(Level level, BlockPos pos) {
         for (net.minecraft.core.Direction dir : net.minecraft.core.Direction.values()) {
             if (dir == net.minecraft.core.Direction.DOWN) continue;
-            if (isChestOrBarrel(level, pos.relative(dir))) return true;
+            if (level.getCapability(net.neoforged.neoforge.capabilities.Capabilities.ItemHandler.BLOCK,
+                    pos.relative(dir), dir.getOpposite()) != null) {
+                return true;
+            }
         }
         return false;
     }
