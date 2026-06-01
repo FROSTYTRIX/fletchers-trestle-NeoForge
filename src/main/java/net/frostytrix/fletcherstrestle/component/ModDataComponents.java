@@ -70,14 +70,15 @@ public class ModDataComponents {
                             .networkSynchronized(ResourceLocation.STREAM_CODEC)
                             .build());
 
-    // The actual item that was installed as the attachment (e.g. the bayonet
-    // sword), kept so it can be handed back intact on removal — preserving its
-    // own durability/enchantments instead of returning a fresh copy.
-    public static final Supplier<DataComponentType<net.minecraft.world.item.ItemStack>> CROSSBOW_ATTACHMENT_ITEM =
-            DATA_COMPONENT_TYPES.register("crossbow_attachment_item", () ->
-                    DataComponentType.<net.minecraft.world.item.ItemStack>builder()
-                            .persistent(net.minecraft.world.item.ItemStack.CODEC)
-                            .networkSynchronized(net.minecraft.world.item.ItemStack.STREAM_CODEC)
+    // Damage value the attachment item (e.g. the bayonet sword) had when it was
+    // installed. Kept so the sword can be handed back at its original wear and
+    // can never be repaired by re-installing. (We store the int rather than the
+    // ItemStack itself — ItemStack isn't a legal data-component value.)
+    public static final Supplier<DataComponentType<Integer>> CROSSBOW_ATTACHMENT_DAMAGE =
+            DATA_COMPONENT_TYPES.register("crossbow_attachment_damage", () ->
+                    DataComponentType.<Integer>builder()
+                            .persistent(Codec.INT)
+                            .networkSynchronized(ByteBufCodecs.VAR_INT)
                             .build());
 
     public static void register(IEventBus bus) {

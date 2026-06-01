@@ -5,6 +5,7 @@ import net.frostytrix.fletcherstrestle.entity.client.HeavyDummyModel;
 import net.frostytrix.fletcherstrestle.entity.client.HeavyDummyRenderer;
 import net.frostytrix.fletcherstrestle.item.ModItems;
 import net.frostytrix.fletcherstrestle.item.custom.ModularBowItem;
+import net.frostytrix.fletcherstrestle.item.custom.ModularCrossbowItem;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.resources.ResourceLocation;
@@ -75,11 +76,15 @@ public class FletcherTrestleClient {
                     });
 
             ItemProperties.register(ModItems.MODULAR_CROSSBOW.get(), ResourceLocation.withDefaultNamespace("pull"), (stack, level, entity, seed) -> {
-                if (entity == null) {
+                if (entity == null || CrossbowItem.isCharged(stack)) {
                     return 0.0F;
-                } else {
-                    return CrossbowItem.isCharged(stack) ? 0.0F : (float) (stack.getUseDuration(entity) - entity.getUseItemRemainingTicks()) / (float) CrossbowItem.getChargeDuration(stack, entity);
                 }
+                // Divide by the crossbow's OWN charge duration (which a magazine
+                // stretches), so the pull animation matches the real draw time.
+                float required = stack.getItem() instanceof ModularCrossbowItem crossbow
+                        ? Math.max(1, crossbow.requiredChargeTicks(stack, entity))
+                        : CrossbowItem.getChargeDuration(stack, entity);
+                return (float) (stack.getUseDuration(entity) - entity.getUseItemRemainingTicks()) / required;
             });
 
             ItemProperties.register(ModItems.MODULAR_CROSSBOW.get(), ResourceLocation.withDefaultNamespace("pulling"), (stack, level, entity, seed) -> {

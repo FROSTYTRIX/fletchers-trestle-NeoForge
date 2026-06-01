@@ -231,11 +231,12 @@ public class ModularBakedModel implements BakedModel {
 
         private String getCrossbowStateSuffix(ItemStack stack, @Nullable LivingEntity entity) {
             if (entity != null && entity.isUsingItem() && entity.getUseItem() == stack) {
-                // Same fix as the bow: use the crossbow's per-limb draw
-                // time so the load animation matches gameplay charge time.
+                // Use the crossbow's actual draw length (use duration minus the
+                // 3-tick hold buffer) so the load animation matches gameplay charge
+                // time — including a magazine's slower (reload_multiplier) draw.
                 float maxPull = 25.0f;
                 if (stack.getItem() instanceof net.frostytrix.fletcherstrestle.item.custom.ModularCrossbowItem xbow) {
-                    maxPull = xbow.getDrawTime(stack);
+                    maxPull = Math.max(1.0f, xbow.getUseDuration(stack, entity) - 3);
                 }
                 return getPullSuffix(stack, entity, maxPull);
             }

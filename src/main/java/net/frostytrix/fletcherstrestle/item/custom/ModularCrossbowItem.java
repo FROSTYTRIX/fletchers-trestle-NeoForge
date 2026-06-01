@@ -92,6 +92,17 @@ public class ModularCrossbowItem extends CrossbowItem {
         return Math.round(getChargeDuration(stack, entity) * reloadMultiplier(stack, entity));
     }
 
+    /**
+     * Ticks the crossbow must be drawn before it loads — a magazine stretches this
+     * by its reload multiplier. Public so the client "pull" animation can divide by
+     * the same value and stay in sync with the real draw time.
+     */
+    public int requiredChargeTicks(ItemStack stack, LivingEntity entity) {
+        return magazineSize(stack, entity) > 1
+                ? magazineChargeTicks(stack, entity)
+                : getChargeDuration(stack, entity);
+    }
+
     public float getDrawTime(ItemStack stack) {
         BowAssembly assembly = stack.get(ModDataComponents.BOW_ASSEMBLY.get());
         if (assembly != null) {
@@ -120,8 +131,7 @@ public class ModularCrossbowItem extends CrossbowItem {
         // crossbow requires the longer (reload_multiplier) draw; until then we
         // must NOT fall through to super, which would load at the normal time.
         boolean magazine = magazineSize(stack, entityLiving) > 1;
-        int required = magazine ? magazineChargeTicks(stack, entityLiving)
-                                : getChargeDuration(stack, entityLiving);
+        int required = requiredChargeTicks(stack, entityLiving);
         int chargeTicks = this.getUseDuration(stack, entityLiving) - timeLeft;
         if (chargeTicks < required) {
             if (!magazine) {

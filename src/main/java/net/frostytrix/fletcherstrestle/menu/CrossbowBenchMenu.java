@@ -159,25 +159,25 @@ public class CrossbowBenchMenu extends AbstractContainerMenu {
             this.container.setItem(SLOT_TRIGGER, new ItemStack(ModItems.MECHANICAL_TRIGGER.get()));
             ResourceLocation att = input.get(ModDataComponents.CROSSBOW_ATTACHMENT.get());
             if (att != null && attachment.isEmpty()) {
-                // Prefer the exact item that was installed (keeps its durability /
-                // enchantments); fall back to a representative item for legacy data.
-                ItemStack stored = input.get(ModDataComponents.CROSSBOW_ATTACHMENT_ITEM.get());
-                ItemStack attItem = (stored != null && !stored.isEmpty()) ? stored.copy() : attachmentItemFor(att);
+                ItemStack attItem = attachmentItemFor(att);
                 if (!attItem.isEmpty()) {
                     // A damageable attachment (a bayonet sword) shares the crossbow's
-                    // wear: it loses the crossbow's wear-% of the durability it had
-                    // LEFT when it was installed. That only ever adds damage (so it
-                    // can never be repaired), and the % is measured against its
-                    // remaining durability at install, not its factory max.
+                    // wear: starting from the damage it had when installed, it loses the
+                    // crossbow's wear-% of the durability it had LEFT then. That only
+                    // ever adds damage (so it can never be repaired), and the % is
+                    // measured against its remaining durability at install.
                     if (attItem.isDamageableItem()) {
+                        Integer storedDamage = input.get(ModDataComponents.CROSSBOW_ATTACHMENT_DAMAGE.get());
+                        int baseDamage = storedDamage != null
+                                ? Math.min(storedDamage, attItem.getMaxDamage() - 1) : 0;
                         int crossbowMax = input.getMaxDamage();
+                        int finalDamage = baseDamage;
                         if (crossbowMax > 0) {
                             float wornPct = input.getDamageValue() / (float) crossbowMax;
-                            int remainingAtInstall = attItem.getMaxDamage() - attItem.getDamageValue();
-                            int added = Math.round(remainingAtInstall * wornPct);
-                            int finalDamage = attItem.getDamageValue() + added;
-                            attItem.setDamageValue(Math.min(attItem.getMaxDamage() - 1, finalDamage));
+                            int remainingAtInstall = attItem.getMaxDamage() - baseDamage;
+                            finalDamage = baseDamage + Math.round(remainingAtInstall * wornPct);
                         }
+                        attItem.setDamageValue(Math.min(attItem.getMaxDamage() - 1, finalDamage));
                     }
                     this.container.setItem(SLOT_ATTACHMENT, attItem);
                 }
@@ -200,7 +200,7 @@ public class CrossbowBenchMenu extends AbstractContainerMenu {
                 if (id != null) {
                     boolean wasInstalled = current.has(ModDataComponents.CROSSBOW_ATTACHMENT.get());
                     current.set(ModDataComponents.CROSSBOW_ATTACHMENT.get(), id);
-                    current.set(ModDataComponents.CROSSBOW_ATTACHMENT_ITEM.get(), att.copy());
+                    current.set(ModDataComponents.CROSSBOW_ATTACHMENT_DAMAGE.get(), att.getDamageValue());
                     applyMeleeModifiers(current, id);
                     if (!wasInstalled && this.owner instanceof net.minecraft.server.level.ServerPlayer sp) {
                         net.frostytrix.fletcherstrestle.progression.ModCriteria.ATTACHMENT_INSTALLED.get().trigger(sp);
@@ -208,7 +208,7 @@ public class CrossbowBenchMenu extends AbstractContainerMenu {
                 }
             } else {
                 current.remove(ModDataComponents.CROSSBOW_ATTACHMENT.get());
-                current.remove(ModDataComponents.CROSSBOW_ATTACHMENT_ITEM.get());
+                current.remove(ModDataComponents.CROSSBOW_ATTACHMENT_DAMAGE.get());
                 applyMeleeModifiers(current, null);
             }
         }
