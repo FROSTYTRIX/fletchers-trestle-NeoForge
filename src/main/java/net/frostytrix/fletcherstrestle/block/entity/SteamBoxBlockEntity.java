@@ -158,11 +158,36 @@ public class SteamBoxBlockEntity extends BlockEntity {
             }
         }
 
-        // Finished limbs wait in the box while an item pipe / automation is
-        // hooked up to pull them. The moment nothing is attached, pop them out
-        // on top (the heat source occupies the space below).
-        if (hasFinishedLimbs() && !hasItemOutputNeighbor(level, pos)) {
-            ejectFinishedLimbs(level, pos);
+        // Move finished limbs out of the (GUI-less) box:
+        //   1. push them into an adjacent chest / container / pipe that has room,
+        //   2. if something IS attached but full, leave them buffered (wait for room),
+        //   3. if nothing is attached at all, pop them out on top.
+        if (hasFinishedLimbs()) {
+            pushFinishedLimbsToNeighbors(level, pos);
+            if (hasFinishedLimbs() && !hasItemOutputNeighbor(level, pos)) {
+                ejectFinishedLimbs(level, pos);
+            }
+        }
+    }
+
+    /** Pushes finished limbs into adjacent inventories (chests, barrels, pipes…) that have room. */
+    private void pushFinishedLimbsToNeighbors(Level level, BlockPos pos) {
+        for (net.minecraft.core.Direction dir : net.minecraft.core.Direction.values()) {
+            if (dir == net.minecraft.core.Direction.DOWN) continue; // heat source is below
+            IItemHandler dest = level.getCapability(
+                    net.neoforged.neoforge.capabilities.Capabilities.ItemHandler.BLOCK,
+                    pos.relative(dir), dir.getOpposite());
+            if (dest == null) continue;
+
+            for (int i = 0; i < 16; i++) {
+                ItemStack stack = itemHandler.getStackInSlot(i);
+                if (stack.isEmpty() || hasSteamingRecipe(stack)) continue; // finished limbs only
+                ItemStack remainder = net.neoforged.neoforge.items.ItemHandlerHelper
+                        .insertItemStacked(dest, stack, false);
+                itemHandler.setStackInSlot(i, remainder);
+            }
+
+            if (!hasFinishedLimbs()) return; // everything placed
         }
     }
 
