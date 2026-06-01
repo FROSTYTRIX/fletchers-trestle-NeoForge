@@ -159,24 +159,27 @@ public class SteamBoxBlockEntity extends BlockEntity {
         }
 
         // Move finished limbs out of the (GUI-less) box:
-        //   1. push them into an adjacent chest / container / pipe that has room,
-        //   2. if something IS attached but full, leave them buffered (wait for room),
-        //   3. if nothing is attached at all, pop them out on top.
+        //   1. push them into an adjacent chest or barrel that has room,
+        //   2. if a chest/barrel IS next to it but full, leave them buffered (wait for room),
+        //   3. if no chest/barrel is attached, pop them out on top.
         if (hasFinishedLimbs()) {
             pushFinishedLimbsToNeighbors(level, pos);
-            if (hasFinishedLimbs() && !hasItemOutputNeighbor(level, pos)) {
+            if (hasFinishedLimbs() && !hasChestOrBarrelNeighbor(level, pos)) {
                 ejectFinishedLimbs(level, pos);
             }
         }
     }
 
-    /** Pushes finished limbs into adjacent inventories (chests, barrels, pipes…) that have room. */
+    /** Pushes finished limbs into an adjacent chest or barrel that has room (never into pipes/machines). */
     private void pushFinishedLimbsToNeighbors(Level level, BlockPos pos) {
         for (net.minecraft.core.Direction dir : net.minecraft.core.Direction.values()) {
             if (dir == net.minecraft.core.Direction.DOWN) continue; // heat source is below
+            BlockPos neighbor = pos.relative(dir);
+            if (!isChestOrBarrel(level, neighbor)) continue;
+
             IItemHandler dest = level.getCapability(
                     net.neoforged.neoforge.capabilities.Capabilities.ItemHandler.BLOCK,
-                    pos.relative(dir), dir.getOpposite());
+                    neighbor, dir.getOpposite());
             if (dest == null) continue;
 
             for (int i = 0; i < 16; i++) {
@@ -191,18 +194,18 @@ public class SteamBoxBlockEntity extends BlockEntity {
         }
     }
 
-    /**
-     * True if any side <i>except the bottom</i> has a block exposing an item
-     * handler (a pipe, hopper, funnel, …). The bottom is excluded because the
-     * heat source lives there — and a lit campfire exposes an item handler too.
-     */
-    private static boolean hasItemOutputNeighbor(Level level, BlockPos pos) {
+    /** True if the block is a (vanilla or modded) chest or barrel. */
+    private static boolean isChestOrBarrel(Level level, BlockPos pos) {
+        net.minecraft.world.level.block.Block block = level.getBlockState(pos).getBlock();
+        return block instanceof net.minecraft.world.level.block.ChestBlock
+                || block instanceof net.minecraft.world.level.block.BarrelBlock;
+    }
+
+    /** True if any non-bottom side has a chest or barrel. */
+    private static boolean hasChestOrBarrelNeighbor(Level level, BlockPos pos) {
         for (net.minecraft.core.Direction dir : net.minecraft.core.Direction.values()) {
             if (dir == net.minecraft.core.Direction.DOWN) continue;
-            if (level.getCapability(net.neoforged.neoforge.capabilities.Capabilities.ItemHandler.BLOCK,
-                    pos.relative(dir), dir.getOpposite()) != null) {
-                return true;
-            }
+            if (isChestOrBarrel(level, pos.relative(dir))) return true;
         }
         return false;
     }
