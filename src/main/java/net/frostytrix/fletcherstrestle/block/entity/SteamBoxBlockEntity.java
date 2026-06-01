@@ -119,49 +119,90 @@ public class SteamBoxBlockEntity extends BlockEntity {
     public void tick(Level level, BlockPos pos, BlockState state) {
         if (level == null || level.isClientSide()) return;
 
-        if (!hasHeatBelow(level, pos)) return; // Stop processing if fire goes out
+        if (hasHeatBelow(level, pos)) {
+            for (int i = 0; i < 16; i++) {
+                ItemStack currentItem = itemHandler.getStackInSlot(i);
 
-        for (int i = 0; i < 16; i++) {
-            ItemStack currentItem = itemHandler.getStackInSlot(i);
+                if (!currentItem.isEmpty()) {
+                    SingleRecipeInput input = new SingleRecipeInput(currentItem);
+                    var recipeHolder = level.getRecipeManager().getRecipeFor(ModRecipes.STEAMING_TYPE.get(), input, level);
 
-            if (!currentItem.isEmpty()) {
-                SingleRecipeInput input = new SingleRecipeInput(currentItem);
-                var recipeHolder = level.getRecipeManager().getRecipeFor(ModRecipes.STEAMING_TYPE.get(), input, level);
+                    if (recipeHolder.isPresent()) {
+                        SteamingRecipe recipe = recipeHolder.get().value();
+                        int requiredWater = recipe.getWaterAmount();
+                        int requiredTime = recipe.getProcessingTime();
 
-                if (recipeHolder.isPresent()) {
-                    SteamingRecipe recipe = recipeHolder.get().value();
-                    int requiredWater = recipe.getWaterAmount();
-                    int requiredTime = recipe.getProcessingTime();
+                        // Progress only advances while there's enough water in the tank.
+                        if (fluidTank.getFluidAmount() >= requiredWater) {
+                            cookingTimes[i]++;
 
-                    // Progress only advances while there's enough water in the tank.
-                    if (fluidTank.getFluidAmount() >= requiredWater) {
-                        cookingTimes[i]++;
+                            if (cookingTimes[i] >= requiredTime) {
+                                // Consume water
+                                fluidTank.drain(requiredWater, IFluidHandler.FluidAction.EXECUTE);
 
-                        if (cookingTimes[i] >= requiredTime) {
-                            // Consume water
-                            fluidTank.drain(requiredWater, IFluidHandler.FluidAction.EXECUTE);
+                                // Buffer the finished limb in its slot. If an item pipe is
+                                // attached it gets pulled out; otherwise it's ejected below.
+                                ItemStack result = recipe.assemble(input, level.registryAccess());
+                                itemHandler.setStackInSlot(i, result);
 
-                            ItemStack result = recipe.assemble(input, level.registryAccess());
-
-                            // Clear the slot and pop the finished limb out just above the
-                            // box (the heat source sits underneath, so nothing collects below).
-                            itemHandler.extractItem(i, 1, false);
-                            ItemEntity drop = new ItemEntity(level,
-                                    pos.getX() + 0.5, pos.getY() + 1.0, pos.getZ() + 0.5, result);
-                            drop.setDeltaMovement(0.0, 0.05, 0.0);
-                            drop.setDefaultPickUpDelay();
-                            level.addFreshEntity(drop);
-
-                            cookingTimes[i] = 0;
+                                cookingTimes[i] = 0;
+                            }
                         }
+                    } else {
+                        // Item in slot has no steaming recipe (e.g. a finished limb)
+                        cookingTimes[i] = 0;
                     }
                 } else {
-                    // Item in slot has no steaming recipe
                     cookingTimes[i] = 0;
                 }
-            } else {
-                cookingTimes[i] = 0;
             }
+        }
+
+        // Finished limbs wait in the box while an item pipe / automation is
+        // hooked up to pull them. The moment nothing is attached, pop them out
+        // on top (the heat source occupies the space below).
+        if (hasFinishedLimbs() && !hasItemOutputNeighbor(level, pos)) {
+            ejectFinishedLimbs(level, pos);
+        }
+    }
+
+    /**
+     * True if any side <i>except the bottom</i> has a block exposing an item
+     * handler (a pipe, hopper, funnel, …). The bottom is excluded because the
+     * heat source lives there — and a lit campfire exposes an item handler too.
+     */
+    private static boolean hasItemOutputNeighbor(Level level, BlockPos pos) {
+        for (net.minecraft.core.Direction dir : net.minecraft.core.Direction.values()) {
+            if (dir == net.minecraft.core.Direction.DOWN) continue;
+            if (level.getCapability(net.neoforged.neoforge.capabilities.Capabilities.ItemHandler.BLOCK,
+                    pos.relative(dir), dir.getOpposite()) != null) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /** True if at least one slot holds a finished (non-steamable) limb. */
+    private boolean hasFinishedLimbs() {
+        for (int i = 0; i < 16; i++) {
+            ItemStack stack = itemHandler.getStackInSlot(i);
+            if (!stack.isEmpty() && !hasSteamingRecipe(stack)) return true;
+        }
+        return false;
+    }
+
+    /** Pops every finished limb out just above the box. */
+    private void ejectFinishedLimbs(Level level, BlockPos pos) {
+        for (int i = 0; i < 16; i++) {
+            ItemStack stack = itemHandler.getStackInSlot(i);
+            if (stack.isEmpty() || hasSteamingRecipe(stack)) continue;
+            ItemStack out = itemHandler.extractItem(i, stack.getCount(), false);
+            if (out.isEmpty()) continue;
+            ItemEntity drop = new ItemEntity(level,
+                    pos.getX() + 0.5, pos.getY() + 1.0, pos.getZ() + 0.5, out);
+            drop.setDeltaMovement(0.0, 0.05, 0.0);
+            drop.setDefaultPickUpDelay();
+            level.addFreshEntity(drop);
         }
     }
 
