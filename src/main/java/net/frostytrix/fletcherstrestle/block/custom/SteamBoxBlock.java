@@ -96,6 +96,25 @@ public class SteamBoxBlock extends BaseEntityBlock {
                 }
             }
 
+            // --- ACTION 1b: REMOVING WATER (Empty Bucket) ---
+            if (stack.is(Items.BUCKET)) {
+                FluidStack drained = steamBox.fluidTank.drain(1000, IFluidHandler.FluidAction.SIMULATE);
+                if (drained.getAmount() >= 1000) {
+                    steamBox.fluidTank.drain(1000, IFluidHandler.FluidAction.EXECUTE);
+                    if (!player.isCreative()) {
+                        stack.shrink(1);
+                        ItemStack waterBucket = new ItemStack(Items.WATER_BUCKET);
+                        if (stack.isEmpty()) {
+                            player.setItemInHand(hand, waterBucket);
+                        } else if (!player.getInventory().add(waterBucket)) {
+                            player.drop(waterBucket, false);
+                        }
+                    }
+                    level.playSound(null, pos, SoundEvents.BUCKET_FILL, SoundSource.BLOCKS, 1.0F, 1.0F);
+                    return ItemInteractionResult.SUCCESS;
+                }
+            }
+
             // --- ACTION 2: INSERTING VALID RECIPE ITEMS ---
             if (!stack.isEmpty()) {
                 SingleRecipeInput input = new SingleRecipeInput(stack);
