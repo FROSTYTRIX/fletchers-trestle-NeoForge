@@ -35,6 +35,7 @@ public class ModBlockLootTableProvider extends BlockLootSubProvider {
         dropSelf(ModBlocks.EAGLE_PERCH.get());
         dropSelf(ModBlocks.EAGLE_NEST.get());
         dropSelf(ModBlocks.CROSSBOW_BENCH.get());
+        dropSelf(ModBlocks.ARROW_SLIT.get());
 
         LootItemCondition.Builder lootitemcondition$builder = LootItemBlockStatePropertyCondition
                 .hasBlockStateProperties(ModBlocks.FLAX_CROP.get())
@@ -57,7 +58,6 @@ public class ModBlockLootTableProvider extends BlockLootSubProvider {
                         )
                 )
         );
-
     }
 
     @Override

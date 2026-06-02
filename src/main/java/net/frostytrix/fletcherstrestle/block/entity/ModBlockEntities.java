@@ -51,6 +51,11 @@ public class ModBlockEntities {
                     BlockEntityType.Builder.of(CrossbowBenchBlockEntity::new, ModBlocks.CROSSBOW_BENCH.get()).build(null)
             );
 
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<ArrowSlitBlockEntity>> ARROW_SLIT_BE =
+            BLOCK_ENTITIES.register("arrow_slit_be", () ->
+                    BlockEntityType.Builder.of(ArrowSlitBlockEntity::new, ModBlocks.ARROW_SLIT.get()).build(null)
+            );
+
     public static void register(IEventBus eventBus) {
         System.out.println("====== FLETCHER'S TRESTLE: REGISTERING BLOCK ENTITIES NOW ======");
         BLOCK_ENTITIES.register(eventBus);

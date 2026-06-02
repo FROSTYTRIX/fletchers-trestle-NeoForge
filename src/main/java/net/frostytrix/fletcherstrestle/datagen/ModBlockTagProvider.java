@@ -22,7 +22,11 @@ public class ModBlockTagProvider extends BlockTagsProvider {
                 .add(ModBlocks.SHAVING_HORSE.get())
                 .add(ModBlocks.STEAM_BOX.get())
                 .add(ModBlocks.DIPPING_VAT.get())
+                .add(ModBlocks.ARROW_SLIT.get())
         ;
+
+        this.tag(BlockTags.MINEABLE_WITH_PICKAXE)
+                ;
 
         this.tag(BlockTags.WOOL)
                 .add(ModBlocks.ARCHERY_TARGET.get())

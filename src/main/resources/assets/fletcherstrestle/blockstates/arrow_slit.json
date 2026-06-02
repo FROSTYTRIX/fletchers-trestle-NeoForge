@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "facing=east":  {"model": "fletcherstrestle:block/arrow_slit"},
+    "facing=west":  {"model": "fletcherstrestle:block/arrow_slit", "y": 180},
+    "facing=north": {"model": "fletcherstrestle:block/arrow_slit", "y": 90},
+    "facing=south": {"model": "fletcherstrestle:block/arrow_slit", "y": 270}
+  }
+}

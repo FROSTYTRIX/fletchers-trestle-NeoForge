@@ -58,6 +58,20 @@ public class ModClientEvents {
         event.register(ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "modular_loader"), ModularModelLoader.INSTANCE);
     }
 
+    private static final ResourceLocation ARROW_SLIT_ID =
+            ResourceLocation.fromNamespaceAndPath(MOD_ID, "arrow_slit");
+
+    // Wrap every baked arrow_slit variant with the dynamic disguise model.
+    @SubscribeEvent
+    public static void onModifyBakingResult(ModelEvent.ModifyBakingResult event) {
+        java.util.Map<net.minecraft.client.resources.model.ModelResourceLocation, net.minecraft.client.resources.model.BakedModel> models = event.getModels();
+        for (var entry : models.entrySet()) {
+            if (entry.getKey().id().equals(ARROW_SLIT_ID)) {
+                entry.setValue(new net.frostytrix.fletcherstrestle.client.model.ArrowSlitBakedModel(entry.getValue()));
+            }
+        }
+    }
+
     @SubscribeEvent
     public static void onClientTick(ClientTickEvent.Post event) {
         // Horse Logic
@@ -176,6 +190,17 @@ public class ModClientEvents {
             return 0x3F76E4;
 
         }, ModBlocks.STEAM_BOX.get());
+
+        // Arrow slit: delegate tinting to whatever block it's disguised as, so
+        // grass/leaves/etc. get their proper biome colour.
+        event.register((state, level, pos, tintIndex) -> {
+            if (level != null && pos != null
+                    && level.getBlockEntity(pos) instanceof net.frostytrix.fletcherstrestle.block.entity.ArrowSlitBlockEntity slit
+                    && slit.hasMimic()) {
+                return Minecraft.getInstance().getBlockColors().getColor(slit.getMimic(), level, pos, tintIndex);
+            }
+            return -1;
+        }, ModBlocks.ARROW_SLIT.get());
     }
 
     /** FOV multiplier from a fitted scope (optic) attachment, or 1.0 if none. */

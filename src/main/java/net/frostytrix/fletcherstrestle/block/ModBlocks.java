@@ -65,6 +65,10 @@ public class ModBlocks {
                     .sound(SoundType.WOOD)
                     .noOcclusion()));
 
+    // Arrow slit: solid cover with a firing port — arrows pass through, mobs/melee don't.
+    public static final DeferredBlock<Block> ARROW_SLIT = registerBlock("arrow_slit",
+            () -> new ArrowSlitBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE_BRICKS).noOcclusion()));
+
     private static <T extends Block> DeferredBlock<T> registerBlock(String name, Supplier<T> block) {
         DeferredBlock<T> toReturn = BLOCKS.register(name, block);
         registerBlockItem(name, toReturn);

@@ -28,6 +28,7 @@ public class ModCreativeModeTabs {
                         output.accept(ModBlocks.SHAVING_HORSE);
                         output.accept(ModBlocks.DIPPING_VAT);
                         output.accept(ModBlocks.ARCHERY_TARGET);
+                        output.accept(ModBlocks.ARROW_SLIT);
 
                         output.accept(ModItems.DRAWKNIFE.get());
 
