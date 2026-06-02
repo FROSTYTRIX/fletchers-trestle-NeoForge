@@ -51,7 +51,13 @@ public class ArrowSlitBakedModel extends BakedModelWrapper<BakedModel> {
         BlockState mimic = data.get(ArrowSlitBlockEntity.MIMIC);
         List<BakedQuad> slitQuads = super.getQuads(state, side, rand, data, renderType);
         if (mimic == null || mimic.isAir()) {
-            return slitQuads;
+            // No disguise: still box-UV the placeholder onto its own texture so it
+            // tiles like a real block (same fix as the disguised case).
+            List<BakedQuad> placeholder = new ArrayList<>(slitQuads.size());
+            for (BakedQuad q : slitQuads) {
+                placeholder.add(reskin(q, q.getSprite(), q.getTintIndex()));
+            }
+            return placeholder;
         }
         BakedModel mimicModel = mimicModel(mimic);
         // Only emit on render layers the mimic actually uses (avoid duplicating

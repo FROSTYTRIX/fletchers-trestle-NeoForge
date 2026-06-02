@@ -2,6 +2,7 @@
 	"format_version": "1.9.0",
 	"credit": "Made with Blockbench",
 	"parent": "minecraft:block/block",
+	"render_type": "minecraft:cutout",
 	"textures": {
 		"wall": "fletcherstrestle:block/arrow_slit",
 		"particle": "fletcherstrestle:block/arrow_slit"
