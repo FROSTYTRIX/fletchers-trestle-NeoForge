@@ -384,5 +384,13 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                 .define('P', ItemTags.PLANKS)
                 .define('B', Items.BUCKET)
                 .unlockedBy("has_bucket", has(Items.BUCKET)).save(recipeOutput);
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModBlocks.ARROW_SLIT.get())
+                .pattern("PPP")
+                .pattern("S S")
+                .pattern("PPP")
+                .define('S', Items.STICK)
+                .define('P', ItemTags.PLANKS)
+                .unlockedBy("has_arrow", has(ItemTags.ARROWS)).save(recipeOutput);
     }
 }
