@@ -1,3 +1,79 @@
+# Fletcher's Trestle — 2.2.0
+
+The Workshop & Fieldcraft update. The **Steam Box** becomes a proper,
+automatable machine, a new **Arrow Slit** lets you build disguised firing
+positions, the crossbow gains a **Bayonet**, and an abandoned **Fletcher's
+Camp** now generates in the world. Plus a full **`/ft` command suite** and
+support for the popular tooltip mods.
+
+---
+
+## ♨️ The Steam Box, rebuilt
+
+The Steam Box is now a real workstation you can plumb and automate:
+
+- **Proper water tank** — water lives in a NeoForge fluid tank shown as a
+  live, rising surface, and the tank is **water-only**, so pipes and pumps
+  from other mods can fill it automatically (no more bucket-only).
+- **Empty a bucket back out** — right-click with an empty bucket to take a
+  bucket of water back.
+- **Hopper & pipe input** — hoppers/pipes can feed Rough Limbs straight in
+  (raw limbs only, so it won't clog).
+- **Smart output** — finished limbs are **pushed into an adjacent chest or
+  barrel** (and wait if it's full), left in place for an item **pipe** to
+  pull, or popped out on top if nothing's attached. Hoppers and other steam
+  boxes are ignored so it doesn't get confused.
+- **Comparator output** — read the water level (0–15) with a comparator.
+- **Water-gated steaming** — progress only advances while there's both heat
+  *and* water; run dry and it pauses until you refill.
+
+## 🧱 The Arrow Slit
+
+A new directional cover block — a loophole you shoot through:
+
+- **Arrows pass through the slit**, but mobs and melee can't get through.
+- **Disguises as any full block** — right-click it with a block to make it
+  wear that block's look (per-face textures, biome tint, transparency for
+  glass/leaves, and light from glowstone, etc.); sneak + empty-hand to take
+  the disguise back. It also takes on the worn block's hardness and blast
+  resistance.
+
+## 🗡️ Bayonet attachment
+
+A new crossbow attachment: slot a sword onto the crossbow at the Crossbow
+Bench to make it a melee weapon. Stabbing wears the crossbow down, and when
+you pull the sword back off it comes out as worn as the crossbow has become
+(it can never be repaired by re-installing). One attachment per crossbow, as
+always.
+
+## 🏕️ Fletcher's Camp
+
+A small abandoned woodworking camp now generates in forests, taigas, plains
+and meadows — the stations in the wild plus a supply chest of early
+fletching gear.
+
+## 🪶 Commands & tooltips
+
+- **`/ft` command tree** (op-only): give modular bows/arrows/crossbows,
+  inspect the material and attachment registries, dump them to a file, and
+  manage archery progression (`/archery` still works too).
+- **Jade / TheOneProbe / WTHIT** — the Steam Box shows its tank, contents
+  and a live steaming/heat/water status in all three.
+
+## 🧰 Other changes & fixes
+
+- **Dipping Vat** — now water-only (won't accept lava/etc. from pipes); its
+  break particles match its wood.
+- Fixed the **bayonet not applying its attack stats** and the bench needing
+  an extra click to unpack a crossbow.
+- Fixed the **magazine draw animation** so it matches the slower reload.
+- Fixed the **Eagle Whistle recipe** failing to load.
+- Fixed a missing **Jade config translation** that spammed an error.
+- Internal: arrow villager trades now pull from the data-driven registries;
+  removed leftover deprecated code.
+
+---
+
 # Fletcher's Trestle — 2.1.0
 
 The Marksmanship update. A new **Crossbow Bench** with data-driven
