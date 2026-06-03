@@ -9,12 +9,10 @@ import net.frostytrix.fletcherstrestle.material.MaterialEffectType;
 import net.frostytrix.fletcherstrestle.material.ModMaterialEffectTypes;
 
 /**
- * Spawn-time effect: sets the arrow's pierce level (how many entities it
- * passes through before stopping). Replaces the hard-coded {@code dark_oak}
- * shaft branch.
+ * Spawn-time: sets the arrow's pierce level (entities passed through before stopping).
+ * Used by the dark_oak shaft.
  *
- * <p>JSON shape:</p>
- * <pre>{ "type": "fletcherstrestle:pierce_level", "level": 1 }</pre>
+ * <p>JSON: {@code { "type": "fletcherstrestle:pierce_level", "level": 1 }}
  */
 public record PierceLevelEffect(int level) implements MaterialEffect {
 
@@ -29,8 +27,7 @@ public record PierceLevelEffect(int level) implements MaterialEffect {
 
     @Override
     public void onArrowSpawn(ModularArrowEntity arrow) {
-        // Vanilla AbstractArrow caps pierce at Byte.MAX_VALUE; the cast is
-        // safe for any sane material declaration.
+        // AbstractArrow stores pierce as a byte; clamp before casting.
         arrow.setPierceLevel((byte) Math.max(0, Math.min(Byte.MAX_VALUE, level)));
     }
 }

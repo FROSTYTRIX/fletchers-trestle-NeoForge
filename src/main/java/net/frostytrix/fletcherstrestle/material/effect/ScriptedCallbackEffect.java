@@ -15,19 +15,12 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 
 /**
- * Bridges a JSON-declared effect to a Java-registered callback. Used
- * by KubeJS scripts and companion mods that want to attach custom
- * behaviors to a material def without forking a new {@link MaterialEffectType}.
+ * Bridges a JSON-declared effect to a Java-registered callback, so KubeJS scripts and companion
+ * mods can attach custom behavior to a material without a new {@link MaterialEffectType}. See
+ * {@link ScriptedEffectCallbacks} for design notes and a usage example. If no handler is registered
+ * for {@code id}, the effect no-ops and logs a single warning.
  *
- * <p>See {@link ScriptedEffectCallbacks} for the full design notes and
- * a KubeJS usage example.</p>
- *
- * <p>JSON:</p>
- * <pre>{ "type": "fletcherstrestle:scripted_callback", "id": "mypack:my_hit" }</pre>
- *
- * <p>The {@code id} is a free-form {@link ResourceLocation}; pick any
- * namespace + path. If no handler is registered for it, the effect
- * no-ops and a single warning is logged to flag the typo.</p>
+ * <p>JSON: {@code { "type": "fletcherstrestle:scripted_callback", "id": "mypack:my_hit" }}
  */
 public record ScriptedCallbackEffect(ResourceLocation id) implements MaterialEffect {
 

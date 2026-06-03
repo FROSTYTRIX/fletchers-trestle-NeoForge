@@ -14,17 +14,10 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.EntityHitResult;
 
 /**
- * On-hit effect: applies a MobEffect to the entity the arrow hit.
+ * On-hit: applies a MobEffect to the entity hit. Used by broadhead (bleed) and mangrove shaft (slowness).
  *
- * <p>Used by the broadhead head (bleed) and mangrove shaft (slowness).</p>
- *
- * <p>JSON shape:</p>
- * <pre>
- * { "type": "fletcherstrestle:apply_effect",
- *   "effect": "minecraft:slowness",
- *   "duration": 80,
- *   "amplifier": 2 }
- * </pre>
+ * <p>JSON: {@code { "type": "fletcherstrestle:apply_effect", "effect": "minecraft:slowness",
+ * "duration": 80, "amplifier": 2 }}
  */
 public record ApplyMobEffectEffect(Holder<MobEffect> effect, int duration, int amplifier)
         implements MaterialEffect {

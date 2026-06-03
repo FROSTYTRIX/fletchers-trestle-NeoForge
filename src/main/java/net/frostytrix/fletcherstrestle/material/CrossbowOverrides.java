@@ -8,15 +8,9 @@ import net.frostytrix.fletcherstrestle.material.stats.BowLimbStats;
 import java.util.Optional;
 
 /**
- * Optional sub-record on {@link BowLimbDef} that lets a single limb material
- * tune individual stats just for the crossbow — one shared limb def with a
- * small escape hatch for when crossbow draw-time should diverge from bow
- * draw-time.
- *
- * <p>Every field is optional. {@code Optional.empty()} = "use the bow value".</p>
- *
- * @param stats per-field overrides for {@link BowLimbStats}; absent fields
- *              inherit from the parent limb def.
+ * Optional sub-record on {@link BowLimbDef} letting one limb material tune stats just for the
+ * crossbow (e.g. when crossbow draw-time should diverge from the bow). Absent fields inherit
+ * from the parent limb def.
  */
 public record CrossbowOverrides(Optional<BowLimbStats> stats) {
 

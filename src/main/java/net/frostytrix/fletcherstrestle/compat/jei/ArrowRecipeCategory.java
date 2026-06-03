@@ -25,7 +25,7 @@ public class ArrowRecipeCategory implements IRecipeCategory<ModularArrowRecipe> 
     private final IDrawable icon;
 
     public ArrowRecipeCategory(IGuiHelper helper) {
-        // Cut out the same 150x60 rectangle, but from your Arrow tab texture!
+        // Same 150x60 slice, from the Arrow tab texture.
         this.background = helper.createDrawable(ARROW_TEXTURE, 10, 10, 150, 60);
         this.icon = helper.createDrawableIngredient(VanillaTypes.ITEM_STACK, new ItemStack(Items.FLETCHING_TABLE));
     }

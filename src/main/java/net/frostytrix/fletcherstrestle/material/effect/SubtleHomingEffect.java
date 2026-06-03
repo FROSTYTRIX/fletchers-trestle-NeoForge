@@ -14,19 +14,12 @@ import net.minecraft.world.phys.Vec3;
 import java.util.List;
 
 /**
- * Tick-time: pulls the arrow toward the nearest non-owner living entity
- * within {@code range} blocks, with a velocity-vector add of magnitude
- * {@code strength}. Skips the first {@code grace_ticks} ticks so the
- * arrow can establish its initial trajectory. Used by the serrated
- * fletching's "magnetism" trait.
+ * Tick-time: pulls the arrow toward a non-owner living entity within {@code range} blocks, adding
+ * a velocity vector of magnitude {@code strength}. Skips the first {@code grace_ticks} ticks so the
+ * arrow can establish its trajectory. Used by the serrated fletching's "magnetism" trait.
  *
- * <p>JSON:</p>
- * <pre>
- * { "type": "fletcherstrestle:subtle_homing",
- *   "range": 5.0,
- *   "strength": 1.0,
- *   "grace_ticks": 2 }
- * </pre>
+ * <p>JSON: {@code { "type": "fletcherstrestle:subtle_homing", "range": 5.0, "strength": 1.0,
+ * "grace_ticks": 2 }}
  */
 public record SubtleHomingEffect(float range, float strength, int graceTicks) implements MaterialEffect {
 
@@ -50,7 +43,7 @@ public record SubtleHomingEffect(float range, float strength, int graceTicks) im
                 searchBox,
                 e -> e != arrow.getOwner() && e.isAlive());
         if (entities.isEmpty()) return;
-        LivingEntity target = entities.get(0); // closest by AABB order
+        LivingEntity target = entities.get(0); // first match in range (not distance-sorted)
         Vec3 targetCenter = target.position().add(0, target.getBbHeight() / 2.0, 0);
         Vec3 pull = targetCenter.subtract(arrow.position()).normalize().scale(strength);
         arrow.setDeltaMovement(arrow.getDeltaMovement().add(pull));

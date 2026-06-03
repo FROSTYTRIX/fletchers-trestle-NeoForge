@@ -26,10 +26,7 @@ public class DippingVatBlock extends BaseEntityBlock {
     protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
         if (!level.isClientSide) {
             if (level.getBlockEntity(pos) instanceof DippingVatBlockEntity vat) {
-                // On délègue tout le traitement logique au Block Entity
-                boolean success = vat.handlePlayerInteraction(player, player.getUsedItemHand());
-
-                if (success) {
+                if (vat.handlePlayerInteraction(player, player.getUsedItemHand())) {
                     return InteractionResult.SUCCESS;
                 }
             }
@@ -59,7 +56,7 @@ public class DippingVatBlock extends BaseEntityBlock {
             int capacity = vat.fluidTank.getCapacity();
 
             if (amount == 0) {
-                return 0; // Vide = Pas de signal
+                return 0;
             }
             return 1 + (amount * 14) / capacity;
         }

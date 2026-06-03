@@ -13,16 +13,11 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 
 /**
- * On-release: applies a MobEffect to the shooter (NOT the target). Used
- * by the acacia limb's brief movement-speed buff on release.
+ * On-release: applies a MobEffect to the shooter, not the target. Used by the acacia limb's
+ * brief speed buff on release.
  *
- * <p>JSON:</p>
- * <pre>
- * { "type": "fletcherstrestle:apply_effect_to_shooter",
- *   "effect": "minecraft:speed",
- *   "duration": 30,
- *   "amplifier": 1 }
- * </pre>
+ * <p>JSON: {@code { "type": "fletcherstrestle:apply_effect_to_shooter", "effect": "minecraft:speed",
+ * "duration": 30, "amplifier": 1 }}
  */
 public record ApplyMobEffectToShooterEffect(
         Holder<MobEffect> effect, int duration, int amplifier) implements MaterialEffect {

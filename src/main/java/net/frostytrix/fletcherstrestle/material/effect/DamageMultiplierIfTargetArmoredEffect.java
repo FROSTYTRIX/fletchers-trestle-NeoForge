@@ -11,13 +11,10 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.EntityHitResult;
 
 /**
- * On-hit: if the target has any armor at all, multiply base damage by
- * {@code multiplier}. Bodkin-point's "armor piercing" trait flattens out
- * to this in practice — the legacy code did a more elaborate armor-scaled
- * bonus but the result was effectively a flat 1.25× when armor > 0.
+ * On-hit: if the target has any armor, multiply base damage by {@code multiplier}. Backs
+ * bodkin-point's "armor piercing" trait.
  *
- * <p>JSON:</p>
- * <pre>{ "type": "fletcherstrestle:damage_multiplier_if_target_armored", "multiplier": 1.25 }</pre>
+ * <p>JSON: {@code { "type": "fletcherstrestle:damage_multiplier_if_target_armored", "multiplier": 1.25 }}
  */
 public record DamageMultiplierIfTargetArmoredEffect(float multiplier) implements MaterialEffect {
 

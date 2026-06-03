@@ -21,20 +21,8 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * Built-in arrow-shaft material defs.
- *
- * <p>Beyond the velocity/gravity stats, each shaft carries its thematic
- * behavior as a {@code MaterialEffect}:</p>
- * <ul>
- *   <li>dark_oak — pierce level 1</li>
- *   <li>crimson — executioner bonus damage on low-HP targets</li>
- *   <li>pale_oak — backstab bonus damage</li>
- *   <li>mangrove — slowness on hit</li>
- *   <li>cherry — heals shooter + cherry-leaves particle</li>
- *   <li>warped — teleport-swap with target</li>
- *   <li>acacia — mid-flight speed boost at tick 10</li>
- *   <li>jungle — chance to bounce off blocks</li>
- * </ul>
+ * Built-in arrow-shaft material defs. Beyond velocity/gravity stats, each shaft carries its
+ * thematic behavior as a {@code MaterialEffect} (see {@link #bootstrap}).
  */
 public final class BuiltinArrowShafts {
     private BuiltinArrowShafts() {

@@ -14,17 +14,11 @@ import net.minecraft.world.phys.EntityHitResult;
 import java.util.Optional;
 
 /**
- * On-hit: heals the shooter by {@code amount} half-hearts, optionally
- * spawning {@code particle_count} of {@code particle} at the target's
- * location. Used by the cherry shaft's "petal burst" trait.
+ * On-hit: heals the shooter by {@code amount} half-hearts, optionally spawning
+ * {@code particle_count} of {@code particle} at the target. Used by the cherry shaft's "petal burst".
  *
- * <p>JSON:</p>
- * <pre>
- * { "type": "fletcherstrestle:heal_shooter",
- *   "amount": 2.0,
- *   "particle": "minecraft:cherry_leaves",
- *   "particle_count": 5 }
- * </pre>
+ * <p>JSON: {@code { "type": "fletcherstrestle:heal_shooter", "amount": 2.0,
+ * "particle": "minecraft:cherry_leaves", "particle_count": 5 }}
  */
 public record HealShooterEffect(
         float amount,

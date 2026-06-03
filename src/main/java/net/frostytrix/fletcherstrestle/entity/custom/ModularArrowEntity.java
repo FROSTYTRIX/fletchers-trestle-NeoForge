@@ -163,7 +163,7 @@ public class ModularArrowEntity extends AbstractArrow {
 
     @Override
     protected double getDefaultGravity() {
-        // FIX: Don't fetch the item stack directly. Rely on our safe getAssembly() method!
+        // Use the safe getAssembly() accessor rather than reading the stack directly.
         ArrowAssembly assembly = this.getAssembly();
 
         if (assembly != null) {

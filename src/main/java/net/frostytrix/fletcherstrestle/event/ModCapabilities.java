@@ -12,11 +12,11 @@ public class ModCapabilities {
 
     @SubscribeEvent
     public static void registerCapabilities(RegisterCapabilitiesEvent event) {
-        // On enregistre la capacité de gestion de fluide pour notre Dipping Vat
+        // Expose the Dipping Vat's fluid tank to pipes/pumps.
         event.registerBlockEntity(
-                Capabilities.FluidHandler.BLOCK, // Le type de capacité (Fluide pour Bloc)
-                ModBlockEntities.DIPPING_VAT_BE.get(), // Ton BlockEntityType enregistré
-                (blockEntity, direction) -> blockEntity.getFluidTank() // Ce qu'on fournit au tuyau
+                Capabilities.FluidHandler.BLOCK,
+                ModBlockEntities.DIPPING_VAT_BE.get(),
+                (blockEntity, direction) -> blockEntity.getFluidTank()
         );
 
         // Steam Box: water-only tank exposed to pipes/pumps from other mods.

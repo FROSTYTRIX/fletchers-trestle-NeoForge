@@ -11,25 +11,11 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 
 /**
- * On-fire: sets a boolean flag on the fired projectile's persistent data
- * map. Used by built-ins for several limb/riser traits the arrow entity
- * inspects later:
- * <ul>
- *   <li>{@code fletcherstrestle:amphibious} (mangrove limb stats already
- *       handle this directly, but the flag pattern is the escape valve
- *       for modpack-added behaviors)</li>
- *   <li>{@code fletcherstrestle:punch} (spruce limb — read in
- *       {@code doKnockback})</li>
- *   <li>{@code fletcherstrestle:conductive} (copper riser — read in
- *       the onHit lightning path)</li>
- * </ul>
+ * On-fire: sets a boolean flag on the projectile's persistent data, which the arrow entity reads
+ * later for traits like {@code punch} (spruce limb) and {@code conductive} (copper riser).
  *
- * <p>JSON:</p>
- * <pre>
- * { "type": "fletcherstrestle:set_arrow_flag",
- *   "key": "fletcherstrestle:conductive",
- *   "value": true }
- * </pre>
+ * <p>JSON: {@code { "type": "fletcherstrestle:set_arrow_flag", "key": "fletcherstrestle:conductive",
+ * "value": true }}
  */
 public record SetArrowFlagEffect(String key, boolean value) implements MaterialEffect {
 

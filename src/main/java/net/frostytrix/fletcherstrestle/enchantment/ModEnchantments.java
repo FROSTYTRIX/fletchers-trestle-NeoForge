@@ -12,7 +12,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.enchantment.Enchantment;
 
 public class ModEnchantments {
-    // This ResourceKey links your Java code to the JSON file we will make next
     public static final ResourceKey<Enchantment> PHOTOSYNTHESIS = ResourceKey.create(
             Registries.ENCHANTMENT,
             ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "photosynthesis")
@@ -42,7 +41,7 @@ public class ModEnchantments {
                         EquipmentSlotGroup.MAINHAND,
                         EquipmentSlotGroup.OFFHAND
                 )
-        ).build(PHOTOSYNTHESIS.location())); // Just build it directly!
+        ).build(PHOTOSYNTHESIS.location()));
 
         context.register(BIOLUMINESCENCE, Enchantment.enchantment(
                 Enchantment.definition(
@@ -55,13 +54,13 @@ public class ModEnchantments {
                         EquipmentSlotGroup.MAINHAND,
                         EquipmentSlotGroup.OFFHAND
                 )
-        ).build(BIOLUMINESCENCE.location())); // Just build it directly!
+        ).build(BIOLUMINESCENCE.location()));
 
         context.register(GALE_FORCE, Enchantment.enchantment(
                 Enchantment.definition(
                         items.getOrThrow(ItemTags.BOW_ENCHANTABLE),
                         2, // weight
-                        3, // max_level (Level 1, 2, and 3 for bigger bursts!)
+                        3, // max_level
                         Enchantment.dynamicCost(15, 10), // min_cost
                         Enchantment.dynamicCost(65, 10), // max_cost
                         4, // anvil_cost

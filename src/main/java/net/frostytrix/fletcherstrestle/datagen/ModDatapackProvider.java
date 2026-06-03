@@ -25,7 +25,7 @@ public class ModDatapackProvider extends DatapackBuiltinEntriesProvider {
             .add(ModMaterialRegistries.ARROW_FLETCHING, BuiltinArrowFletchings::bootstrap);
 
     public ModDatapackProvider(PackOutput output, CompletableFuture<net.minecraft.core.HolderLookup.Provider> registries) {
-        // The 'Set.of(FletcherTrestle.MOD_ID)' ensures it generates in your mod's namespace
+        // Set.of(MOD_ID) scopes generation to this mod's namespace.
         super(output, registries, BUILDER, Set.of(FletcherTrestle.MOD_ID));
     }
 }

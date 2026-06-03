@@ -36,7 +36,6 @@ public class FletcherTrestleClient {
     }
 
     public FletcherTrestleClient(IEventBus modEventBus) {
-        // 2. Register the Entity Renderers (The line that fixes your crash)
         modEventBus.addListener(this::registerRenderers);
         modEventBus.addListener(this::registerLayers);
     }
@@ -54,22 +53,18 @@ public class FletcherTrestleClient {
     private static void onClientSetup(FMLClientSetupEvent event) {
         event.enqueueWork(() -> {
 
-            // This binds the "pull" animation to our custom draw speed!
+            // "pull" animation driven by our per-limb draw time, not vanilla's 20 ticks.
             ItemProperties.register(ModItems.MODULAR_BOW.get(), ResourceLocation.withDefaultNamespace("pull"),
                     (stack, level, entity, seed) -> {
                         if (entity == null) {
                             return 0.0F;
                         } else {
-                            // Cast the item to our custom bow class so we can access the helper method
                             ModularBowItem bow = (ModularBowItem) stack.getItem();
-
-                            // Calculate the visual pull based on OUR draw time, not the vanilla 20.0F
                             return entity.getUseItem() != stack ? 0.0F :
                                     (float) (stack.getUseDuration(entity) - entity.getUseItemRemainingTicks()) / bow.getDrawTime(stack);
                         }
                     });
 
-            // We also need the "pulling" boolean so the game knows you are actively using it
             ItemProperties.register(ModItems.MODULAR_BOW.get(), ResourceLocation.withDefaultNamespace("pulling"),
                     (stack, level, entity, seed) -> {
                         return entity != null && entity.isUsingItem() && entity.getUseItem() == stack ? 1.0F : 0.0F;

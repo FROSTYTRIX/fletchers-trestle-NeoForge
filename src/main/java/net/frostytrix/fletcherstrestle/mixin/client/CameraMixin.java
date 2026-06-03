@@ -26,7 +26,7 @@ public abstract class CameraMixin {
     @ModifyVariable(method = "setPosition(DDD)V", at = @At("HEAD"), ordinal = 1, argsOnly = true)
     private double smoothCameraY(double y) {
 
-        // 1. Calculate Delta Time (Time since last frame in seconds)
+        // Delta time since last frame, in seconds.
         long currentTime = Util.getMillis();
         if (this.fletcherstrestle$lastRenderTime == 0) {
             this.fletcherstrestle$lastRenderTime = currentTime;
@@ -34,16 +34,9 @@ public abstract class CameraMixin {
         double deltaTime = (currentTime - this.fletcherstrestle$lastRenderTime) / 1000.0;
         this.fletcherstrestle$lastRenderTime = currentTime;
 
-        // If we are riding a horse and Free-Looking
         if (this.entity != null && this.entity.getVehicle() instanceof AbstractHorse && ClientState.isFreeLooking) {
-
-            // 2. Framerate-Independent Exponential Decay
-            // Tweak this decay value!
-            // Higher (e.g., 20.0) = snappier/tighter to the horse.
-            // Lower (e.g., 5.0) = looser/more cinematic glide.
+            // Framerate-independent exponential decay (higher = tighter to the horse).
             double decay = 12.0;
-
-            // Apply the exponential decay formula
             double smoothedY = y + (this.fletcherstrestle$lastY - y) * Math.exp(-decay * deltaTime);
 
             this.fletcherstrestle$lastY = smoothedY;

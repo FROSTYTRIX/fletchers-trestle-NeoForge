@@ -10,9 +10,8 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 
 import java.util.function.Supplier;
 
-// Custom sound events for the eagle. The audio files referenced from
-// sounds.json are vanilla placeholders for now — when you record your own
-// .ogg files you only have to update sounds.json (no code changes).
+// Custom sound events for the eagle. The files referenced from sounds.json are vanilla
+// placeholders for now — swapping in real .ogg files only needs a sounds.json change, no code.
 public final class ModSounds {
 
     private ModSounds() {

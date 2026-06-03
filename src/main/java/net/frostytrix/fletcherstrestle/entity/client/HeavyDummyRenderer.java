@@ -58,21 +58,14 @@ public class HeavyDummyRenderer extends LivingEntityRenderer<HeavyDummyEntity, H
             MinecraftSessionService sessionService = minecraft.getMinecraftSessionService();
 
             try {
-                // Use 'false' for signed data to avoid strict IDE security errors
                 ProfileResult result = sessionService.fetchProfile(uuid, false);
 
                 if (result != null && result.profile() != null) {
                     GameProfile profile = result.profile();
-
-                    // 1.21 uses a specific internal method to register the skin texture
-                    // We run it on the main thread to interact with the SkinManager safely
-                    minecraft.execute(() -> {
-                        minecraft.getSkinManager().getOrLoad(profile).thenAccept(playerSkin -> {
-                            // This code only runs once the PNG is actually downloaded
-                            SKIN_CACHE.put(uuid, playerSkin.texture());
-                            System.out.println("DEBUG: Texture fully loaded for " + profile.getName());
-                        });
-                    });
+                    // Resolve the skin on the main thread so SkinManager is touched safely.
+                    minecraft.execute(() ->
+                            minecraft.getSkinManager().getOrLoad(profile).thenAccept(playerSkin ->
+                                    SKIN_CACHE.put(uuid, playerSkin.texture())));
                 }
             } catch (Exception e) {
                 FETCHING.remove(uuid);

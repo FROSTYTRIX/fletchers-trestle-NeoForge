@@ -15,11 +15,8 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * Built-in bow-string material defs. Mirrors the legacy
- * {@code ModularBowItem.StringStats} enum 1:1.
- *
- * <p>Note: SPIDER maps to vanilla {@link Items#STRING}, not to a custom item.
- * The legacy enum's "spider" id was just a flavor label.</p>
+ * Built-in bow-string material defs. Note SPIDER maps to vanilla {@link Items#STRING} (the id is
+ * just a flavor label), not a custom item.
  */
 public final class BuiltinBowStrings {
     private BuiltinBowStrings() {

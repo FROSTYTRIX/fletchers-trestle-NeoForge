@@ -22,7 +22,7 @@ public class SteamingRecipeBuilder implements RecipeBuilder {
     private final Ingredient input;
     private final ItemStack result;
 
-    // Set your defaults right here!
+    // Defaults
     private int processingTime = 200;
     private int waterAmount = 250;
 

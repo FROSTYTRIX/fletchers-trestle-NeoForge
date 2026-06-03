@@ -21,19 +21,9 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * Built-in bow-limb material defs. Stats mirror the legacy
- * {@code ModularBowItem.LimbStats} enum; behaviors that used to be hard-
- * coded {@code if ("crimson".equals(limbId))} branches in
- * {@code ModularBowItem.createProjectile} / {@code releaseUsing} are now
- * {@code MaterialEffect} entries on the relevant limb def.
- *
- * <p>Effects attached per material:</p>
- * <ul>
- *   <li>acacia — {@code apply_effect_to_shooter} (movement speed II, 30 ticks)</li>
- *   <li>spruce — {@code set_arrow_flag} ({@code fletcherstrestle:punch})</li>
- *   <li>crimson — {@code ignite_arrow} (100 seconds)</li>
- *   <li>warped — {@code set_arrow_no_gravity}</li>
- * </ul>
+ * Built-in bow-limb material defs. Per-limb special behaviors (acacia speed buff, spruce punch,
+ * crimson ignite, warped no-gravity) are {@code MaterialEffect} entries on the def, listed in
+ * {@link #bootstrap}.
  */
 public final class BuiltinBowLimbs {
     private BuiltinBowLimbs() {

@@ -9,16 +9,11 @@ import net.frostytrix.fletcherstrestle.material.MaterialEffectType;
 import net.frostytrix.fletcherstrestle.material.ModMaterialEffectTypes;
 
 /**
- * Tick-time: on exactly the tick number {@code tick}, multiply the arrow's
- * delta movement by {@code multiplier}. Used by the acacia shaft to give
- * the arrow a brief mid-flight boost (tick=10, x1.4).
+ * Tick-time: on exactly tick {@code tick}, multiply the arrow's delta movement by
+ * {@code multiplier}. Used by the acacia shaft for a brief mid-flight boost (tick=10, x1.4).
  *
- * <p>JSON:</p>
- * <pre>
- * { "type": "fletcherstrestle:set_velocity_multiplier_at_tick",
- *   "tick": 10,
- *   "multiplier": 1.4 }
- * </pre>
+ * <p>JSON: {@code { "type": "fletcherstrestle:set_velocity_multiplier_at_tick", "tick": 10,
+ * "multiplier": 1.4 }}
  */
 public record SetVelocityMultiplierAtTickEffect(int tick, float multiplier) implements MaterialEffect {
 

@@ -22,26 +22,17 @@ import java.util.function.Function;
 /**
  * Lookup service for material defs. Two flavors per part:
  * <ul>
- *   <li>{@code resolveX(stack)} — given a player-supplied ItemStack, find
- *       the def whose {@link Ingredient} accepts it. Used by the recipe
- *       matchers in the fletching menu.</li>
- *   <li>{@code resolveXById(idOrLegacy)} — given the String stored on an
- *       {@code ArrowAssembly} / {@code BowAssembly} component, find the
- *       def. Tolerates both modern id form ({@code "dark_oak"},
- *       {@code "mypack:steel"}) and legacy display form
- *       ({@code "Dark Oak"}) so worlds saved before 2.0.0 keep working.</li>
+ *   <li>{@code resolveX(stack)} — find the def whose {@link Ingredient} accepts a given
+ *       ItemStack. Used by the fletching-menu recipe matchers.</li>
+ *   <li>{@code resolveXById(idOrLegacy)} — find the def from the String stored on a
+ *       Bow/Arrow assembly component. Tolerates modern id form ({@code "dark_oak"},
+ *       {@code "mypack:steel"}) and legacy display form ({@code "Dark Oak"}) so pre-2.0.0
+ *       worlds keep working.</li>
  * </ul>
  *
- * <p>Most callers don't have a {@link RegistryAccess} handy, so each public
- * method has an overload that calls {@link #pickAccess()} to find one via
- * the running server (logical server) or {@link Minecraft#getConnection()}
- * (logical client). Callers that DO have an access (recipes during
- * matching, the arrow entity post-spawn, anything in a {@code Level}-aware
- * code path) should pass it explicitly — it's a strict superset.</p>
- *
- * <p>Walks the registry linearly on each ingredient-based lookup. The
- * registries are tiny (3–11 entries) so this is negligible; a cache can
- * land in a later phase if profile shows it's worth the lifecycle wiring.</p>
+ * <p>Each method has a no-arg-access overload that calls {@link #pickAccess()} (server, else
+ * client connection) for callers without a registry access handy; pass one explicitly when you
+ * have it. Lookups walk the registry linearly — fine for these tiny registries (3–11 entries).
  */
 public final class MaterialResolver {
     private MaterialResolver() {
@@ -211,13 +202,9 @@ public final class MaterialResolver {
         if (maybeLookup.isEmpty()) return Optional.empty();
         HolderLookup.RegistryLookup<T> lookup = maybeLookup.get();
 
-        // Every ResourceLocation build below goes through tryBuild / tryParse,
-        // which return null on invalid characters instead of throwing. This
-        // matters: pre-2.0.0 BowAssemblies store legacy display form
-        // ("Wood", "Dark Oak", "High Tension") which contain capitals and
-        // spaces — both rejected by ResourceLocation's strict path check.
-        // The legacy-form fallback at step (3) handles those, but it can
-        // only run if steps (1) and (2) don't throw first.
+        // Use tryBuild/tryParse (null on invalid chars, never throws): legacy display forms
+        // like "Dark Oak" have capitals/spaces that fail ResourceLocation's strict check, so
+        // steps (1)/(2) must not throw before the step (3) fallback can normalise them.
 
         // (1) explicit namespace e.g. "mypack:steel"
         if (idOrLegacy.indexOf(':') >= 0) {

@@ -11,23 +11,14 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 import java.util.function.Supplier;
 
 /**
- * Custom NeoForge registry of {@link MaterialEffectType}s — the extension
- * point for mods that want to add new declarative material behaviors.
- * Register a new effect type here (or against {@link #REGISTRY_KEY} from a
- * companion mod) and modpack JSONs can reference it immediately.
- *
- * <p>The registry is created via {@link DeferredRegister#makeRegistry} which
- * fires {@code NewRegistryEvent} for us — no extra wiring in
- * {@link FletcherTrestle} beyond the standard {@code REGISTRY.register(bus)}
- * call.</p>
+ * Custom NeoForge registry of {@link MaterialEffectType}s — the extension point for new declarative
+ * material behaviors. Register a type here (or against {@link #REGISTRY_KEY} from a companion mod)
+ * and modpack JSONs can reference it immediately.
  */
 public final class ModMaterialEffectTypes {
     private ModMaterialEffectTypes() {
     }
 
-    /**
-     * Registry key used by both the registry creation and the dispatch codec.
-     */
     public static final ResourceKey<Registry<MaterialEffectType<?>>> REGISTRY_KEY =
             ResourceKey.createRegistryKey(
                     ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "material_effect_type"));
@@ -35,13 +26,7 @@ public final class ModMaterialEffectTypes {
     public static final DeferredRegister<MaterialEffectType<?>> EFFECT_TYPES =
             DeferredRegister.create(REGISTRY_KEY, FletcherTrestle.MOD_ID);
 
-    /**
-     * The live registry. {@link DeferredRegister#makeRegistry} returns a
-     * {@link Registry} that's backed by the real registry once
-     * {@code NewRegistryEvent} fires. The dispatch codec in
-     * {@link MaterialEffect#CODEC} reads through this at parse time, so types
-     * registered after class-load are still discoverable.
-     */
+    /** Live registry; the dispatch codec reads through it, so post-init types stay discoverable. */
     public static final Registry<MaterialEffectType<?>> REGISTRY =
             EFFECT_TYPES.makeRegistry(builder -> builder.sync(true));
 

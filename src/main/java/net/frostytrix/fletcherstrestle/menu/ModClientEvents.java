@@ -18,8 +18,7 @@ import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 
 import static net.frostytrix.fletcherstrestle.FletcherTrestle.MOD_ID;
 
-// Notice the bus = MOD and value = CLIENT.
-// This ensures servers don't crash trying to load graphics!
+// Client-only subscriber so dedicated servers never touch client/graphics code.
 @EventBusSubscriber(modid = MOD_ID, value = Dist.CLIENT)
 public class ModClientEvents {
 

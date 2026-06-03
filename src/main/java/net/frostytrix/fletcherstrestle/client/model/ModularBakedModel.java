@@ -63,22 +63,20 @@ public class ModularBakedModel implements BakedModel {
         this.basePath = basePath;
         this.overrides = new ModularItemOverrides();
 
-        // Update this line to pass the basePath!
         this.transforms = createCustomTransforms(basePath);
     }
 
     private ItemTransforms createCustomTransforms(String basePath) {
         float f = 1 / 16.0f;
 
-        // NEW: Create a standard transform for when the item is dropped on the ground
-        // Rotation: 0, Translation: slightly up so it doesn't clip, Scale: 50% (0.5f)
+        // Ground transform: nudged up so it doesn't clip, scaled to 50%.
         ItemTransform groundTransform = new ItemTransform(
                 new Vector3f(0, 0, 0),
                 new Vector3f(0, 2 * f, 0),
                 new Vector3f(0.5f, 0.5f, 0.5f)
         );
 
-        // If it's a crossbow, use the specific rotations and translations you provided
+        // Crossbows use their own hand transforms.
         if (basePath != null && basePath.contains("crossbow")) {
             ItemTransform thirdPersonRight = new ItemTransform(new Vector3f(-90, 0, -60), new Vector3f(2 * f, 0.1f * f, -3 * f), new Vector3f(0.9f, 0.9f, 0.9f));
             ItemTransform thirdPersonLeft = new ItemTransform(new Vector3f(-90, 0, 30), new Vector3f(2 * f, 0.1f * f, -3 * f), new Vector3f(0.9f, 0.9f, 0.9f));

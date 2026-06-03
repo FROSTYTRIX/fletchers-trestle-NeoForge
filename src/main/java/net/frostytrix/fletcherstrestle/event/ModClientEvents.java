@@ -127,16 +127,11 @@ public class ModClientEvents {
                 // 4. Calculate direction and fire the packet!
                 double delta = event.getScrollDeltaY();
                 if (delta != 0) {
-                    // Scrolling DOWN (negative delta) usually cycles right in the UI
-                    // Scrolling UP (positive delta) usually cycles left
+                    // Scroll down cycles right, scroll up cycles left.
                     boolean cycleRight = delta < 0;
-
-                    // Dispatch the exact same packet you already wrote
                     PacketDistributor.sendToServer(new QuiverSlotPacket(cycleRight));
-
-                    // 5. UX Polish: Force the Quiver HUD to pop open so the player sees the change!
-                    // (Assuming you have a tick counter in your QuiverHudOverlay)
-                    QuiverHudOverlay.displayTicks = 60; // Keep open for 3 seconds
+                    // Pop the Quiver HUD open so the change is visible.
+                    QuiverHudOverlay.displayTicks = 60; // 3 seconds
                 }
             }
         }
@@ -146,19 +141,17 @@ public class ModClientEvents {
     public static void onMovementInput(MovementInputUpdateEvent event) {
         Player player = event.getEntity();
 
-        // 1. Safety feature: Auto-disable if you jump off the horse
+        // Auto-disable if the player dismounts.
         if (!player.isPassenger() && ClientState.isGallopLocked) {
             ClientState.isGallopLocked = false;
         }
 
-        // 2. The Cruise Control Logic
+        // Cruise control: hold the mount moving forward.
         if (ClientState.isGallopLocked && player.getVehicle() instanceof AbstractHorse) {
-
-            // Force the game to think 'W' is being held down
             event.getInput().up = true;
             event.getInput().forwardImpulse = 1.0F;
 
-            // Optional quality of life: If you manually press 'S' (brake), turn off cruise control
+            // Pressing 'S' (brake) cancels cruise control.
             if (event.getInput().down) {
                 ClientState.isGallopLocked = false;
             }

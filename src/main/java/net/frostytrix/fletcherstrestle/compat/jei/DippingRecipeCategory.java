@@ -126,7 +126,7 @@ public class DippingRecipeCategory implements IRecipeCategory<DippingRecipe> {
                             var potionHolder = BuiltInRegistries.POTION.getHolder(ResourceLocation.parse(potionId)).orElse(null);
 
                             if (potionHolder != null) {
-                                tooltip.clear(); // On vire le texte par défaut "Water"
+                                tooltip.clear(); // drop the default "Water" line
                                 ItemStack dummyPotion = new ItemStack(Items.POTION);
                                 dummyPotion.set(DataComponents.POTION_CONTENTS, new PotionContents(potionHolder));
                                 // For modular arrows, the fluid is just an example —

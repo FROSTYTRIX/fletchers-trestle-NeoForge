@@ -14,11 +14,10 @@ import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
 
 /**
- * On-hit: with {@code chance} probability, swaps the shooter and target's
- * positions. Used by the warped shaft.
+ * On-hit: with {@code chance} probability, swaps the shooter's and target's positions.
+ * Used by the warped shaft.
  *
- * <p>JSON:</p>
- * <pre>{ "type": "fletcherstrestle:teleport_swap_with_target", "chance": 1.0 }</pre>
+ * <p>JSON: {@code { "type": "fletcherstrestle:teleport_swap_with_target", "chance": 1.0 }}
  */
 public record TeleportSwapWithTargetEffect(float chance) implements MaterialEffect {
 

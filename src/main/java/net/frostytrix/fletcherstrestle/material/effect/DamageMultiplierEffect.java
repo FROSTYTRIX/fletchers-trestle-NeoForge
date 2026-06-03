@@ -9,16 +9,11 @@ import net.frostytrix.fletcherstrestle.material.MaterialEffectType;
 import net.frostytrix.fletcherstrestle.material.ModMaterialEffectTypes;
 
 /**
- * Spawn-time effect: scales the arrow's base damage by a constant.
+ * Spawn-time: scales the arrow's base damage by a constant. The part stats records already
+ * carry a {@code damage_multiplier} field for the common case; this effect lets a material
+ * stack an extra multiplier on top.
  *
- * <p>Note: head / shaft / fletching stats records *already* carry a
- * {@code damage_multiplier} field for the common case. This effect type is
- * the escape valve for cases where a material wants to stack an additional
- * multiplier with the base stat (e.g. a future "Enchanted" string that
- * boosts whatever head it's paired with).</p>
- *
- * <p>JSON shape:</p>
- * <pre>{ "type": "fletcherstrestle:damage_multiplier", "multiplier": 1.25 }</pre>
+ * <p>JSON: {@code { "type": "fletcherstrestle:damage_multiplier", "multiplier": 1.25 }}
  */
 public record DamageMultiplierEffect(float multiplier) implements MaterialEffect {
 

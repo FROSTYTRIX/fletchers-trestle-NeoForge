@@ -36,22 +36,13 @@ import net.neoforged.neoforge.event.entity.RegisterSpawnPlacementsEvent;
 import net.neoforged.neoforge.event.server.ServerStartingEvent;
 import org.slf4j.Logger;
 
-// The value here should match an entry in the META-INF/neoforge.mods.toml file
 @Mod(FletcherTrestle.MOD_ID)
 public class FletcherTrestle {
     public static final String MOD_ID = "fletcherstrestle";
     public static final Logger LOGGER = LogUtils.getLogger();
 
-
-    // The constructor for the mod class is the first code that is run when your mod is loaded.
-    // FML will recognize some parameter types like IEventBus or ModContainer and pass them in automatically.
     public FletcherTrestle(IEventBus modEventBus, ModContainer modContainer) {
-        // Register the commonSetup method for modloading
         modEventBus.addListener(this::commonSetup);
-
-        // Register ourselves for server and other game events we are interested in.
-        // Note that this is necessary if and only if we want *this* class (ExampleMod) to respond directly to events.
-        // Do not add this line if there are no @SubscribeEvent-annotated functions in this class, like onServerStarting() below.
         NeoForge.EVENT_BUS.register(this);
 
         ModCreativeModeTabs.register(modEventBus);
@@ -67,29 +58,23 @@ public class FletcherTrestle {
         ModFluids.FLUIDS.register(modEventBus);
         ModSounds.register(modEventBus);
         ModFeatures.register(modEventBus);
-        // MaterialEffectType registry + the six datapack-driven material
-        // registries. JSON in data/<ns>/fletcherstrestle/{bow_limb,
-        // arrow_head,...}/<id>.json loads into these and syncs to clients.
+        // MaterialEffectType registry + the six datapack-driven material registries
+        // (data/<ns>/fletcherstrestle/{bow_limb,arrow_head,...}/<id>.json, synced to clients).
         ModMaterialEffectTypes.register(modEventBus);
         ModMaterialRegistries.register(modEventBus);
-        // Phase 1 (Marksmanship roadmap): data-driven crossbow attachments,
-        // loaded from data/<ns>/fletcherstrestle/crossbow_attachment/<id>.json
-        // and synced to clients like the material registries.
+        // Data-driven crossbow attachments (crossbow_attachment/<id>.json, synced to clients).
         ModCrossbowAttachments.register(modEventBus);
-        // Phase 2 (Marksmanship): per-player archery XP data attachment.
+        // Per-player archery XP data attachment.
         ModAttachments.register(modEventBus);
-        // Phase 3: custom advancement triggers.
+        // Custom advancement triggers.
         ModCriteria.register(modEventBus);
 
-
-        // Register the item to a creative tab
         modEventBus.addListener(this::addCreative);
         modEventBus.addListener(this::registerEntityAttributes);
         modEventBus.addListener(this::onRegisterSpawnPlacements);
 
         ModRecipes.SERIALIZERS.register(modEventBus);
         ModRecipes.TYPES.register(modEventBus);
-        // Register our mod's ModConfigSpec so that FML can create and load the config file for us
         modContainer.registerConfig(ModConfig.Type.SERVER, FletcherConfig.SERVER_SPEC);
         modContainer.registerConfig(ModConfig.Type.CLIENT, FletcherConfig.CLIENT_SPEC);
     }
@@ -97,7 +82,6 @@ public class FletcherTrestle {
     private void commonSetup(FMLCommonSetupEvent event) {
     }
 
-    // Add the example block item to the building blocks tab
     private void addCreative(BuildCreativeModeTabContentsEvent event) {
     }
 
@@ -126,9 +110,7 @@ public class FletcherTrestle {
     }
 
 
-    // You can use SubscribeEvent and let the Event Bus discover methods to call
     @SubscribeEvent
     public void onServerStarting(ServerStartingEvent event) {
-
     }
 }

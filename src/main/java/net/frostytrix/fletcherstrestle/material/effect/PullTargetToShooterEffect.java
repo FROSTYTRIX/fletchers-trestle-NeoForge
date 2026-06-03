@@ -13,17 +13,11 @@ import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
 
 /**
- * On-hit: yanks the target toward the shooter on impact. Velocity is
- * {@code strength} blocks/tick toward the shooter, with a minimum upward
- * component of {@code minLift} so terrain doesn't snag the pull. Used by
- * the barbed_tip head.
+ * On-hit: yanks the target toward the shooter at {@code strength} blocks/tick, with a minimum
+ * upward {@code minLift} so terrain doesn't snag the pull. Used by the barbed_tip head.
  *
- * <p>JSON:</p>
- * <pre>
- * { "type": "fletcherstrestle:pull_target_to_shooter",
- *   "strength": 0.75,
- *   "min_lift": 0.25 }
- * </pre>
+ * <p>JSON: {@code { "type": "fletcherstrestle:pull_target_to_shooter", "strength": 0.75,
+ * "min_lift": 0.25 }}
  */
 public record PullTargetToShooterEffect(float strength, float minLift) implements MaterialEffect {
 

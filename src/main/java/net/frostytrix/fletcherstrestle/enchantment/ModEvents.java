@@ -34,44 +34,34 @@ public class ModEvents {
 
     @SubscribeEvent
     public static void onArrowSpawn(EntityJoinLevelEvent event) {
-        // Only run on the server, and only if the joining entity is an arrow
         if (event.getLevel().isClientSide() || !(event.getEntity() instanceof AbstractArrow arrow)) return;
 
-        // Check if the shooter was a player
         if (arrow.getOwner() instanceof Player player) {
-
-            // In 1.21.1, arrows natively keep track of the exact weapon ItemStack that fired them!
+            // Arrows track the exact weapon ItemStack that fired them.
             ItemStack bow = arrow.getWeaponItem();
 
             if (bow != null && !bow.isEmpty()) {
                 Registry<Enchantment> registry = event.getLevel().registryAccess().registryOrThrow(Registries.ENCHANTMENT);
 
                 registry.getHolder(ModEnchantments.BIOLUMINESCENCE).ifPresent(enchantHolder -> {
-                    // Does the bow have Bioluminescence?
-                    if (bow.getEnchantmentLevel(enchantHolder) > 0) {
-
-                        // If the player successfully consumed a torch, tag the flying arrow!
-                        if (consumeTorch(player)) {
-                            arrow.addTag("fletcherstrestle:carries_torch");
-                        }
+                    // Bioluminescence: consume a torch to make the arrow carry one.
+                    if (bow.getEnchantmentLevel(enchantHolder) > 0 && consumeTorch(player)) {
+                        arrow.addTag("fletcherstrestle:carries_torch");
                     }
                 });
             }
         }
     }
 
-    // Helper method to find and delete exactly 1 torch
+    /** Consumes one torch (offhand first, then main inventory); free in creative. */
     private static boolean consumeTorch(Player player) {
-        // Free torches for creative mode
         if (player.isCreative()) return true;
 
-        // Check offhand first (common for spelunking)
         if (player.getOffhandItem().is(Items.TORCH)) {
             player.getOffhandItem().shrink(1);
             return true;
         }
 
-        // Scan main inventory
         for (int i = 0; i < player.getInventory().items.size(); i++) {
             ItemStack stack = player.getInventory().items.get(i);
             if (stack.is(Items.TORCH)) {
@@ -82,7 +72,6 @@ public class ModEvents {
         return false;
     }
 
-    // --- 2. THE IMPACT LOGIC ---
     @SubscribeEvent
     public static void onArrowImpact(ProjectileImpactEvent event) {
         if (event.getProjectile().level().isClientSide()) return;
@@ -99,34 +88,28 @@ public class ModEvents {
 
                     double hitX, hitY, hitZ;
 
-                    // 1. THE BULLETPROOF FIX: Use the exact RayTrace hit location, not the arrow's body!
+                    // Burst at the exact ray-trace hit location, not the arrow's body.
                     if (event.getRayTraceResult().getType() == HitResult.Type.BLOCK) {
                         BlockHitResult blockHit = (BlockHitResult) event.getRayTraceResult();
                         Direction face = blockHit.getDirection();
-
-                        // getLocation() gets the exact surface pixel of the block
+                        // Nudge out along the hit face to the surface.
                         hitX = blockHit.getLocation().x() + (face.getStepX() * 0.1);
                         hitY = blockHit.getLocation().y() + (face.getStepY() * 0.1);
                         hitZ = blockHit.getLocation().z() + (face.getStepZ() * 0.1);
 
                     } else if (event.getRayTraceResult().getType() == HitResult.Type.ENTITY) {
-                        // If we hit a zombie, just explode exactly where it hit them
                         EntityHitResult entityHit = (EntityHitResult) event.getRayTraceResult();
                         hitX = entityHit.getLocation().x();
                         hitY = entityHit.getLocation().y();
                         hitZ = entityHit.getLocation().z();
 
                     } else {
-                        // Fallback (should rarely happen, but prevents crashes)
                         hitX = arrow.getX();
                         hitY = arrow.getY();
                         hitZ = arrow.getZ();
                     }
 
-                    // 2. THE POWER TUNING
                     float blastRadius = 0.5f + (galeLevel * 0.55f);
-
-                    // Trigger the burst at the exact surface coordinate
                     level.explode(
                             arrow,
                             null,
@@ -203,16 +186,14 @@ public class ModEvents {
         Player player = event.getEntity();
         Level level = player.level();
 
-        // 1. Only run this logic on the server side
         if (level.isClientSide()) return;
 
-        // 2. Optimization: Only execute exactly every 40 ticks (2 seconds)
+        // Throttle: only every 200 ticks (10 seconds).
         if (player.tickCount % 200 != 0) return;
 
-        // 3. Environment Check: Is it daytime and can the player see the sky?
+        // Photosynthesis only repairs in daylight under open sky.
         if (!level.isDay() || !level.canSeeSky(player.blockPosition())) return;
 
-        // 4. Check the item in the main hand
         ItemStack stack = player.getMainHandItem();
 
         // We only care if the item is actually damaged
@@ -226,8 +207,7 @@ public class ModEvents {
                 int enchLevel = stack.getEnchantmentLevel(enchantmentHolder);
 
                 if (enchLevel > 0) {
-                    // --- NEW: Component Validation ---
-                    // If it's a modular bow, check its parts before repairing
+                    // A modular bow only photosynthesises with a wooden riser and non-Nether limbs.
                     if (stack.has(ModDataComponents.BOW_ASSEMBLY.get())) {
                         BowAssembly assembly = stack.get(ModDataComponents.BOW_ASSEMBLY.get());
                         String riser = assembly.riserMaterial().toLowerCase();
@@ -235,17 +215,12 @@ public class ModEvents {
 
                         boolean isWoodRiser = !riser.contains("copper");
                         boolean isValidLimb = !limbs.contains("crimson") && !limbs.contains("warped");
-
-                        // If it has metal parts or nether wood, abort the repair immediately!
                         if (!isWoodRiser || !isValidLimb) {
                             return;
                         }
                     }
-                    // --- END NEW ---
 
-                    // Proceed with normal healing
-                    int repairAmount = enchLevel;
-                    stack.setDamageValue(Math.max(0, stack.getDamageValue() - repairAmount));
+                    stack.setDamageValue(Math.max(0, stack.getDamageValue() - enchLevel));
                 }
             });
         }

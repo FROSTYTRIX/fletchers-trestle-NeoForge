@@ -55,39 +55,14 @@ public class ModularArrowItem extends ArrowItem {
         // Potion contents (when present — for glass-vial arrows after dipping)
         if (potion != null) {
             tooltipComponents.add(Component.translatable("gui.fletcherstrestle.effects").withStyle(ChatFormatting.LIGHT_PURPLE, ChatFormatting.BOLD));
-            // 1.0 durationFactor — full potion duration at impact center.
-            // Effects fall off by distance at hit-time (see applyGlassVialEffect).
+            // Full duration shown here; effects fall off by distance at hit-time (see applyGlassVialEffect).
             potion.addPotionTooltip(tooltipComponents::add, 1.0F, 20.0F);
         }
     }
 
-    private String capitalize(String str) {
-        if (str == null || str.isEmpty()) return str;
-
-        // 1. Replace underscores with spaces so "dark_oak" becomes "dark oak"
-        String spaced = str.replace('_', ' ');
-
-        // 2. Split the string into individual words
-        String[] words = spaced.split(" ");
-        StringBuilder result = new StringBuilder();
-
-        for (String word : words) {
-            if (!word.isEmpty()) {
-                // 3. Capitalize the first letter of each word
-                result.append(Character.toUpperCase(word.charAt(0)))
-                        .append(word.substring(1).toLowerCase())
-                        .append(" ");
-            }
-        }
-
-        // 4. Trim the extra space at the end
-        return result.toString().trim();
-    }
-
     @Override
     public AbstractArrow createArrow(Level level, ItemStack ammo, LivingEntity shooter, @Nullable ItemStack weapon) {
-        // Pass the 'ammo' ItemStack directly into your entity!
-        // This 'ammo' contains your ArrowAssembly component.
+        // The ammo stack carries the ArrowAssembly component the entity reads.
         return new ModularArrowEntity(level, shooter, ammo.copy(), weapon);
     }
 }

@@ -51,10 +51,8 @@ public class ModularQuiverItem extends Item {
         }
         // Inserting into Quiver
         else if (carriedStack.getItem() instanceof ArrowItem) {
-            // DYNAMIC UPDATE: Use maxSlots instead of 9
             for (int i = 0; i < maxSlots; i++) {
-
-                // DYNAMIC UPDATE: Ensure the list has enough empty slots to prevent out-of-bounds errors
+                // Grow the list as needed so the index is always valid.
                 if (i >= list.size()) {
                     list.add(ItemStack.EMPTY);
                 }
@@ -96,13 +94,8 @@ public class ModularQuiverItem extends Item {
     // --- Helpers ---
     public static List<ItemStack> getQuiverContents(ItemStack quiver) {
         ItemContainerContents contents = quiver.getOrDefault(DataComponents.CONTAINER, ItemContainerContents.EMPTY);
-
-        // 1. Create a NonNullList pre-filled with exactly 9 Empty ItemStacks
         NonNullList<ItemStack> list = NonNullList.withSize(9, ItemStack.EMPTY);
-
-        // 2. Safely copy the contents into our properly sized Minecraft list
         contents.copyInto(list);
-
         return list;
     }
 
@@ -111,7 +104,6 @@ public class ModularQuiverItem extends Item {
         ItemStack stack = player.getItemInHand(hand);
         if (!level.isClientSide) {
             player.openMenu(new SimpleMenuProvider(
-                    // We removed the 'hand' parameter here!
                     (id, inv, p) -> new QuiverMenu(id, inv),
                     Component.translatable("gui.fletcherstrestle.quiver")
             ));

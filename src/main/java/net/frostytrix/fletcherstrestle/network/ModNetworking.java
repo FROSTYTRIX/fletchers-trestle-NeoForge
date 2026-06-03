@@ -23,8 +23,6 @@ public class ModNetworking {
                 FletchingTabPayload.TYPE,
                 FletchingTabPayload.STREAM_CODEC,
                 FletchingTabPayload::handleData
-                // Note: If your handle method takes payload/context explicitly like below,
-                // use: (payload, context) -> context.enqueueWork(() -> payload.handle(context.player()))
         );
 
         // Client → Server : change active quiver slot
@@ -82,13 +80,10 @@ public class ModNetworking {
             Entity sender = context.player();
             if (sender == null || sender.level() == null) return;
 
-            // Find the entity using the entityId we sent over
             Entity entity = sender.level().getEntity(payload.entityId());
 
-            // 1. THE FIX: Check if it's a LivingEntity and cast it to 'mount'
+            // Only apply if it's a living mount the sender is actually riding.
             if (entity instanceof LivingEntity mount && mount.hasPassenger(sender)) {
-
-                // Now Java knows 'mount' has a body and a head!
                 mount.setYRot(payload.yRot());
                 mount.yBodyRot = payload.yRot();
                 mount.yHeadRot = payload.yRot();

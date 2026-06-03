@@ -36,7 +36,7 @@ public class DippingVatBlockEntity extends BlockEntity {
         protected void onContentsChanged() {
             setChanged();
             if (level != null && !level.isClientSide()) {
-                // Force le serveur à envoyer le nouveau NBT au client (Flag 3 = Update Block)
+                // Push the new tank NBT to clients so the fluid renders (flag 3 = block update).
                 level.sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), 3);
             }
         }
@@ -71,7 +71,6 @@ public class DippingVatBlockEntity extends BlockEntity {
         return tag;
     }
 
-    // 3. On expédie le paquet au client
     @Override
     public ClientboundBlockEntityDataPacket getUpdatePacket() {
         return ClientboundBlockEntityDataPacket.create(this);
@@ -80,26 +79,24 @@ public class DippingVatBlockEntity extends BlockEntity {
     public boolean handlePlayerInteraction(Player player, InteractionHand hand) {
         ItemStack itemInHand = player.getItemInHand(hand);
 
-        // --- SEAUX ET CONTENANTS OFFICIELS (Eau, Lave, Fluides moddés) ---
-        // FluidUtil va vider le seau dans le tank (ou le remplir) et donner le seau vide au joueur automatiquement
+        // Buckets / fluid containers: FluidUtil fills/empties the tank and swaps the player's item.
         if (net.neoforged.neoforge.fluids.FluidUtil.interactWithFluidHandler(player, hand, this.fluidTank)) {
-            return true; // Si l'interaction réussit, on s'arrête là !
+            return true;
         }
 
-        // --- NOUVEAU CAS : RÉCUPÉRER UNE POTION DANS UNE FIOLE VIDE ---
+        // Fill an empty glass bottle from the tank.
         if (itemInHand.is(Items.GLASS_BOTTLE)) {
             FluidStack currentFluid = fluidTank.getFluid();
 
-            // Il faut au moins 1000mB pour remplir une fiole entière
+            // Need a full 1000mB for one bottle.
             if (currentFluid.getAmount() >= 1000) {
-                // On vérifie que c'est bien notre potion alchimique (ou de l'eau pure)
                 boolean isOurPotion = currentFluid.getFluid() == net.frostytrix.fletcherstrestle.fluid.ModFluids.LIQUID_POTION_SOURCE.get();
                 boolean isWater = currentFluid.getFluid() == net.minecraft.world.level.material.Fluids.WATER;
 
                 if (isOurPotion || isWater) {
                     ItemStack filledBottle = new ItemStack(Items.POTION);
 
-                    // On recrée l'item Potion avec le bon effet
+                    // Rebuild the Potion item with the right effect.
                     if (isOurPotion) {
                         net.minecraft.world.item.component.CustomData customData = currentFluid.get(DataComponents.CUSTOM_DATA);
                         if (customData != null && customData.contains("potion")) {
@@ -110,17 +107,16 @@ public class DippingVatBlockEntity extends BlockEntity {
                             }
                         }
                     } else {
-                        // Cas où le joueur a mis de l'eau pure via un tuyau ou un seau
+                        // Plain water (piped or bucketed in).
                         var waterHolder = net.minecraft.core.registries.BuiltInRegistries.POTION.getHolder(net.minecraft.resources.ResourceLocation.parse("minecraft:water")).orElse(null);
                         if (waterHolder != null) {
                             filledBottle.set(DataComponents.POTION_CONTENTS, new net.minecraft.world.item.alchemy.PotionContents(waterHolder));
                         }
                     }
 
-                    // On draine 1000mB du réservoir
                     fluidTank.drain(1000, IFluidHandler.FluidAction.EXECUTE);
 
-                    // On gère l'inventaire du joueur (remplace la fiole vide par la pleine)
+                    // Swap the empty bottle for the filled one.
                     if (!player.getAbilities().instabuild) {
                         itemInHand.shrink(1);
                     }
@@ -131,14 +127,13 @@ public class DippingVatBlockEntity extends BlockEntity {
                         player.drop(filledBottle, false);
                     }
 
-                    // On joue le son de remplissage de bouteille
                     level.playSound(null, this.worldPosition, SoundEvents.BOTTLE_FILL, SoundSource.BLOCKS, 1.0F, 1.0F);
                     return true;
                 }
             }
         }
 
-        // --- CAS 1 : REMPLISSAGE POTION MANUEL ---
+        // Manual fill: pour a (non-water) potion bottle into the tank.
         if (itemInHand.is(Items.POTION)) {
             PotionContents potionContents = itemInHand.get(DataComponents.POTION_CONTENTS);
             if (potionContents != null && !potionContents.is(Potions.WATER)) {
@@ -180,30 +175,21 @@ public class DippingVatBlockEntity extends BlockEntity {
             }
         }
 
-        // --- CAS 2 : LE TREMPAGE (DATA-DRIVEN VIA RECETTES) ---
+        // Dipping (data-driven via recipes).
         if (!fluidTank.isEmpty() && !itemInHand.isEmpty()) {
-            // 1. On crée l'objet Input pour la recette
             DippingRecipeInput input = new DippingRecipeInput(itemInHand, fluidTank.getFluid());
-
-            // 2. On interroge le gestionnaire de recettes de Minecraft
             Optional<RecipeHolder<DippingRecipe>> match = this.level.getRecipeManager()
                     .getRecipeFor(ModRecipes.DIPPING_TYPE.get(), input, this.level);
 
-            // 3. Si une recette correspond (Ex: 16 Flèches + 1000mB correspond)
             if (match.isPresent()) {
                 DippingRecipe recipe = match.get().value();
 
-                // Vérification supplémentaire : a-t-on le bon nombre d'items en main ?
                 if (itemInHand.getCount() >= recipe.inputCount()) {
-
-                    // On assemble le résultat (ce qui transfère magiquement la couleur de la potion)
+                    // Assemble (carries over the potion colour), then consume inputs.
                     ItemStack result = recipe.assemble(input, level.registryAccess());
-
-                    // Consommation
                     itemInHand.shrink(recipe.inputCount());
                     fluidTank.drain(recipe.fluidAmount(), IFluidHandler.FluidAction.EXECUTE);
 
-                    // Restitution au joueur
                     if (!player.getInventory().add(result)) {
                         player.drop(result, false);
                     }

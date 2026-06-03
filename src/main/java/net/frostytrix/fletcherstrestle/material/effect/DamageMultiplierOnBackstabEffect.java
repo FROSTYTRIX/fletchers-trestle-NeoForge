@@ -14,21 +14,13 @@ import net.minecraft.world.phys.Vec3;
 import java.util.Optional;
 
 /**
- * On-hit: if the arrow approaches the target from behind, multiply base
- * damage by {@code multiplier}. "Behind" is defined by the dot product of
- * the target's view vector and the arrow's velocity exceeding
- * {@code dotThreshold} — the closer to 1.0, the stricter the angle.
+ * On-hit: if the arrow comes from behind the target, multiply base damage by {@code multiplier}.
+ * "Behind" means the dot of the target's view vector and the arrow's velocity exceeds
+ * {@code dotThreshold} (closer to 1.0 = stricter angle). Used by the pale_oak shaft; optional
+ * {@code sound} plays on a successful backstab.
  *
- * <p>Used by the pale_oak shaft. Optional {@code sound} plays on a
- * successful backstab.</p>
- *
- * <p>JSON:</p>
- * <pre>
- * { "type": "fletcherstrestle:damage_multiplier_on_backstab",
- *   "dot_threshold": 0.5,
- *   "multiplier": 1.4,
- *   "sound": "minecraft:entity.breeze.wind_charge_burst" }
- * </pre>
+ * <p>JSON: {@code { "type": "fletcherstrestle:damage_multiplier_on_backstab", "dot_threshold": 0.5,
+ * "multiplier": 1.4, "sound": "minecraft:entity.breeze.wind_charge_burst" }}
  */
 public record DamageMultiplierOnBackstabEffect(
         float dotThreshold,

@@ -17,12 +17,8 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * Built-in arrow-fletching material defs.
- *
- * <p>{@code bound} carries its 25% drop-on-hit chance and {@code serrated}
- * its mid-flight homing as effects. {@code vex} (block-phase) is still
- * keyed off its id in {@code ModularArrowEntity} — it needs stateful
- * coordination the simple effect hooks don't expose yet.</p>
+ * Built-in arrow-fletching material defs. {@code bound} (drop-on-hit) and {@code serrated} (homing)
+ * use effects; {@code vex} (block-phase) is stateful and keyed off its id in {@code ModularArrowEntity}.
  */
 public final class BuiltinArrowFletchings {
     private BuiltinArrowFletchings() {

@@ -11,11 +11,9 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 
 /**
- * On-fire: sets the fired projectile on fire for {@code seconds} seconds.
- * Used by the crimson bow / crossbow limb.
+ * On-fire: sets the fired projectile alight for {@code seconds} seconds. Used by the crimson limb.
  *
- * <p>JSON:</p>
- * <pre>{ "type": "fletcherstrestle:ignite_arrow", "seconds": 100 }</pre>
+ * <p>JSON: {@code { "type": "fletcherstrestle:ignite_arrow", "seconds": 100 }}
  */
 public record IgniteArrowEffect(int seconds) implements MaterialEffect {
 

@@ -23,7 +23,7 @@ public class DippingRecipeBuilder implements RecipeBuilder {
     private final Ingredient input;
     private final ItemStack result;
 
-    // Valeurs par défaut
+    // Defaults
     private int inputCount = 1;
     private int fluidAmount = 1000;
     private Optional<String> requiredPotion = Optional.empty();
@@ -37,12 +37,12 @@ public class DippingRecipeBuilder implements RecipeBuilder {
         this.result = new ItemStack(result, resultCount);
     }
 
-    // Point d'entrée basique (donne 1 item)
+    // Basic entry point (yields 1 item).
     public static DippingRecipeBuilder dipping(Ingredient input, ItemLike result) {
         return new DippingRecipeBuilder(input, result, 1);
     }
 
-    // Point d'entrée pour des stacks (ex: 16 flèches)
+    // Entry point for stacked results (e.g. 16 arrows).
     public static DippingRecipeBuilder dipping(Ingredient input, ItemLike result, int resultCount) {
         return new DippingRecipeBuilder(input, result, resultCount);
     }
@@ -91,7 +91,7 @@ public class DippingRecipeBuilder implements RecipeBuilder {
                 .requirements(AdvancementRequirements.Strategy.OR);
         this.criteria.forEach(advancementBuilder::addCriterion);
 
-        // Création de l'objet recette
+        // Build the recipe object.
         DippingRecipe recipe = new DippingRecipe(this.input, this.inputCount, this.requiredPotion, this.fluidAmount, this.result);
 
         // Sauvegarde de la recette ET de l'avancement dans le Datagen

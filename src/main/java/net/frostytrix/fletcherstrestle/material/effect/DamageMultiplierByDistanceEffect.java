@@ -10,12 +10,10 @@ import net.frostytrix.fletcherstrestle.material.ModMaterialEffectTypes;
 import net.minecraft.world.phys.EntityHitResult;
 
 /**
- * On-hit: scales base damage by {@code 1 + (distanceTraveled / perBlock)}.
- * Used by the weighted_blunt head — every {@code perBlock} blocks of
- * travel adds 1× the base damage.
+ * On-hit: scales base damage by {@code 1 + (distanceTraveled / perBlock)}. Used by the
+ * weighted_blunt head — every {@code perBlock} blocks of travel adds 1× the base damage.
  *
- * <p>JSON:</p>
- * <pre>{ "type": "fletcherstrestle:damage_multiplier_by_distance", "per_block": 100 }</pre>
+ * <p>JSON: {@code { "type": "fletcherstrestle:damage_multiplier_by_distance", "per_block": 100 }}
  */
 public record DamageMultiplierByDistanceEffect(float perBlock) implements MaterialEffect {
 

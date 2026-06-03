@@ -15,15 +15,13 @@ import java.util.UUID;
 import java.util.function.Supplier;
 
 public class ModDataComponents {
-    // 1. Use the standard DeferredRegister format
     public static final DeferredRegister<DataComponentType<?>> DATA_COMPONENT_TYPES =
             DeferredRegister.create(Registries.DATA_COMPONENT_TYPE, FletcherTrestle.MOD_ID);
 
-    // 2. Use the standard .register() and manually build the Component Type
     public static final Supplier<DataComponentType<BowAssembly>> BOW_ASSEMBLY =
             DATA_COMPONENT_TYPES.register("bow_assembly", () ->
                     DataComponentType.<BowAssembly>builder()
-                            .persistent(BowAssembly.CODEC) // Note: If your specific mapping version complains here, change 'persistent' to 'codec'
+                            .persistent(BowAssembly.CODEC)
                             .networkSynchronized(BowAssembly.STREAM_CODEC)
                             .build()
             );
@@ -43,12 +41,11 @@ public class ModDataComponents {
                             .networkSynchronized(ByteBufCodecs.INT)
                             .build());
 
-    // Inside ModDataComponents.java
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> MAX_QUIVER_SLOTS =
             DATA_COMPONENT_TYPES.register("max_quiver_slots", () ->
                     DataComponentType.<Integer>builder()
-                            .persistent(Codec.INT)// For saving to NBT/Disk
-                            .networkSynchronized(ByteBufCodecs.VAR_INT) // For syncing from Server -> Client
+                            .persistent(Codec.INT)
+                            .networkSynchronized(ByteBufCodecs.VAR_INT)
                             .build());
 
     // Stored on the Eagle Whistle item — UUID of the specific eagle the
@@ -60,9 +57,8 @@ public class ModDataComponents {
                             .networkSynchronized(UUIDUtil.STREAM_CODEC)
                             .build());
 
-    // Crossbow attachment (Phase 1) — id of the installed attachment def,
-    // resolved against the crossbow_attachment datapack registry at aim/fire
-    // time. One universal slot, so a single id is enough.
+    // Crossbow attachment — id of the installed attachment def, resolved against the
+    // crossbow_attachment datapack registry at aim/fire time. One universal slot, so one id.
     public static final Supplier<DataComponentType<ResourceLocation>> CROSSBOW_ATTACHMENT =
             DATA_COMPONENT_TYPES.register("crossbow_attachment", () ->
                     DataComponentType.<ResourceLocation>builder()

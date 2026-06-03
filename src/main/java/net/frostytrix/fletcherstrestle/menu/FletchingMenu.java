@@ -201,15 +201,7 @@ public class FletchingMenu extends AbstractContainerMenu {
                     this.craftSlots.getItem(6)  // Fletching
             );
 
-            // --- ADD THESE DEBUG LINES ---
-            //System.out.println("--- CHECKING ARROW RECIPE ---");
-            //System.out.println("Head Slot contains: " + arrowInput.head().getItem());
-            //System.out.println("Shaft Slot contains: " + arrowInput.shaft().getItem());
-            //System.out.println("Fletch Slot contains: " + arrowInput.fletching().getItem());
-
             var arrowRecipeHolder = this.level.getRecipeManager().getRecipeFor(ModRecipes.MODULAR_ARROW_TYPE.get(), arrowInput, this.level);
-
-            //System.out.println("Did RecipeManager find a match? " + arrowRecipeHolder.isPresent());
 
             if (arrowRecipeHolder.isPresent()) {
                 ItemStack output = arrowRecipeHolder.get().value().assemble(arrowInput, this.level.registryAccess());
@@ -275,7 +267,7 @@ public class FletchingMenu extends AbstractContainerMenu {
                         if (!this.moveItemStackTo(itemstack1, 8, 35, false)) return ItemStack.EMPTY;
                     }
                 } else if (this.activeTab == 1) {
-                    // Using your newly made tags for shift-clicking!
+                    // Route shift-clicked parts to the matching arrow slot by tag.
                     if (itemstack1.is(ModTags.Items.ARROW_HEADS)) {
                         if (!this.moveItemStackTo(itemstack1, 5, 6, false)) return ItemStack.EMPTY;
                     } else if (itemstack1.is(ModTags.Items.ROUGH_LIMBS)) {

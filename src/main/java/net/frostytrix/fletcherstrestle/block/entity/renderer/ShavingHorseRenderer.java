@@ -24,7 +24,7 @@ public class ShavingHorseRenderer implements BlockEntityRenderer<ShavingHorseBlo
 
         poseStack.pushPose();
 
-        poseStack.translate(0.5, 1.05, 0.5); // Milieu du bloc, un peu en hauteur
+        poseStack.translate(0.5, 1.05, 0.5); // centre of the block, slightly raised
 
         Direction facing = entity.getBlockState().getValue(ShavingHorseBlock.FACING);
         float rotation = -facing.toYRot();

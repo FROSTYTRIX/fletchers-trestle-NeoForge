@@ -13,29 +13,14 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 
 /**
- * Block-hit: with {@code chance} probability and up to {@code maxBounces}
- * times per arrow, deflect off the impacted face instead of embedding.
- * Used by the jungle shaft.
+ * Block-hit: deflects off the impacted face instead of embedding, with {@code chance}
+ * probability and up to {@code maxBounces} times. Used by the jungle shaft. The bounce
+ * inverts the velocity axis facing the surface and scales all axes by {@code retention}.
+ * Signals "consumed" by incrementing the arrow's bounce count, which
+ * {@link ModularArrowEntity#getBounceCount()} checks to skip the vanilla embed path.
  *
- * <p>The bounce keeps {@code retention} fraction of the incoming velocity
- * (defaults to 0.3 — arrows lose most of their energy on impact). The
- * axis aligned with the impacted face is inverted; the other two axes
- * keep their direction but are scaled down. Crit-arrow particles are
- * disabled after the first bounce so the arrow stops cosmetically
- * "sparkling" through subsequent ricochets.</p>
- *
- * <p>The effect returns nothing — it signals "block-hit consumed" by
- * mutating the arrow's state. The caller in {@code ModularArrowEntity.onHitBlock}
- * checks {@link ModularArrowEntity#getBounceCount()} after dispatch and
- * skips the vanilla embed path if the count increased.</p>
- *
- * <p>JSON:</p>
- * <pre>
- * { "type": "fletcherstrestle:bounce_on_block",
- *   "chance": 0.85,
- *   "max_bounces": 3,
- *   "retention": 0.3 }
- * </pre>
+ * <p>JSON: {@code { "type": "fletcherstrestle:bounce_on_block", "chance": 0.85,
+ * "max_bounces": 3, "retention": 0.3 }}
  */
 public record BounceOnBlockEffect(float chance, int maxBounces, float retention) implements MaterialEffect {
 

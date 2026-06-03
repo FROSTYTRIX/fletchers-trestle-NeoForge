@@ -9,8 +9,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
-// Fletcher's Guide — opens the in-game guidebook screen (Phase 4). A button
-// inside still links out to the full project wiki.
+// Fletcher's Guide — opens the in-game guidebook screen. A button inside links out to the wiki.
 public class FletcherGuideItem extends Item {
 
     public FletcherGuideItem(Properties properties) {

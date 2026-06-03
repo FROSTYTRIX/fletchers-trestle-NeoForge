@@ -13,15 +13,15 @@ public class ModFluids {
     public static final DeferredRegister<Fluid> FLUIDS =
             DeferredRegister.create(Registries.FLUID, FletcherTrestle.MOD_ID);
 
-    // 1. Le fluide source (celui qui est statique dans le tank)
+    // Source fluid (the static one held in the tank).
     public static final Supplier<FlowingFluid> LIQUID_POTION_SOURCE = FLUIDS.register("liquid_potion",
             () -> new BaseFlowingFluid.Source(ModFluids.LIQUID_POTION_PROPERTIES));
 
-    // 2. Le fluide en mouvement (requis par NeoForge même si on ne s'en sert pas directement)
+    // Flowing fluid (required by NeoForge even though we never flow it).
     public static final Supplier<FlowingFluid> LIQUID_POTION_FLOWING = FLUIDS.register("flowing_liquid_potion",
             () -> new BaseFlowingFluid.Flowing(ModFluids.LIQUID_POTION_PROPERTIES));
 
-    // 3. Les propriétés qui lient le Type (ModFluidTypes) aux Fluides physiques
+    // Properties linking the fluid type (ModFluidTypes) to the physical fluids.
     public static final BaseFlowingFluid.Properties LIQUID_POTION_PROPERTIES = new BaseFlowingFluid.Properties(
             ModFluidTypes.LIQUID_POTION_TYPE,
             LIQUID_POTION_SOURCE,

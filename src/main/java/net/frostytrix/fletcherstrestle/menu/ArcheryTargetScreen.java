@@ -79,11 +79,11 @@ public class ArcheryTargetScreen extends AbstractContainerScreen<ArcheryTargetMe
         addRenderableWidget(Button.builder(
                         Component.translatable("gui.fletcherstrestle.clear_shots"),
                         btn -> {
-                            // 1. On vide côté client immédiatement (pas de flicker)
+                            // Clear client-side immediately (no flicker).
                             targetMenu.setShots(Collections.emptyList());
                             scrollOffset = 0;
                             selectedShot = -1;
-                            // 2. On envoie le containerId avec le packet pour cohérence
+                            // Send the containerId with the packet so server and client stay in sync.
                             PacketDistributor.sendToServer(
                                     new ClearShotsPacket(targetMenu.getTargetPos(), targetMenu.containerId)
                             );

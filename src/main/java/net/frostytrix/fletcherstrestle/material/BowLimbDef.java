@@ -10,26 +10,15 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * Datapack definition of a bow-limb material.
+ * Datapack definition of a bow-limb material, at {@code data/<ns>/fletcherstrestle/bow_limb/<id>.json}.
+ * The file id (e.g. {@code fletcherstrestle:oak}) is the canonical material id used by assemblies,
+ * texture paths and tooltip keys.
  *
- * <p>Lives at {@code data/<ns>/fletcherstrestle/bow_limb/<id>.json}.
- * The file's id (e.g. {@code fletcherstrestle:oak}) is the canonical material
- * id used by {@link net.frostytrix.fletcherstrestle.component.BowAssembly},
- * texture paths, and tooltip translation keys.</p>
- *
- * @param ingredient        items accepted by the fletching menu's limb slot;
- *                          how modpack makers map a modded item onto this
- *                          material.
- * @param stats             stats consumed at draw / fire time
- * @param texture           optional resource-location of the bow texture for
- *                          this limb; falls back to the conventional path
- *                          {@code <ns>:textures/.../limb/<id>.png}.
+ * @param ingredient        items accepted by the fletching menu's limb slot
+ * @param stats             stats consumed at draw/fire time
+ * @param texture           optional bow-texture override; else the conventional path
  * @param effects           declarative behaviors attached to this material
- *                          (e.g. amphibious aim, slow-falling-while-aiming).
- * @param crossbowOverrides optional per-stat overrides applied when this
- *                          limb is used on a crossbow.
- * @see CrossbowOverrides
- * @see MaterialEffect
+ * @param crossbowOverrides optional per-stat overrides applied on a crossbow
  */
 public record BowLimbDef(
         Ingredient ingredient,

@@ -8,23 +8,10 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DataPackRegistryEvent;
 
 /**
- * The six datapack registries that hold material definitions. Each loads
- * JSON entries from {@code data/<datapack_namespace>/fletcherstrestle/<path>/<id>.json}
- * where {@code <path>} matches the registry-key path below
- * ({@code bow_limb}, {@code arrow_head}, …).
- *
- * <p>All six are <b>synced to clients</b>: the arrow renderer needs the
- * texture overrides, JEI categories need to enumerate entries, and the
- * tooltip code reads stats — all of those run client-side. The implication
- * is that any modpack adding a material def must ship the datapack on
- * client as well as server, which is the right default for this kind of
- * data and matches how recipes / loot tables already work.</p>
- *
- * <p>Registries are wired up in
- * {@link #onNewDataPackRegistry(DataPackRegistryEvent.NewRegistry)},
- * which fires on the mod-event bus during init. Call
- * {@link #register(IEventBus)} from the mod constructor to hook the
- * listener.</p>
+ * The six datapack registries holding material definitions. Each loads JSON from
+ * {@code data/<namespace>/fletcherstrestle/<path>/<id>.json} where {@code <path>} matches the
+ * registry-key path below. All six are <b>synced to clients</b> (renderer, JEI and tooltips read
+ * them client-side), so a modpack adding a material def must ship its datapack on the client too.
  */
 public final class ModMaterialRegistries {
     private ModMaterialRegistries() {

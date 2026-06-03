@@ -114,13 +114,8 @@ public class RopeBlock extends Block implements SimpleWaterloggedBlock {
     @Override
     protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
         if (state.getValue(PERSISTENT) && !player.level().isClientSide && !level.getBlockState(pos.below()).is(ModBlocks.ROPE.get())) {
-            if (!state.getValue(BOTTOM)) {
-                level.setBlockAndUpdate(pos, state.setValue(BOTTOM, true));
-                return InteractionResult.SUCCESS;
-            } else {
-                level.setBlockAndUpdate(pos, state.setValue(BOTTOM, false));
-                return InteractionResult.SUCCESS;
-            }
+            level.setBlockAndUpdate(pos, state.cycle(BOTTOM));
+            return InteractionResult.SUCCESS;
         }
         return super.useWithoutItem(state, level, pos, player, hitResult);
     }

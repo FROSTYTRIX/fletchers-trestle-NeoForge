@@ -22,22 +22,11 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * Built-in arrow-head material defs. Mirrors the legacy
- * {@code ModularArrowItem.HeadStats} enum stats AND the hardcoded on-hit
- * branches that used to live in {@code ModularArrowEntity.onHitEntity}.
- *
- * <p>Each head's special behaviors (bleed for broadhead, armor-piercing
- * for bodkin, distance damage for weighted_blunt, target-pull for barbed,
- * etc.) is now expressed as a {@code MaterialEffect} in its def, so a
- * modpack can swap them out, parameterise them, or attach extra effects
- * by overriding the JSON.</p>
- *
- * <p>The complex multi-tick effects — resonance echo, rope deployment,
- * grappling hook, glass-vial potion splash — still live in
- * {@code ModularArrowEntity} for the moment; they need stateful
- * coordination with the arrow's tick lifecycle that the simple effect
- * lifecycle hooks don't expose. A future "stateful effect" extension can
- * lift them up too if needed.</p>
+ * Built-in arrow-head material defs. Each head's special behavior (bleed, armor-pierce, distance
+ * damage, target-pull, …) is a {@code MaterialEffect} on its def, so modpacks can override it via
+ * JSON. The complex multi-tick behaviors (resonance echo, rope/grapple deploy, glass-vial splash)
+ * still live in {@code ModularArrowEntity}, keyed off the head id — they need stateful tick
+ * coordination the simple effect hooks don't expose.
  */
 public final class BuiltinArrowHeads {
     private BuiltinArrowHeads() {
@@ -65,8 +54,7 @@ public final class BuiltinArrowHeads {
         register(ctx, BODKIN_POINT, Ingredient.of(Items.COPPER_INGOT), 1.00f,
                 List.of(new DamageMultiplierIfTargetArmoredEffect(1.25f)));
 
-        // RESONANCE_TIP — delayed echo damage. Still hardcoded in
-        // ModularArrowEntity.onHitEntity for now (stateful multi-tick).
+        // RESONANCE_TIP — delayed echo damage (stateful, handled in ModularArrowEntity).
         register(ctx, RESONANCE_TIP, Ingredient.of(Items.ECHO_SHARD), 1.00f, List.of());
 
         // BARBED_TIP — yanks target toward shooter on hit.
@@ -77,10 +65,8 @@ public final class BuiltinArrowHeads {
         register(ctx, WEIGHTED_BLUNT, Ingredient.of(Items.GOLD_INGOT), 1.05f,
                 List.of(new DamageMultiplierByDistanceEffect(100f)));
 
-        // WEIGHTED_HOOK / TRAILING_ROPE / GLASS_VIAL — stateful multi-tick
-        // behaviors still live in ModularArrowEntity. The defs ship with
-        // empty effect lists; the behavior is triggered by the entity
-        // when it sees the matching head id.
+        // WEIGHTED_HOOK / TRAILING_ROPE / GLASS_VIAL — stateful behaviors triggered in
+        // ModularArrowEntity by head id; defs ship with empty effect lists.
         register(ctx, WEIGHTED_HOOK, itemIng(ModItems.WEIGHTED_HOOK::get), 0.50f, List.of());
         register(ctx, TRAILING_ROPE, itemIng(() -> ModBlocks.ROPE.asItem()), 0.30f, List.of());
         register(ctx, GLASS_VIAL, Ingredient.of(Items.GLASS_BOTTLE), 0.40f, List.of());

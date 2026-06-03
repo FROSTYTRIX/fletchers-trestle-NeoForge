@@ -11,16 +11,11 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.EntityHitResult;
 
 /**
- * On-hit: if the target is below {@code threshold} fraction of max health,
- * multiply the arrow's base damage by {@code multiplier} before vanilla
- * damage resolves. Used by the crimson shaft's "executioner" trait.
+ * On-hit: if the target is below {@code threshold} fraction of max health, multiply base damage
+ * by {@code multiplier}. Used by the crimson shaft's "executioner" trait.
  *
- * <p>JSON:</p>
- * <pre>
- * { "type": "fletcherstrestle:damage_multiplier_if_target_below_health",
- *   "threshold": 0.5,
- *   "multiplier": 1.5 }
- * </pre>
+ * <p>JSON: {@code { "type": "fletcherstrestle:damage_multiplier_if_target_below_health",
+ * "threshold": 0.5, "multiplier": 1.5 }}
  */
 public record DamageMultiplierIfTargetBelowHealthEffect(float threshold, float multiplier)
         implements MaterialEffect {

@@ -305,38 +305,32 @@ public class ModularCrossbowItem extends CrossbowItem {
 
     @Override
     protected Projectile createProjectile(Level level, LivingEntity shooter, ItemStack weapon, ItemStack ammo, boolean isCrit) {
-        // 1. Let vanilla create the base projectile first
         Projectile projectile = super.createProjectile(level, shooter, weapon, ammo, isCrit);
-
-        // 2. Fetch our custom modular stats
         BowAssembly assembly = weapon.get(ModDataComponents.BOW_ASSEMBLY.get());
 
-        // 3. If it's a valid assembly and the projectile is an arrow, apply traits.
         if (assembly != null && projectile instanceof AbstractArrow arrow) {
             BowLimbDef limb = Materials.bowLimb(assembly.limbMaterial());
             BowRiserDef riser = Materials.bowRiser(assembly.riserMaterial());
             BowStringDef string = Materials.bowString(assembly.stringMaterial());
 
-            // --- DAMAGE MODIFIER ---
             arrow.setBaseDamage(arrow.getBaseDamage() * limb.stats().damageMultiplier());
 
-            // Archery skill: crit chance (Phase 2 passive).
+            // Archery skill: crit chance.
             if (shooter instanceof Player p) {
                 net.frostytrix.fletcherstrestle.progression.ArcheryProgression.rollCrit(p, arrow);
             }
 
-            // --- AMPHIBIOUS FLAG (stats-driven; not an effect) ---
+            // Amphibious lives on stats, not effects.
             if (limb.stats().amphibious()) {
                 arrow.getPersistentData().putBoolean("fletcherstrestle:amphibious", true);
             }
 
-            // --- ON-FIRE EFFECTS: ignite, no-gravity, flag-set, etc.
+            // On-fire effects: ignite, no-gravity, flag-set, etc.
             limb.effects().forEach(e -> e.onProjectileFired(shooter, weapon, arrow));
             riser.effects().forEach(e -> e.onProjectileFired(shooter, weapon, arrow));
             string.effects().forEach(e -> e.onProjectileFired(shooter, weapon, arrow));
         }
 
-        // 4. Return the fully modified arrow to the firing sequence
         return projectile;
     }
 
@@ -371,7 +365,7 @@ public class ModularCrossbowItem extends CrossbowItem {
             }
         }
 
-        // Archery skill: steadier aim with level (Phase 2 passive).
+        // Archery skill: steadier aim with level.
         if (shooter instanceof Player p) {
             finalInaccuracy *= net.frostytrix.fletcherstrestle.progression.ArcheryProgression.inaccuracyMultiplier(p);
         }
@@ -471,138 +465,4 @@ public class ModularCrossbowItem extends CrossbowItem {
         }
     }
 
-    // --- ENUMS ---
-
-    /**
-     * @deprecated see {@link ModularBowItem.LimbStats}.
-     */
-    @Deprecated(forRemoval = true)
-    public enum LimbStats {
-        OAK("oak", 20.0f, 1.0f, false, false),
-        SPRUCE("spruce", 22.0f, 1.0f, false, false),
-        BIRCH("birch", 10.0f, 0.7f, false, false),
-        JUNGLE("jungle", 18.0f, 0.9f, false, false),
-        ACACIA("acacia", 20.0f, 1f, false, false),
-        DARK_OAK("dark oak", 35.0f, 1.6f, false, false),
-        MANGROVE("mangrove", 22.0f, 1f, true, false),
-        CHERRY("cherry", 20.0f, 0.85f, false, true),
-        PALE_OAK("pale oak", 26.0f, 1f, false, false),
-        CRIMSON("crimson", 24.0f, 1.1f, false, false),
-        WARPED("warped", 20.0f, 1.0f, false, false);
-
-        private final String name;
-        private final float drawTime;
-        private final float damageMult;
-        private final boolean isAmphibious;
-        private final boolean givesSlowFalling;
-
-        LimbStats(String name, float drawTime, float damageMult, boolean isAmphibious, boolean givesSlowFalling) {
-            this.name = name;
-            this.drawTime = drawTime;
-            this.damageMult = damageMult;
-            this.isAmphibious = isAmphibious;
-            this.givesSlowFalling = givesSlowFalling;
-        }
-
-        public static LimbStats fromString(String materialName) {
-            for (LimbStats stat : values()) {
-                if (stat.name.equalsIgnoreCase(materialName)) return stat;
-            }
-            return OAK;
-        }
-
-        public float getDrawTime() {
-            return drawTime;
-        }
-
-        public float getDamageMult() {
-            return damageMult;
-        }
-
-        public boolean isGivesSlowFalling() {
-            return givesSlowFalling;
-        }
-
-        public boolean isAmphibian() {
-            return isAmphibious;
-        }
-
-        public Object getMaterialName() {
-            return name;
-        }
-    }
-
-    /**
-     * @deprecated see {@link ModularBowItem.LimbStats}.
-     */
-    @Deprecated(forRemoval = true)
-    public enum RiserStats {
-        WOOD("wood", 250, 1.0f),
-        IRON("iron", 750, 0.2f),
-        COPPER("copper", 400, 1.0f);
-
-        private final String name;
-        private final int maxDurability;
-        private final float inaccuracyMult;
-
-        RiserStats(String name, int maxDurability, float inaccuracyMult) {
-            this.name = name;
-            this.maxDurability = maxDurability;
-            this.inaccuracyMult = inaccuracyMult;
-        }
-
-        public static RiserStats fromString(String name) {
-            for (RiserStats stat : values()) {
-                if (stat.name.equalsIgnoreCase(name)) return stat;
-            }
-            return WOOD;
-        }
-
-        public float getMaxDurability() {
-            return maxDurability;
-        }
-
-        public float getInnacuracyMult() {
-            return inaccuracyMult;
-        }
-
-        public String getMaterialName() {
-            return name;
-        }
-    }
-
-    /**
-     * @deprecated see {@link ModularBowItem.LimbStats}.
-     */
-    @Deprecated(forRemoval = true)
-    public enum StringStats {
-        SPIDER("spider", 1.0f, 1),
-        FLAX("flax", 1.3f, 1),
-        HIGH_TENSION("high tension", 1.8f, 2);
-
-        private final String name;
-        private final float velocityMult;
-        private final int durabilityCost;
-
-        StringStats(String name, float velocityMult, int durabilityCost) {
-            this.name = name;
-            this.velocityMult = velocityMult;
-            this.durabilityCost = durabilityCost;
-        }
-
-        public static StringStats fromString(String name) {
-            for (StringStats stat : values()) {
-                if (stat.name.equalsIgnoreCase(name)) return stat;
-            }
-            return SPIDER;
-        }
-
-        public float getVelocityMult() {
-            return velocityMult;
-        }
-
-        public float getDurabilityCost() {
-            return durabilityCost;
-        }
-    }
 }

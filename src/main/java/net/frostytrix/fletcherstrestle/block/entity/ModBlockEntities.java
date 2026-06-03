@@ -57,7 +57,6 @@ public class ModBlockEntities {
             );
 
     public static void register(IEventBus eventBus) {
-        System.out.println("====== FLETCHER'S TRESTLE: REGISTERING BLOCK ENTITIES NOW ======");
         BLOCK_ENTITIES.register(eventBus);
     }
 }

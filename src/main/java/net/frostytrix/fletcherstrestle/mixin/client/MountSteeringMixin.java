@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-// Target the horse specifically so it can't override us!
+// Targets the horse directly so its own rotation logic can't override ours.
 @Mixin(AbstractHorse.class)
 public class MountSteeringMixin {
 
@@ -36,24 +36,17 @@ public class MountSteeringMixin {
         AbstractHorse mount = (AbstractHorse) (Object) this;
 
         if (mount.level().isClientSide() && ClientState.isFreeLooking) {
-
-            // 1. Convert A/D keys into a steering wheel!
-            // passenger.xxa tracks your A/D keys (usually -1.0 to 1.0)
-            float turnSpeed = 5.0F; // Tweak this number to make the horse turn faster or slower
-
-            // Subtracting the input turns the horse mathematically left or right
+            // Steer with A/D (passenger.xxa, -1..1).
+            float turnSpeed = 5.0F;
             this.fletcherstrestle$storedYRot -= passenger.xxa * turnSpeed;
-
-            // Keep the body aligned with the new direction
             this.fletcherstrestle$storedBodyRot = this.fletcherstrestle$storedYRot;
 
-            // 2. Re-apply the newly steered rotation back to the horse
             mount.setYRot(this.fletcherstrestle$storedYRot);
             mount.yBodyRot = this.fletcherstrestle$storedBodyRot;
             mount.yHeadRot = this.fletcherstrestle$storedBodyRot;
             mount.yRotO = this.fletcherstrestle$storedYRot;
 
-            // 3. SEND THE DATA TO THE SERVER!
+            // Sync the steered rotation to the server.
             PacketDistributor.sendToServer(new MountSyncPayload(mount.getId(), this.fletcherstrestle$storedYRot));
         }
     }

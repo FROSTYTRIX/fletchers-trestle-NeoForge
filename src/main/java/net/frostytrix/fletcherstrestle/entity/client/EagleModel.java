@@ -285,10 +285,10 @@ public class EagleModel extends EntityModel<EagleEntity> {
         // Tail fans out during flight, dips slightly on downstroke
         tail.xRot = 0.1f + (float) Math.sin(ageInTicks * 0.25f) * 0.05f;
 
-        // Body tilts forward during flight
-        // (this is done in the renderer via PoseStack, not here — placeholder comment)
+        // Body forward-tilt during flight is applied in the renderer (PoseStack), not here.
 
         // Legs tuck back during flight
+
         leftLeg.xRot = -0.6f;
         rightLeg.xRot = -0.6f;
     }

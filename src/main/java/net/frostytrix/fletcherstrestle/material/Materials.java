@@ -12,19 +12,10 @@ import java.util.Locale;
 import java.util.Optional;
 
 /**
- * Thin convenience facade over {@link MaterialResolver}. Each lookup
- * returns a def with a sensible default applied on miss — mirrors the
- * legacy {@code *Stats.fromString(...)} contract of "never null, always
- * returns the OAK/WOOD/SPIDER/etc fallback".
- *
- * <p>Use this from any call site that just wants stat values without
- * caring about resolution failure. Use {@link MaterialResolver} directly
- * if you need {@code Optional} semantics or a {@link Holder.Reference}
- * (e.g. to read the material's id for tooltip translation).</p>
- *
- * <p>The default defs ({@link #DEFAULT_BOW_LIMB} etc.) are also returned
- * during early init / datagen / before the client joins a world — anywhere
- * {@link MaterialResolver} can't find a {@code RegistryAccess}.</p>
+ * Convenience facade over {@link MaterialResolver}: each lookup is never-null, returning a sensible
+ * default def on miss. Use this when you just want stat values; use {@link MaterialResolver} directly
+ * for {@code Optional} semantics or a {@link Holder.Reference}. The defaults also stand in during
+ * early init / datagen / before the client joins a world (no {@code RegistryAccess} available).
  */
 public final class Materials {
     private Materials() {
@@ -87,17 +78,8 @@ public final class Materials {
     // ---- Display names ----
 
     /**
-     * Returns the translatable display name for a material stored on a
-     * {@link net.frostytrix.fletcherstrestle.component.BowAssembly} /
-     * {@link net.frostytrix.fletcherstrestle.component.ArrowAssembly}.
-     *
-     * <p>If the id resolves to a registry entry, returns
-     * {@code Component.translatable("material.<namespace>.<path>")} so the
-     * built-in lang file (or a modpack's lang file for added materials)
-     * controls the player-facing label. Falls back to a Component built
-     * off the raw id string when resolution fails — this keeps existing
-     * worlds with legacy "Dark Oak" stored strings displaying SOMETHING
-     * even if the registry doesn't recognise the string.</p>
+     * Translatable display name for a stored material id: {@code material.<ns>.<path>} when it
+     * resolves, else a literal of the raw string so legacy "Dark Oak" entries still show something.
      */
     public static Component bowLimbName(String idOrLegacy) {
         return MaterialResolver.resolveBowLimbById(idOrLegacy)
@@ -138,24 +120,10 @@ public final class Materials {
     // ---- Texture resolution ----
 
     /**
-     * Resolves a texture {@link ResourceLocation} for a material slot,
-     * honoring the def's optional {@code texture} override and falling
-     * back to a conventional path otherwise.
-     *
-     * <p>Convention path: {@code <materialNamespace>:<basePathPrefix>/<materialPath><suffix>}
-     * where the material namespace is the namespace of the registered def
-     * (so {@code mypack:steel} pulls from {@code mypack:...} by default),
-     * and {@code <materialPath>} is the registry-key path of the def
-     * (e.g. {@code dark_oak}, {@code high_tension}).</p>
-     *
-     * <p>If the def carries an explicit {@code texture} field, that
-     * location is used as the override base — {@code suffix} is appended
-     * to whatever path the override points to so the same suffix scheme
-     * (e.g. {@code _limb_pulling_0}) works.</p>
-     *
-     * <p>Falls back to the mod's own namespace + the supplied id string if
-     * the def can't be resolved (e.g. an empty assembly or a legacy
-     * display-form string that doesn't normalise to anything known).</p>
+     * Texture {@link ResourceLocation} for a material slot. Uses the def's optional {@code texture}
+     * override if present (with {@code suffix} appended), else the convention path
+     * {@code <defNamespace>:<basePathPrefix>/<defPath><suffix>}. Falls back to the mod namespace +
+     * normalised id when the def can't be resolved.
      */
     public static ResourceLocation bowLimbTexture(String idString, String basePathPrefix, String suffix) {
         return textureOf(MaterialResolver.resolveBowLimbById(idString),

@@ -1,4 +1,4 @@
-package net.frostytrix.fletcherstrestle.event; // Ajuste selon ton package
+package net.frostytrix.fletcherstrestle.event;
 
 import net.frostytrix.fletcherstrestle.FletcherTrestle;
 import net.frostytrix.fletcherstrestle.fluid.ModFluidTypes;
@@ -19,7 +19,7 @@ public class ModClientFluidEvents {
     @SubscribeEvent
     public static void onClientExtensions(RegisterClientExtensionsEvent event) {
 
-        // On enregistre nos extensions visuelles et on les lie à notre fluide (ModFluidTypes.LIQUID_POTION_TYPE)
+        // Register client visual extensions for our liquid-potion fluid type.
         event.registerFluidType(new IClientFluidTypeExtensions() {
             private static final ResourceLocation WATER_STILL = ResourceLocation.withDefaultNamespace("block/water_still");
             private static final ResourceLocation WATER_FLOW = ResourceLocation.withDefaultNamespace("block/water_flow");
@@ -34,7 +34,7 @@ public class ModClientFluidEvents {
                 return WATER_FLOW;
             }
 
-            // La magie de la couleur dynamique est ici
+            // Dynamic colour: tint to the stored potion's colour.
             @Override
             public int getTintColor(FluidStack stack) {
                 net.minecraft.world.item.component.CustomData customData = stack.get(DataComponents.CUSTOM_DATA);
@@ -47,7 +47,7 @@ public class ModClientFluidEvents {
                         return contents.getColor() | 0xFF000000;
                     }
                 }
-                return 0xFF385DC6; // Bleu par défaut si aucune potion n'est détectée
+                return 0xFF385DC6; // default blue when no potion is present
             }
         }, ModFluidTypes.LIQUID_POTION_TYPE.get());
 

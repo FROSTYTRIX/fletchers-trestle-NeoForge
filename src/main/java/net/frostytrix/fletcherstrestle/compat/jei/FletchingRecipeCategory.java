@@ -31,7 +31,7 @@ public class FletchingRecipeCategory implements IRecipeCategory<ModularWeaponRec
     private final IDrawable icon;
 
     public FletchingRecipeCategory(IGuiHelper helper) {
-        // We cut out a 150x60 rectangle from your GUI texture to use as the background
+        // 150x60 slice of the GUI texture used as the category background.
         this.background = helper.createDrawable(TEXTURE, 10, 10, 150, 60);
         this.icon = helper.createDrawableIngredient(VanillaTypes.ITEM_STACK, new ItemStack(Blocks.FLETCHING_TABLE));
     }
