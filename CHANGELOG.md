@@ -31,7 +31,7 @@ The Steam Box is now a real workstation you can plumb and automate:
 
 A new directional cover block — a loophole you shoot through:
 
-- **Arrows pass through the slit**, but mobs and melee can't get through.
+- **Arrows pass through the slit**, but mobs and melee can't easily get through.
 - **Disguises as any full block** — right-click it with a block to make it
   wear that block's look (per-face textures, biome tint, transparency for
   glass/leaves, and light from glowstone, etc.); sneak + empty-hand to take
@@ -68,7 +68,6 @@ fletching gear.
   an extra click to unpack a crossbow.
 - Fixed the **magazine draw animation** so it matches the slower reload.
 - Fixed the **Eagle Whistle recipe** failing to load.
-- Fixed a missing **Jade config translation** that spammed an error.
 - Internal: arrow villager trades now pull from the data-driven registries;
   removed leftover deprecated code.
 
