@@ -80,6 +80,10 @@ public class FletcherTrestle {
     }
 
     private void commonSetup(FMLCommonSetupEvent event) {
+        // Let dispensers fire modular arrows like any other arrow (carrying their assembly).
+        event.enqueueWork(() -> net.minecraft.world.level.block.DispenserBlock.registerBehavior(
+                ModItems.MODULAR_ARROW.get(),
+                new net.minecraft.core.dispenser.ProjectileDispenseBehavior(ModItems.MODULAR_ARROW.get())));
     }
 
     private void addCreative(BuildCreativeModeTabContentsEvent event) {

@@ -1,6 +1,7 @@
 package net.frostytrix.fletcherstrestle.entity;
 
 import net.frostytrix.fletcherstrestle.FletcherTrestle;
+import net.frostytrix.fletcherstrestle.entity.custom.BlackHoleEntity;
 import net.frostytrix.fletcherstrestle.entity.custom.EagleEntity;
 import net.frostytrix.fletcherstrestle.entity.custom.HeavyDummyEntity;
 import net.frostytrix.fletcherstrestle.entity.custom.ModularArrowEntity;
@@ -39,6 +40,15 @@ public class ModEntities {
                             .clientTrackingRange(8)      // players see it at 128 blocks
                             .updateInterval(1)           // fast sync — it flies
                             .build("eagle")
+            );
+
+    public static final Supplier<EntityType<BlackHoleEntity>> BLACK_HOLE =
+            ENTITY_TYPES.register("black_hole", () ->
+                    EntityType.Builder.<BlackHoleEntity>of(BlackHoleEntity::new, MobCategory.MISC)
+                            .sized(3.0F, 3.0F)
+                            .clientTrackingRange(10)
+                            .updateInterval(1)
+                            .build("black_hole")
             );
 
     public static void register(IEventBus eventBus) {

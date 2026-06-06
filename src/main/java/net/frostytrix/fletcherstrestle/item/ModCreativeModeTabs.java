@@ -89,6 +89,13 @@ public class ModCreativeModeTabs {
                         modularArrowDisplay.set(ModDataComponents.ARROW_ASSEMBLY.get(),
                                 new ArrowAssembly("flint", "oak", "feather"));
                         output.accept(modularArrowDisplay);
+
+                        // Creative-only spectacle: black-hole arrow.
+                        ItemStack blackHoleArrow = new ItemStack(ModItems.MODULAR_ARROW.get());
+                        blackHoleArrow.set(ModDataComponents.ARROW_ASSEMBLY.get(),
+                                new ArrowAssembly("black_hole", "oak", "feather"));
+                        output.accept(blackHoleArrow);
+
                         output.accept(ModItems.WEIGHTED_HOOK.get());
                         output.accept(ModBlocks.ROPE.get());
 

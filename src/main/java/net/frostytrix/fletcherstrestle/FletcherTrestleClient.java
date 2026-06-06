@@ -1,6 +1,7 @@
 package net.frostytrix.fletcherstrestle;
 
 import net.frostytrix.fletcherstrestle.entity.ModEntities;
+import net.frostytrix.fletcherstrestle.entity.client.BlackHoleRenderer;
 import net.frostytrix.fletcherstrestle.entity.client.HeavyDummyModel;
 import net.frostytrix.fletcherstrestle.entity.client.HeavyDummyRenderer;
 import net.frostytrix.fletcherstrestle.item.ModItems;
@@ -43,6 +44,7 @@ public class FletcherTrestleClient {
 
     private void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
         event.registerEntityRenderer(ModEntities.HEAVY_DUMMY.get(), HeavyDummyRenderer::new);
+        event.registerEntityRenderer(ModEntities.BLACK_HOLE.get(), BlackHoleRenderer::new);
     }
 
     private void registerLayers(EntityRenderersEvent.RegisterLayerDefinitions event) {

@@ -5,10 +5,13 @@ import net.frostytrix.fletcherstrestle.component.ModDataComponents;
 import net.frostytrix.fletcherstrestle.entity.custom.ModularArrowEntity;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.core.Direction;
+import net.minecraft.core.Position;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.AbstractArrow;
+import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.ArrowItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -64,5 +67,14 @@ public class ModularArrowItem extends ArrowItem {
     public AbstractArrow createArrow(Level level, ItemStack ammo, LivingEntity shooter, @Nullable ItemStack weapon) {
         // The ammo stack carries the ArrowAssembly component the entity reads.
         return new ModularArrowEntity(level, shooter, ammo.copy(), weapon);
+    }
+
+    // Lets a dispenser fire a modular arrow (carrying its assembly) instead of a vanilla arrow.
+    @Override
+    public Projectile asProjectile(Level level, Position pos, ItemStack stack, Direction direction) {
+        ModularArrowEntity arrow = new ModularArrowEntity(
+                level, pos.x(), pos.y(), pos.z(), stack.copyWithCount(1), null);
+        arrow.pickup = AbstractArrow.Pickup.ALLOWED;
+        return arrow;
     }
 }

@@ -1,3 +1,40 @@
+# Fletcher's Trestle — 2.2.1
+
+The Singularity. A new **creative-only Black Hole arrow** collapses a piece of
+the world into a gravitational set piece — and modular arrows can finally be
+fired from dispensers.
+
+---
+
+## 🕳️ The Black Hole arrow
+
+A new **creative-only** arrow head that turns its impact point into a black hole:
+
+- **Gargantua, in Minecraft** — a fully procedural 3D set piece (no textures):
+  an opaque event-horizon sphere wrapped in a warm, Doppler-shifted accretion
+  disk, a lensed halo bending over the void, and a crisp photon ring, inspired
+  by *Interstellar*.
+- **It devours everything** — blocks, dropped items, mobs, and even block
+  entities (chests, machines) are dragged in and consumed. Crossing the event
+  horizon is instant death.
+- **An expanding crater** — destruction starts tight at the impact and sweeps
+  outward over its lifetime, frictionlessly hauling everything inward and
+  carving a growing crater. Only exposed blocks erode; bedrock and other
+  unbreakable blocks resist.
+- **Survives reloads** — the whole cinematic persists and resumes if you save
+  and quit mid-collapse.
+- Assembled at the Fletching Table from a **Barrier** (keeping it creative-only),
+  and fully integrated: it appears in the `/ft` commands and JEI, and has a
+  proper translated name.
+
+## 🎯 Other changes
+
+- **Dispensers can now fire modular arrows**, carrying their full assembly
+  (head, shaft, fletching and every behavior) — so you can even wire a
+  black-hole arrow to a redstone trigger.
+
+---
+
 # Fletcher's Trestle — 2.2.0
 
 The Workshop & Fieldcraft update. The **Steam Box** becomes a proper,

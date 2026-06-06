@@ -41,6 +41,7 @@ public final class BuiltinArrowHeads {
     public static final ResourceKey<ArrowHeadDef> WEIGHTED_HOOK = key("weighted_hook");
     public static final ResourceKey<ArrowHeadDef> TRAILING_ROPE = key("trailing_rope");
     public static final ResourceKey<ArrowHeadDef> GLASS_VIAL = key("glass_vial");
+    public static final ResourceKey<ArrowHeadDef> BLACK_HOLE = key("black_hole");
 
     public static void bootstrap(BootstrapContext<ArrowHeadDef> ctx) {
         // FLINT — vanilla baseline.
@@ -70,6 +71,10 @@ public final class BuiltinArrowHeads {
         register(ctx, WEIGHTED_HOOK, itemIng(ModItems.WEIGHTED_HOOK::get), 0.50f, List.of());
         register(ctx, TRAILING_ROPE, itemIng(() -> ModBlocks.ROPE.asItem()), 0.30f, List.of());
         register(ctx, GLASS_VIAL, Ingredient.of(Items.GLASS_BOTTLE), 0.40f, List.of());
+
+        // BLACK_HOLE — creative-only spectacle: spawns a black hole on impact (stateful, handled in
+        // ModularArrowEntity by head id). Crafted from the creative-only barrier ("the void").
+        register(ctx, BLACK_HOLE, Ingredient.of(Items.BARRIER), 1.00f, List.of());
     }
 
     private static Ingredient itemIng(java.util.function.Supplier<? extends ItemLike> s) {

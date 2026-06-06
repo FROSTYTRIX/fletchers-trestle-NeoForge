@@ -71,7 +71,14 @@ public class ModularArrowEntity extends AbstractArrow {
 
     // This constructor is called by our Item when fired
     public ModularArrowEntity(Level level, LivingEntity shooter, ItemStack ammo, @Nullable ItemStack weapon) {
-        super(ModEntities.MODULAR_ARROW.get(), shooter, level, ammo, weapon); // Replace EntityType.ARROW with your custom registered entity type later!
+        super(ModEntities.MODULAR_ARROW.get(), shooter, level, ammo, weapon);
+        this.entityData.set(SYNCED_ITEM, ammo.copyWithCount(1));
+        applyFlightModifiers(ammo);
+    }
+
+    // Position-based constructor — used by the dispenser behaviour (no shooter).
+    public ModularArrowEntity(Level level, double x, double y, double z, ItemStack ammo, @Nullable ItemStack weapon) {
+        super(ModEntities.MODULAR_ARROW.get(), x, y, z, level, ammo, weapon);
         this.entityData.set(SYNCED_ITEM, ammo.copyWithCount(1));
         applyFlightModifiers(ammo);
     }
@@ -177,6 +184,13 @@ public class ModularArrowEntity extends AbstractArrow {
     @Override
     protected void onHitEntity(EntityHitResult result) {
         ArrowAssembly assembly = this.getAssembly();
+
+        // Black-hole arrow: spawn the set-piece at impact and consume the arrow.
+        if (assembly != null && "black_hole".equals(assembly.head())) {
+            BlackHoleEntity.spawnAt(this.level(), result.getLocation());
+            this.discard();
+            return;
+        }
 
         // Glass-vial arrows shatter on impact and splash whatever potion they
         // were dipped in. Resolves before everything else so it can't be
@@ -407,6 +421,13 @@ public class ModularArrowEntity extends AbstractArrow {
     @Override
     protected void onHitBlock(BlockHitResult result) {
         ArrowAssembly assembly = this.getAssembly();
+
+        // Black-hole arrow: spawn the set-piece at impact and consume the arrow.
+        if (assembly != null && "black_hole".equals(assembly.head())) {
+            BlackHoleEntity.spawnAt(this.level(), result.getLocation());
+            this.discard();
+            return;
+        }
 
         // VEX FLETCHING: phase through one block of cover. Skips the impact
         // entirely the first time we hit a block; subsequent hits behave normally.
