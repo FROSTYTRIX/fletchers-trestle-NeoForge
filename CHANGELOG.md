@@ -21,13 +21,11 @@ A new **creative-only** arrow head that turns its impact point into a black hole
   outward over its lifetime, frictionlessly hauling everything inward and
   carving a growing crater. Only exposed blocks erode; bedrock and other
   unbreakable blocks resist.
-- **Survives reloads** — the whole cinematic persists and resumes if you save
-  and quit mid-collapse.
 - Assembled at the Fletching Table from a **Barrier** (keeping it creative-only),
   and fully integrated: it appears in the `/ft` commands and JEI, and has a
   proper translated name.
 
-## 🎯 Other changes
+## 🎯 Bug Fixes
 
 - **Dispensers can now fire modular arrows**, carrying their full assembly
   (head, shaft, fletching and every behavior) — so you can even wire a
