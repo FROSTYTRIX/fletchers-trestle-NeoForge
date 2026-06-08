@@ -3,6 +3,7 @@ package net.frostytrix.fletcherstrestle.datagen;
 import net.frostytrix.fletcherstrestle.FletcherTrestle;
 import net.frostytrix.fletcherstrestle.item.ModItems;
 import net.frostytrix.fletcherstrestle.loot.AddItemModifier;
+import net.frostytrix.fletcherstrestle.loot.ParrotFeatherModifier;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
@@ -59,5 +60,10 @@ public class ModGlobalLootModifierProvider extends GlobalLootModifierProvider {
                         LootItemRandomChanceCondition.randomChance(.125f).build()
                 }, ModItems.FLAX_SEEDS.get()));
 
+        // Parrots drop a feather matching their colour instead of a plain one.
+        this.add("coloured_feathers_from_parrot",
+                new ParrotFeatherModifier(new LootItemCondition[]{
+                        new LootTableIdCondition.Builder(ResourceLocation.withDefaultNamespace("entities/parrot")).build()
+                }));
     }
 }

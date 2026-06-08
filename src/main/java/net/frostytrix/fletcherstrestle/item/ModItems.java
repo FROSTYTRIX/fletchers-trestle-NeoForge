@@ -117,6 +117,22 @@ public class ModItems {
     public static final DeferredItem<Item> FLAX_STRING = ITEMS.register("flax_string",
             () -> new Item(new Item.Properties()));
 
+    // Coloured feathers — alternate fletchings (same stats as a plain feather).
+    // Drop from parrots (red/blue/green/cyan/light_gray by colour) and the eagle (brown).
+    // TODO: Redo the placeholder item/fletching textures — colour-pick from the actual mob colours.
+    public static final DeferredItem<Item> RED_FEATHER = ITEMS.register("red_feather",
+            () -> new Item(new Item.Properties()));
+    public static final DeferredItem<Item> BLUE_FEATHER = ITEMS.register("blue_feather",
+            () -> new Item(new Item.Properties()));
+    public static final DeferredItem<Item> GREEN_FEATHER = ITEMS.register("green_feather",
+            () -> new Item(new Item.Properties()));
+    public static final DeferredItem<Item> CYAN_FEATHER = ITEMS.register("cyan_feather",
+            () -> new Item(new Item.Properties()));
+    public static final DeferredItem<Item> LIGHT_GRAY_FEATHER = ITEMS.register("light_gray_feather",
+            () -> new Item(new Item.Properties()));
+    public static final DeferredItem<Item> BROWN_FEATHER = ITEMS.register("brown_feather",
+            () -> new Item(new Item.Properties()));
+
     // Arrows
 
     public static final DeferredItem<Item> MODULAR_ARROW = ITEMS.register("modular_arrow",

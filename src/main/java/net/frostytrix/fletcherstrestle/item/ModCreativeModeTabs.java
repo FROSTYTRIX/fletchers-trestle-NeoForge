@@ -77,6 +77,13 @@ public class ModCreativeModeTabs {
                         output.accept(ModItems.FLAX.get());
                         output.accept(ModItems.FLAX_SEEDS.get());
 
+                        output.accept(ModItems.RED_FEATHER.get());
+                        output.accept(ModItems.BLUE_FEATHER.get());
+                        output.accept(ModItems.GREEN_FEATHER.get());
+                        output.accept(ModItems.CYAN_FEATHER.get());
+                        output.accept(ModItems.LIGHT_GRAY_FEATHER.get());
+                        output.accept(ModItems.BROWN_FEATHER.get());
+
                         ItemStack modularBowDisplay = new ItemStack(ModItems.MODULAR_BOW.get());
                         ItemStack modularCrossowDisplay = new ItemStack(ModItems.MODULAR_CROSSBOW.get());
                         ItemStack modularArrowDisplay = new ItemStack(ModItems.MODULAR_ARROW.get());

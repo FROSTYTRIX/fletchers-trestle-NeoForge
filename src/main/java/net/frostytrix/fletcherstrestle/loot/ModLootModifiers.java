@@ -16,6 +16,9 @@ public class ModLootModifiers {
     public static final Supplier<MapCodec<? extends IGlobalLootModifier>> ADD_ITEM =
             LOOT_MODIFIER_SERIALIZERS.register("add_item", () -> AddItemModifier.CODEC);
 
+    public static final Supplier<MapCodec<? extends IGlobalLootModifier>> PARROT_FEATHER =
+            LOOT_MODIFIER_SERIALIZERS.register("parrot_feather", () -> ParrotFeatherModifier.CODEC);
+
     public static void register(IEventBus eventBus) {
         LOOT_MODIFIER_SERIALIZERS.register(eventBus);
     }

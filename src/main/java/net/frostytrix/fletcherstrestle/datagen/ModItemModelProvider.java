@@ -61,5 +61,12 @@ public class ModItemModelProvider extends ItemModelProvider {
         basicItem(ModItems.MECHANICAL_TRIGGER.get());
         basicItem(ModItems.HEAVY_DUMMY_ITEM.get());
         basicItem(ModItems.WEIGHTED_HOOK.get());
+
+        basicItem(ModItems.RED_FEATHER.get());
+        basicItem(ModItems.BLUE_FEATHER.get());
+        basicItem(ModItems.GREEN_FEATHER.get());
+        basicItem(ModItems.CYAN_FEATHER.get());
+        basicItem(ModItems.LIGHT_GRAY_FEATHER.get());
+        basicItem(ModItems.BROWN_FEATHER.get());
     }
 }

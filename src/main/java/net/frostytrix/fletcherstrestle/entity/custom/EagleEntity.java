@@ -179,9 +179,7 @@ public class EagleEntity extends TamableAnimal {
                 if (EagleEntity.this.isTame()) return false;
                 // Nest-bound eagles use the patrol goal instead.
                 if (EagleEntity.this.getNestPos() != null) return false;
-                // Throttle: ~5% chance per evaluation, vanilla checks at
-                // ~once-per-second so this means a wander attempt every ~20s.
-                if (EagleEntity.this.getRandom().nextInt(20) != 0) return false;
+                // The goal already self-throttles via its interval; no extra gate.
                 return super.canUse();
             }
         });
@@ -424,19 +422,28 @@ public class EagleEntity extends TamableAnimal {
         boolean grounded = isGroundedRobust();
         boolean airborne = !grounded;
 
-        // Bird-like settling: if airborne with no active goal/path, apply a
-        // gentle downward drift so the eagle descends to land instead of
-        // hovering forever.
-        boolean idleAirborne = airborne
-                && !this.isOrderedToSit()
+        // Soaring: when idle (no goal/path), an eagle holds a cruising altitude above the
+        // terrain — taking off if it's on the ground — rather than drifting down to land.
+        // It only comes down for a real reason (perch, sit, fetch, hunt, follow-owner).
+        boolean idleSoaring = !this.isOrderedToSit()
                 && this.getNavigation().isDone()
                 && this.huntTarget == null
                 && this.getEagleState() == STATE_IDLE;
-        if (idleAirborne) {
+        if (idleSoaring) {
+            int groundY = this.level().getHeight(
+                    net.minecraft.world.level.levelgen.Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                    this.getBlockX(), this.getBlockZ());
+            double aboveGround = this.getY() - groundY;
             Vec3 m = this.getDeltaMovement();
-            if (m.y > -0.08) {
-                this.setDeltaMovement(m.x, m.y - 0.02, m.z);
+            double vy;
+            if (aboveGround < 8.0) {
+                vy = Math.min(0.10, m.y + 0.03);    // climb to cruising altitude
+            } else if (aboveGround > 18.0) {
+                vy = Math.max(-0.06, m.y - 0.02);   // ease down if a bit high
+            } else {
+                vy = m.y * 0.7;                       // glide roughly level
             }
+            this.setDeltaMovement(m.x * 0.95, vy, m.z * 0.95);
         }
 
         // Hysteresis on the IS_FLYING flag.
@@ -1318,8 +1325,8 @@ public class EagleEntity extends TamableAnimal {
         private static final double PATROL_RADIUS = 20.0;
         private static final double VERTICAL_RANGE = 6.0;
         // Ticks between picking new patrol points. Random within this range.
-        private static final int MIN_REST_TICKS = 80;   // 4 sec
-        private static final int MAX_REST_TICKS = 240;  // 12 sec
+        private static final int MIN_REST_TICKS = 30;   // 1.5 sec
+        private static final int MAX_REST_TICKS = 100;  // 5 sec
 
         private final EagleEntity eagle;
         private double tx, ty, tz;
