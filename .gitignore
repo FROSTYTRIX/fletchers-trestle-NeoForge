@@ -40,3 +40,9 @@ repo/
 !**/src/**/repo/
 
 BRAINSTORM_BRIEF.md
+
+### Claude Code & graphify (local tooling) ###
+.claude/
+CLAUDE.md
+graphify-out/
+.graphify_*
