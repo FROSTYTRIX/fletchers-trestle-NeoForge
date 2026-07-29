@@ -97,8 +97,8 @@ public class FletcherTrestle {
     // the mountain-biome tag; this predicate adds altitude, sky-visibility,
     // and sky-light checks so they only appear on exposed ridges in daylight.
     //
-    // The EAGLES_NATURAL_SPAWNING gate (off by default while the eagle model
-    // is WIP) lives inside checkEagleSpawnRules, NOT here: this event fires
+    // The EAGLES_NATURAL_SPAWNING gate (on by default now that the eagle model
+    // has shipped) lives inside checkEagleSpawnRules, NOT here: this event fires
     // during mod-loading registration, before the SERVER config is loaded, so
     // reading the config value here throws "Cannot get config value before
     // config is loaded." The placement is always registered; the predicate —

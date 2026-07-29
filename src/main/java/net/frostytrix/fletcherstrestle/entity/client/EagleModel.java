@@ -7,6 +7,7 @@ import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
+import net.minecraft.client.model.geom.builders.CubeDeformation;
 import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
@@ -16,314 +17,199 @@ import net.minecraft.resources.ResourceLocation;
 import static net.frostytrix.fletcherstrestle.FletcherTrestle.MOD_ID;
 
 /**
- * Eagle Model — texture sheet is 64x64 px.
+ * Eagle Model — commissioned Blockbench rig (64x64 texture sheet).
  * <p>
- * Pivot point convention used throughout:
- * X = left/right  (positive = player's right when looking at entity front)
- * Y = up/down     (positive = DOWN in Minecraft model space)
- * Z = forward/back (positive = toward the viewer / entity's back)
+ * Geometry is the artist's export ({@link #createBodyLayer()}); the part
+ * hierarchy is:
+ * <pre>
+ *   commeagle (root group)
+ *     body
+ *       leftleg → leftfoot
+ *       rightleg → rightfoot
+ *       tailbase → tailfeathers
+ *       neck → head
+ *       leftwingbase → leftwingfeathers
+ *       rightwingbase → rightwingfeathers
+ * </pre>
+ * The animatable group parts all default to zero rotation (the resting pose
+ * the artist modelled lives inside the baked {@code _r1} sub-cubes), so
+ * {@link #resetParts()} just zeroes them each frame.
  * <p>
- * All dimensions in 1/16th of a block (i.e. "model units").
- * The eagle is modelled as if standing upright facing you.
+ * NOTE: wing-flap axis/amplitude and leg-tuck are a first pass — they need
+ * tuning from an in-game screenshot (the usual build→run→tune loop).
  */
 public class EagleModel extends EntityModel<EagleEntity> {
 
     public static final ModelLayerLocation LAYER_LOCATION =
             new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(MOD_ID, "eagle"), "main");
 
-    // Part references (stored so setupAnim() can rotate them each frame)
-    private final ModelPart root;
+    // Top render group (everything hangs off this).
+    private final ModelPart commeagle;
+    // Animatable group parts.
     private final ModelPart body;
-    private final ModelPart head;
-    private final ModelPart beak;
     private final ModelPart neck;
-    private final ModelPart tail;
-    private final ModelPart leftWingUpper;
-    private final ModelPart leftWingLower;
-    private final ModelPart rightWingUpper;
-    private final ModelPart rightWingLower;
+    private final ModelPart head;
+    private final ModelPart tailbase;
+    private final ModelPart tailfeathers;
+    private final ModelPart leftWingBase;
+    private final ModelPart leftWingFeathers;
+    private final ModelPart rightWingBase;
+    private final ModelPart rightWingFeathers;
     private final ModelPart leftLeg;
-    private final ModelPart leftTalon;
+    private final ModelPart leftFoot;
     private final ModelPart rightLeg;
-    private final ModelPart rightTalon;
+    private final ModelPart rightFoot;
 
     public EagleModel(ModelPart root) {
-        this.root = root;
-        this.body = root.getChild("body");
-        this.head = body.getChild("head");
-        this.beak = head.getChild("beak");
+        this.commeagle = root.getChild("commeagle");
+        this.body = commeagle.getChild("body");
+
+        this.leftLeg = body.getChild("leftleg");
+        this.leftFoot = leftLeg.getChild("leftfoot");
+        this.rightLeg = body.getChild("rightleg");
+        this.rightFoot = rightLeg.getChild("rightfoot");
+
+        this.tailbase = body.getChild("tailbase");
+        this.tailfeathers = tailbase.getChild("tailfeathers");
+
         this.neck = body.getChild("neck");
-        this.tail = body.getChild("tail");
+        this.head = neck.getChild("head");
 
-        ModelPart leftWing = body.getChild("left_wing");
-        this.leftWingUpper = leftWing;
-        this.leftWingLower = leftWing.getChild("left_wing_lower");
-
-        ModelPart rightWing = body.getChild("right_wing");
-        this.rightWingUpper = rightWing;
-        this.rightWingLower = rightWing.getChild("right_wing_lower");
-
-        this.leftLeg = body.getChild("left_leg");
-        this.leftTalon = leftLeg.getChild("left_talon");
-
-        this.rightLeg = body.getChild("right_leg");
-        this.rightTalon = rightLeg.getChild("right_talon");
+        this.leftWingBase = body.getChild("leftwingbase");
+        this.leftWingFeathers = leftWingBase.getChild("leftwingfeathers");
+        this.rightWingBase = body.getChild("rightwingbase");
+        this.rightWingFeathers = rightWingBase.getChild("rightwingfeathers");
     }
 
     /**
-     * createBodyLayer() — defines ALL cube geometry and UV mappings.
-     * Called once at startup; the result is registered with EntityModelSet.
-     * <p>
-     * Texture sheet: 64 x 64 pixels.
-     * UV coordinates below are [u, v] = top-left corner of the face strip on the sheet.
+     * createBodyLayer() — geometry exported from Blockbench (Mojang mappings).
+     * Texture sheet: 64 x 64.
      */
     public static LayerDefinition createBodyLayer() {
-        MeshDefinition mesh = new MeshDefinition();
-        PartDefinition root = mesh.getRoot();
+        MeshDefinition meshdefinition = new MeshDefinition();
+        PartDefinition partdefinition = meshdefinition.getRoot();
 
-        // ---------------------------------------------------------------
-        // BODY  — the core trunk, pivot at the bird's center of mass
-        //   Size:     8w x 6h x 10d   (wide, shallow, long like a bird torso)
-        //   Pivot:    (0, 14, 0)       (14 units down from model origin = roughly mid-air standing)
-        //   UV:       (0, 0)
-        // ---------------------------------------------------------------
-        PartDefinition body = root.addOrReplaceChild("body",
-                CubeListBuilder.create()
-                        .texOffs(0, 0)
-                        .addBox(-4f, -3f, -5f, 8, 6, 10),
-                PartPose.offset(0f, 14f, 0f));
+        PartDefinition commeagle = partdefinition.addOrReplaceChild("commeagle", CubeListBuilder.create(), PartPose.offset(0.0F, 24.0F, 0.0F));
 
-        // ---------------------------------------------------------------
-        // NECK — short connector between body and head
-        //   Size:     3w x 4h x 3d
-        //   Pivot:    (0, -3, -4)      (attached at front-top of body)
-        //   UV:       (36, 0)
-        //   Default rotation: tilted slightly forward (-0.2 rad on X)
-        // ---------------------------------------------------------------
-        PartDefinition neck = body.addOrReplaceChild("neck",
-                CubeListBuilder.create()
-                        .texOffs(36, 0)
-                        .addBox(-1.5f, -4f, -1.5f, 3, 4, 3),
-                PartPose.offsetAndRotation(0f, -3f, -4f, -0.2f, 0f, 0f));
+        PartDefinition body = commeagle.addOrReplaceChild("body", CubeListBuilder.create(), PartPose.offset(0.0F, -12.0F, 0.0F));
 
-        // ---------------------------------------------------------------
-        // HEAD — attached to top of neck
-        //   Size:     4w x 4h x 4d
-        //   Pivot:    (0, -4, 0)       (top of neck)
-        //   UV:       (0, 16)
-        // ---------------------------------------------------------------
-        PartDefinition head = body.addOrReplaceChild("head",
-                CubeListBuilder.create()
-                        .texOffs(0, 16)
-                        .addBox(-2f, -4f, -2f, 4, 4, 4),
-                // Pivot is relative to BODY origin, matching the neck top:
-                // body pivot (0,14,0) + neck offset (0,-3,-4) + neck height (0,-4,0) = (0,-7,-4)
-                PartPose.offset(0f, -7f, -4f));
+        body.addOrReplaceChild("body_r1", CubeListBuilder.create().texOffs(0, 0).addBox(-4.0F, -2.0F, -7.0F, 8.0F, 7.0F, 11.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, -0.3927F, 0.0F, 0.0F));
 
-        // ---------------------------------------------------------------
-        // BEAK — child of head, hooked downward tip
-        //   Size:     2w x 2h x 3d    (extends forward from head front)
-        //   Pivot:    (0, -2, -2)      (front-mid of head)
-        //   UV:       (16, 16)
-        //   Default rotation: slight downward hook (-0.15 rad on X)
-        // ---------------------------------------------------------------
-        head.addOrReplaceChild("beak",
-                CubeListBuilder.create()
-                        .texOffs(16, 16)
-                        .addBox(-1f, -1f, -3f, 2, 2, 3),
-                PartPose.offsetAndRotation(0f, -2f, -2f, -0.15f, 0f, 0f));
+        PartDefinition leftleg = body.addOrReplaceChild("leftleg", CubeListBuilder.create(), PartPose.offset(2.5F, 5.0F, -1.0F));
 
-        // ---------------------------------------------------------------
-        // TAIL — fans out from the back of the body
-        //   Size:     6w x 1h x 6d    (flat fan)
-        //   Pivot:    (0, -1, 5)       (rear top of body)
-        //   UV:       (0, 32)
-        //   Default rotation: tilted upward slightly (0.3 rad on X)
-        // ---------------------------------------------------------------
-        body.addOrReplaceChild("tail",
-                CubeListBuilder.create()
-                        .texOffs(0, 32)
-                        .addBox(-3f, 0f, 0f, 6, 1, 6),
-                PartPose.offsetAndRotation(0f, -1f, 5f, 0.3f, 0f, 0f));
+        leftleg.addOrReplaceChild("leftleg_r1", CubeListBuilder.create().texOffs(44, 32).addBox(-1.0F, -2.0F, -1.0F, 2.0F, 3.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 1.0F, 1.0F, 0.3491F, 0.0F, 0.0F));
 
-        // ---------------------------------------------------------------
-        // LEFT WING (upper segment) — pivots at the shoulder (left side of body)
-        //   Size:     7w x 2h x 8d
-        //   Pivot:    (-4, -2, -2)     (left shoulder of body)
-        //   UV:       (0, 40)
-        //   Default rotation: wings folded against body (Z = +1.0 rad, folds down-inward)
-        // ---------------------------------------------------------------
-        PartDefinition leftWing = body.addOrReplaceChild("left_wing",
-                CubeListBuilder.create()
-                        .texOffs(0, 40)
-                        .addBox(-7f, -1f, -4f, 7, 2, 8),
-                PartPose.offsetAndRotation(-4f, -2f, -2f, 0f, 0f, 1.0f));
+        leftleg.addOrReplaceChild("leftfoot", CubeListBuilder.create().texOffs(32, 48).addBox(-0.5F, 1.0F, 0.25F, 1.0F, 5.0F, 0.0F, new CubeDeformation(0.01F))
+        .texOffs(44, 28).addBox(-1.5F, 6.0F, -2.5F, 3.0F, 0.0F, 4.0F, new CubeDeformation(0.01F)), PartPose.offset(0.0F, 1.0F, 1.0F));
 
-        // LEFT WING LOWER (primary feathers) — child of upper wing
-        //   Size:     8w x 1h x 6d    (slightly wider, thinner = primary fan)
-        //   Pivot:    (-7, 0, 0)       (tip of upper segment)
-        //   UV:       (32, 32)
-        //   Default rotation: folded further (Z = +0.3 rad relative to upper)
-        leftWing.addOrReplaceChild("left_wing_lower",
-                CubeListBuilder.create()
-                        .texOffs(32, 32)
-                        .addBox(-8f, 0f, -3f, 8, 1, 6),
-                PartPose.offsetAndRotation(-7f, 0f, 0f, 0f, 0f, 0.3f));
+        PartDefinition rightleg = body.addOrReplaceChild("rightleg", CubeListBuilder.create(), PartPose.offset(-2.5F, 4.25F, -0.5F));
 
-        // ---------------------------------------------------------------
-        // RIGHT WING (upper segment) — mirror of left wing
-        //   Pivot:    (4, -2, -2)      (right shoulder)
-        //   UV:       (0, 48)
-        //   Default rotation: Z = -1.0 rad (folds down-inward, opposite side)
-        // ---------------------------------------------------------------
-        PartDefinition rightWing = body.addOrReplaceChild("right_wing",
-                CubeListBuilder.create()
-                        .texOffs(0, 48)
-                        .addBox(0f, -1f, -4f, 7, 2, 8),
-                PartPose.offsetAndRotation(4f, -2f, -2f, 0f, 0f, -1.0f));
+        rightleg.addOrReplaceChild("rightleg_r1", CubeListBuilder.create().texOffs(44, 37).addBox(-1.0F, -2.0F, -1.0F, 2.0F, 3.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 1.75F, 0.5F, 0.3491F, 0.0F, 0.0F));
 
-        // RIGHT WING LOWER (primary feathers)
-        //   Pivot:    (7, 0, 0)
-        //   UV:       (32, 40)
-        //   Default rotation: Z = -0.3 rad
-        rightWing.addOrReplaceChild("right_wing_lower",
-                CubeListBuilder.create()
-                        .texOffs(32, 40)
-                        .addBox(0f, 0f, -3f, 8, 1, 6),
-                PartPose.offsetAndRotation(7f, 0f, 0f, 0f, 0f, -0.3f));
+        rightleg.addOrReplaceChild("rightfoot", CubeListBuilder.create().texOffs(34, 48).addBox(-0.5F, 0.0F, 0.25F, 1.0F, 5.0F, 0.0F, new CubeDeformation(0.01F))
+        .texOffs(32, 44).addBox(-1.5F, 5.0F, -2.5F, 3.0F, 0.0F, 4.0F, new CubeDeformation(0.01F)), PartPose.offset(0.0F, 2.75F, 0.5F));
 
-        // ---------------------------------------------------------------
-        // LEFT LEG
-        //   Size:     2w x 5h x 2d
-        //   Pivot:    (-2, 3, 0)       (left underside of body)
-        //   UV:       (20, 16)
-        // ---------------------------------------------------------------
-        PartDefinition leftLeg = body.addOrReplaceChild("left_leg",
-                CubeListBuilder.create()
-                        .texOffs(20, 16)
-                        .addBox(-1f, 0f, -1f, 2, 5, 2),
-                PartPose.offset(-2f, 3f, 0f));
+        PartDefinition tailbase = body.addOrReplaceChild("tailbase", CubeListBuilder.create().texOffs(38, 11).addBox(-3.0F, 0.0F, 0.0F, 6.0F, 4.0F, 3.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 3.0F));
 
-        // LEFT TALON — 3 small claws, modelled as one flat cube for now
-        //   Size:     4w x 1h x 3d
-        //   Pivot:    (0, 5, 0)        (bottom of leg)
-        //   UV:       (28, 16)
-        //   Default rotation: -0.4 rad on X (claws grip forward-down)
-        leftLeg.addOrReplaceChild("left_talon",
-                CubeListBuilder.create()
-                        .texOffs(28, 16)
-                        .addBox(-2f, 0f, -1.5f, 4, 1, 3),
-                PartPose.offsetAndRotation(0f, 5f, 0f, -0.4f, 0f, 0f));
+        PartDefinition tailfeathers = tailbase.addOrReplaceChild("tailfeathers", CubeListBuilder.create(), PartPose.offset(0.0F, 2.0F, 3.0F));
 
-        // ---------------------------------------------------------------
-        // RIGHT LEG (mirror of left)
-        //   Pivot:    (2, 3, 0)
-        //   UV:       (20, 24)
-        // ---------------------------------------------------------------
-        PartDefinition rightLeg = body.addOrReplaceChild("right_leg",
-                CubeListBuilder.create()
-                        .texOffs(20, 24)
-                        .addBox(-1f, 0f, -1f, 2, 5, 2),
-                PartPose.offset(2f, 3f, 0f));
+        tailfeathers.addOrReplaceChild("cube_r1", CubeListBuilder.create().texOffs(0, 18).addBox(-4.0F, 0.0F, -1.0F, 7.0F, 0.0F, 10.0F, new CubeDeformation(0.01F)), PartPose.offsetAndRotation(0.5F, 0.25F, 0.5F, -0.3927F, 0.0F, 0.0F));
 
-        // RIGHT TALON
-        //   UV:       (28, 24)
-        rightLeg.addOrReplaceChild("right_talon",
-                CubeListBuilder.create()
-                        .texOffs(28, 24)
-                        .addBox(-2f, 0f, -1.5f, 4, 1, 3),
-                PartPose.offsetAndRotation(0f, 5f, 0f, -0.4f, 0f, 0f));
+        PartDefinition neck = body.addOrReplaceChild("neck", CubeListBuilder.create(), PartPose.offset(0.0F, -2.0F, -6.0F));
 
-        return LayerDefinition.create(mesh, 64, 64);
+        neck.addOrReplaceChild("neck_r1", CubeListBuilder.create().texOffs(38, 0).addBox(-3.0F, -2.0F, -2.0F, 5.0F, 7.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.5F, -2.0F, -1.0F, -0.1309F, 0.0F, 0.0F));
+
+        neck.addOrReplaceChild("head", CubeListBuilder.create().texOffs(34, 18).addBox(-2.5F, -2.9829F, -3.739F, 4.0F, 4.0F, 6.0F, new CubeDeformation(0.0F))
+        .texOffs(46, 42).addBox(-1.5F, -1.9829F, -5.739F, 2.0F, 2.0F, 2.0F, new CubeDeformation(0.0F))
+        .texOffs(46, 46).addBox(-1.5F, -1.9829F, -6.739F, 2.0F, 3.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.5F, -4.0F, -1.0F, 0.1309F, 0.0F, 0.0F));
+
+        PartDefinition leftwingbase = body.addOrReplaceChild("leftwingbase", CubeListBuilder.create(), PartPose.offset(3.5F, -2.0F, -4.0F));
+
+        leftwingbase.addOrReplaceChild("lwbase_r1", CubeListBuilder.create().texOffs(0, 28).addBox(-1.0F, -6.0F, -1.0F, 1.0F, 6.0F, 10.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(1.5F, 4.5F, -2.5F, -0.3927F, 0.0F, 0.0F));
+
+        leftwingbase.addOrReplaceChild("leftwingfeathers", CubeListBuilder.create().texOffs(0, 44).addBox(-0.5F, -2.0F, -1.0F, 0.0F, 5.0F, 8.0F, new CubeDeformation(0.01F)), PartPose.offset(1.5F, 4.5F, 6.5F));
+
+        PartDefinition rightwingbase = body.addOrReplaceChild("rightwingbase", CubeListBuilder.create(), PartPose.offset(-3.5F, -2.0F, -4.0F));
+
+        rightwingbase.addOrReplaceChild("rwbase_r1", CubeListBuilder.create().texOffs(22, 28).addBox(0.0F, -6.0F, -1.0F, 1.0F, 6.0F, 10.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-1.5F, 4.5F, -2.5F, -0.3927F, 0.0F, 0.0F));
+
+        rightwingbase.addOrReplaceChild("rightwingfeathers", CubeListBuilder.create().texOffs(16, 44).addBox(0.5F, -2.0F, -1.0F, 0.0F, 5.0F, 8.0F, new CubeDeformation(0.01F)), PartPose.offset(-1.5F, 4.5F, 6.5F));
+
+        return LayerDefinition.create(meshdefinition, 64, 64);
     }
 
     // ---------------------------------------------------------------
     // setupAnim() — called every frame by the renderer.
-    // animationPosition = walk distance accumulator (used for leg/wing swing)
-    // animationSpeed    = how fast the entity is moving (0..1)
-    // bobbing           = vertical bob offset
-    // ageInTicks        = entity age in ticks + partialTick (for idle sway)
     // ---------------------------------------------------------------
     @Override
     public void setupAnim(EagleEntity entity, float animationPosition,
                           float animationSpeed, float ageInTicks,
                           float netHeadYaw, float headPitch) {
 
-        // Reset all parts to their default PartPose rotation every frame
-        // so animations don't stack across frames.
         resetParts();
 
-        boolean isFlying = entity.isFlying(); // you'll expose this from EagleEntity
-
-        if (isFlying) {
-            animateFlight(ageInTicks, animationSpeed);
+        if (entity.isFlying()) {
+            // Flap phase & amplitude both come from the entity (accumulated /
+            // smoothed there): amplitude scales glide↔flap with speed, and the
+            // accumulated phase lets the frequency scale with speed too without
+            // the jitter that frequency-modulating a shared sine would cause.
+            animateFlight(entity.getFlapPhase(), entity.getFlapAmount());
         } else {
             animateIdle(ageInTicks, animationSpeed, animationPosition);
         }
 
-        // Head always tracks the look direction (yaw/pitch from EntityRenderer)
+        // Head tracks the look direction. Head is a child of neck; the small
+        // baked head pitch (0.1309) is its rest pose, so we add on top of 0.
         head.yRot = netHeadYaw * ((float) Math.PI / 180f);
         head.xRot = headPitch * ((float) Math.PI / 180f);
-        // Keep beak attached — no extra rotation needed, it's a child of head
     }
 
-    private void animateFlight(float ageInTicks, float speed) {
-        // Wing flap: sinusoidal on Z axis for upper segments
-        // Amplitude increases with speed (faster flight = bigger flap)
-        float flapAmplitude = 0.6f + speed * 0.4f;
-        float flapCycle = (float) Math.sin(ageInTicks * 0.25f) * flapAmplitude;
+    private void animateFlight(float flapPhase, float horizSpeed) {
+        // The wings are modelled FOLDED (hanging down along the body at rest,
+        // zRot 0). Flight has two parts: (1) a static "open" angle that swings
+        // each folded wing out to horizontal at the shoulder, and (2) a flap
+        // oscillating around that open pose. The flap stays smaller than the
+        // open angle so the wing never rotates back into the body.
+        // Left wing sits on +X (opens with negative zRot), right on -X (positive).
+        // ~83° open — wings sit nearly horizontal (90° = 1.5708) so a gliding
+        // eagle reads as wings-out, not half-folded.
+        float openAngle = 1.45f;
 
-        // Upper wings rotate on Z (left = negative to lift, right = positive)
-        leftWingUpper.zRot = -flapCycle - 0.2f;   // -0.2 = slight natural droop offset
-        rightWingUpper.zRot = flapCycle + 0.2f;
+        // move: 0 when hovering/soaring, →1 when powering forward. Blends a
+        // near-still eagle into a wings-out GLIDE (tiny waver) and a moving one
+        // into a full, faster flap — so a stationary airborne eagle looks like
+        // it's soaring, not frozen mid-air.
+        // Amplitude scales glide↔flap with speed; the phase is accumulated on
+        // the entity (so its frequency can scale with speed jitter-free).
+        float move = Math.min(1f, horizSpeed / 0.25f);
+        float flapAmp = 0.06f + move * 0.4f;
+        float flap = (float) Math.sin(flapPhase) * flapAmp;
 
-        // Lower wing (primary feathers) extends outward slightly on downstroke
-        float lowerExtend = Math.max(0f, -flapCycle) * 0.3f;
-        leftWingLower.zRot = -(0.3f + lowerExtend);
-        rightWingLower.zRot = 0.3f + lowerExtend;
+        leftWingBase.zRot = -openAngle + flap;
+        rightWingBase.zRot = openAngle - flap;
 
-        // Tail fans out during flight, dips slightly on downstroke
-        tail.xRot = 0.1f + (float) Math.sin(ageInTicks * 0.25f) * 0.05f;
+        // Primary feathers trail the flap a little (they're children of the
+        // wing base, so this bends the wingtip relative to the opened wing).
+        leftWingFeathers.zRot = flap * 0.4f;
+        rightWingFeathers.zRot = -flap * 0.4f;
 
-        // Body forward-tilt during flight is applied in the renderer (PoseStack), not here.
+        // Tail fans / dips gently with the flap.
+        tailbase.xRot = (float) Math.sin(flapPhase) * 0.06f;
 
-        // Legs tuck back during flight
-
-        leftLeg.xRot = -0.6f;
-        rightLeg.xRot = -0.6f;
+        // Legs tuck BACK under the tail in flight (positive xRot swings the
+        // downward-hanging legs rearward).
+        leftLeg.xRot = 0.8f;
+        rightLeg.xRot = 0.8f;
     }
 
     private void animateIdle(float ageInTicks, float speed, float walkPos) {
-        // Perched bird posture: neck pulled in (head closer to body), slight
-        // breathing motion. The default neck xRot is -0.2 (forward tilt);
-        // we increase to -0.05 so the head sits more upright over the body.
-        neck.xRot = -0.05f + (float) Math.sin(ageInTicks * 0.05f) * 0.04f;
-
-        // Occasional slow head-turn left/right.
+        // Gentle breathing/sway on the neck.
+        neck.xRot = (float) Math.sin(ageInTicks * 0.05f) * 0.04f;
+        // Occasional slow head turn.
         head.yRot = (float) Math.sin(ageInTicks * 0.03f) * 0.15f;
 
-        // Wings folded DOWN along the body. Sign convention: model Y+ is
-        // visually DOWN, so positive zRot on the left wing rotates its tip
-        // UP (above horizontal). To drape the wing along the bird's side
-        // we need NEGATIVE zRot on the left and POSITIVE on the right.
-        leftWingUpper.zRot = -1.4f;
-        rightWingUpper.zRot = 1.4f;
-        // The lower wing (primary feathers) tucks inward slightly. Same
-        // sign rule applies — small inward bend.
-        leftWingLower.zRot = -0.3f;
-        rightWingLower.zRot = 0.3f;
-
-        // Tail relaxed downward instead of fanned out.
-        tail.xRot = 0.15f;
-
-        // Legs straight under the body — not angled like in flight.
-        leftLeg.xRot = 0f;
-        rightLeg.xRot = 0f;
-
-        // Talons flat on the ground (default pose has them tilted forward
-        // for the in-flight grip-forward look).
-        leftTalon.xRot = 0f;
-        rightTalon.xRot = 0f;
+        // Tail relaxed.
+        tailbase.xRot = 0.05f;
 
         if (speed > 0.01f) {
             // Walking waddle.
@@ -333,53 +219,29 @@ public class EagleModel extends EntityModel<EagleEntity> {
     }
 
     /**
-     * Resets all animated parts to their PartPose defaults.
-     * Must be called at the start of every setupAnim() to prevent
-     * rotation accumulation across frames (the same bug we fixed in ModularArrowRenderer!).
+     * Zeroes every animated group part each frame so rotations don't stack
+     * (same accumulation bug we fixed in ModularArrowRenderer). The artist's
+     * resting pose lives in the baked _r1 cubes, so zero IS the rest pose.
      */
     private void resetParts() {
-        // Body stays fixed — its PartPose handles position
-        neck.xRot = -0.2f;
-        neck.yRot = 0f;
-        neck.zRot = 0f;
-        head.xRot = 0f;
-        head.yRot = 0f;
-        head.zRot = 0f;
-        beak.xRot = -0.15f;
-
-        tail.xRot = 0.3f;
-        tail.yRot = 0f;
-        tail.zRot = 0f;
-
-        leftWingUpper.xRot = 0f;
-        leftWingUpper.yRot = 0f;
-        leftWingUpper.zRot = 1.0f;
-        leftWingLower.xRot = 0f;
-        leftWingLower.yRot = 0f;
-        leftWingLower.zRot = 0.3f;
-
-        rightWingUpper.xRot = 0f;
-        rightWingUpper.yRot = 0f;
-        rightWingUpper.zRot = -1.0f;
-        rightWingLower.xRot = 0f;
-        rightWingLower.yRot = 0f;
-        rightWingLower.zRot = -0.3f;
-
-        leftLeg.xRot = 0f;
-        leftLeg.yRot = 0f;
-        leftLeg.zRot = 0f;
-        rightLeg.xRot = 0f;
-        rightLeg.yRot = 0f;
-        rightLeg.zRot = 0f;
-
-        leftTalon.xRot = -0.4f;
-        rightTalon.xRot = -0.4f;
+        neck.xRot = neck.yRot = neck.zRot = 0f;
+        head.xRot = head.yRot = head.zRot = 0f;
+        tailbase.xRot = tailbase.yRot = tailbase.zRot = 0f;
+        tailfeathers.xRot = tailfeathers.yRot = tailfeathers.zRot = 0f;
+        leftWingBase.xRot = leftWingBase.yRot = leftWingBase.zRot = 0f;
+        leftWingFeathers.xRot = leftWingFeathers.yRot = leftWingFeathers.zRot = 0f;
+        rightWingBase.xRot = rightWingBase.yRot = rightWingBase.zRot = 0f;
+        rightWingFeathers.xRot = rightWingFeathers.yRot = rightWingFeathers.zRot = 0f;
+        leftLeg.xRot = leftLeg.yRot = leftLeg.zRot = 0f;
+        leftFoot.xRot = leftFoot.yRot = leftFoot.zRot = 0f;
+        rightLeg.xRot = rightLeg.yRot = rightLeg.zRot = 0f;
+        rightFoot.xRot = rightFoot.yRot = rightFoot.zRot = 0f;
     }
 
     @Override
     public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer,
                                int packedLight, int packedOverlay,
                                int color) {
-        root.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
+        commeagle.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
     }
 }

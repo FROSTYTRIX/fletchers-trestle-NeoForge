@@ -70,6 +70,22 @@ public class EagleEntity extends TamableAnimal {
     @Nullable
     private BlockPos perchPos = null;
 
+    // Set by EaglePerchGoal while it directly drives the final descent onto the
+    // crossbar. Suppresses the idle-soaring altitude hold so it doesn't fight
+    // the landing. Transient — never saved.
+    private boolean landingApproach = false;
+
+    // Client-side smoothed horizontal speed. Drives the wing-flap amplitude in
+    // the model; smoothing keeps it from jittering frame-to-frame (raw client
+    // deltaMovement is noisy). Not saved, client-only.
+    private float flapAmount = 0f;
+
+    // Client-side accumulated flap phase. Advanced each tick by a speed-scaled
+    // frequency; because it's accumulated (not ageInTicks * freq), the phase
+    // never jumps when the frequency changes, so the flap can speed up with
+    // motion without the jitter that frequency-modulating a shared sine caused.
+    private float flapPhase = 0f;
+
     // Position of the nest this eagle considers its breeding ground.
     // Server-side only; saved to NBT. Null when not bound to a nest.
     @Nullable
@@ -415,6 +431,16 @@ public class EagleEntity extends TamableAnimal {
             this.setNoGravity(true);
         }
 
+        // Smooth the horizontal speed the flap animation reads from (client),
+        // and advance the accumulated flap phase by a speed-scaled frequency.
+        if (this.level().isClientSide) {
+            Vec3 mv = this.getDeltaMovement();
+            float target = (float) Math.sqrt(mv.x * mv.x + mv.z * mv.z);
+            this.flapAmount += (target - this.flapAmount) * 0.12f;
+            float moveN = Math.min(1f, this.flapAmount / 0.30f);
+            this.flapPhase += 0.15f + moveN * 0.20f;   // 0.15 soaring → 0.35 max
+        }
+
         // Robust ground check: vanilla onGround() flickers because with no
         // gravity the eagle barely loads against the block. We extend the
         // bounding box ~0.15 blocks down and test for any collision —
@@ -425,8 +451,15 @@ public class EagleEntity extends TamableAnimal {
         // Soaring: when idle (no goal/path), an eagle holds a cruising altitude above the
         // terrain — taking off if it's on the ground — rather than drifting down to land.
         // It only comes down for a real reason (perch, sit, fetch, hunt, follow-owner).
+        // NOTE: also require the move control to be idle. A goal can drive the
+        // eagle directly via move control while navigation is "done" (e.g. the
+        // perch goal's close-range descent onto the thin crossbar). Without this
+        // check, soaring would fight that descent — pushing the eagle back up to
+        // cruise altitude so it hovers above the perch and never lands.
         boolean idleSoaring = !this.isOrderedToSit()
                 && this.getNavigation().isDone()
+                && !this.getMoveControl().hasWanted()
+                && !this.landingApproach
                 && this.huntTarget == null
                 && this.getEagleState() == STATE_IDLE;
         if (idleSoaring) {
@@ -436,14 +469,35 @@ public class EagleEntity extends TamableAnimal {
             double aboveGround = this.getY() - groundY;
             Vec3 m = this.getDeltaMovement();
             double vy;
-            if (aboveGround < 8.0) {
-                vy = Math.min(0.10, m.y + 0.03);    // climb to cruising altitude
-            } else if (aboveGround > 18.0) {
-                vy = Math.max(-0.06, m.y - 0.02);   // ease down if a bit high
+            if (aboveGround < 5.0) {
+                vy = Math.min(0.08, m.y + 0.025);   // climb if it's dropped low
+            } else if (aboveGround > 11.0) {
+                vy = Math.max(-0.07, m.y - 0.025);  // descend if it's too high
             } else {
-                vy = m.y * 0.7;                       // glide roughly level
+                vy = m.y * 0.7 - 0.012;              // glide with a slow sink so it drifts down
             }
-            this.setDeltaMovement(m.x * 0.95, vy, m.z * 0.95);
+            // Lazy circling drift so a soaring eagle traces slow circles instead
+            // of parking motionless in the air. The heading rotates slowly over
+            // time (desynced per-eagle by id so a flock doesn't move in lockstep);
+            // we ease horizontal velocity toward that heading. With this drift
+            // speed / turn rate the eagle circles at roughly a 4-block radius.
+            double angle = this.tickCount * 0.015 + (this.getId() % 32) * 0.4;
+            double driftSpeed = 0.06;
+            double targetVx = Math.cos(angle) * driftSpeed;
+            double targetVz = Math.sin(angle) * driftSpeed;
+            double nvx = m.x + (targetVx - m.x) * 0.08;
+            double nvz = m.z + (targetVz - m.z) * 0.08;
+            this.setDeltaMovement(nvx, vy, nvz);
+
+            // Face the direction of travel so it looks like it's flying forward
+            // around the circle, not drifting sideways.
+            double hs = Math.sqrt(nvx * nvx + nvz * nvz);
+            if (hs > 1.0E-3) {
+                float yaw = (float) (-Math.atan2(nvx, nvz) * (180.0 / Math.PI));
+                this.setYRot(yaw);
+                this.yBodyRot = yaw;
+                this.yHeadRot = yaw;
+            }
         }
 
         // Hysteresis on the IS_FLYING flag.
@@ -535,6 +589,16 @@ public class EagleEntity extends TamableAnimal {
 
     public boolean isFlying() {
         return this.entityData.get(IS_FLYING);
+    }
+
+    /** Client-side smoothed horizontal speed, for the wing-flap animation. */
+    public float getFlapAmount() {
+        return this.flapAmount;
+    }
+
+    /** Client-side accumulated flap phase (radians), for the wing-flap sine. */
+    public float getFlapPhase() {
+        return this.flapPhase;
     }
 
     public boolean isFetchModeEnabled() {
@@ -1049,6 +1113,7 @@ public class EagleEntity extends TamableAnimal {
         public void start() {
             repathCooldown = 0;
             landed = false;
+            eagle.landingApproach = false;
         }
 
         @Override
@@ -1069,22 +1134,42 @@ public class EagleEntity extends TamableAnimal {
                 eagle.setEagleState(STATE_PERCHED);
                 eagle.setOrderedToSit(true);
                 eagle.getNavigation().stop();
+                eagle.landingApproach = false;
                 landed = true;
                 return;
             }
 
             if (distSqr > APPROACH_RANGE_SQR) {
                 // Far — let FlyingPathNavigation get us close.
+                eagle.landingApproach = false;
                 eagle.getMoveControl().setWantedPosition(landX, landY + 1.0, landZ, 1.2);
                 if (--repathCooldown <= 0) {
                     eagle.getNavigation().moveTo(landX, landY + 1.0, landZ, 1.2);
                     repathCooldown = 12;
                 }
             } else {
-                // Close — pathfinding struggles with the thin crossbar target,
-                // so drive directly via move control instead.
+                // Close — FlyingMoveControl refuses to close the last ~1-2 blocks
+                // (it stops within its own bounding-box size of the target), so it
+                // can never settle onto the thin crossbar. Drive the descent by
+                // hand: point the velocity straight at the landing spot each tick.
+                // landingApproach suppresses idle-soaring so it doesn't fight us.
+                eagle.landingApproach = true;
                 eagle.getNavigation().stop();
-                eagle.getMoveControl().setWantedPosition(landX, landY, landZ, 0.8);
+                eagle.setXxa(0f);
+                eagle.setYya(0f);
+                eagle.setZza(0f);
+                double dx = landX - eagle.getX();
+                double dy = landY - eagle.getY();
+                double dz = landZ - eagle.getZ();
+                double dist = Math.sqrt(dx * dx + dy * dy + dz * dz);
+                if (dist > 1.0E-4) {
+                    double step = Math.min(0.12, dist) / dist;
+                    eagle.setDeltaMovement(dx * step, dy * step, dz * step);
+                }
+                // Face the perch while settling.
+                float yaw = (float) (-Math.atan2(dx, dz) * (180.0 / Math.PI));
+                eagle.setYRot(yaw);
+                eagle.yBodyRot = yaw;
             }
         }
 
@@ -1094,6 +1179,7 @@ public class EagleEntity extends TamableAnimal {
             // cleanup. If the goal was aborted (owner came back, perch broken),
             // we leave the eagle wherever it was — FollowOwnerGoal can take over.
             eagle.getNavigation().stop();
+            eagle.landingApproach = false;
         }
 
         // Owner is "far" if absent (offline / null) or in another dimension

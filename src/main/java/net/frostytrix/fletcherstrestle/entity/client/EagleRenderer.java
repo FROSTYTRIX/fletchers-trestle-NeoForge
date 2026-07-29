@@ -13,7 +13,7 @@ public class EagleRenderer extends MobRenderer<EagleEntity, EagleModel> {
 
     private static final ResourceLocation TEXTURE =
             ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID,
-                    "textures/entity/eagle/eagle.png");
+                    "textures/entity/eagle.png");
 
     public EagleRenderer(EntityRendererProvider.Context context) {
         super(context,

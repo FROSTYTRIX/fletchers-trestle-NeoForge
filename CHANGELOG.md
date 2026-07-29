@@ -1,3 +1,43 @@
+# Fletcher's Trestle — 2.3.0
+
+The Eagle Has Landed. The eagle companion finally gets its **real model** — a
+commissioned, fully-animated bird — and with it, **natural spawning goes live**
+across the mountains. Plus a nasty bow bug squashed.
+
+---
+
+## 🦅 The eagle, for real
+
+- **A proper model** — the placeholder shape is gone, replaced by a commissioned
+  Blockbench eagle: distinct head, hooked beak, layered wings, tail fan, and
+  taloned legs.
+- **Alive in the air** — a reworked flight animation: the wings open and *soar*
+  when the eagle glides, and beat harder the faster it flies (smoothly, no
+  jitter). Idle eagles now trace slow, lazy **circles**, facing the way they
+  fly and gently drifting down instead of hovering frozen in place.
+- **Natural spawning is ON** — eagles now spawn on high, sunlit mountain ridges
+  (Stony/Jagged/Frozen Peaks, Snowy Slopes, Windswept Hills), and wild
+  **eagle nests** generate in the world. Rare and meaningful, as intended. Can
+  still be disabled via the `eagles.natural_spawning` config.
+
+## 🪵 Perches actually work now
+
+- **Eagles land on their perch.** Previously a bound eagle would stall a couple
+  blocks *above* its perch and never settle — the flight move-control refuses
+  to close the last short distance onto a thin crossbar. The eagle now
+  hand-flies the final descent and sits properly. Its idle soaring no longer
+  fights the landing.
+
+## 🎯 Bug fixes
+
+- **The modular bow can now fire vanilla arrows and shoot in creative.** Firing
+  any non-modular arrow (a vanilla arrow, or the infinite creative-mode arrow)
+  crashed the shot on the server with a `getPickResult()` null — so the bow
+  would draw but never release. Only modular arrows worked. Fixed; all ammo
+  fires now, modular arrows still get their full assembly bonuses.
+
+---
+
 # Fletcher's Trestle — 2.2.1
 
 The Singularity. A new **creative-only Black Hole arrow** collapses a piece of

@@ -93,7 +93,13 @@ public class ModularBowItem extends BowItem {
         if (bowStack.isEmpty()) bowStack = shooter.getMainHandItem(); // Fallback for edge cases
 
         BowAssembly assembly = bowStack.get(ModDataComponents.BOW_ASSEMBLY.get());
-        ArrowAssembly Assembly = projectile.getPickResult().get(ModDataComponents.ARROW_ASSEMBLY.get());
+        // getPickResult() is null for a plain vanilla Arrow (only our
+        // ModularArrowEntity overrides it), so a vanilla or creative-default
+        // arrow would NPE here and cancel the whole shot. Guard it.
+        ItemStack pickResult = projectile.getPickResult();
+        ArrowAssembly Assembly = pickResult != null
+                ? pickResult.get(ModDataComponents.ARROW_ASSEMBLY.get())
+                : null;
         float finalVelocity = velocity;
         float finalInaccuracy = inaccuracy;
 

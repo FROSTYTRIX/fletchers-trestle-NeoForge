@@ -11,8 +11,8 @@ public class FletcherConfig {
     /**
      * Master toggle for everything that adds eagles to a freshly-generated
      * world: the spawn-placement entry that lets the spawn pool tick them
-     * in, and the eagle-nest world-gen feature. Default OFF for now — the
-     * eagle model is still WIP. Flip back on once it ships.
+     * in, and the eagle-nest world-gen feature. Enabled by default now that
+     * the eagle model has shipped; players can still turn it off.
      */
     public static final ModConfigSpec.BooleanValue EAGLES_NATURAL_SPAWNING;
 
@@ -62,9 +62,9 @@ public class FletcherConfig {
         EAGLES_NATURAL_SPAWNING = serverBuilder
                 .comment(
                         "Whether eagles spawn naturally in the world (mountain-biome spawn pool + nest worldgen feature).",
-                        "Disabled by default while the eagle model is WIP. The spawn-egg item still works regardless.",
-                        "Flip to true to re-enable everything; no other changes needed.")
-                .define("natural_spawning", false);
+                        "Enabled by default. The spawn-egg item still works regardless.",
+                        "Set to false to disable natural spawning; no other changes needed.")
+                .define("natural_spawning", true);
         serverBuilder.pop();
 
         SERVER_SPEC = serverBuilder.build();
