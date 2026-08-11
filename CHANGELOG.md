@@ -24,8 +24,9 @@ powered by Patchouli — and the jungle bow finally lives up to its "agility" na
 
 ## 🦅 Eagle polish
 
-- Eagles carry a **slight forward lean** now, reading as poised and soaring rather
-  than standing bolt upright — both in the world and in the guidebook render.
+- The eagle carries a **slight forward lean** in the guidebook render, reading as
+  poised and soaring rather than standing bolt upright.
+- Removed the leftover **[WIP]** tag from the **Eagle Spawn Egg** name (EN & FR).
 
 ---
 
