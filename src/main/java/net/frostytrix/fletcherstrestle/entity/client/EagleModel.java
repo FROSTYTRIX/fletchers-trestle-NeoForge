@@ -148,6 +148,10 @@ public class EagleModel extends EntityModel<EagleEntity> {
 
         resetParts();
 
+        // Slight forward lean so the eagle reads as poised/soaring rather than
+        // standing bolt upright — applies in-world and in the guidebook render.
+        body.xRot = 0.12f;
+
         if (entity.isFlying()) {
             // Flap phase & amplitude both come from the entity (accumulated /
             // smoothed there): amplitude scales glide↔flap with speed, and the

@@ -1,3 +1,34 @@
+# Fletcher's Trestle — 2.3.1
+
+By the Book. The Fletcher's Guide is now a real, illustrated **in-game handbook**
+powered by Patchouli — and the jungle bow finally lives up to its "agility" name.
+
+---
+
+## 📖 The guidebook, powered by Patchouli
+
+- **A real in-game manual** — the Fletcher's Guide now opens an illustrated
+  **Patchouli** book instead of the old placeholder screen. Chapters for Getting
+  Started, Woodworking Stations, Modular Equipment, and Companions, plus a full
+  **Reference** section (materials, stats, enchantments, skills) — with inline
+  crafting recipes and a live rotating **eagle render**.
+- **Optional, never forced** — Patchouli is a soft dependency. Installed? You get
+  the book and its recipe. Not installed? Both quietly disappear and nothing else
+  about the mod changes.
+
+## 🏹 Jungle "Agility", for real
+
+- The **jungle limb** finally does what its tooltip always promised: you **walk at
+  full speed while drawing**, with no movement penalty — and no FOV distortion.
+  (The perk simply never existed in the code before; now it does.)
+
+## 🦅 Eagle polish
+
+- Eagles carry a **slight forward lean** now, reading as poised and soaring rather
+  than standing bolt upright — both in the world and in the guidebook render.
+
+---
+
 # Fletcher's Trestle — 2.3.0
 
 The Eagle Has Landed. The eagle companion finally gets its **real model** — a
