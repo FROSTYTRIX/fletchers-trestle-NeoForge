@@ -1,0 +1,16 @@
+{
+  "name": "Modular Arrows",
+  "category": "fletcherstrestle:equipment",
+  "icon": "fletcherstrestle:modular_arrow",
+  "sortnum": 1,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Like bows, arrows are built from parts — assembled at the $(l)Fletching Table$():$(br)$(li)$(l)Head$() — damage and on-hit effect$(li)$(l)Shaft$() — weight, gravity, and flight$(li)$(l)Fletching$() — accuracy and stability"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Heads carry the personality: $(l)broadheads$() cause bleed, $(l)bodkin points$() punch through armor, $(l)weighted hooks$() grapple you across gaps, and $(l)trailing rope$() heads lay a climbable line.$(br2)Mix and match to build the arrow the moment calls for."
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "name": "Flax Farming",
+  "category": "fletcherstrestle:woodworking",
+  "icon": "fletcherstrestle:flax",
+  "sortnum": 2,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "$(l)Flax$() is the mod's home-grown fibre. Plant $(l)Flax Seeds$() on farmland and harvest the mature crop for flax."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Spin flax into $(l)Flax String$() — a fast, cheap bowstring — so you never have to hunt spiders just to string a bow. It draws a touch shaky if you overhold, but the $(l)Aim$() skill smooths that out."
+    }
+  ]
+}

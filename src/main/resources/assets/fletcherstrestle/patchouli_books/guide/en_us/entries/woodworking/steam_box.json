@@ -1,0 +1,21 @@
+{
+  "name": "The Steam Box",
+  "category": "fletcherstrestle:woodworking",
+  "icon": "fletcherstrestle:steam_box",
+  "sortnum": 1,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "The $(l)Steam Box$() softens a $(l)Rough Limb$() with heat and moisture, turning it into a $(l)Pliable Limb$() that can actually be strung into a bow.$(br2)Fuel it, load your rough limbs, and let them steam."
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "fletcherstrestle:steam_box",
+      "text": "Craft a Steam Box to make your limbs pliable."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "With a Pliable Limb, a $(l)Riser$() and a $(l)String$() in hand, head to the $(l)Fletching Table$() to assemble — and tune — your bow."
+    }
+  ]
+}

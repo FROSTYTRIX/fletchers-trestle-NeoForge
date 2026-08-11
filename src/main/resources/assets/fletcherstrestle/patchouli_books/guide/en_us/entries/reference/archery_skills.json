@@ -1,0 +1,18 @@
+{
+  "name": "Archery Skills",
+  "category": "fletcherstrestle:reference",
+  "icon": "minecraft:target",
+  "sortnum": 5,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "title": "Archery XP",
+      "text": "You gain archery XP by landing hits, headshots, long-range shots, and kills — never from the practice dummy. Each level costs a little more than the last, and XP is never lost on death."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Skill Tree",
+      "text": "Every level grants a point to spend across three branches:$(br)$(li)$(l)Draw$() — faster draw$(li)$(l)Crit$() — chance to crit$(li)$(l)Aim$() — tighter spread, and a longer grace before a flax string starts to shake."
+    }
+  ]
+}

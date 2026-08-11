@@ -1,0 +1,18 @@
+{
+  "name": "Risers & Strings",
+  "category": "fletcherstrestle:reference",
+  "icon": "fletcherstrestle:iron_riser",
+  "sortnum": 1,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "title": "Risers",
+      "text": "The riser is the weapon's core — durability and accuracy.$(br)$(li)$(l)Wood$() — 250 dur$(li)$(l)Copper$() — 400 dur, Conductive$(li)$(l)Iron$() — 750 dur, High Precision$(br2)$(l)Conductive$(): during a thunderstorm, a hit calls lightning. $(l)High Precision$(): cuts a bow's random spread to a fifth."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Strings",
+      "text": "The string sets arrow velocity.$(br)$(li)$(l)Spider$() — 1.0x$(li)$(l)Flax$() — 1.3x, Shaky$(li)$(l)High Tension$() — 1.8x (costs 2 durability per shot)$(br2)$(l)Shaky$(): holding a full draw too long jitters your aim."
+    }
+  ]
+}

@@ -25,10 +25,15 @@ public class FletcherGuideItem extends Item {
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
 
-        if (level.isClientSide) {
-            // Client-only: open the guide screen.
-            net.frostytrix.fletcherstrestle.client.guide.FletcherGuideScreen.open();
-        } else {
+        // The guide is a Patchouli book. Its recipe is gated on Patchouli being
+        // installed, so in survival the item only exists when the book does.
+        // PatchouliCompat is only touched behind the isLoaded guard, so it never
+        // classloads in packs without Patchouli.
+        if (!level.isClientSide) {
+            if (net.neoforged.fml.ModList.get().isLoaded("patchouli")
+                    && player instanceof net.minecraft.server.level.ServerPlayer serverPlayer) {
+                net.frostytrix.fletcherstrestle.compat.PatchouliCompat.openGuide(serverPlayer);
+            }
             level.playSound(null, player.getX(), player.getY(), player.getZ(),
                     SoundEvents.BOOK_PAGE_TURN, SoundSource.PLAYERS, 0.7f, 1.0f);
         }

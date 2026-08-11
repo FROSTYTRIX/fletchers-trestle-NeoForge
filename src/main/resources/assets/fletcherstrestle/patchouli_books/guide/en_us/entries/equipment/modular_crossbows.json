@@ -1,0 +1,22 @@
+{
+  "name": "Modular Crossbows",
+  "category": "fletcherstrestle:equipment",
+  "icon": "fletcherstrestle:modular_crossbow",
+  "sortnum": 2,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "A modular bow becomes a crossbow at the $(l)Crossbow Bench$(), which also fits it with one $(l)attachment$().$(br2)You get a single slot — a real choice, not a power-stack."
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "fletcherstrestle:crossbow_bench",
+      "text": "Craft a Crossbow Bench to build and modify crossbows."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Attachments",
+      "text": "$(li)$(l)Scope$() — zoom and steadier aim$(li)$(l)Magazine$() — holds several bolts for burst fire, at the cost of a slower reload$(li)$(l)Bayonet$() — a blade for when they get close$(br2)Attachments swap freely at the bench."
+    }
+  ]
+}

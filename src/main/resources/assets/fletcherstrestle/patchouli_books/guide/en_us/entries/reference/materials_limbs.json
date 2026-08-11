@@ -1,0 +1,22 @@
+{
+  "name": "Bow Limbs",
+  "category": "fletcherstrestle:reference",
+  "icon": "fletcherstrestle:pliable_oak_limb",
+  "sortnum": 0,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "title": "Bow Limbs",
+      "text": "Limbs set draw time (ticks) and damage. Lower draw = faster shots.$(br)$(li)$(l)Oak$() — 20t, 1.0x$(li)$(l)Birch$() — 10t, 0.7x$(li)$(l)Spruce$() — 22t, 1.0x, Punch$(li)$(l)Jungle$() — 18t, 0.9x, Agility$(li)$(l)Acacia$() — 20t, 1.0x, Speedy"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(li)$(l)Dark Oak$() — 35t, 1.6x$(li)$(l)Mangrove$() — 22t, 1.0x, Amphibious$(li)$(l)Cherry$() — 20t, 0.85x, Slow Fall$(li)$(l)Pale Oak$() — 26t, 1.0x$(li)$(l)Crimson$() — 24t, 1.1x, Ignited$(li)$(l)Warped$() — 20t, 1.0x, No Gravity"
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Modifiers",
+      "text": "$(l)Punch$(): Punch I by default. $(l)Agility$(): walk at full speed while drawing. $(l)Speedy$(): Speed II for 1.5s after firing. $(l)Amphibious$(): less drag underwater. $(l)Slow Fall$(): slow-falling while aiming mid-air. $(l)Ignited$(): Flame by default. $(l)No Gravity$(): arrows fly perfectly straight."
+    }
+  ]
+}

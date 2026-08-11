@@ -1,0 +1,17 @@
+{
+  "name": "Enchantments",
+  "category": "fletcherstrestle:reference",
+  "icon": "minecraft:enchanted_book",
+  "sortnum": 4,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "title": "Enchantments",
+      "text": "Three archery enchantments ship with the mod:$(br2)$(l)Bioluminescence$() — consumes a torch to make the arrow carry light, lighting where it lands."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(l)Gale Force$() — adds a burst of wind to your shots.$(br2)$(l)Photosynthesis$() — a modular bow slowly repairs itself in daylight under open sky. Requires a wooden riser and non-Nether limbs."
+    }
+  ]
+}

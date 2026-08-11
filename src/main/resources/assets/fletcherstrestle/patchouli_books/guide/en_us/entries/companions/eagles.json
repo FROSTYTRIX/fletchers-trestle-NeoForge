@@ -1,0 +1,23 @@
+{
+  "name": "Eagles",
+  "category": "fletcherstrestle:companions",
+  "icon": "fletcherstrestle:eagle_spawn_egg",
+  "sortnum": 0,
+  "pages": [
+    {
+      "type": "patchouli:entity",
+      "entity": "fletcherstrestle:eagle",
+      "scale": 0.7,
+      "name": "Eagle",
+      "text": "Eagles soar high over sunlit mountain ridges — Stony, Jagged, and Frozen Peaks, Snowy Slopes, and Windswept Hills. Rare, proud, and worth the climb."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Tame an eagle and it becomes a hunting partner. Use an $(l)Eagle Whistle$() to toggle fetch mode and recall it from range, or bind it to an $(l)Eagle Perch$() so it stays home when you're away."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Eagles nest, breed, and raise eaglets. Find a wild $(l)nest$() on a high ridge, or build your own with an $(l)Eagle Nest$() and an $(l)Eagle Egg$() to start your own line of birds."
+    }
+  ]
+}

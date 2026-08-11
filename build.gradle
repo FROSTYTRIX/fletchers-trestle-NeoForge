@@ -138,6 +138,12 @@ dependencies {
     compileOnly "maven.modrinth:jade:${jade_version}"
     compileOnly "maven.modrinth:the-one-probe:${top_version}"
     compileOnly "maven.modrinth:wthit:${wthit_version}"
+
+    // Patchouli — optional in-game guidebook. Compile against its API and load it
+    // in the dev runClient (same pattern as JEI). The mod stays optional at
+    // runtime via the neoforge.mods.toml dependency; this does not bundle it.
+    compileOnly "vazkii.patchouli:Patchouli:${patchouli_version}"
+    runtimeOnly "vazkii.patchouli:Patchouli:${patchouli_version}"
     // Example optional mod dependency with JEI
     // The JEI API is declared for compile time use, while the full JEI artifact is used at runtime
     // compileOnly "mezz.jei:jei-${mc_version}-common-api:${jei_version}"

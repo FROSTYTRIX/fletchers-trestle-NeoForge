@@ -1,0 +1,22 @@
+{
+  "name": "Arrow Heads",
+  "category": "fletcherstrestle:reference",
+  "icon": "fletcherstrestle:modular_arrow",
+  "sortnum": 2,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "title": "Arrow Heads",
+      "text": "The head sets damage and the on-hit trick.$(br)$(li)$(l)Flint$() — 1.0x$(li)$(l)Broadhead$() — 1.15x, Hemorrhage$(li)$(l)Bodkin Point$() — 1.0x, Piercing$(li)$(l)Barbed Tip$() — 1.0x, Puller$(li)$(l)Resonance Tip$() — 1.0x, Resonance"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(li)$(l)Weighted Blunt$() — 1.05x, Distance$(li)$(l)Weighted Hook$() — 0.5x, Grappling$(li)$(l)Trailing Rope$() — 0.3x, Rope$(li)$(l)Glass Vial$() — 0.4x, Potion Payload$(li)$(l)Black Hole$() — creative-only Singularity"
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Effects",
+      "text": "$(l)Hemorrhage$(): 3s bleed. $(l)Piercing$(): ignores some armor. $(l)Puller$(): drags the target toward you. $(l)Resonance$(): 30% follow-up hit after a delay. $(l)Distance$(): +1% damage per block flown. $(l)Grappling$(): yanks you to where it lands. $(l)Rope$(): places a climbable line. $(l)Potion Payload$(): dip to tip with any potion."
+    }
+  ]
+}

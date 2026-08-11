@@ -12,13 +12,11 @@ across the mountains. Plus a nasty bow bug squashed.
   Blockbench eagle: distinct head, hooked beak, layered wings, tail fan, and
   taloned legs.
 - **Alive in the air** — a reworked flight animation: the wings open and *soar*
-  when the eagle glides, and beat harder the faster it flies (smoothly, no
-  jitter). Idle eagles now trace slow, lazy **circles**, facing the way they
+  when the eagle glides, and beat harder the faster it flies. Idle eagles now trace slow, lazy **circles**, facing the way they
   fly and gently drifting down instead of hovering frozen in place.
 - **Natural spawning is ON** — eagles now spawn on high, sunlit mountain ridges
   (Stony/Jagged/Frozen Peaks, Snowy Slopes, Windswept Hills), and wild
-  **eagle nests** generate in the world. Rare and meaningful, as intended. Can
-  still be disabled via the `eagles.natural_spawning` config.
+  **eagle nests** generate in the world. Can still be disabled via the `eagles.natural_spawning` config.
 
 ## 🪵 Perches actually work now
 

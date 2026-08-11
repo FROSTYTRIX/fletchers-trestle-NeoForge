@@ -1,0 +1,21 @@
+{
+  "name": "The Shaving Horse",
+  "category": "fletcherstrestle:woodworking",
+  "icon": "fletcherstrestle:shaving_horse",
+  "sortnum": 0,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "The $(l)Shaving Horse$() is where woodworking begins. Sit at it with a $(item)Drawknife$() in hand and strip a log into a $(l)Rough Limb$() — the raw form of a bow arm.$(br2)Each wood type shaves into its own limb, and that choice decides the weapon's draw speed and damage down the line."
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "fletcherstrestle:shaving_horse",
+      "text": "Craft a Shaving Horse to set up your workshop."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "A Rough Limb still needs to be made $(l)pliable$() before it can bend into a bow. That happens next, at the $(l)Steam Box$()."
+    }
+  ]
+}

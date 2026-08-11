@@ -1,0 +1,21 @@
+{
+  "name": "Your First Bow",
+  "category": "fletcherstrestle:getting_started",
+  "icon": "fletcherstrestle:modular_bow",
+  "sortnum": 0,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Fletcher's Trestle replaces the vanilla bow with a $(l)modular$() one you build yourself. Every part — the limbs, riser, string, and each arrow's head, shaft, and fletching — is a real choice that changes how your weapon performs.$(br2)It all starts with a single tool: the $(item)Drawknife$()."
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "fletcherstrestle:drawknife",
+      "text": "The $(item)Drawknife$() is used at the $(l)Shaving Horse$() to strip logs into limbs. Craft one to begin the pipeline."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "From here the woodworking pipeline flows: $(br)$(li)Shave logs into rough limbs$(li)Steam them pliable in the Steam Box$(li)Assemble and tune at the Fletching Table$(br2)Each following chapter covers a station in depth."
+    }
+  ]
+}

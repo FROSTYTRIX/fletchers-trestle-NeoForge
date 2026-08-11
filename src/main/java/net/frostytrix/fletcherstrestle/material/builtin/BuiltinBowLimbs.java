@@ -47,7 +47,8 @@ public final class BuiltinBowLimbs {
         register(ctx, SPRUCE, ModItems.PLIABLE_SPRUCE_LIMB, 22.0f, 1.00f, false, false,
                 List.of(new SetArrowFlagEffect("fletcherstrestle:punch", true)));
         register(ctx, BIRCH, ModItems.PLIABLE_BIRCH_LIMB, 10.0f, 0.70f, false, false, List.of());
-        register(ctx, JUNGLE, ModItems.PLIABLE_JUNGLE_LIMB, 18.0f, 0.90f, false, false, List.of());
+        // Jungle: "agility" — the player walks at normal speed while drawing.
+        register(ctx, JUNGLE, ModItems.PLIABLE_JUNGLE_LIMB, 18.0f, 0.90f, false, false, true, List.of());
         register(ctx, ACACIA, ModItems.PLIABLE_ACACIA_LIMB, 20.0f, 1.00f, false, false,
                 List.of(new ApplyMobEffectToShooterEffect(MobEffects.MOVEMENT_SPEED, 30, 1)));
         register(ctx, DARK_OAK, ModItems.PLIABLE_DARK_OAK_LIMB, 35.0f, 1.60f, false, false, List.of());
@@ -66,9 +67,18 @@ public final class BuiltinBowLimbs {
                                  float drawTime, float damageMult,
                                  boolean amphibious, boolean givesSlowFalling,
                                  List<MaterialEffect> effects) {
+        register(ctx, key, ingredient, drawTime, damageMult, amphibious, givesSlowFalling, false, effects);
+    }
+
+    private static void register(BootstrapContext<BowLimbDef> ctx,
+                                 ResourceKey<BowLimbDef> key,
+                                 java.util.function.Supplier<? extends ItemLike> ingredient,
+                                 float drawTime, float damageMult,
+                                 boolean amphibious, boolean givesSlowFalling, boolean agility,
+                                 List<MaterialEffect> effects) {
         ctx.register(key, new BowLimbDef(
                 Ingredient.of(ingredient.get()),
-                new BowLimbStats(drawTime, damageMult, amphibious, givesSlowFalling),
+                new BowLimbStats(drawTime, damageMult, amphibious, givesSlowFalling, agility),
                 Optional.empty(),
                 effects,
                 Optional.empty()

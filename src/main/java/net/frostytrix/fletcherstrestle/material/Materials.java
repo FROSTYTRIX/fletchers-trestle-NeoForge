@@ -23,7 +23,7 @@ public final class Materials {
 
     public static final BowLimbDef DEFAULT_BOW_LIMB = new BowLimbDef(
             Ingredient.EMPTY,
-            new BowLimbStats(20f, 1f, false, false),
+            new BowLimbStats(20f, 1f, false, false, false),
             Optional.empty(), List.of(), Optional.empty());
 
     public static final BowRiserDef DEFAULT_BOW_RISER = new BowRiserDef(

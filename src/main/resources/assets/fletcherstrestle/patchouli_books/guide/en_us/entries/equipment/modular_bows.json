@@ -1,0 +1,20 @@
+{
+  "name": "Modular Bows",
+  "category": "fletcherstrestle:equipment",
+  "icon": "fletcherstrestle:modular_bow",
+  "sortnum": 0,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "A modular bow is assembled at the $(l)Fletching Table$() from three parts:$(br)$(li)$(l)Limbs$() — draw speed and damage$(li)$(l)Riser$() — durability and accuracy$(li)$(l)String$() — arrow velocity"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Assembling a bow triggers a short $(l)tuning minigame$(). Your score becomes the bow's $(l)Tuning %$() — shown in green on its tooltip.$(br2)Higher tuning means a $(l)faster draw$(), so a well-tuned bow of the same parts simply shoots quicker."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Different woods play very differently: birch draws lightning-fast for little damage, dark oak hits like a truck but draws slowly, and jungle lets you $(l)walk at full speed while drawing$(). See $(l)Materials & Stats$() for the full table."
+    }
+  ]
+}

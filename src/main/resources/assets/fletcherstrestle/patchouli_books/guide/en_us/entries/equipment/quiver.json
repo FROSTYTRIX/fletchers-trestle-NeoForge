@@ -1,0 +1,22 @@
+{
+  "name": "The Quiver",
+  "category": "fletcherstrestle:equipment",
+  "icon": "fletcherstrestle:leather_quiver",
+  "sortnum": 3,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "A $(l)Quiver$() carries several arrow types at once and lets you swap between them on the fly — hold the quiver modifier key and scroll to cycle the selected slot."
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "fletcherstrestle:leather_quiver",
+      "text": "The Leather Quiver holds 3 slots."
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "fletcherstrestle:iron_quiver",
+      "text": "The Iron Quiver holds 5."
+    }
+  ]
+}

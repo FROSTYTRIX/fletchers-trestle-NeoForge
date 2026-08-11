@@ -107,10 +107,12 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                 .unlockedBy("has_paper", has(Items.PAPER))
                 .save(recipeOutput);
 
+        // The guide is a Patchouli book now, so its recipe only exists when
+        // Patchouli is installed (matches the optional-dependency design).
         ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, ModItems.FLETCHER_GUIDE.get())
                 .requires(Items.BOOK).requires(Items.FEATHER)
                 .unlockedBy("has_book", has(Items.BOOK))
-                .save(recipeOutput);
+                .save(recipeOutput.withConditions(modLoaded("patchouli")));
 
         // Bow -> crossbow assembly moved off the Smithing Table onto the
         // Crossbow Bench (handled in CrossbowBenchMenu). The bench is the single
