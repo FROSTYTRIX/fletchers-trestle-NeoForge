@@ -1,0 +1,37 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    {
+      "tag": "fletcherstrestle:linen"
+    },
+    {
+      "tag": "fletcherstrestle:linen"
+    },
+    {
+      "tag": "fletcherstrestle:linen"
+    },
+    {
+      "tag": "fletcherstrestle:linen"
+    },
+    {
+      "tag": "fletcherstrestle:linen"
+    },
+    {
+      "tag": "fletcherstrestle:linen"
+    },
+    {
+      "tag": "fletcherstrestle:linen"
+    },
+    {
+      "tag": "fletcherstrestle:linen"
+    },
+    {
+      "item": "minecraft:brown_dye"
+    }
+  ],
+  "result": {
+    "count": 8,
+    "id": "fletcherstrestle:brown_linen"
+  }
+}

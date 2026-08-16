@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/carpet",
+  "textures": {
+    "wool": "fletcherstrestle:block/orange_linen"
+  }
+}

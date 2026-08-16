@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/outer_stairs",
+  "textures": {
+    "bottom": "fletcherstrestle:block/brown_linen",
+    "side": "fletcherstrestle:block/brown_linen",
+    "top": "fletcherstrestle:block/brown_linen"
+  }
+}

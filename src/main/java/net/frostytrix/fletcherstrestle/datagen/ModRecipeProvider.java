@@ -8,12 +8,17 @@ import net.frostytrix.fletcherstrestle.datagen.recipeBuilders.SteamingRecipeBuil
 import net.frostytrix.fletcherstrestle.item.ModItems;
 import net.frostytrix.fletcherstrestle.tags.ModTags;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.DyeItem;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.neoforged.neoforge.common.conditions.IConditionBuilder;
 
@@ -106,6 +111,52 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                 .requires(Blocks.WHITE_WOOL).requires(Items.BLACK_DYE).requires(Items.BLUE_DYE).requires(Items.RED_DYE).requires(Items.YELLOW_DYE)
                 .unlockedBy("has_paper", has(Items.PAPER))
                 .save(recipeOutput);
+
+        // Linen — woven from flax string, the same way wool comes from string.
+        ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, ModBlocks.LINEN.block().get())
+                .pattern("SS")
+                .pattern("SS")
+                .define('S', ModItems.FLAX_STRING.get())
+                .unlockedBy("has_flax_string", has(ModItems.FLAX_STRING.get()))
+                .save(recipeOutput);
+
+        // Building shapes for every colour, and the dye recipe for the 16
+        // coloured ones. Dye accepts ANY linen (via the tag) so you can
+        // re-dye a colour you've changed your mind about, and each result
+        // gets a unique recipe id.
+        for (ModBlocks.LinenSet set : ModBlocks.allLinenSets()) {
+            linenShapes(recipeOutput, set);
+        }
+        for (var entry : ModBlocks.DYED_LINEN.entrySet()) {
+            DyeColor colour = entry.getKey();
+            Block dyed = entry.getValue().block().get();
+            ShapelessRecipeBuilder.shapeless(RecipeCategory.BUILDING_BLOCKS, dyed, 8)
+                    .requires(Ingredient.of(ModTags.Items.LINEN), 8)
+                    .requires(DyeItem.byColor(colour))
+                    .unlockedBy("has_linen", has(ModTags.Items.LINEN))
+                    .save(recipeOutput, ResourceLocation.fromNamespaceAndPath(
+                            FletcherTrestle.MOD_ID, colour.getName() + "_linen_from_dye"));
+
+            // Linen works like wool: it can make beds and banners too.
+            ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, bedFor(colour))
+                    .pattern("###")
+                    .pattern("XXX")
+                    .define('#', dyed)
+                    .define('X', ItemTags.PLANKS)
+                    .unlockedBy("has_linen", has(ModTags.Items.LINEN))
+                    .save(recipeOutput, ResourceLocation.fromNamespaceAndPath(
+                            FletcherTrestle.MOD_ID, colour.getName() + "_bed_from_linen"));
+
+            ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, bannerFor(colour))
+                    .pattern("###")
+                    .pattern("###")
+                    .pattern(" | ")
+                    .define('#', dyed)
+                    .define('|', Items.STICK)
+                    .unlockedBy("has_linen", has(ModTags.Items.LINEN))
+                    .save(recipeOutput, ResourceLocation.fromNamespaceAndPath(
+                            FletcherTrestle.MOD_ID, colour.getName() + "_banner_from_linen"));
+        }
 
         // The guide is a Patchouli book now, so its recipe only exists when
         // Patchouli is installed (matches the optional-dependency design).
@@ -394,5 +445,40 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                 .define('S', Items.STICK)
                 .define('P', ItemTags.PLANKS)
                 .unlockedBy("has_arrow", has(ItemTags.ARROWS)).save(recipeOutput);
+    }
+
+    /** Stairs / slab / carpet recipes for one linen colour. */
+    private void linenShapes(RecipeOutput recipeOutput, ModBlocks.LinenSet set) {
+        Block base = set.block().get();
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, set.stairs().get(), 4)
+                .pattern("L  ")
+                .pattern("LL ")
+                .pattern("LLL")
+                .define('L', base)
+                .unlockedBy("has_linen", has(ModTags.Items.LINEN))
+                .save(recipeOutput);
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, set.slab().get(), 6)
+                .pattern("LLL")
+                .define('L', base)
+                .unlockedBy("has_linen", has(ModTags.Items.LINEN))
+                .save(recipeOutput);
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, set.carpet().get(), 3)
+                .pattern("LL")
+                .define('L', base)
+                .unlockedBy("has_linen", has(ModTags.Items.LINEN))
+                .save(recipeOutput);
+    }
+
+    private static Item bedFor(DyeColor colour) {
+        return BuiltInRegistries.ITEM.get(
+                ResourceLocation.withDefaultNamespace(colour.getName() + "_bed"));
+    }
+
+    private static Item bannerFor(DyeColor colour) {
+        return BuiltInRegistries.ITEM.get(
+                ResourceLocation.withDefaultNamespace(colour.getName() + "_banner"));
     }
 }

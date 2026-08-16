@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "condition": "minecraft:survives_explosion"
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "fletcherstrestle:light_gray_linen"
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "fletcherstrestle:blocks/light_gray_linen"
+}

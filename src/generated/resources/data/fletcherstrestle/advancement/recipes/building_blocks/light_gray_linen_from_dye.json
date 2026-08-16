@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_linen": {
+      "conditions": {
+        "items": [
+          {
+            "items": "#fletcherstrestle:linen"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "fletcherstrestle:light_gray_linen_from_dye"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_linen"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "fletcherstrestle:light_gray_linen_from_dye"
+    ]
+  }
+}

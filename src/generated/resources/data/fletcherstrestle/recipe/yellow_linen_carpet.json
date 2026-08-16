@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "L": {
+      "item": "fletcherstrestle:yellow_linen"
+    }
+  },
+  "pattern": [
+    "LL"
+  ],
+  "result": {
+    "count": 3,
+    "id": "fletcherstrestle:yellow_linen_carpet"
+  }
+}

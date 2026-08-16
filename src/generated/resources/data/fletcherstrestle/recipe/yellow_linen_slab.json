@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "L": {
+      "item": "fletcherstrestle:yellow_linen"
+    }
+  },
+  "pattern": [
+    "LLL"
+  ],
+  "result": {
+    "count": 6,
+    "id": "fletcherstrestle:yellow_linen_slab"
+  }
+}

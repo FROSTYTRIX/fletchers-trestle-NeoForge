@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "L": {
+      "item": "fletcherstrestle:white_linen"
+    }
+  },
+  "pattern": [
+    "L  ",
+    "LL ",
+    "LLL"
+  ],
+  "result": {
+    "count": 4,
+    "id": "fletcherstrestle:white_linen_stairs"
+  }
+}

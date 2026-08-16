@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/slab",
+  "textures": {
+    "bottom": "fletcherstrestle:block/orange_linen",
+    "side": "fletcherstrestle:block/orange_linen",
+    "top": "fletcherstrestle:block/orange_linen"
+  }
+}

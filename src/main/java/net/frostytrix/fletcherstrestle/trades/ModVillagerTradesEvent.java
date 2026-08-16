@@ -1,6 +1,7 @@
 package net.frostytrix.fletcherstrestle.trades;
 
 import net.frostytrix.fletcherstrestle.FletcherTrestle;
+import net.frostytrix.fletcherstrestle.block.ModBlocks;
 import net.frostytrix.fletcherstrestle.item.ModItems;
 import net.minecraft.world.entity.npc.VillagerProfession;
 import net.minecraft.world.entity.npc.VillagerTrades;
@@ -84,6 +85,31 @@ public class ModVillagerTradesEvent {
                     Optional.empty(),
                     new ItemStack(Items.EMERALD, 1),
                     12, 3, 0.05F));
+
+            // Linen is a textile, so the shepherd deals in it exactly the way it
+            // deals in wool: buys the plain stuff, sells it back by the colour.
+            event.getTrades().get(1).add((trader, random) -> new MerchantOffer(
+                    new ItemCost(ModBlocks.LINEN.block().get().asItem(), 18),
+                    Optional.empty(),
+                    new ItemStack(Items.EMERALD, 1),
+                    16, 2, 0.05F));
+
+            for (var set : ModBlocks.DYED_LINEN.values()) {
+                // Apprentice: one listing per colour, mirroring vanilla's wool
+                // sales — the villager rolls a couple of these at random.
+                event.getTrades().get(2).add((trader, random) -> new MerchantOffer(
+                        new ItemCost(Items.EMERALD, 1),
+                        Optional.empty(),
+                        new ItemStack(set.block().get(), 1),
+                        16, 5, 0.05F));
+
+                // Journeyman: carpets, like the vanilla carpet trades.
+                event.getTrades().get(3).add((trader, random) -> new MerchantOffer(
+                        new ItemCost(Items.EMERALD, 1),
+                        Optional.empty(),
+                        new ItemStack(set.carpet().get(), 4),
+                        16, 10, 0.05F));
+            }
         }
     }
 

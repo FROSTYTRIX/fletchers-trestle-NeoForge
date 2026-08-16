@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/inner_stairs",
+  "textures": {
+    "bottom": "fletcherstrestle:block/green_linen",
+    "side": "fletcherstrestle:block/green_linen",
+    "top": "fletcherstrestle:block/green_linen"
+  }
+}

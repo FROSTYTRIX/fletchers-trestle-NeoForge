@@ -1,22 +1,22 @@
 # Fletcher's Trestle — 2.4.0
 
 Trade Secrets. Villagers now deal in modular gear, flax is something you can
-actually **find** out in the world, and two long-standing arrow bugs are dead.
+actually **find** out in the world, and two arrow bugs are dead.
 
 ---
 
 ## 🤝 Villager trades
 
 - **The Fletcher sells modular weapons.** Its vanilla bow and crossbow trades are
-  gone — replaced with **fully assembled modular bows and crossbows**, complete
-  with randomised limbs, riser, and string. The Expert and Master tiers sell
-  **enchanted** ones, using vanilla's own enchantment roll and pricing.
+  gone; replaced with **fully assembled modular bows and crossbows**, complete
+  with randomised limbs, riser, and string just as the modular arrow had replaced the vanilla one.
+  The Expert and Master tiers sell **enchanted** ones, using vanilla's own enchantment roll and pricing.
   - Parts come from the material registries, so a modpack's materials show up in
     trades automatically.
-  - Tuning lands between 55% and 90% — a bought weapon is solid, but a good run
-    at the Fletching Table still beats it.
+  - Tuning lands between 55% and 90% a bought weapon can be good, but a good run
+    at the Fletching Table and a little bit of skill sill is better.
 - **The Fletcher sells Flax String**, so you can buy a bowstring outright.
-- **The Shepherd deals in raw flax** — sells it, and buys your surplus back.
+- **The Shepherd sells Flax**, and buys your surplus back.
 
 > Villager trades are rolled when a villager takes its profession, so you'll need
 > a freshly-professioned villager to see these.
@@ -26,15 +26,13 @@ actually **find** out in the world, and two long-standing arrow bugs are dead.
 - Flax, Flax String, and Flax Seeds now generate in **village chests** (fletcher,
   shepherd, and the farming houses), plus **shipwrecks**, **pillager outposts**,
   and the **village temple**.
-- A **fletcher's chest** is the jackpot: 85% for 2–5 Flax String — usually enough
+- A **fletcher's chest** is the jackpot: 85% chance for 2–5 Flax String usually enough
   to string a bow the moment you find it.
-- Chest loot can now roll **stacks** instead of a single item, so a find is
-  actually worth something.
 
 ## ⚖️ Bowstring rebalance
 
 - **Flax String → 0.85x** velocity (was 1.3x). It's farmable, renewable, and
-  shaky on an overdraw — now it's genuinely the budget option rather than a
+  shaky on an overdraw now it's genuinely the budget option rather than a
   straight upgrade.
 - **High Tension → 1.4x** velocity (was 1.8x), still 2 durability per shot.
 
@@ -42,8 +40,8 @@ actually **find** out in the world, and two long-standing arrow bugs are dead.
 
 - **Fast arrows no longer swerve and teleport.** A High Tension shot flies past
   the speed vanilla's spawn packet can describe (it clamps each axis to 3.9),
-  which *rotated* the velocity the client received — so the arrow appeared to
-  curve off course and then snap onto the target. Modular arrows now send their
+  which *rotated* the velocity the client received so the arrow appeared to
+  curve off course and then snap onto the target. Arrows now send their
   true velocity, so what you see is the shot you actually took. (Damage and
   range were always correct; only the visuals were wrong.)
 - **Homing arrows no longer jitter.** The serrated fletching's homing ran on both
@@ -61,7 +59,7 @@ actually **find** out in the world, and two long-standing arrow bugs are dead.
 # Fletcher's Trestle — 2.3.1
 
 By the Book. The Fletcher's Guide is now a real, illustrated **in-game handbook**
-powered by Patchouli — and the jungle bow finally lives up to its "agility" name.
+powered by Patchouli and the jungle bow finally lives up to its "agility" name.
 
 ---
 

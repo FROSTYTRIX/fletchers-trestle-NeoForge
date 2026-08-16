@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "fletcherstrestle:block/linen_slab"
+    },
+    "type=double": {
+      "model": "fletcherstrestle:block/linen"
+    },
+    "type=top": {
+      "model": "fletcherstrestle:block/linen_slab_top"
+    }
+  }
+}

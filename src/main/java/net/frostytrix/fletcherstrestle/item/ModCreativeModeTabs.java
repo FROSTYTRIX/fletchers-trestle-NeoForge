@@ -129,6 +129,25 @@ public class ModCreativeModeTabs {
                     })
                     .build());
 
+    /**
+     * Decoration tab — the linen textile family and other furnishing blocks.
+     * Kept separate so 68 linen blocks don't bury the archery gear.
+     */
+    public static final Supplier<CreativeModeTab> DECORATIONS_TAB = CREATIVE_MODE_TAB.register("decorations_tab",
+            () -> CreativeModeTab.builder().icon(() -> new ItemStack(ModBlocks.LINEN.block().get()))
+                    .withTabsBefore(ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "fletchers_trestle_tab"))
+                    .title(Component.translatable("creative_tab.fletcherstrestle.decorations_tab"))
+                    .displayItems((itemDisplayParameters, output) -> {
+                        // Linen, grouped colour by colour: block, stairs, slab, carpet.
+                        for (ModBlocks.LinenSet set : ModBlocks.allLinenSets()) {
+                            output.accept(set.block().get());
+                            output.accept(set.stairs().get());
+                            output.accept(set.slab().get());
+                            output.accept(set.carpet().get());
+                        }
+                    })
+                    .build());
+
 
     public static void register(IEventBus bus) {
         CREATIVE_MODE_TAB.register(bus);

@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "fletcherstrestle:block/cyan_linen_slab"
+    },
+    "type=double": {
+      "model": "fletcherstrestle:block/cyan_linen"
+    },
+    "type=top": {
+      "model": "fletcherstrestle:block/cyan_linen_slab_top"
+    }
+  }
+}

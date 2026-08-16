@@ -26,6 +26,14 @@ public class ModBlockLootTableProvider extends BlockLootSubProvider {
 
     @Override
     protected void generate() {
+        for (ModBlocks.LinenSet set : ModBlocks.allLinenSets()) {
+            dropSelf(set.block().get());
+            dropSelf(set.stairs().get());
+            dropSelf(set.carpet().get());
+            // Slabs need the special handler so a double slab drops two.
+            add(set.slab().get(), this::createSlabItemTable);
+        }
+
         dropSelf(ModBlocks.STEAM_BOX.get());
         dropSelf(ModBlocks.SHAVING_HORSE.get());
         dropSelf(ModBlocks.ARCHERY_TARGET.get());

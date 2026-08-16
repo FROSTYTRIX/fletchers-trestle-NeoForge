@@ -33,6 +33,20 @@ public class ModBlockTagProvider extends BlockTagsProvider {
                 .add(ModBlocks.ROPE.get())
         ;
 
+        // Linen behaves like wool: shears mine it fast, and the stairs/slabs/
+        // carpets join the vanilla families so anything looking for "all
+        // stairs" or "all carpets" picks them up.
+        var wool = this.tag(BlockTags.WOOL);
+        var stairs = this.tag(BlockTags.STAIRS);
+        var slabs = this.tag(BlockTags.SLABS);
+        var carpets = this.tag(BlockTags.WOOL_CARPETS);
+        for (ModBlocks.LinenSet set : ModBlocks.allLinenSets()) {
+            wool.add(set.block().get());
+            stairs.add(set.stairs().get());
+            slabs.add(set.slab().get());
+            carpets.add(set.carpet().get());
+        }
+
         this.tag(BlockTags.CLIMBABLE)
                 .add(ModBlocks.ROPE.get());
     }

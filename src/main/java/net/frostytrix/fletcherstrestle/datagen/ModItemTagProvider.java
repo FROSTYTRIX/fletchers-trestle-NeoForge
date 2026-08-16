@@ -91,5 +91,16 @@ public class ModItemTagProvider extends ItemTagsProvider {
 
         tag(ItemTags.BOW_ENCHANTABLE)
                 .add(ModItems.MODULAR_BOW.get());
+
+        // Every linen block, so dye recipes can re-colour any of them, plus the
+        // vanilla wool/carpet item tags so linen counts as wool to other recipes.
+        var linen = tag(ModTags.Items.LINEN);
+        var wool = tag(ItemTags.WOOL);
+        var carpets = tag(ItemTags.WOOL_CARPETS);
+        for (net.frostytrix.fletcherstrestle.block.ModBlocks.LinenSet set : ModBlocks.allLinenSets()) {
+            linen.add(set.block().get().asItem());
+            wool.add(set.block().get().asItem());
+            carpets.add(set.carpet().get().asItem());
+        }
     }
 }

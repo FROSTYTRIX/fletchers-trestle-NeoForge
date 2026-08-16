@@ -1,6 +1,23 @@
 {
   "values": [
     "fletcherstrestle:archery_target",
-    "fletcherstrestle:rope"
+    "fletcherstrestle:rope",
+    "fletcherstrestle:linen",
+    "fletcherstrestle:white_linen",
+    "fletcherstrestle:orange_linen",
+    "fletcherstrestle:magenta_linen",
+    "fletcherstrestle:light_blue_linen",
+    "fletcherstrestle:yellow_linen",
+    "fletcherstrestle:lime_linen",
+    "fletcherstrestle:pink_linen",
+    "fletcherstrestle:gray_linen",
+    "fletcherstrestle:light_gray_linen",
+    "fletcherstrestle:cyan_linen",
+    "fletcherstrestle:purple_linen",
+    "fletcherstrestle:blue_linen",
+    "fletcherstrestle:brown_linen",
+    "fletcherstrestle:green_linen",
+    "fletcherstrestle:red_linen",
+    "fletcherstrestle:black_linen"
   ]
 }
