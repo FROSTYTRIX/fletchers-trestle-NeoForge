@@ -1,0 +1,27 @@
+{
+  "name": "Linen",
+  "category": "fletcherstrestle:woodworking",
+  "icon": "fletcherstrestle:linen",
+  "sortnum": 5,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Flax isn't only for bowstrings. Weave $(l)Flax String$() into $(l)Linen$() — a soft, wool-like block for building and furnishing your workshop."
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "fletcherstrestle:linen",
+      "text": "Four Flax String makes one Linen."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Colours & Shapes",
+      "text": "$(l)8 Linen + any dye$() gives 8 of that colour — and because the recipe takes $(o)any$() linen, you can re-dye a colour you've changed your mind about.$(br2)All 17 colours come with $(l)stairs$(), a $(l)slab$() and a $(l)carpet$()."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Like Wool",
+      "text": "Linen counts as wool: shears cut it quickly, and it makes $(l)beds$() and $(l)banners$() just like wool does.$(br2)The $(l)Shepherd$() trades in it too — buying plain linen, and selling dyed linen and carpets."
+    }
+  ]
+}

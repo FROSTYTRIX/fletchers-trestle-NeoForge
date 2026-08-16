@@ -1,3 +1,30 @@
+# Fletcher's Trestle — 2.5.0
+
+Woven. Flax gets a second life as **linen** — a dyeable textile block family, so
+the crop that strings your bows can furnish the workshop you built it in.
+
+---
+
+## 🧵 Linen
+
+- **A new block family in 17 colours** — undyed linen plus all 16 dyes, each with
+  a **block, stairs, slab and carpet**. Every colour has its own texture rather
+  than a tint, so they read as distinct fabrics.
+- **Woven from Flax String** (4 → 1), then dyed 8-at-a-time. The dye recipe
+  accepts *any* linen, so a colour you've gone off can simply be re-dyed.
+- **It behaves like wool** — shears cut it fast, it carries the wool, stairs,
+  slab and carpet tags, and it makes **beds** and **banners** just like wool.
+- **The Shepherd trades it**, the way it already trades wool: buying plain
+  linen, selling dyed linen by the colour, and selling carpets at Journeyman.
+- **A second creative tab** — "Fletcher's Trestle: Decorations" — keeps the
+  linen family from burying the archery gear.
+
+## 📖 Guidebook
+
+- New **Linen** entry covering weaving, dyeing, and what it shares with wool.
+
+---
+
 # Fletcher's Trestle — 2.4.0
 
 Trade Secrets. Villagers now deal in modular gear, flax is something you can
