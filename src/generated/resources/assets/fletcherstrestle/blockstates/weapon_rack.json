@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "fletcherstrestle:block/weapon_rack",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "fletcherstrestle:block/weapon_rack"
+    },
+    "facing=south": {
+      "model": "fletcherstrestle:block/weapon_rack",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "fletcherstrestle:block/weapon_rack",
+      "y": 270
+    }
+  }
+}

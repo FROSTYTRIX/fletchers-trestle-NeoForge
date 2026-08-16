@@ -90,7 +90,7 @@ public class DippingRecipeCategory implements IRecipeCategory<DippingRecipe> {
             ItemStack copy = stack.copy();
             copy.setCount(recipe.inputCount());
             if (isModularPotion && copy.is(ModItems.MODULAR_ARROW.get())) {
-                // Empty glass-vial arrow (no potion yet) — visualizes what
+                // Empty glass-vial arrow (no potion yet): visualizes what
                 // you'd put in the vat.
                 copy.set(ModDataComponents.ARROW_ASSEMBLY.get(),
                         new ArrowAssembly("glass_vial", "oak", "feather"));
@@ -129,7 +129,7 @@ public class DippingRecipeCategory implements IRecipeCategory<DippingRecipe> {
                                 tooltip.clear(); // drop the default "Water" line
                                 ItemStack dummyPotion = new ItemStack(Items.POTION);
                                 dummyPotion.set(DataComponents.POTION_CONTENTS, new PotionContents(potionHolder));
-                                // For modular arrows, the fluid is just an example —
+                                // For modular arrows, the fluid is just an example,
                                 // any potion works. Make that clear in the tooltip.
                                 if (recipe.requiredPotion().isEmpty()) {
                                     tooltip.add(0, Component.literal("Any potion (example: ")

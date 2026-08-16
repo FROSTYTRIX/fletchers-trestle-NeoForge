@@ -28,13 +28,13 @@ import java.util.Optional;
 import java.util.function.Supplier;
 
 /**
- * Sells a fully-assembled modular bow or crossbow with randomised parts —
+ * Sells a fully-assembled modular bow or crossbow with randomised parts,
  * the weapon-side counterpart to {@link RandomModularArrowTrade}. Replaces the
  * fletcher's vanilla bow/crossbow trades so villagers deal in this mod's gear.
  *
  * <p>Parts are drawn from the datapack material registries, so a modpack's
  * limbs/risers/strings show up in trades automatically. Tuning is randomised in
- * a respectable band — a villager-made bow is decent but not perfectly tuned,
+ * a respectable band: a villager-made bow is decent but not perfectly tuned,
  * leaving room for a player's own Fletching Table work to beat it.</p>
  *
  * <p>When {@code enchanted}, the stack is enchanted exactly the way vanilla
@@ -98,7 +98,7 @@ public class RandomModularBowTrade implements VillagerTrades.ItemListing {
     /**
      * Picks a random entry id from a material registry. Built-ins are stored
      * as a bare path ("oak"); entries from other namespaces keep their full id
-     * ("mypack:steel") — both are understood by the resolver.
+     * ("mypack:steel"): both are understood by the resolver.
      */
     private static <T> String randomEntry(Registry<T> registry, RandomSource random) {
         List<ResourceKey<T>> keys = new ArrayList<>(registry.registryKeySet());

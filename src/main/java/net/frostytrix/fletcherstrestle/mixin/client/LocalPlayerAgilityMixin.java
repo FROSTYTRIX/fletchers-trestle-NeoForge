@@ -24,12 +24,12 @@ import org.spongepowered.asm.mixin.injection.ModifyConstant;
  * Both {@code 0.2F} constants are unique to this block within {@code aiStep},
  * so a plain {@link ModifyConstant} (same technique as the bow-draw divisor
  * mixin) can flip them to {@code 1.0F} when the player is drawing an agility
- * bow — cancelling the slowdown. The callback only fires inside the
+ * bow: cancelling the slowdown. The callback only fires inside the
  * {@code isUsingItem()} guard, so the held item is always the one being used.</p>
  *
  * <p>This replaces an earlier MOVEMENT_SPEED-attribute approach, which distorted
  * the FOV (vanilla scales FOV by movement speed). Touching only the input
- * impulses leaves speed — and thus FOV — untouched.</p>
+ * impulses leaves speed, and thus FOV: untouched.</p>
  */
 @Mixin(LocalPlayer.class)
 public abstract class LocalPlayerAgilityMixin {

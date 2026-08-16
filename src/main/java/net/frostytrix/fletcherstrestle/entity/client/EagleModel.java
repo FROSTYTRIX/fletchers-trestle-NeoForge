@@ -17,7 +17,7 @@ import net.minecraft.resources.ResourceLocation;
 import static net.frostytrix.fletcherstrestle.FletcherTrestle.MOD_ID;
 
 /**
- * Eagle Model — commissioned Blockbench rig (64x64 texture sheet).
+ * Eagle Model: commissioned Blockbench rig (64x64 texture sheet).
  * <p>
  * Geometry is the artist's export ({@link #createBodyLayer()}); the part
  * hierarchy is:
@@ -35,7 +35,7 @@ import static net.frostytrix.fletcherstrestle.FletcherTrestle.MOD_ID;
  * the artist modelled lives inside the baked {@code _r1} sub-cubes), so
  * {@link #resetParts()} just zeroes them each frame.
  * <p>
- * NOTE: wing-flap axis/amplitude and leg-tuck are a first pass — they need
+ * NOTE: wing-flap axis/amplitude and leg-tuck are a first pass: they need
  * tuning from an in-game screenshot (the usual build→run→tune loop).
  */
 public class EagleModel extends EntityModel<EagleEntity> {
@@ -82,7 +82,7 @@ public class EagleModel extends EntityModel<EagleEntity> {
     }
 
     /**
-     * createBodyLayer() — geometry exported from Blockbench (Mojang mappings).
+     * createBodyLayer(): geometry exported from Blockbench (Mojang mappings).
      * Texture sheet: 64 x 64.
      */
     public static LayerDefinition createBodyLayer() {
@@ -139,7 +139,7 @@ public class EagleModel extends EntityModel<EagleEntity> {
     }
 
     // ---------------------------------------------------------------
-    // setupAnim() — called every frame by the renderer.
+    // setupAnim(): called every frame by the renderer.
     // ---------------------------------------------------------------
     @Override
     public void setupAnim(EagleEntity entity, float animationPosition,
@@ -178,13 +178,13 @@ public class EagleModel extends EntityModel<EagleEntity> {
         // oscillating around that open pose. The flap stays smaller than the
         // open angle so the wing never rotates back into the body.
         // Left wing sits on +X (opens with negative zRot), right on -X (positive).
-        // ~83° open — wings sit nearly horizontal (90° = 1.5708) so a gliding
+        // ~83° open: wings sit nearly horizontal (90° = 1.5708) so a gliding
         // eagle reads as wings-out, not half-folded.
         float openAngle = 1.45f;
 
         // move: 0 when hovering/soaring, →1 when powering forward. Blends a
         // near-still eagle into a wings-out GLIDE (tiny waver) and a moving one
-        // into a full, faster flap — so a stationary airborne eagle looks like
+        // into a full, faster flap, so a stationary airborne eagle looks like
         // it's soaring, not frozen mid-air.
         // Amplitude scales glide↔flap with speed; the phase is accumulated on
         // the entity (so its frequency can scale with speed jitter-free).

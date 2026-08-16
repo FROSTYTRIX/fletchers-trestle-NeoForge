@@ -58,7 +58,7 @@ public class RandomModularArrowTrade implements VillagerTrades.ItemListing {
     /**
      * Picks a random entry id from a material registry. Built-ins are stored
      * as a bare path ("bodkin_point"); entries from other namespaces keep
-     * their full id ("mypack:steel") — both are understood by the resolver.
+     * their full id ("mypack:steel"): both are understood by the resolver.
      */
     private static <T> String randomEntry(Registry<T> registry, RandomSource random) {
         List<ResourceKey<T>> keys = new ArrayList<>(registry.registryKeySet());

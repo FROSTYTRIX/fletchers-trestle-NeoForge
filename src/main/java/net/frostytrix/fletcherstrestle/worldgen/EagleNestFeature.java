@@ -15,7 +15,7 @@ import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 
-// EagleNestFeature — places an Eagle Nest block on a high, sky-exposed
+// EagleNestFeature: places an Eagle Nest block on a high, sky-exposed
 // surface and seeds it with 0–3 random eggs plus 1–2 wild eagles whose
 // `nestPos` is set so they patrol the nest.
 //
@@ -36,7 +36,7 @@ public class EagleNestFeature extends Feature<NoneFeatureConfiguration> {
     @Override
     public boolean place(FeaturePlaceContext<NoneFeatureConfiguration> context) {
         // Gated by FletcherConfig.EAGLES_NATURAL_SPAWNING. Returning false
-        // here means "no nest placed at this chunk-decoration site" — the
+        // here means "no nest placed at this chunk-decoration site": the
         // biome modifier JSON still lists the feature, but every attempt
         // bails immediately when the toggle is off. Flip the config to true
         // to restore the full nest worldgen.
@@ -117,7 +117,7 @@ public class EagleNestFeature extends Feature<NoneFeatureConfiguration> {
 
         eagle.moveTo(x, y, z, random.nextFloat() * 360.0f, 0f);
         eagle.setNestPos(nestPos);
-        // Wild — no owner, no taming. Players need to tame these themselves.
+        // Wild: no owner, no taming. Players need to tame these themselves.
         level.addFreshEntity(eagle);
     }
 }

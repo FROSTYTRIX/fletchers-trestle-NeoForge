@@ -50,7 +50,7 @@ public class ArcherySkillScreen extends Screen {
 
     @Override
     public void renderBackground(GuiGraphics g, int mouseX, int mouseY, float partialTick) {
-        // Plain dim overlay — deliberately NOT calling super, which applies the
+        // Plain dim overlay: deliberately NOT calling super, which applies the
         // 1.21 gaussian blur post-process (that's what made the screen blurry).
         g.fill(0, 0, this.width, this.height, 0xB0000000);
     }
@@ -86,7 +86,7 @@ public class ArcherySkillScreen extends Screen {
                     this.left + 12, rowY + 12, 0xB0B0B0, true);
         }
 
-        // Render widgets directly — calling super.render() would re-draw the
+        // Render widgets directly: calling super.render() would re-draw the
         // dim overlay over the panel.
         for (net.minecraft.client.gui.components.Renderable r : this.renderables) {
             r.render(g, mouseX, mouseY, partialTick);

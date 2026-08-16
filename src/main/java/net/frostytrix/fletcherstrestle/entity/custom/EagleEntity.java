@@ -38,7 +38,7 @@ import java.util.EnumSet;
 public class EagleEntity extends TamableAnimal {
 
     // ---------------------------------------------------------------
-    // Synced data — declaration order is critical!
+    // Synced data: declaration order is critical!
     // These IDs are assigned sequentially at class load time.
     // NEVER reorder these fields.
     // ---------------------------------------------------------------
@@ -61,7 +61,7 @@ public class EagleEntity extends TamableAnimal {
     public static final int STATE_HUNTING = 3;
     public static final int STATE_RETURNING = 4;
 
-    // Hunt target — not synced, server-only logic
+    // Hunt target, not synced, server-only logic
     @Nullable
     private LivingEntity huntTarget = null;
 
@@ -72,7 +72,7 @@ public class EagleEntity extends TamableAnimal {
 
     // Set by EaglePerchGoal while it directly drives the final descent onto the
     // crossbar. Suppresses the idle-soaring altitude hold so it doesn't fight
-    // the landing. Transient — never saved.
+    // the landing. Transient: never saved.
     private boolean landingApproach = false;
 
     // Client-side smoothed horizontal speed. Drives the wing-flap amplitude in
@@ -91,7 +91,7 @@ public class EagleEntity extends TamableAnimal {
     @Nullable
     private BlockPos nestPos = null;
 
-    // Fetch inventory — 16 slots so the eagle can carry up to 16 arrows in
+    // Fetch inventory: 16 slots so the eagle can carry up to 16 arrows in
     // a single trip, with room for up to 16 different arrow types (one type
     // per slot if needed; matching types still stack). Capacity is enforced
     // by total item count via hasFetchSpace(), not by full slots.
@@ -122,7 +122,7 @@ public class EagleEntity extends TamableAnimal {
     }
 
     // ---------------------------------------------------------------
-    // Spawn rules — keeps wild eagles to high, sunlit mountain ridges
+    // Spawn rules: keeps wild eagles to high, sunlit mountain ridges
     // rather than spawning under leaves at sea level. Wired up in
     // FletcherTrestle.onRegisterSpawnPlacements.
     // ---------------------------------------------------------------
@@ -134,18 +134,18 @@ public class EagleEntity extends TamableAnimal {
             net.minecraft.util.RandomSource random) {
         // Natural spawning is config-gated (off by default while the model is
         // WIP). This predicate runs at spawn-attempt time, when the SERVER
-        // config is loaded — unlike RegisterSpawnPlacementsEvent, so it's the
+        // config is loaded: unlike RegisterSpawnPlacementsEvent, so it's the
         // correct place to read the flag.
         if (!net.frostytrix.fletcherstrestle.config.FletcherConfig.EAGLES_NATURAL_SPAWNING.get()) return false;
         // Bottom layers / cave biomes are off-limits regardless of biome tag.
         if (pos.getY() < 80) return false;
         if (!level.canSeeSky(pos)) return false;
-        // Daylight only — keeps them from popping in at night.
+        // Daylight only: keeps them from popping in at night.
         return level.getBrightness(net.minecraft.world.level.LightLayer.SKY, pos) >= 12;
     }
 
     // ---------------------------------------------------------------
-    // Step 2 — Attributes
+    // Step 2: Attributes
     // ---------------------------------------------------------------
     public static AttributeSupplier.Builder createAttributes() {
         return Animal.createLivingAttributes()
@@ -157,7 +157,7 @@ public class EagleEntity extends TamableAnimal {
     }
 
     // ---------------------------------------------------------------
-    // Step 3 — Synced data registration
+    // Step 3: Synced data registration
     // ---------------------------------------------------------------
     @Override
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
@@ -168,7 +168,7 @@ public class EagleEntity extends TamableAnimal {
     }
 
     // ---------------------------------------------------------------
-    // Step 4 — AI Goal stack
+    // Step 4: AI Goal stack
     // ---------------------------------------------------------------
     @Override
     protected void registerGoals() {
@@ -204,7 +204,7 @@ public class EagleEntity extends TamableAnimal {
     }
 
     // ---------------------------------------------------------------
-    // Step 7 — Taming
+    // Step 7: Taming
     // ---------------------------------------------------------------
     @Override
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
@@ -260,7 +260,7 @@ public class EagleEntity extends TamableAnimal {
     }
 
     // ---------------------------------------------------------------
-    // Step 9 — Save/Load
+    // Step 9: Save/Load
     // ---------------------------------------------------------------
     @Override
     public void addAdditionalSaveData(CompoundTag tag) {
@@ -348,7 +348,7 @@ public class EagleEntity extends TamableAnimal {
     }
 
     // ---------------------------------------------------------------
-    // Step 12 — Flying navigation
+    // Step 12: Flying navigation
     // ---------------------------------------------------------------
     @Override
     protected PathNavigation createNavigation(Level level) {
@@ -386,7 +386,7 @@ public class EagleEntity extends TamableAnimal {
     //   - uniform 0.91 damping so motion bleeds off instead of locking
     //   - when on ground or sitting, use a stronger ground friction
     //
-    // No gravity term at all — the bird never "falls" passively. If it has
+    // No gravity term at all: the bird never "falls" passively. If it has
     // nowhere to go (no path), it gently settles via the descent term in
     // tick() rather than dropping like a rock.
     @Override
@@ -419,13 +419,13 @@ public class EagleEntity extends TamableAnimal {
     }
 
     // ---------------------------------------------------------------
-    // Tick — manage IS_FLYING synced flag
+    // Tick: manage IS_FLYING synced flag
     // ---------------------------------------------------------------
     @Override
     public void tick() {
         super.tick();
 
-        // Gravity stays off — travel() handles all motion. If a vanilla code
+        // Gravity stays off: travel() handles all motion. If a vanilla code
         // path flipped it back on (rare but possible), force it off again.
         if (!this.isNoGravity()) {
             this.setNoGravity(true);
@@ -443,18 +443,18 @@ public class EagleEntity extends TamableAnimal {
 
         // Robust ground check: vanilla onGround() flickers because with no
         // gravity the eagle barely loads against the block. We extend the
-        // bounding box ~0.15 blocks down and test for any collision —
+        // bounding box ~0.15 blocks down and test for any collision,
         // that's stable across FollowOwnerGoal nudges and other small Y jitter.
         boolean grounded = isGroundedRobust();
         boolean airborne = !grounded;
 
         // Soaring: when idle (no goal/path), an eagle holds a cruising altitude above the
-        // terrain — taking off if it's on the ground — rather than drifting down to land.
+        // terrain: taking off if it's on the ground: rather than drifting down to land.
         // It only comes down for a real reason (perch, sit, fetch, hunt, follow-owner).
         // NOTE: also require the move control to be idle. A goal can drive the
         // eagle directly via move control while navigation is "done" (e.g. the
         // perch goal's close-range descent onto the thin crossbar). Without this
-        // check, soaring would fight that descent — pushing the eagle back up to
+        // check, soaring would fight that descent: pushing the eagle back up to
         // cruise altitude so it hovers above the perch and never lands.
         boolean idleSoaring = !this.isOrderedToSit()
                 && this.getNavigation().isDone()
@@ -514,10 +514,10 @@ public class EagleEntity extends TamableAnimal {
         if (this.isOrderedToSit()) {
             shouldFly = false;
         } else if (currentlyFlying) {
-            // Was flying — only switch to "not flying" after 4+ ticks grounded
+            // Was flying: only switch to "not flying" after 4+ ticks grounded
             shouldFly = groundedTicks < 4;
         } else {
-            // Was grounded — require 8+ ticks airborne before flipping to
+            // Was grounded: require 8+ ticks airborne before flipping to
             // flying so a brief lift from FollowOwnerGoal doesn't trigger
             // the flap animation while the eagle is essentially standing still.
             shouldFly = airborneTicks >= 8;
@@ -620,7 +620,7 @@ public class EagleEntity extends TamableAnimal {
     }
 
     // ---------------------------------------------------------------
-    // Fetch inventory API — used by EagleFetchGoal.
+    // Fetch inventory API: used by EagleFetchGoal.
     // ---------------------------------------------------------------
     // True while the eagle has carried fewer than FETCH_CAPACITY arrows.
     // Capacity is enforced by total item count, not by slot, so 16 different
@@ -662,7 +662,7 @@ public class EagleEntity extends TamableAnimal {
         }
     }
 
-    // Drop the carried inventory at the eagle's feet — used on death.
+    // Drop the carried inventory at the eagle's feet: used on death.
     public void dropFetchInventoryHere() {
         for (int i = 0; i < fetchInventory.getContainerSize(); i++) {
             ItemStack stack = fetchInventory.getItem(i);
@@ -683,7 +683,7 @@ public class EagleEntity extends TamableAnimal {
     // ---------------------------------------------------------------
     @Override
     public @Nullable AgeableMob getBreedOffspring(ServerLevel level, AgeableMob otherParent) {
-        // Eagles don't spawn a baby directly when breeding — instead the
+        // Eagles don't spawn a baby directly when breeding: instead the
         // breeding ritual deposits an egg in their nest, and the egg later
         // hatches into an eaglet. See EagleBreedGoal + EagleNestBlockEntity.
         return null;
@@ -701,7 +701,7 @@ public class EagleEntity extends TamableAnimal {
         return this.isInLove() && other.isInLove();
     }
 
-    // Babies are smaller — keeps eaglets visually distinct from adults.
+    // Babies are smaller: keeps eaglets visually distinct from adults.
     @Override
     public float getScale() {
         return this.isBaby() ? 0.55f : 1.0f;
@@ -737,7 +737,7 @@ public class EagleEntity extends TamableAnimal {
     // ---------------------------------------------------------------
 
     /**
-     * EagleFetchGoal — scans for arrows on the ground near the owner, flies
+     * EagleFetchGoal: scans for arrows on the ground near the owner, flies
      * out to grab them into the eagle's fetch inventory, then returns to the
      * owner to deposit. With more than one slot the eagle chains pickups
      * until the inventory is full or no more arrows are in range.
@@ -762,12 +762,12 @@ public class EagleEntity extends TamableAnimal {
         public boolean canUse() {
             if (!eagle.isTame() || eagle.isOrderedToSit()) return false;
             if (!(eagle.getOwner() instanceof Player owner) || !owner.isAlive()) return false;
-            // Owner in a different dimension — we can't path there, don't even try.
+            // Owner in a different dimension: we can't path there, don't even try.
             if (owner.level().dimension() != eagle.level().dimension()) return false;
 
             int state = eagle.getEagleState();
 
-            // Cold-start return is always allowed, even with fetch mode OFF —
+            // Cold-start return is always allowed, even with fetch mode OFF,
             // this lets a mid-fetch abort still deliver what was already collected.
             if (!eagle.isFetchInventoryEmpty() && state == STATE_IDLE) {
                 return true;
@@ -810,7 +810,7 @@ public class EagleEntity extends TamableAnimal {
                 return targetArrow != null && targetArrow.isAlive();
             }
             if (state == STATE_RETURNING) {
-                // Return always continues — deliver what we have even with mode off.
+                // Return always continues: deliver what we have even with mode off.
                 return !eagle.isFetchInventoryEmpty();
             }
             return false;
@@ -836,7 +836,7 @@ public class EagleEntity extends TamableAnimal {
             }
         }
 
-        // FETCH phase — fly out to the arrow, grab it, then either chain to
+        // FETCH phase: fly out to the arrow, grab it, then either chain to
         // the next nearby arrow or transition to RETURNING.
         private void tickFetch() {
             if (targetArrow == null || !targetArrow.isAlive()) {
@@ -872,7 +872,7 @@ public class EagleEntity extends TamableAnimal {
 
                 ItemStack leftover = eagle.addToFetchInventory(pickup);
                 if (!leftover.isEmpty()) {
-                    // Shouldn't normally happen — canUse checked hasFetchSpace —
+                    // Shouldn't normally happen: canUse checked hasFetchSpace,
                     // but drop anything that didn't fit so it's not lost.
                     eagle.spawnAtLocation(leftover);
                 }
@@ -905,7 +905,7 @@ public class EagleEntity extends TamableAnimal {
             giveUpTimer = 0;
         }
 
-        // RETURN phase — carry everything back to the owner and deposit it.
+        // RETURN phase: carry everything back to the owner and deposit it.
         private void tickReturn() {
             if (eagle.isFetchInventoryEmpty()) {
                 stop();
@@ -936,7 +936,7 @@ public class EagleEntity extends TamableAnimal {
 
         @Override
         public void stop() {
-            // Keep any carried items in the inventory — next canUse cycle will
+            // Keep any carried items in the inventory: next canUse cycle will
             // re-attempt delivery (cold-start return). This avoids dropping
             // items every time the eagle gets briefly interrupted (panic,
             // sit, etc.). Death drops the inventory via dropEquipment.
@@ -964,7 +964,7 @@ public class EagleEntity extends TamableAnimal {
     }
 
     /**
-     * EagleHuntGoal — circles above a target entity.
+     * EagleHuntGoal: circles above a target entity.
      * Activated externally via EagleEntity.setHuntTarget().
      */
     static class EagleHuntGoal extends Goal {
@@ -1011,7 +1011,7 @@ public class EagleEntity extends TamableAnimal {
                 stop();
                 return;
             }
-            // Skip orbit work if the target's chunk is unloaded — wait until
+            // Skip orbit work if the target's chunk is unloaded: wait until
             // it comes back into range rather than pathing into nowhere.
             if (!eagle.level().isLoaded(target.blockPosition())) return;
 
@@ -1051,7 +1051,7 @@ public class EagleEntity extends TamableAnimal {
     }
 
     /**
-     * EaglePerchGoal — when the owner is far away (or offline / in another
+     * EaglePerchGoal: when the owner is far away (or offline / in another
      * dimension), the eagle flies to its claimed perch block and settles there
      * instead of hovering aimlessly. On arrival it enters STATE_PERCHED and
      * sits, reusing the existing sit animation.
@@ -1065,7 +1065,7 @@ public class EagleEntity extends TamableAnimal {
         // above the perch's base position). Eagle's feet should land here.
         private static final double CROSSBAR_Y = 14.0 / 16.0;
         // Once within this radius of the exact landing spot, we stop using
-        // pathfinding and drive the eagle directly — flying nav can't path
+        // pathfinding and drive the eagle directly: flying nav can't path
         // to a thin decorative crossbar.
         private static final double APPROACH_RANGE_SQR = 16.0;  // 4 blocks
         // Inside this radius the eagle snaps to position and sits.
@@ -1105,7 +1105,7 @@ public class EagleEntity extends TamableAnimal {
             BlockPos perch = eagle.getPerchPos();
             if (perch == null) return false;
             if (!eagle.level().isLoaded(perch)) return false;
-            // Owner came back — yield to FollowOwnerGoal mid-flight.
+            // Owner came back: yield to FollowOwnerGoal mid-flight.
             return ownerFarOrAbsent();
         }
 
@@ -1127,7 +1127,7 @@ public class EagleEntity extends TamableAnimal {
             double distSqr = eagle.distanceToSqr(landX, landY, landZ);
 
             if (distSqr <= LAND_SNAP_RANGE_SQR) {
-                // Close enough to land — snap the eagle's position exactly
+                // Close enough to land: snap the eagle's position exactly
                 // onto the crossbar and put it to sleep.
                 eagle.moveTo(landX, landY, landZ, eagle.getYRot(), eagle.getXRot());
                 eagle.setDeltaMovement(net.minecraft.world.phys.Vec3.ZERO);
@@ -1140,7 +1140,7 @@ public class EagleEntity extends TamableAnimal {
             }
 
             if (distSqr > APPROACH_RANGE_SQR) {
-                // Far — let FlyingPathNavigation get us close.
+                // Far: let FlyingPathNavigation get us close.
                 eagle.landingApproach = false;
                 eagle.getMoveControl().setWantedPosition(landX, landY + 1.0, landZ, 1.2);
                 if (--repathCooldown <= 0) {
@@ -1148,7 +1148,7 @@ public class EagleEntity extends TamableAnimal {
                     repathCooldown = 12;
                 }
             } else {
-                // Close — FlyingMoveControl refuses to close the last ~1-2 blocks
+                // Close: FlyingMoveControl refuses to close the last ~1-2 blocks
                 // (it stops within its own bounding-box size of the target), so it
                 // can never settle onto the thin crossbar. Drive the descent by
                 // hand: point the velocity straight at the landing spot each tick.
@@ -1177,7 +1177,7 @@ public class EagleEntity extends TamableAnimal {
         public void stop() {
             // Landing side-effects happen in tick() now, so stop() is just
             // cleanup. If the goal was aborted (owner came back, perch broken),
-            // we leave the eagle wherever it was — FollowOwnerGoal can take over.
+            // we leave the eagle wherever it was: FollowOwnerGoal can take over.
             eagle.getNavigation().stop();
             eagle.landingApproach = false;
         }
@@ -1195,7 +1195,7 @@ public class EagleEntity extends TamableAnimal {
     }
 
     /**
-     * EagleBreedGoal — replaces vanilla BreedGoal for eagles. When two of the
+     * EagleBreedGoal: replaces vanilla BreedGoal for eagles. When two of the
      * same owner's adult eagles enter love mode and a claimed nest is in
      * range, both fly to the nest, perform a short ritual, and add an egg.
      * The egg incubates inside the nest and hatches into a baby eagle.
@@ -1208,7 +1208,7 @@ public class EagleEntity extends TamableAnimal {
         private static final int RITUAL_TICKS_REQUIRED = 40;          // 2 seconds at the nest
         private static final double NEST_SEARCH_RADIUS = 24.0;        // blocks
         private static final double PARTNER_SEARCH_RADIUS = 24.0;     // blocks
-        private static final double NEST_ARRIVAL_DIST_SQR = 25.0;     // 5 blocks — generous so both birds count
+        private static final double NEST_ARRIVAL_DIST_SQR = 25.0;     // 5 blocks: generous so both birds count
         private static final int AGE_COOLDOWN_AFTER_BREED = 6000;     // 5 minutes
 
         // Cooldown applied to both birds if the ritual ends without an egg.
@@ -1295,7 +1295,7 @@ public class EagleEntity extends TamableAnimal {
         }
 
         // Either partner can deposit. The early isInLove check prevents
-        // a double-lay because layEgg also resets both birds' love mode —
+        // a double-lay because layEgg also resets both birds' love mode,
         // the partner's next call short-circuits before adding a second egg.
         private void layEgg() {
             if (nestPos == null || partner == null) return;
@@ -1397,7 +1397,7 @@ public class EagleEntity extends TamableAnimal {
     }
 
     /**
-     * EagleNestPatrolGoal — wild eagles that worldgen bound to a nest pick
+     * EagleNestPatrolGoal: wild eagles that worldgen bound to a nest pick
      * random points within a "territory" around the nest and fly to them.
      * Combines "stay near home" with "wander around" so they don't just
      * hover in one spot.
@@ -1426,7 +1426,7 @@ public class EagleEntity extends TamableAnimal {
 
         @Override
         public boolean canUse() {
-            // Wild eagles only — tamed eagles use the perch/follow goals.
+            // Wild eagles only: tamed eagles use the perch/follow goals.
             if (eagle.isTame()) return false;
             if (eagle.isOrderedToSit()) return false;
             if (eagle.getNestPos() == null) return false;
@@ -1443,7 +1443,7 @@ public class EagleEntity extends TamableAnimal {
         public boolean canContinueToUse() {
             if (eagle.isTame()) return false;
             if (eagle.getNestPos() == null) return false;
-            // Reached the patrol point — let stop() reset rest timer.
+            // Reached the patrol point: let stop() reset rest timer.
             return eagle.distanceToSqr(tx, ty, tz) > 9.0;  // 3 blocks
         }
 

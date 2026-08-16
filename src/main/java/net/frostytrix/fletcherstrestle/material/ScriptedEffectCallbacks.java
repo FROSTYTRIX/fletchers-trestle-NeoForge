@@ -12,7 +12,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * Registry of named callback handlers invoked by {@code ScriptedCallbackEffect} — the lightweight
+ * Registry of named callback handlers invoked by {@code ScriptedCallbackEffect}: the lightweight
  * escape valve for behaviors the closed {@code fletcherstrestle:*} effect vocabulary can't express.
  * Register a Java/KubeJS handler under a string id, then reference that id from material JSON. The
  * {@link Handler} interface mirrors {@link MaterialEffect}'s hooks, each defaulting to no-op.
@@ -61,7 +61,7 @@ public final class ScriptedEffectCallbacks {
     }
 
     /**
-     * Empty handler returned for unknown ids — every method no-ops.
+     * Empty handler returned for unknown ids: every method no-ops.
      */
     public static final Handler NOOP = new Handler() {
     };

@@ -41,7 +41,7 @@ public class EagleNestBlock extends BaseEntityBlock {
     public static final IntegerProperty EGG_COUNT =
             IntegerProperty.create("egg_count", 0, EagleNestBlockEntity.MAX_EGGS);
 
-    // Low bowl shape, ~3px tall — enough to feel like a perch for the bird
+    // Low bowl shape, ~3px tall: enough to feel like a perch for the bird
     // but doesn't block walking past.
     private static final VoxelShape SHAPE = Block.box(2, 0, 2, 14, 4, 14);
 
@@ -108,7 +108,7 @@ public class EagleNestBlock extends BaseEntityBlock {
             String label = nest.getOwnerName() != null ? nest.getOwnerName() : "unknown";
             int eggs = nest.eggCount();
             player.displayClientMessage(
-                    Component.literal("Nest of " + label + " — " + eggs + " egg(s)."),
+                    Component.literal("Nest of " + label + ": " + eggs + " egg(s)."),
                     true);
             return InteractionResult.SUCCESS;
         }
@@ -120,7 +120,7 @@ public class EagleNestBlock extends BaseEntityBlock {
     }
 
     // On break, drop any remaining eggs as items so the player isn't punished
-    // for relocating their nest mid-incubation. (Hatch progress is lost — eggs
+    // for relocating their nest mid-incubation. (Hatch progress is lost: eggs
     // come back as fresh items.)
     @Override
     public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean moving) {

@@ -32,7 +32,7 @@ public class EagleRenderer extends MobRenderer<EagleEntity, EagleModel> {
                                   float scale) {
         super.setupRotations(entity, poseStack, ageInTicks, rotationYaw, partialTicks, scale);
 
-        // Tilt the whole body forward during flight — feels more aerodynamic
+        // Tilt the whole body forward during flight: feels more aerodynamic
         if (entity.isFlying()) {
             Vec3 motion = entity.getDeltaMovement();
             float speed = (float) motion.horizontalDistance();

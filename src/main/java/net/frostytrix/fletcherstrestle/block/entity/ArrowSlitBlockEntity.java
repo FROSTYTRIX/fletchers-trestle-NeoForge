@@ -46,7 +46,7 @@ public class ArrowSlitBlockEntity extends BlockEntity {
         setChanged();
         if (level != null && !level.isClientSide()) {
             level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 3);
-            // The mimic can emit light (e.g. glowstone) — re-evaluate lighting
+            // The mimic can emit light (e.g. glowstone): re-evaluate lighting
             // here since the blockstate itself didn't change.
             level.getLightEngine().checkBlock(worldPosition);
         }
@@ -92,10 +92,10 @@ public class ArrowSlitBlockEntity extends BlockEntity {
         if (level != null && level.isClientSide() && !Objects.equals(previous, this.mimic)) {
             requestModelDataUpdate();
             // The mimic's light emission changed but the blockstate didn't, so the
-            // client light engine isn't notified by the normal path — recompute it
+            // client light engine isn't notified by the normal path: recompute it
             // here (handles both lighting up and going back to 0).
             level.getLightEngine().checkBlock(worldPosition);
-            // Force the section to recompile now — setBlocksDirty(same,same) wouldn't.
+            // Force the section to recompile now: setBlocksDirty(same,same) wouldn't.
             net.minecraft.client.Minecraft.getInstance().levelRenderer.setSectionDirty(
                     net.minecraft.core.SectionPos.blockToSectionCoord(worldPosition.getX()),
                     net.minecraft.core.SectionPos.blockToSectionCoord(worldPosition.getY()),

@@ -26,7 +26,7 @@ public class ModCapabilities {
                 (blockEntity, direction) -> blockEntity.getFluidTank()
         );
 
-        // Steam Box: hopper/pipe automation — insert raw limbs, extract finished ones.
+        // Steam Box: hopper/pipe automation: insert raw limbs, extract finished ones.
         event.registerBlockEntity(
                 Capabilities.ItemHandler.BLOCK,
                 ModBlockEntities.STEAM_BOX_BE.get(),

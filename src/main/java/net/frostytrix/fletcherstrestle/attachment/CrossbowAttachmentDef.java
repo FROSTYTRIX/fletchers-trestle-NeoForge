@@ -17,7 +17,7 @@ import java.util.Optional;
  * attachment so the Crossbow Bench accepts it.</p>
  *
  * <p>Registered as a synced datapack registry in
- * {@link ModCrossbowAttachments} — JEI and client-side aim/zoom logic read
+ * {@link ModCrossbowAttachments}: JEI and client-side aim/zoom logic read
  * these, so they ship to clients like the material defs do.</p>
  *
  * @param ingredient items the Crossbow Bench accepts to install this attachment

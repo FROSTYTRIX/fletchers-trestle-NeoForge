@@ -10,9 +10,9 @@ import net.frostytrix.fletcherstrestle.material.ModMaterialEffectTypes;
 import net.minecraft.world.phys.EntityHitResult;
 
 /**
- * On-hit: with {@code chance} probability, drops the arrow item at the
+ * On-hit, with {@code chance} probability, drops the arrow item at the
  * impact site and discards the entity. Used by the bound fletching's
- * "drop-on-hit" trait — lets players recover the arrow for ~1/4 hits.
+ * "drop-on-hit" trait: lets players recover the arrow for ~1/4 hits.
  *
  * <p>JSON:</p>
  * <pre>{ "type": "fletcherstrestle:drop_self_on_hit", "chance": 0.25 }</pre>

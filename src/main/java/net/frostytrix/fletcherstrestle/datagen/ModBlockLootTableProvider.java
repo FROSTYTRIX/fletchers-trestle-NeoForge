@@ -34,6 +34,7 @@ public class ModBlockLootTableProvider extends BlockLootSubProvider {
             add(set.slab().get(), this::createSlabItemTable);
         }
 
+        dropSelf(ModBlocks.WEAPON_RACK.get());
         dropSelf(ModBlocks.STEAM_BOX.get());
         dropSelf(ModBlocks.SHAVING_HORSE.get());
         dropSelf(ModBlocks.ARCHERY_TARGET.get());

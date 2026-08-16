@@ -66,6 +66,14 @@ public class ModularBakedModel implements BakedModel {
         this.transforms = createCustomTransforms(basePath);
     }
 
+    /**
+     * Vanilla's item/generated gives every item a 180 degree Y flip in the FIXED
+     * context (item frames, display blocks). Without it our modular weapons sat
+     * backwards relative to vanilla bows wherever FIXED is used.
+     */
+    private static final ItemTransform FIXED_TRANSFORM = new ItemTransform(
+            new Vector3f(0, 180, 0), new Vector3f(0, 0, 0), new Vector3f(1, 1, 1));
+
     private ItemTransforms createCustomTransforms(String basePath) {
         float f = 1 / 16.0f;
 
@@ -84,7 +92,7 @@ public class ModularBakedModel implements BakedModel {
             ItemTransform firstPersonLeft = new ItemTransform(new Vector3f(-90, 0, 35), new Vector3f(1.13f * f, 3.2f * f, 1.13f * f), new Vector3f(0.68f, 0.68f, 0.68f));
 
             return new ItemTransforms(thirdPersonLeft, thirdPersonRight, firstPersonLeft, firstPersonRight,
-                    ItemTransform.NO_TRANSFORM, ItemTransform.NO_TRANSFORM, groundTransform, ItemTransform.NO_TRANSFORM);
+                    ItemTransform.NO_TRANSFORM, ItemTransform.NO_TRANSFORM, groundTransform, FIXED_TRANSFORM);
         }
         // Otherwise, fall back to the standard Bow transforms you already had
         else {
@@ -94,7 +102,7 @@ public class ModularBakedModel implements BakedModel {
             ItemTransform firstPersonLeft = new ItemTransform(new Vector3f(0, 90, -25), new Vector3f(1.13f * f, 3.2f * f, 1.13f * f), new Vector3f(0.68f, 0.68f, 0.68f));
 
             return new ItemTransforms(thirdPersonLeft, thirdPersonRight, firstPersonLeft, firstPersonRight,
-                    ItemTransform.NO_TRANSFORM, ItemTransform.NO_TRANSFORM, groundTransform, ItemTransform.NO_TRANSFORM); // <-- Replaced ground argument
+                    ItemTransform.NO_TRANSFORM, ItemTransform.NO_TRANSFORM, groundTransform, FIXED_TRANSFORM); // <-- Replaced ground argument
         }
     }
 
@@ -134,7 +142,7 @@ public class ModularBakedModel implements BakedModel {
                 textures.add(Materials.bowStringTexture(stringMat, basePath + "/strings", "_string" + pull));
                 if (!pull.isEmpty()) {
                     // The "arrow on the bow" silhouette stays in our namespace
-                    // — no def to override it.
+                    //: no def to override it.
                     textures.add(ResourceLocation.fromNamespaceAndPath(
                             FletcherTrestle.MOD_ID, basePath + "/extras/arrow" + pull));
                 }
@@ -231,7 +239,7 @@ public class ModularBakedModel implements BakedModel {
             if (entity != null && entity.isUsingItem() && entity.getUseItem() == stack) {
                 // Use the crossbow's actual draw length (use duration minus the
                 // 3-tick hold buffer) so the load animation matches gameplay charge
-                // time — including a magazine's slower (reload_multiplier) draw.
+                // time, including a magazine's slower (reload_multiplier) draw.
                 float maxPull = 25.0f;
                 if (stack.getItem() instanceof net.frostytrix.fletcherstrestle.item.custom.ModularCrossbowItem xbow) {
                     maxPull = Math.max(1.0f, xbow.getUseDuration(stack, entity) - 3);

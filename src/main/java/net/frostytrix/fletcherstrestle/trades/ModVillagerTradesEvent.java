@@ -44,7 +44,7 @@ public class ModVillagerTradesEvent {
             // Custom Trade : Modular Arrows
             level1Trades.add(new RandomModularArrowTrade(1, 12, 12, 1));
 
-            // Flax String — the fletcher's own trade. Buying a bowstring is the
+            // Flax String: the fletcher's own trade. Buying a bowstring is the
             // reliable way to get one without farming, and it's thematically
             // theirs (string is a fletcher's stock-in-trade).
             event.getTrades().get(2).add((trader, random) -> new MerchantOffer(
@@ -53,7 +53,7 @@ public class ModVillagerTradesEvent {
                     new ItemStack(ModItems.FLAX_STRING.get(), 4),
                     12, 3, 0.05F));
 
-            // Vanilla bows/crossbows don't belong in this mod's fletcher — swap
+            // Vanilla bows/crossbows don't belong in this mod's fletcher: swap
             // all four for assembled modular weapons with randomised parts.
             // Vanilla sells: bow @2, crossbow @3, enchanted bow @4,
             // enchanted crossbow @5.
@@ -71,7 +71,7 @@ public class ModVillagerTradesEvent {
                     new RandomModularBowTrade(ModItems.MODULAR_CROSSBOW, 3, 3, 15, true));
         }
 
-        // The shepherd works raw fibre, so they deal in unspun flax — selling it,
+        // The shepherd works raw fibre, so they deal in unspun flax: selling it,
         // and buying it back off players who farm the stuff.
         if (event.getType() == VillagerProfession.SHEPHERD) {
             event.getTrades().get(1).add((trader, random) -> new MerchantOffer(
@@ -96,7 +96,7 @@ public class ModVillagerTradesEvent {
 
             for (var set : ModBlocks.DYED_LINEN.values()) {
                 // Apprentice: one listing per colour, mirroring vanilla's wool
-                // sales — the villager rolls a couple of these at random.
+                // sales: the villager rolls a couple of these at random.
                 event.getTrades().get(2).add((trader, random) -> new MerchantOffer(
                         new ItemCost(Items.EMERALD, 1),
                         Optional.empty(),

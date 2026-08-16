@@ -5,6 +5,7 @@ import net.frostytrix.fletcherstrestle.block.custom.*;
 import net.frostytrix.fletcherstrestle.item.ModItems;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
+import net.frostytrix.fletcherstrestle.block.custom.WeaponRackBlock;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -74,12 +75,17 @@ public class ModBlocks {
                     .sound(SoundType.WOOD)
                     .noOcclusion()));
 
-    // Arrow slit: solid cover with a firing port — arrows pass through, mobs/melee don't.
+    // Arrow slit: solid cover with a firing port: arrows pass through, mobs/melee don't.
     public static final DeferredBlock<Block> ARROW_SLIT = registerBlock("arrow_slit",
             () -> new ArrowSlitBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE_BRICKS).noOcclusion()));
 
+    // Wall-mounted display rack for a modular bow or crossbow. The weapon is
+    // drawn by its block-entity renderer, so it shows its real assembly.
+    public static final DeferredBlock<Block> WEAPON_RACK = registerBlock("weapon_rack",
+            () -> new WeaponRackBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_PLANKS).noOcclusion()));
+
     // ---------------------------------------------------------------
-    // Linen — the decorative side of flax. Woven from flax string, so a flax
+    // Linen: the decorative side of flax. Woven from flax string, so a flax
     // farm feeds the workshop's furnishings as well as its bowstrings.
     //
     // Wool-like (soft, flammable) and dyeable into all 16 colours, each with
@@ -94,13 +100,13 @@ public class ModBlocks {
                            DeferredBlock<Block> carpet) {
     }
 
-    /** Undyed linen — the natural flax colour. */
+    /** Undyed linen: the natural flax colour. */
     public static final LinenSet LINEN = registerLinenSet("linen");
 
     /** One set per vanilla dye colour, e.g. {@code red_linen}, {@code red_linen_stairs}. */
     public static final Map<DyeColor, LinenSet> DYED_LINEN = registerDyedLinen();
 
-    /** Every linen set, undyed first — handy for datagen and creative-tab loops. */
+    /** Every linen set, undyed first: handy for datagen and creative-tab loops. */
     public static List<LinenSet> allLinenSets() {
         List<LinenSet> all = new ArrayList<>();
         all.add(LINEN);

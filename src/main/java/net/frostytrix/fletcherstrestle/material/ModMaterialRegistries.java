@@ -43,7 +43,7 @@ public final class ModMaterialRegistries {
 
     /**
      * Registers each of the six datapack registries. We pass the same codec
-     * as both data-codec and network-codec — clients receive the full def
+     * as both data-codec and network-codec: clients receive the full def
      * on connect, so renderer + JEI + tooltip code can read it.
      */
     private static void onNewDataPackRegistry(DataPackRegistryEvent.NewRegistry event) {

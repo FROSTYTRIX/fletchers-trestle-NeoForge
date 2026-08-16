@@ -55,7 +55,7 @@ public class ModularArrowItem extends ArrowItem {
         tooltipComponents.add(Component.literal("- ").append(Component.translatable("gui.fletcherstrestle.fletching")).append(": ")
                 .append(net.frostytrix.fletcherstrestle.material.Materials.arrowFletchingName(assembly.fletching())).withStyle(ChatFormatting.GRAY));
 
-        // Potion contents (when present — for glass-vial arrows after dipping)
+        // Potion contents (when present: for glass-vial arrows after dipping)
         if (potion != null) {
             tooltipComponents.add(Component.translatable("gui.fletcherstrestle.effects").withStyle(ChatFormatting.LIGHT_PURPLE, ChatFormatting.BOLD));
             // Full duration shown here; effects fall off by distance at hit-time (see applyGlassVialEffect).

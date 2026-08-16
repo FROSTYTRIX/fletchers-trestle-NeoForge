@@ -6,7 +6,7 @@
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "Fletcher's Trestle replaces the vanilla bow with a $(l)modular$() one you build yourself. Every part — the limbs, riser, string, and each arrow's head, shaft, and fletching — is a real choice that changes how your weapon performs.$(br2)It all starts with a single tool: the $(item)Drawknife$()."
+      "text": "Fletcher's Trestle replaces the vanilla bow with a $(l)modular$() one you build yourself. Every part: the limbs, riser, string, and each arrow's head, shaft, and fletching: is a real choice that changes how your weapon performs.$(br2)It all starts with a single tool: the $(item)Drawknife$()."
     },
     {
       "type": "patchouli:crafting",

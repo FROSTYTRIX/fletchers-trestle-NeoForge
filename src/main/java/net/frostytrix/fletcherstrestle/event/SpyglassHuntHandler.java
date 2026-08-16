@@ -35,9 +35,9 @@ public final class SpyglassHuntHandler {
     private SpyglassHuntHandler() {
     }
 
-    // Tunables — kept here so they're easy to find when iterating on feel.
+    // Tunables: kept here so they're easy to find when iterating on feel.
     private static final int LOCK_ON_TICKS = 60;    // 3 seconds at 20 tps
-    private static final double RAY_RANGE = 128.0; // blocks — spyglass-scale spotting range
+    private static final double RAY_RANGE = 128.0; // blocks: spyglass-scale spotting range
     private static final double EAGLE_RANGE = 48.0;  // owner -> eagle search radius
 
     // Per-player lock-on state. Lives on the server only.
@@ -56,7 +56,7 @@ public final class SpyglassHuntHandler {
     @SubscribeEvent
     public static void onPlayerTick(PlayerTickEvent.Post event) {
         Player player = event.getEntity();
-        // Server side only — we never trust client input for entity targeting.
+        // Server side only: we never trust client input for entity targeting.
         if (player.level().isClientSide) return;
         if (!(player instanceof ServerPlayer)) return;
 
@@ -95,7 +95,7 @@ public final class SpyglassHuntHandler {
         Vec3 end = eye.add(look.x * RAY_RANGE, look.y * RAY_RANGE, look.z * RAY_RANGE);
 
         // Find how far the ray reaches before hitting a truly opaque block.
-        // Leaves, glass, iron bars, ice, etc. are skipped — they don't block
+        // Leaves, glass, iron bars, ice, etc. are skipped: they don't block
         // a spyglass scope in spirit. We stop at the first block whose state
         // reports canOcclude() (full opaque face).
         double maxDistSqr = occludingHitDistanceSqr(player.level(), eye, end, look, player);
@@ -140,7 +140,7 @@ public final class SpyglassHuntHandler {
             }
             BlockState state = level.getBlockState(hit.getBlockPos());
             if (state.canOcclude()) {
-                // True opaque block — vision stops here.
+                // True opaque block: vision stops here.
                 return hit.getLocation().distanceToSqr(eye);
             }
             // Non-occluding (leaves, glass, bars, ice, ...). Step a tiny bit
@@ -162,7 +162,7 @@ public final class SpyglassHuntHandler {
                         && e.getEagleState() == EagleEntity.STATE_IDLE);
 
         if (nearby.isEmpty()) {
-            // Nothing to do — player has no available eagle. Stay quiet
+            // Nothing to do: player has no available eagle. Stay quiet
             // so the player can still scope around without spam.
             return;
         }

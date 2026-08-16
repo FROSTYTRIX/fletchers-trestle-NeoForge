@@ -56,6 +56,11 @@ public class ModBlockEntities {
                     BlockEntityType.Builder.of(ArrowSlitBlockEntity::new, ModBlocks.ARROW_SLIT.get()).build(null)
             );
 
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<WeaponRackBlockEntity>> WEAPON_RACK_BE =
+            BLOCK_ENTITIES.register("weapon_rack_be", () ->
+                    BlockEntityType.Builder.of(WeaponRackBlockEntity::new, ModBlocks.WEAPON_RACK.get()).build(null)
+            );
+
     public static void register(IEventBus eventBus) {
         BLOCK_ENTITIES.register(eventBus);
     }

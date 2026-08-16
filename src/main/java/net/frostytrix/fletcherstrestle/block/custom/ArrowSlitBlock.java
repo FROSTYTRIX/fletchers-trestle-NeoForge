@@ -34,20 +34,20 @@ import org.jetbrains.annotations.Nullable;
 /**
  * Arrow slit / loophole that disguises itself as any block placed into it,
  * adopting that block's look (via a dynamic model) and hardness / blast
- * resistance. Solid cover with a firing port — arrows pass through it, mobs and
+ * resistance. Solid cover with a firing port: arrows pass through it, mobs and
  * melee don't. Directional; collision matches the {@code block/arrow_slit} model.
  */
 public class ArrowSlitBlock extends HorizontalDirectionalBlock implements EntityBlock {
 
     public static final MapCodec<ArrowSlitBlock> CODEC = simpleCodec(ArrowSlitBlock::new);
 
-    // Default (model as authored): port runs along X — walls on N/S, open E/W.
+    // Default (model as authored): port runs along X: walls on N/S, open E/W.
     private static final VoxelShape SHAPE_X = Shapes.or(
             Block.box(0, 0, 0, 16, 3, 16),
             Block.box(0, 13, 0, 16, 16, 16),
             Block.box(0, 3, 0, 16, 13, 6),
             Block.box(0, 3, 10, 16, 13, 16));
-    // Port runs along Z (model rotated 90°) — walls on E/W.
+    // Port runs along Z (model rotated 90°): walls on E/W.
     private static final VoxelShape SHAPE_Z = Shapes.or(
             Block.box(0, 0, 0, 16, 3, 16),
             Block.box(0, 13, 0, 16, 16, 16),
@@ -170,7 +170,7 @@ public class ArrowSlitBlock extends HorizontalDirectionalBlock implements Entity
         return super.getExplosionResistance(state, level, pos, explosion);
     }
 
-    // The worn block drops alongside the slit, through the loot system — so it
+    // The worn block drops alongside the slit, through the loot system, so it
     // follows the same rules (nothing drops on a creative break).
     @Override
     protected java.util.List<ItemStack> getDrops(BlockState state, LootParams.Builder params) {

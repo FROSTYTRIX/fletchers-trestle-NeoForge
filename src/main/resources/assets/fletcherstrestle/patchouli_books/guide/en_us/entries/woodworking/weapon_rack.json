@@ -1,0 +1,21 @@
+{
+  "name": "The Weapon Rack",
+  "category": "fletcherstrestle:woodworking",
+  "icon": "fletcherstrestle:weapon_rack",
+  "sortnum": 6,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "You spent real effort tuning that bow. The $(l)Weapon Rack$() gives it somewhere to live.$(br2)Mount it on a wall like a torch, then right-click with a bow or crossbow to hang it. Right-click empty-handed to take it back down."
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "fletcherstrestle:weapon_rack",
+      "text": "Three planks and two sticks for the pegs."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "The rack shows the $(l)actual weapon$() you hang on it, so a cherry-limbed bow looks different to a dark oak one. Vanilla bows and crossbows work too.$(br2)Break the wall behind it and the rack falls, dropping whatever it was holding."
+    }
+  ]
+}

@@ -13,7 +13,7 @@ import java.util.function.Supplier;
  * Player data attachments for the marksmanship system (Phase 2).
  *
  * <p>{@code ARCHERY_XP} stores total archery XP on the player.
- * {@code copyOnDeath()} keeps it across respawns — the design says XP is
+ * {@code copyOnDeath()} keeps it across respawns: the design says XP is
  * never lost on death.</p>
  */
 public final class ModAttachments {

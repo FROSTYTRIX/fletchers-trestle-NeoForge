@@ -42,7 +42,7 @@ public class CrossbowBenchMenu extends AbstractContainerMenu {
     private final Registry<CrossbowAttachmentDef> attachments;
 
     private boolean mutating = false;
-    // Previous-state snapshot — lets us tell "a crossbow was just placed"
+    // Previous-state snapshot: lets us tell "a crossbow was just placed"
     // (unpack) apart from "the trigger was just removed" (disassemble), which
     // produce identical slot contents.
     private boolean lastInputCrossbow = false;
@@ -56,7 +56,7 @@ public class CrossbowBenchMenu extends AbstractContainerMenu {
         this(id, playerInv, new SimpleContainer(FUNCTIONAL_SLOTS), ContainerLevelAccess.NULL);
     }
 
-    /** Server-side constructor — {@code container} is the block entity's inventory. */
+    /** Server-side constructor: {@code container} is the block entity's inventory. */
     public CrossbowBenchMenu(int id, Inventory playerInv, Container container, ContainerLevelAccess access) {
         super(ModMenuTypes.CROSSBOW_BENCH_MENU.get(), id);
         checkContainerSize(container, FUNCTIONAL_SLOTS);
@@ -66,7 +66,7 @@ public class CrossbowBenchMenu extends AbstractContainerMenu {
         this.attachments = playerInv.player.level().registryAccess()
                 .registryOrThrow(ModCrossbowAttachments.CROSSBOW_ATTACHMENT);
 
-        // Input slot — bow or crossbow. Taking a finished crossbow consumes the
+        // Input slot: bow or crossbow. Taking a finished crossbow consumes the
         // fitted-part representations (they are baked into the crossbow).
         this.addSlot(new Slot(container, SLOT_INPUT, 81, 23) {
             @Override
@@ -82,7 +82,7 @@ public class CrossbowBenchMenu extends AbstractContainerMenu {
                 super.onTake(p, s);
             }
         });
-        // Trigger slot — exactly one mechanical trigger.
+        // Trigger slot: exactly one mechanical trigger.
         this.addSlot(new Slot(container, SLOT_TRIGGER, 64, 46) {
             @Override
             public boolean mayPlace(ItemStack s) {
@@ -94,7 +94,7 @@ public class CrossbowBenchMenu extends AbstractContainerMenu {
                 return 1;
             }
         });
-        // Attachment slot — one item that some attachment def accepts.
+        // Attachment slot: one item that some attachment def accepts.
         this.addSlot(new Slot(container, SLOT_ATTACHMENT, 98, 46) {
             @Override
             public boolean mayPlace(ItemStack s) {
@@ -243,7 +243,7 @@ public class CrossbowBenchMenu extends AbstractContainerMenu {
 
     /**
      * Sets (or clears) the crossbow's mainhand attack-damage modifiers based on the
-     * fitted attachment's {@code melee_damage} stat — this is what makes a bayonet
+     * fitted attachment's {@code melee_damage} stat: this is what makes a bayonet
      * a real melee weapon. The bench is the only place attachments change, so this
      * can never desync from the {@code CROSSBOW_ATTACHMENT} component.
      */

@@ -49,7 +49,7 @@ public record SubtleHomingEffect(float range, float strength, int graceTicks) im
                 e -> e != arrow.getOwner() && e.isAlive());
         if (entities.isEmpty()) return;
 
-        // Nearest target — deterministic. The old get(0) picked whatever the
+        // Nearest target: deterministic. The old get(0) picked whatever the
         // entity iteration happened to return first, which differs between sides.
         LivingEntity target = null;
         double bestSqr = Double.MAX_VALUE;

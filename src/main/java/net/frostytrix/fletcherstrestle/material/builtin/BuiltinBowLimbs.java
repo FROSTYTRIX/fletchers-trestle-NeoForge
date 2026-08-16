@@ -47,7 +47,7 @@ public final class BuiltinBowLimbs {
         register(ctx, SPRUCE, ModItems.PLIABLE_SPRUCE_LIMB, 22.0f, 1.00f, false, false,
                 List.of(new SetArrowFlagEffect("fletcherstrestle:punch", true)));
         register(ctx, BIRCH, ModItems.PLIABLE_BIRCH_LIMB, 10.0f, 0.70f, false, false, List.of());
-        // Jungle: "agility" — the player walks at normal speed while drawing.
+        // Jungle: "agility": the player walks at normal speed while drawing.
         register(ctx, JUNGLE, ModItems.PLIABLE_JUNGLE_LIMB, 18.0f, 0.90f, false, false, true, List.of());
         register(ctx, ACACIA, ModItems.PLIABLE_ACACIA_LIMB, 20.0f, 1.00f, false, false,
                 List.of(new ApplyMobEffectToShooterEffect(MobEffects.MOVEMENT_SPEED, 30, 1)));

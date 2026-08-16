@@ -56,7 +56,7 @@ public class EagleWhistleItem extends Item {
             } else {
                 toggleFetchMode(targets, player);
             }
-            // Audible cue regardless — gives feedback even when "no eagles in range".
+            // Audible cue regardless: gives feedback even when "no eagles in range".
             level.playSound(null, player.getX(), player.getY(), player.getZ(),
                     SoundEvents.NOTE_BLOCK_FLUTE.value(), SoundSource.PLAYERS,
                     0.8f, 1.4f);
@@ -110,7 +110,7 @@ public class EagleWhistleItem extends Item {
 
     private static void toggleFetchMode(List<EagleEntity> targets, Player player) {
         // Use the first matched eagle's mode as the reference. All targets
-        // get flipped to the opposite — keeps the squad in sync rather than
+        // get flipped to the opposite: keeps the squad in sync rather than
         // each eagle drifting to its own state.
         boolean newMode = !targets.get(0).isFetchModeEnabled();
         for (EagleEntity e : targets) e.setFetchModeEnabled(newMode);

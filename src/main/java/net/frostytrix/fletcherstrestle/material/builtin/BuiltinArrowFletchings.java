@@ -31,7 +31,7 @@ public final class BuiltinArrowFletchings {
     public static final ResourceKey<ArrowFletchingDef> SERRATED = key("serrated");
     public static final ResourceKey<ArrowFletchingDef> BOUND = key("bound");
     public static final ResourceKey<ArrowFletchingDef> VEX = key("vex");
-    // Coloured feathers — identical stats to plain feather, just cosmetic.
+    // Coloured feathers: identical stats to plain feather, just cosmetic.
     public static final ResourceKey<ArrowFletchingDef> RED_FEATHER = key("red_feather");
     public static final ResourceKey<ArrowFletchingDef> BLUE_FEATHER = key("blue_feather");
     public static final ResourceKey<ArrowFletchingDef> GREEN_FEATHER = key("green_feather");
@@ -43,7 +43,7 @@ public final class BuiltinArrowFletchings {
         register(ctx, FEATHER, Ingredient.of(Items.FEATHER), 1.00f, List.of());
         register(ctx, RIGID, Ingredient.of(Items.FLINT), 0.84f, List.of());
         register(ctx, TRAILING, Ingredient.of(Items.STRING), 0.75f, List.of());
-        // SERRATED — mid-flight magnetism, pulls arrow toward nearest target
+        // SERRATED: mid-flight magnetism, pulls arrow toward nearest target
         // within 5 blocks. Skips the first 2 ticks so initial trajectory holds.
         register(ctx, SERRATED, Ingredient.of(Items.PHANTOM_MEMBRANE), 1.00f,
                 List.of(new SubtleHomingEffect(5.0f, 1.0f, 2)));

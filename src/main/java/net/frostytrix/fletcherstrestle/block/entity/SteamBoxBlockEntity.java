@@ -209,9 +209,9 @@ public class SteamBoxBlockEntity extends BlockEntity {
      *
      * <p>Skipped:
      * <ul>
-     *   <li>the bottom — the heat source lives there (a lit campfire has an inventory);</li>
-     *   <li>hoppers — a side hopper can't pull from us (hoppers only pull from above);</li>
-     *   <li>other steam boxes — their input handler would falsely look like a pipe.</li>
+     *   <li>the bottom: the heat source lives there (a lit campfire has an inventory);</li>
+     *   <li>hoppers: a side hopper can't pull from us (hoppers only pull from above);</li>
+     *   <li>other steam boxes: their input handler would falsely look like a pipe.</li>
      * </ul>
      */
     private static boolean hasItemHandlerNeighbor(Level level, BlockPos pos) {

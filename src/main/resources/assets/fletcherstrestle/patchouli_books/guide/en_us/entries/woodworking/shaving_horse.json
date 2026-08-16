@@ -6,7 +6,7 @@
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "The $(l)Shaving Horse$() is where woodworking begins. Sit at it with a $(item)Drawknife$() in hand and strip a log into a $(l)Rough Limb$() — the raw form of a bow arm.$(br2)Each wood type shaves into its own limb, and that choice decides the weapon's draw speed and damage down the line."
+      "text": "The $(l)Shaving Horse$() is where woodworking begins. Sit at it with a $(item)Drawknife$() in hand and strip a log into a $(l)Rough Limb$(): the raw form of a bow arm.$(br2)Each wood type shaves into its own limb, and that choice decides the weapon's draw speed and damage down the line."
     },
     {
       "type": "patchouli:crafting",

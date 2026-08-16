@@ -23,7 +23,7 @@ public record CrossbowAttachmentStats(
         int magazineSize,
         float meleeDamage) {
 
-    /** No-op stats — used as the default when a def omits the `stats` block. */
+    /** No-op stats: used as the default when a def omits the `stats` block. */
     public static final CrossbowAttachmentStats DEFAULT =
             new CrossbowAttachmentStats(1.0f, 1.0f, 1.0f, 1.0f, 1, 0.0f);
 

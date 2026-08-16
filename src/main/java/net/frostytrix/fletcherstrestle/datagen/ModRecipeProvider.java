@@ -112,7 +112,16 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                 .unlockedBy("has_paper", has(Items.PAPER))
                 .save(recipeOutput);
 
-        // Linen — woven from flax string, the same way wool comes from string.
+        // Weapon rack: a plank backboard with two pegs.
+        ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, ModBlocks.WEAPON_RACK.get())
+                .pattern("PPP")
+                .pattern("S S")
+                .define('P', ItemTags.PLANKS)
+                .define('S', Items.STICK)
+                .unlockedBy("has_planks", has(ItemTags.PLANKS))
+                .save(recipeOutput);
+
+        // Linen: woven from flax string, the same way wool comes from string.
         ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, ModBlocks.LINEN.block().get())
                 .pattern("SS")
                 .pattern("SS")
@@ -177,7 +186,7 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                 .define('I', Items.IRON_INGOT)
                 .unlockedBy("has_tripwire_hook", has(Items.TRIPWIRE_HOOK)).save(recipeOutput);
 
-        // Magazine attachment — an iron clip with a redstone feed spring.
+        // Magazine attachment: an iron clip with a redstone feed spring.
         ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, ModItems.MAGAZINE.get())
                 .pattern("I I")
                 .pattern("IRI")

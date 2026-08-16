@@ -14,7 +14,7 @@ import org.joml.Quaternionf;
 /**
  * Procedural renderer for the {@link BlackHoleEntity}: an opaque black sphere (event horizon) that
  * writes depth and occludes a flat, Doppler-shifted accretion disk, with a lensing arc, photon ring,
- * soft bloom and a collapse flash. All geometry is generated from maths each frame — no textures.
+ * soft bloom and a collapse flash. All geometry is generated from maths each frame: no textures.
  */
 public class BlackHoleRenderer extends EntityRenderer<BlackHoleEntity> {
 
@@ -36,7 +36,7 @@ public class BlackHoleRenderer extends EntityRenderer<BlackHoleEntity> {
         Quaternionf camera = this.entityRenderDispatcher.cameraOrientation();
 
         if (horizon > 0.001f) {
-            // 1) Event horizon — opaque black sphere, flushed first so it writes depth and the
+            // 1) Event horizon: opaque black sphere, flushed first so it writes depth and the
             //    additive glow behind it is correctly occluded.
             VertexConsumer core = buffers.getBuffer(BlackHoleRenderTypes.CORE);
             sphere(pose.last().pose(), core, horizon, 0f, 0f, 0f, 1f);
@@ -46,20 +46,20 @@ public class BlackHoleRenderer extends EntityRenderer<BlackHoleEntity> {
 
             VertexConsumer glow = buffers.getBuffer(BlackHoleRenderTypes.GLOW);
 
-            // 2) Lensed halo — camera-facing wrap-around glow (the disk's far side bent up over
+            // 2) Lensed halo: camera-facing wrap-around glow (the disk's far side bent up over
             //    and under the void), warm, streaky, brightest over the top and bottom.
             pose.pushPose();
             pose.mulPose(camera);
             lensedHalo(pose.last().pose(), glow, horizon * 0.98f, horizon * 2.0f, age);
             pose.popPose();
 
-            // 3) Accretion disk — flat front band crossing in front of the sphere, Doppler-shifted.
+            // 3) Accretion disk: flat front band crossing in front of the sphere, Doppler-shifted.
             pose.pushPose();
             pose.mulPose(new Quaternionf().rotationX(Mth.DEG_TO_RAD * 8f));
             disk(pose.last().pose(), glow, horizon * 0.98f, horizon * 1.95f, age);
             pose.popPose();
 
-            // 4) Photon ring — the crisp thin Einstein ring right at the shadow's edge.
+            // 4) Photon ring: the crisp thin Einstein ring right at the shadow's edge.
             pose.pushPose();
             pose.mulPose(camera);
             ring2D(pose.last().pose(), glow, horizon * 1.0f, horizon * 1.1f,

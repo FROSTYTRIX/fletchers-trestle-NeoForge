@@ -15,7 +15,7 @@
     },
     {
       "type": "patchouli:text",
-      "text": "On hit, the vial $(l)shatters$() and splashes its potion onto whatever it struck — a delivery system for anything you can brew, from Healing to Poison to Slow Falling."
+      "text": "On hit, the vial $(l)shatters$() and splashes its potion onto whatever it struck: a delivery system for anything you can brew, from Healing to Poison to Slow Falling."
     }
   ]
 }

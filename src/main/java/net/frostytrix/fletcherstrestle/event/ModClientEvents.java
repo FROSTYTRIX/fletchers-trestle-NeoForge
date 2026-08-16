@@ -46,6 +46,8 @@ public class ModClientEvents {
         event.registerBlockEntityRenderer(ModBlockEntities.DIPPING_VAT_BE.get(), DippingVatRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntities.STEAM_BOX_BE.get(), SteamBoxRenderer::new);
         event.registerEntityRenderer(ModEntities.EAGLE.get(), EagleRenderer::new);
+        event.registerBlockEntityRenderer(ModBlockEntities.WEAPON_RACK_BE.get(),
+                net.frostytrix.fletcherstrestle.block.entity.renderer.WeaponRackRenderer::new);
     }
 
     @SubscribeEvent
@@ -160,7 +162,7 @@ public class ModClientEvents {
 
     // Tints layer 3 of the modular arrow item model (the liquid overlay
     // added by ModularBakedModel) with the potion's color. Layers 0-2 are
-    // the shaft / fletching / head — untouched.
+    // the shaft / fletching / head: untouched.
     @SubscribeEvent
     public static void onItemColors(RegisterColorHandlersEvent.Item event) {
         event.register((stack, tintIndex) -> {
@@ -228,7 +230,7 @@ public class ModClientEvents {
             event.setNewFovModifier(event.getFovModifier() * (1.0F - (progress * 0.15F)));
         }
 
-        // Scope ADS — a loaded crossbow with a scope fitted zooms while the
+        // Scope ADS: a loaded crossbow with a scope fitted zooms while the
         // scope toggle (keybind) is on. This is the "aim to shoot" zoom.
         ItemStack held = player.getMainHandItem();
         if (ClientState.scopeActive

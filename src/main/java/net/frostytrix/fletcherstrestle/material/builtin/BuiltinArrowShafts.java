@@ -51,14 +51,14 @@ public final class BuiltinArrowShafts {
         register(ctx, SPRUCE, ModItems.ROUGH_SPRUCE_LIMB, 1.0f, 1.1f, List.of());
         register(ctx, BIRCH, ModItems.ROUGH_BIRCH_LIMB, 1.0f, 0.9f, List.of());
 
-        // JUNGLE — 85% chance to bounce off a block, up to 3 times per arrow.
+        // JUNGLE: 85% chance to bounce off a block, up to 3 times per arrow.
         register(ctx, JUNGLE, ModItems.ROUGH_JUNGLE_LIMB, 1.0f, 1.0f,
                 List.of(new BounceOnBlockEffect(0.85f, 3, 0.3f)));
 
         register(ctx, DARK_OAK, ModItems.ROUGH_DARK_OAK_LIMB, 1.0f, 1.0f,
                 List.of(new PierceLevelEffect(1)));
 
-        // ACACIA — at tick=10, multiply velocity ×1.4 for a brief mid-flight boost.
+        // ACACIA: at tick=10, multiply velocity ×1.4 for a brief mid-flight boost.
         register(ctx, ACACIA, ModItems.ROUGH_ACACIA_LIMB, 1.0f, 1.0f,
                 List.of(new SetVelocityMultiplierAtTickEffect(10, 1.4f)));
 

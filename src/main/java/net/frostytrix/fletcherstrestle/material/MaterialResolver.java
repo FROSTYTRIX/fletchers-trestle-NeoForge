@@ -22,9 +22,9 @@ import java.util.function.Function;
 /**
  * Lookup service for material defs. Two flavors per part:
  * <ul>
- *   <li>{@code resolveX(stack)} — find the def whose {@link Ingredient} accepts a given
+ *   <li>{@code resolveX(stack)}: find the def whose {@link Ingredient} accepts a given
  *       ItemStack. Used by the fletching-menu recipe matchers.</li>
- *   <li>{@code resolveXById(idOrLegacy)} — find the def from the String stored on a
+ *   <li>{@code resolveXById(idOrLegacy)}: find the def from the String stored on a
  *       Bow/Arrow assembly component. Tolerates modern id form ({@code "dark_oak"},
  *       {@code "mypack:steel"}) and legacy display form ({@code "Dark Oak"}) so pre-2.0.0
  *       worlds keep working.</li>
@@ -32,7 +32,7 @@ import java.util.function.Function;
  *
  * <p>Each method has a no-arg-access overload that calls {@link #pickAccess()} (server, else
  * client connection) for callers without a registry access handy; pass one explicitly when you
- * have it. Lookups walk the registry linearly — fine for these tiny registries (3–11 entries).
+ * have it. Lookups walk the registry linearly: fine for these tiny registries (3–11 entries).
  */
 public final class MaterialResolver {
     private MaterialResolver() {
@@ -215,7 +215,7 @@ public final class MaterialResolver {
             }
         }
 
-        // (2) bare path, default namespace — only attempted if the path
+        // (2) bare path, default namespace: only attempted if the path
         //     passes ResourceLocation's character validation.
         ResourceLocation withNs = ResourceLocation.tryBuild(FletcherTrestle.MOD_ID, idOrLegacy);
         if (withNs != null) {

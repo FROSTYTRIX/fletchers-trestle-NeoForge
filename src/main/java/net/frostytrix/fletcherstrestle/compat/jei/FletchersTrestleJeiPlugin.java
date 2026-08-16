@@ -72,7 +72,7 @@ public class FletchersTrestleJeiPlugin implements IModPlugin {
             // Generic potion-arrow recipes (no required_potion, output is the
             // generic "any tipped arrow / any modular potion arrow"): explode
             // into one synthetic recipe per vanilla potion so JEI indexes them
-            // by their final item — searching "Jump Boost Arrow" finds the
+            // by their final item: searching "Jump Boost Arrow" finds the
             // jump-boost-specific variant.
             boolean isGenericTipped = recipe.requiredPotion().isEmpty() && recipe.output().is(Items.TIPPED_ARROW);
             boolean isGenericModular = recipe.requiredPotion().isEmpty() && recipe.output().is(ModItems.MODULAR_ARROW.get());

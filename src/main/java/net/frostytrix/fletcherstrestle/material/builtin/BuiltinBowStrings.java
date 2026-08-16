@@ -27,14 +27,14 @@ public final class BuiltinBowStrings {
     public static final ResourceKey<BowStringDef> HIGH_TENSION = key("high_tension");
 
     public static void bootstrap(BootstrapContext<BowStringDef> ctx) {
-        // Spider — vanilla string. 1× velocity, 1 durability per shot.
+        // Spider: vanilla string. 1× velocity, 1 durability per shot.
         ctx.register(SPIDER, new BowStringDef(
                 Ingredient.of(Items.STRING),
                 new BowStringStats(1.0f, 1),
                 Optional.empty(),
                 List.of()
         ));
-        // Flax — mod's own string item. 0.85× velocity: farmable and renewable,
+        // Flax: mod's own string item. 0.85× velocity: farmable and renewable,
         // so it trades real power (and the shaky overdraw) for convenience.
         ctx.register(FLAX, new BowStringDef(
                 Ingredient.of(ModItems.FLAX_STRING.get()),
@@ -42,7 +42,7 @@ public final class BuiltinBowStrings {
                 Optional.empty(),
                 List.of()
         ));
-        // High-tension — 1.4× velocity, costs 2 durability per shot.
+        // High-tension: 1.4× velocity, costs 2 durability per shot.
         ctx.register(HIGH_TENSION, new BowStringDef(
                 Ingredient.of(ModItems.HIGH_TENSION_STRING.get()),
                 new BowStringStats(1.4f, 2),

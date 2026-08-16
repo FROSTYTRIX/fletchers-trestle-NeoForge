@@ -45,11 +45,11 @@ import java.util.stream.Collectors;
  * {@code /ft}), op level 2:
  *
  * <ul>
- *   <li>{@code give bow|arrow|crossbow …} — spawn finished gear with chosen
+ *   <li>{@code give bow|arrow|crossbow …}: spawn finished gear with chosen
  *       materials, skipping the craft pipeline.</li>
- *   <li>{@code materials} / {@code attachments} — list loaded datapack defs.</li>
- *   <li>{@code dump} — write all ids + translation keys to a file.</li>
- *   <li>{@code archery xp|reset|max|info} — archery progress (also at the
+ *   <li>{@code materials} / {@code attachments}: list loaded datapack defs.</li>
+ *   <li>{@code dump}: write all ids + translation keys to a file.</li>
+ *   <li>{@code archery xp|reset|max|info}: archery progress (also at the
  *       top-level alias {@code /archery}).</li>
  * </ul>
  */

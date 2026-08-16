@@ -54,7 +54,7 @@ public class DippingVatRenderer implements BlockEntityRenderer<DippingVatBlockEn
         boolean isPotion = fluidStack.getFluid() == net.frostytrix.fletcherstrestle.fluid.ModFluids.LIQUID_POTION_SOURCE.get();
 
         if (isPotion) {
-            // Potion (two-pass): pass 1 — opaque coloured base.
+            // Potion (two-pass): pass 1: opaque coloured base.
             float u0_w = whiteSprite.getU0();
             float u1_w = whiteSprite.getU1();
             float v0_w = whiteSprite.getV0();
@@ -64,7 +64,7 @@ public class DippingVatRenderer implements BlockEntityRenderer<DippingVatBlockEn
             builder.addVertex(matrix, 0.875f, currentHeight, 0.125f).setColor(r, g, b, 1.0f).setUv(u1_w, v0_w).setOverlay(packedOverlay).setLight(packedLight).setNormal(poseStack.last(), 0, 1, 0);
             builder.addVertex(matrix, 0.125f, currentHeight, 0.125f).setColor(r, g, b, 1.0f).setUv(u0_w, v0_w).setOverlay(packedOverlay).setLight(packedLight).setNormal(poseStack.last(), 0, 1, 0);
 
-            // Pass 2 — translucent water ripples just above the base.
+            // Pass 2: translucent water ripples just above the base.
             float currentHeightOverlay = currentHeight + 0.0005f;
             float u0_h = waterSprite.getU0();
             float u1_h = waterSprite.getU1();

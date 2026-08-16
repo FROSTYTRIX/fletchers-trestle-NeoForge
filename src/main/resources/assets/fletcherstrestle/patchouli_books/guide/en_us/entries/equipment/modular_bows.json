@@ -6,11 +6,11 @@
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "A modular bow is assembled at the $(l)Fletching Table$() from three parts:$(br)$(li)$(l)Limbs$() — draw speed and damage$(li)$(l)Riser$() — durability and accuracy$(li)$(l)String$() — arrow velocity"
+      "text": "A modular bow is assembled at the $(l)Fletching Table$() from three parts:$(br)$(li)$(l)Limbs$(): draw speed and damage$(li)$(l)Riser$(): durability and accuracy$(li)$(l)String$(): arrow velocity"
     },
     {
       "type": "patchouli:text",
-      "text": "Assembling a bow triggers a short $(l)tuning minigame$(). Your score becomes the bow's $(l)Tuning %$() — shown in green on its tooltip.$(br2)Higher tuning means a $(l)faster draw$(), so a well-tuned bow of the same parts simply shoots quicker."
+      "text": "Assembling a bow triggers a short $(l)tuning minigame$(). Your score becomes the bow's $(l)Tuning %$(): shown in green on its tooltip.$(br2)Higher tuning means a $(l)faster draw$(), so a well-tuned bow of the same parts simply shoots quicker."
     },
     {
       "type": "patchouli:text",

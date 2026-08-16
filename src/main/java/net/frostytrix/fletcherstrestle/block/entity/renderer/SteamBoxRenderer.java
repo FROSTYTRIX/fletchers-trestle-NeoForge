@@ -17,7 +17,7 @@ import org.joml.Matrix4f;
 
 /**
  * Renders the Steam Box's water as a dynamic surface whose height tracks the
- * fluid tank fill ratio — same technique as {@link DippingVatRenderer}, so the
+ * fluid tank fill ratio: same technique as {@link DippingVatRenderer}, so the
  * blockstate no longer needs discrete water-level models.
  */
 public class SteamBoxRenderer implements BlockEntityRenderer<SteamBoxBlockEntity> {

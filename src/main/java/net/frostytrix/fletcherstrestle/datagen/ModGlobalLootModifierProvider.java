@@ -96,7 +96,7 @@ public class ModGlobalLootModifierProvider extends GlobalLootModifierProvider {
 
         // Raw flax fibre. The shepherd works fibre for a living, the fletcher
         // keeps stock for spinning into string, and farming houses store what
-        // they harvested — so all three can turn up unspun flax.
+        // they harvested, so all three can turn up unspun flax.
         this.add("flax_from_village_shepherd",
                 new AddItemModifier(new LootItemCondition[]{
                         new LootTableIdCondition.Builder(ResourceLocation.withDefaultNamespace("chests/village/village_shepherd")).build(),
@@ -127,7 +127,7 @@ public class ModGlobalLootModifierProvider extends GlobalLootModifierProvider {
                         LootItemRandomChanceCondition.randomChance(.6f).build()
                 }, ModItems.FLAX.get(), 2, 5));
 
-        // Farming stashes — the village crop stores. Flax is a farm crop, so a
+        // Farming stashes: the village crop stores. Flax is a farm crop, so a
         // farmer's chest is the most natural place in the world to find it.
         this.add("flax_from_village_desert_house",
                 new AddItemModifier(new LootItemCondition[]{
@@ -148,7 +148,7 @@ public class ModGlobalLootModifierProvider extends GlobalLootModifierProvider {
                 }, ModItems.FLAX_SEEDS.get(), 2, 5));
 
         // General world chests. Flax is a common rural good, so it turns up in
-        // the ordinary places people stash supplies — kept to modest odds so it
+        // the ordinary places people stash supplies: kept to modest odds so it
         // stays a nice find rather than clutter.
         this.add("flax_seed_from_village_temple",
                 new AddItemModifier(new LootItemCondition[]{

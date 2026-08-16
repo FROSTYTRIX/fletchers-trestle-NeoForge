@@ -30,7 +30,7 @@ import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 //   - Right-clicking a vanilla fletching table opens our custom menu.
 //   - Arrows striking an archery target block record a shot on its BE.
 // Material-specific arrow effects (spruce punch, copper conductivity, etc.)
-// live on the items/entities themselves — keep this file lean.
+// live on the items/entities themselves: keep this file lean.
 @EventBusSubscriber(modid = FletcherTrestle.MOD_ID)
 public class ModServerEvents {
 
@@ -54,8 +54,8 @@ public class ModServerEvents {
     // otherwise lost if the player logs out / quits with the GUI open: the
     // menu container never gets returned to the inventory before it's saved.
     // PlayerLoggedOutEvent fires in PlayerList.remove BEFORE the player save,
-    // so force-closing the open menu here runs the menu's removed() — which
-    // returns the craft slots to the inventory — in time to be persisted.
+    // so force-closing the open menu here runs the menu's removed(), which
+    // returns the craft slots to the inventory: in time to be persisted.
     @SubscribeEvent
     public static void onPlayerLoggedOut(PlayerEvent.PlayerLoggedOutEvent event) {
         if (event.getEntity() instanceof ServerPlayer player

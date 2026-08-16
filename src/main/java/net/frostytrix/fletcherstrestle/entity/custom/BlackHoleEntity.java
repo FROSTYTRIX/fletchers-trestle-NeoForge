@@ -25,7 +25,7 @@ import org.joml.Vector3f;
 
 /**
  * Creative-only "black hole" set piece spawned when a {@code black_hole} arrow lands. Runs a fixed
- * cinematic timeline — telegraph, pull, collapse, flash — pulling nearby entities and items toward
+ * cinematic timeline: telegraph, pull, collapse, flash: pulling nearby entities and items toward
  * its centre, then vanishing. Purely a spectacle; it does no terrain damage. The visual timeline is
  * driven off a server-authoritative age that is synced to clients and persisted across reloads.
  */
@@ -210,7 +210,7 @@ public class BlackHoleEntity extends Entity {
         }
     }
 
-    /** Erases every breakable block inside the event-horizon sphere as it expands — the void itself. */
+    /** Erases every breakable block inside the event-horizon sphere as it expands: the void itself. */
     private void clearHorizon(ServerLevel level) {
         // Clear a little beyond the visual sphere so no ring of blocks survives hugging the horizon.
         double r = horizonScale(0f) + 2.0;
@@ -234,7 +234,7 @@ public class BlackHoleEntity extends Entity {
         }
     }
 
-    /** True if the block has at least one open (air / non-solid) face — i.e. it isn't fully buried. */
+    /** True if the block has at least one open (air / non-solid) face: i.e. it isn't fully buried. */
     private static boolean isExposed(ServerLevel level, BlockPos pos) {
         for (Direction d : Direction.values()) {
             BlockPos np = pos.relative(d);

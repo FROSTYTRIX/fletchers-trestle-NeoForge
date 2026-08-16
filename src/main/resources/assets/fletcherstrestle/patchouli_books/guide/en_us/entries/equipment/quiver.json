@@ -6,7 +6,7 @@
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "A $(l)Quiver$() carries several arrow types at once and lets you swap between them on the fly — hold the quiver modifier key and scroll to cycle the selected slot."
+      "text": "A $(l)Quiver$() carries several arrow types at once and lets you swap between them on the fly: hold the quiver modifier key and scroll to cycle the selected slot."
     },
     {
       "type": "patchouli:crafting",

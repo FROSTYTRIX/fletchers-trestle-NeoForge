@@ -47,7 +47,7 @@ public class ModularArrowEntity extends AbstractArrow
     private int bounceCount = 0;
     private static final int MAX_BOUNCES = 3;
 
-    // Vex Fletching — pass through one block of cover, once per arrow.
+    // Vex Fletching: pass through one block of cover, once per arrow.
     private boolean hasPhased = false;
 
     //Grappling
@@ -77,7 +77,7 @@ public class ModularArrowEntity extends AbstractArrow
         applyFlightModifiers(ammo);
     }
 
-    // Position-based constructor — used by the dispenser behaviour (no shooter).
+    // Position-based constructor: used by the dispenser behaviour (no shooter).
     public ModularArrowEntity(Level level, double x, double y, double z, ItemStack ammo, @Nullable ItemStack weapon) {
         super(ModEntities.MODULAR_ARROW.get(), x, y, z, level, ammo, weapon);
         this.entityData.set(SYNCED_ITEM, ammo.copyWithCount(1));
@@ -195,14 +195,14 @@ public class ModularArrowEntity extends AbstractArrow
 
         // Glass-vial arrows shatter on impact and splash whatever potion they
         // were dipped in. Resolves before everything else so it can't be
-        // combined with other head effects. Kept id-keyed (not an effect) —
+        // combined with other head effects. Kept id-keyed (not an effect),
         // it reads the arrow's POTION_CONTENTS and needs stateful handling.
         if ("glass_vial".equals(assembly.head())) {
             applyGlassVialEffect(result.getLocation());
             return;
         }
 
-        // Resonance setup — head-specific multi-tick state that freezes the
+        // Resonance setup: head-specific multi-tick state that freezes the
         // arrow and queues delayed damage. Stays here because it needs to
         // mutate arrow state in coordinated ways the simple effect hook
         // doesn't expose. Future "stateful effect" extension can lift it.
@@ -236,7 +236,7 @@ public class ModularArrowEntity extends AbstractArrow
         shaft.effects().forEach(e -> e.onArrowHit(this, result));
         fletching.effects().forEach(e -> e.onArrowHit(this, result));
 
-        // Copper "conductive" lightning — reads the persistent flag stamped
+        // Copper "conductive" lightning: reads the persistent flag stamped
         // by the copper riser's set_arrow_flag effect at fire time.
         if (result.getEntity() instanceof LivingEntity target
                 && this.getPersistentData().getBoolean("fletcherstrestle:conductive")
@@ -483,7 +483,7 @@ public class ModularArrowEntity extends AbstractArrow
 
         // Dispatch block-hit effects (jungle bounce, future: phase-through,
         // sticky, etc.). Effects that mutate the arrow into a deflected
-        // state signal it by bumping bounceCount — if that happened,
+        // state signal it by bumping bounceCount: if that happened,
         // skip the vanilla embed path.
         int bounceBefore = this.bounceCount;
         var head = net.frostytrix.fletcherstrestle.material.Materials.arrowHead(assembly.head());
@@ -506,7 +506,7 @@ public class ModularArrowEntity extends AbstractArrow
     private void applyGlassVialEffect(Vec3 hitPos) {
         Level lvl = this.level();
 
-        // Glass shatter — sound + neutral water splash particles.
+        // Glass shatter: sound + neutral water splash particles.
         lvl.playSound(null, hitPos.x, hitPos.y, hitPos.z,
                 SoundEvents.GLASS_BREAK, this.getSoundSource(), 1.0f, 1.0f);
 
@@ -605,7 +605,7 @@ public class ModularArrowEntity extends AbstractArrow
     // independently to ±3.9 blocks/tick (ClientboundAddEntityPacket). A fast
     // modular arrow blows past that: a full draw is ~3.0, and a High Tension
     // string (1.8x) puts it around 5.4. Because the clamp is per-axis, the
-    // dominant axis gets capped while the others don't — which *rotates* the
+    // dominant axis gets capped while the others don't, which *rotates* the
     // client's velocity vector. The client then renders the arrow flying off
     // at the wrong angle until the server's real positions arrive and snap it
     // back, reading in-game as "the arrow strays off course, then teleports

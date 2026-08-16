@@ -9,9 +9,9 @@ import net.minecraft.client.renderer.RenderType;
  * to reach the engine's {@code protected} blend/depth state shards.
  *
  * <ul>
- *   <li>{@link #GLOW} — untextured position+colour, additive blending, no depth write: the accretion
+ *   <li>{@link #GLOW}: untextured position+colour, additive blending, no depth write: the accretion
  *       disk and photon ring (light adds up, so brightness stacks toward the core).</li>
- *   <li>{@link #CORE} — untextured position+colour, opaque, depth-writing: the event-horizon sphere,
+ *   <li>{@link #CORE}: untextured position+colour, opaque, depth-writing: the event-horizon sphere,
  *       which must occlude the glow behind it for the 3D read.</li>
  * </ul>
  */

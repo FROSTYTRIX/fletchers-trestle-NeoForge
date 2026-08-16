@@ -11,14 +11,14 @@ import org.spongepowered.asm.mixin.injection.ModifyConstant;
 /**
  * Vanilla's {@code ItemInHandRenderer.renderArmWithItem}'s {@code case BOW}
  * computes a normalised draw progress as {@code f8 / 20.0F}, then feeds
- * that into a Z-axis scale ({@code 1 + f12 * 0.2}) — the visible
+ * that into a Z-axis scale ({@code 1 + f12 * 0.2}): the visible
  * "stretching" you see as the bow is drawn back.
  *
  * <p>The 20.0F divisor is hardcoded for the vanilla bow's 20-tick draw.
  * Our modular bow's draw time varies per limb material (10 for birch,
  * 35 for dark oak, …). Without intervention the stretch animation runs
  * on a 20-tick schedule while the texture-stage transitions and the
- * FOV zoom run on the per-limb schedule — visually disjoint.</p>
+ * FOV zoom run on the per-limb schedule: visually disjoint.</p>
  *
  * <p>Fix: when the held stack is a {@link ModularBowItem}, replace the
  * 20.0F divisor with the limb-specific draw time. {@code 20.0F} is

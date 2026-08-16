@@ -8,7 +8,7 @@ import vazkii.patchouli.api.PatchouliAPI;
 /**
  * Isolated Patchouli calls. Every reference to Patchouli lives in this class, so
  * it is only classloaded when Patchouli is actually present. Callers MUST guard
- * with {@code ModList.get().isLoaded("patchouli")} before touching this class —
+ * with {@code ModList.get().isLoaded("patchouli")} before touching this class,
  * Patchouli is an optional (compileOnly) dependency and will be absent at runtime
  * in packs that don't ship it.
  */
@@ -16,7 +16,7 @@ public final class PatchouliCompat {
     private PatchouliCompat() {
     }
 
-    /** The book id — matches assets/fletcherstrestle/patchouli_books/guide/. */
+    /** The book id: matches assets/fletcherstrestle/patchouli_books/guide/. */
     public static final ResourceLocation GUIDE_BOOK =
             ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "guide");
 

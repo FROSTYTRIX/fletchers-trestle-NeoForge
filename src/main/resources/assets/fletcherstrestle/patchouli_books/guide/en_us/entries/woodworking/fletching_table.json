@@ -6,7 +6,7 @@
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "The $(l)Fletching Table$() is where it all comes together. Bring your $(l)Pliable Limb$(), a $(l)Riser$(), and a $(l)String$() here to assemble a finished bow — or a $(l)Head$(), $(l)Shaft$(), and $(l)Fletching$() to build a modular arrow."
+      "text": "The $(l)Fletching Table$() is where it all comes together. Bring your $(l)Pliable Limb$(), a $(l)Riser$(), and a $(l)String$() here to assemble a finished bow, or a $(l)Head$(), $(l)Shaft$(), and $(l)Fletching$() to build a modular arrow."
     },
     {
       "type": "patchouli:text",
@@ -15,7 +15,7 @@
     },
     {
       "type": "patchouli:text",
-      "text": "The table is the vanilla Fletching Table — right-click it to open the modular menu. Everything you build starts and ends here."
+      "text": "The table is the vanilla Fletching Table: right-click it to open the modular menu. Everything you build starts and ends here."
     }
   ]
 }

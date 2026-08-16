@@ -101,8 +101,8 @@ public class FletcherTrestle {
     // has shipped) lives inside checkEagleSpawnRules, NOT here: this event fires
     // during mod-loading registration, before the SERVER config is loaded, so
     // reading the config value here throws "Cannot get config value before
-    // config is loaded." The placement is always registered; the predicate —
-    // which runs at spawn-attempt time, once config is available — decides
+    // config is loaded." The placement is always registered; the predicate,
+    // which runs at spawn-attempt time, once config is available: decides
     // whether any eagle actually spawns.
     private void onRegisterSpawnPlacements(RegisterSpawnPlacementsEvent event) {
         event.register(

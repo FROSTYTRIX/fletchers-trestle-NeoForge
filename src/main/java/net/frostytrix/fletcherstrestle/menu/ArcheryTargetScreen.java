@@ -68,7 +68,7 @@ public class ArcheryTargetScreen extends AbstractContainerScreen<ArcheryTargetMe
         this.imageHeight = GUI_H;
         this.inventoryLabelY = 10000;
         this.titleLabelX = 8;
-        this.titleLabelY = -10; // hidden — no title label needed
+        this.titleLabelY = -10; // hidden: no title label needed
     }
 
     @Override

@@ -24,7 +24,7 @@ import net.minecraft.world.level.Level;
 import java.util.Optional;
 
 /**
- * @param requiredPotion optional — if present, the tank fluid must be exactly this potion
+ * @param requiredPotion optional: if present, the tank fluid must be exactly this potion
  */
 public record DippingRecipe(Ingredient inputItem, int inputCount, Optional<String> requiredPotion, int fluidAmount,
                             ItemStack output) implements Recipe<DippingRecipeInput> {
@@ -37,7 +37,7 @@ public record DippingRecipe(Ingredient inputItem, int inputCount, Optional<Strin
         }
 
         // 1b. Modular arrows can only be dipped if their head is the
-        //     glass_vial type — the only head designed to hold a payload.
+        //     glass_vial type: the only head designed to hold a payload.
         //     This stops e.g. broadhead arrows from accidentally being
         //     converted into potion arrows.
         ArrowAssembly assembly = input.item().get(ModDataComponents.ARROW_ASSEMBLY.get());

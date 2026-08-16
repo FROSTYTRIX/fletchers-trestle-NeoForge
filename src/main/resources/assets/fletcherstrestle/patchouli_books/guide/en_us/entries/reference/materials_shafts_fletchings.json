@@ -7,7 +7,7 @@
     {
       "type": "patchouli:text",
       "title": "Shafts",
-      "text": "One shaft per wood; most carry a modifier.$(br)$(li)$(l)Jungle$() — Bounce$(li)$(l)Acacia$() — Boost$(li)$(l)Dark Oak$() — Pierce$(li)$(l)Mangrove$() — Slower$(li)$(l)Cherry$() — Health Steal$(li)$(l)Pale Oak$() — Backstab$(li)$(l)Crimson$() — Executioner$(li)$(l)Warped$() — Translocation"
+      "text": "One shaft per wood; most carry a modifier.$(br)$(li)$(l)Jungle$(): Bounce$(li)$(l)Acacia$(): Boost$(li)$(l)Dark Oak$(): Pierce$(li)$(l)Mangrove$(): Slower$(li)$(l)Cherry$(): Health Steal$(li)$(l)Pale Oak$(): Backstab$(li)$(l)Crimson$(): Executioner$(li)$(l)Warped$(): Translocation"
     },
     {
       "type": "patchouli:text",
@@ -16,7 +16,7 @@
     {
       "type": "patchouli:text",
       "title": "Fletchings",
-      "text": "Fletchings tune accuracy and stability.$(br)$(li)$(l)Feather$() — 1.0x$(li)$(l)Rigid$() — 0.84x$(li)$(l)Trailing$() — 0.75x, Stable$(li)$(l)Serrated$() — Homing$(li)$(l)Bound$() — Recovery$(li)$(l)Vex$() — Ghostly$(br2)$(l)Coloured feathers$() (parrot/eagle drops) are cosmetic variants of Feather."
+      "text": "Fletchings tune accuracy and stability.$(br)$(li)$(l)Feather$(): 1.0x$(li)$(l)Rigid$(): 0.84x$(li)$(l)Trailing$(): 0.75x, Stable$(li)$(l)Serrated$(): Homing$(li)$(l)Bound$(): Recovery$(li)$(l)Vex$(): Ghostly$(br2)$(l)Coloured feathers$() (parrot/eagle drops) are cosmetic variants of Feather."
     }
   ]
 }

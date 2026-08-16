@@ -21,7 +21,7 @@ import java.util.List;
  * Wraps the baked {@code arrow_slit} model. When the block entity reports a
  * mimic block, the slit geometry is re-skinned to look like that block:
  * <ul>
- *   <li>each face takes the mimic's texture(s) for that direction — all of them,
+ *   <li>each face takes the mimic's texture(s) for that direction: all of them,
  *       so layered blocks like grass (base + tinted overlay) look right;</li>
  *   <li>UVs are projected from world position (box mapping), so a face samples
  *       the part of the texture that matches where it sits in the cube (the

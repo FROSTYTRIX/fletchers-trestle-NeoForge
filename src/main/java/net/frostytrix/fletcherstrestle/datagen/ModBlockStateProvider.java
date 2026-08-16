@@ -24,6 +24,12 @@ public class ModBlockStateProvider extends BlockStateProvider {
     protected void registerStatesAndModels() {
         makeFlaxCrop((CropBlock) (ModBlocks.FLAX_CROP.get()), "flax_stage_", "flax_stage_");
 
+        // Weapon rack: a wall fixture that faces out of the wall it's on. The
+        // model is hand-written (backboard + two pegs), so just wire the states.
+        horizontalBlock(ModBlocks.WEAPON_RACK.get(),
+                models().getExistingFile(modLoc("block/weapon_rack")));
+        itemModels().withExistingParent("weapon_rack", modLoc("block/weapon_rack"));
+
         // Linen: a wool-like decorative block woven from flax string, in 17
         // colours, each with a block, stairs, slab and carpet. Every variant
         // has its own texture (terracotta-style rather than tinted).

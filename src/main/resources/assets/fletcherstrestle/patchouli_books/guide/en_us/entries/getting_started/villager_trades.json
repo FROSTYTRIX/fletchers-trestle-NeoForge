@@ -7,16 +7,16 @@
     {
       "type": "patchouli:text",
       "title": "The Fletcher",
-      "text": "The village $(l)Fletcher$() deals in this mod's gear — it no longer sells vanilla bows.$(br)$(li)$(l)Novice$() — modular arrows$(li)$(l)Apprentice$() — Flax String, and a $(l)Modular Bow$()$(li)$(l)Journeyman$() — a $(l)Modular Crossbow$()$(li)$(l)Expert / Master$() — $(l)enchanted$() versions of both"
+      "text": "The village $(l)Fletcher$() deals in this mod's gear: it no longer sells vanilla bows.$(br)$(li)$(l)Novice$(): modular arrows$(li)$(l)Apprentice$(): Flax String, and a $(l)Modular Bow$()$(li)$(l)Journeyman$(): a $(l)Modular Crossbow$()$(li)$(l)Expert / Master$(): $(l)enchanted$() versions of both"
     },
     {
       "type": "patchouli:text",
-      "text": "Every weapon it sells comes $(l)fully assembled with random parts$(), tuned somewhere between 55% and 90%.$(br2)So a bought bow is a solid find — but a careful run at the $(l)Fletching Table$() still out-tunes it. Buying is convenience, not the best gear."
+      "text": "Every weapon it sells comes $(l)fully assembled with random parts$(), tuned somewhere between 55% and 90%.$(br2)So a bought bow is a solid find, but a careful run at the $(l)Fletching Table$() still out-tunes it. Buying is convenience, not the best gear."
     },
     {
       "type": "patchouli:text",
       "title": "The Shepherd",
-      "text": "The $(l)Shepherd$() works raw fibre:$(br)$(li)$(l)Novice$() — buy $(l)Flax$() for an emerald$(li)$(l)Apprentice$() — sell your surplus flax back$(br2)$(o)A villager's trades are set when it takes its profession — an old villager keeps its old trades.$()"
+      "text": "The $(l)Shepherd$() works raw fibre:$(br)$(li)$(l)Novice$(): buy $(l)Flax$() for an emerald$(li)$(l)Apprentice$(): sell your surplus flax back$(br2)$(o)A villager's trades are set when it takes its profession: an old villager keeps its old trades.$()"
     }
   ]
 }

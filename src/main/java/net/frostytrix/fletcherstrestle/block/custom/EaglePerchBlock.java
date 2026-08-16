@@ -27,7 +27,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 import java.util.UUID;
 
-// Eagle Perch — a craftable stand a tamed eagle can claim as its home base.
+// Eagle Perch: a craftable stand a tamed eagle can claim as its home base.
 // Stores ownership in its BlockEntity; the eagle stores the perch position.
 // Together they form a stable "this eagle belongs to this perch" link that
 // survives chunk unloads.
@@ -103,7 +103,7 @@ public class EaglePerchBlock extends BaseEntityBlock {
         }
 
         if (player.isShiftKeyDown()) {
-            // Unclaim — only the owner can do this.
+            // Unclaim: only the owner can do this.
             if (perch.isClaimed() && player.getUUID().equals(perch.getOwnerUUID())) {
                 clearEaglePerchPos(level, perch.getEagleUUID());
                 perch.unclaim();
@@ -120,7 +120,7 @@ public class EaglePerchBlock extends BaseEntityBlock {
             return InteractionResult.SUCCESS;
         }
 
-        // Unclaimed — try to claim using the nearest idle owned eagle.
+        // Unclaimed: try to claim using the nearest idle owned eagle.
         EagleEntity eagle = findClaimableEagle(level, player, pos);
         if (eagle == null) {
             player.displayClientMessage(

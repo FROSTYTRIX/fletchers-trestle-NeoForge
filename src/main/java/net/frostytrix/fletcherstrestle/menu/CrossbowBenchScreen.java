@@ -50,7 +50,7 @@ public class CrossbowBenchScreen extends AbstractContainerScreen<CrossbowBenchMe
         g.pose().pushPose();
         g.pose().scale(s, s, 1.0f);
 
-        // Left panel — what the bow/crossbow is made of (names resolved like the
+        // Left panel: what the bow/crossbow is made of (names resolved like the
         // item tooltip, so crafted bows show "High-Tension" not a raw id).
         var assembly = input.get(ModDataComponents.BOW_ASSEMBLY.get());
         if (assembly != null) {
@@ -59,7 +59,7 @@ public class CrossbowBenchScreen extends AbstractContainerScreen<CrossbowBenchMe
             line(g, label("string") + ": " + Materials.bowStringName(assembly.stringMaterial()).getString(), 8, 36, s, color);
         }
 
-        // Right panel — what's fitted (crossbow only).
+        // Right panel: what's fitted (crossbow only).
         if (input.is(ModItems.MODULAR_CROSSBOW.get())) {
             ResourceLocation att = input.get(ModDataComponents.CROSSBOW_ATTACHMENT.get());
             line(g, label("trigger") + ": " + label("mechanical"), 100, 18, s, color);

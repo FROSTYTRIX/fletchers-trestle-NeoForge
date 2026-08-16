@@ -56,7 +56,7 @@ public class ModularArrowRecipe implements Recipe<ArrowRecipeInput> {
 
         // Resolve each part by its Ingredient match against the supplied
         // stack. Returns the canonical registry-id path (e.g. "broadhead")
-        // — same string the legacy hardcoded chains used to return, so
+        //: same string the legacy hardcoded chains used to return, so
         // ArrowAssembly's storage format and downstream string-matching
         // branches in ModularArrowEntity are unchanged.
         String headName = resolveHead(provider, input.head());

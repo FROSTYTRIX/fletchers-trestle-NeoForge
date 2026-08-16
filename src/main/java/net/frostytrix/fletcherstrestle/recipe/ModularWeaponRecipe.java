@@ -76,7 +76,7 @@ public class ModularWeaponRecipe implements Recipe<FletchingRecipeInput> {
      *
      * @deprecated prefer {@link MaterialResolver#resolveBowLimb(HolderLookup.Provider, ItemStack)}
      * / {@code resolveBowRiser} / {@code resolveBowString} when
-     * a {@link HolderLookup.Provider} is available — they
+     * a {@link HolderLookup.Provider} is available: they
      * account for modpack-supplied materials too.
      */
     @Deprecated

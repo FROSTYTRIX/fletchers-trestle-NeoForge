@@ -1,0 +1,49 @@
+{
+  "parent": "block/block",
+  "textures": {
+    "board": "fletcherstrestle:block/weapon_rack",
+    "peg": "fletcherstrestle:block/weapon_rack_peg",
+    "particle": "fletcherstrestle:block/weapon_rack"
+  },
+  "elements": [
+    {
+      "__comment": "Backboard: a flat plank flush against the wall.",
+      "from": [2, 6, 15],
+      "to": [14, 9, 16],
+      "faces": {
+        "north": {"uv": [2, 7, 14, 10], "texture": "#board"},
+        "south": {"uv": [2, 7, 14, 10], "texture": "#board"},
+        "east":  {"uv": [15, 7, 16, 10], "texture": "#board"},
+        "west":  {"uv": [0, 7, 1, 10], "texture": "#board"},
+        "up":    {"uv": [2, 15, 14, 16], "texture": "#board"},
+        "down":  {"uv": [2, 15, 14, 16], "texture": "#board"}
+      }
+    },
+    {
+      "__comment": "Left peg: juts forward to carry the weapon.",
+      "from": [3, 7, 11],
+      "to": [5, 9, 15],
+      "faces": {
+        "north": {"uv": [3, 7, 5, 9], "texture": "#peg"},
+        "south": {"uv": [3, 7, 5, 9], "texture": "#peg"},
+        "east":  {"uv": [1, 7, 5, 9], "texture": "#peg"},
+        "west":  {"uv": [1, 7, 5, 9], "texture": "#peg"},
+        "up":    {"uv": [3, 1, 5, 5], "texture": "#peg"},
+        "down":  {"uv": [3, 1, 5, 5], "texture": "#peg"}
+      }
+    },
+    {
+      "__comment": "Right peg: mirror of the left.",
+      "from": [11, 7, 11],
+      "to": [13, 9, 15],
+      "faces": {
+        "north": {"uv": [11, 7, 13, 9], "texture": "#peg"},
+        "south": {"uv": [11, 7, 13, 9], "texture": "#peg"},
+        "east":  {"uv": [1, 7, 5, 9], "texture": "#peg"},
+        "west":  {"uv": [1, 7, 5, 9], "texture": "#peg"},
+        "up":    {"uv": [11, 1, 13, 5], "texture": "#peg"},
+        "down":  {"uv": [11, 1, 13, 5], "texture": "#peg"}
+      }
+    }
+  ]
+}

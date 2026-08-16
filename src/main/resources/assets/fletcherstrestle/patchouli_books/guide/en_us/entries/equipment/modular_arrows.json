@@ -6,7 +6,7 @@
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "Like bows, arrows are built from parts — assembled at the $(l)Fletching Table$():$(br)$(li)$(l)Head$() — damage and on-hit effect$(li)$(l)Shaft$() — weight, gravity, and flight$(li)$(l)Fletching$() — accuracy and stability"
+      "text": "Like bows, arrows are built from parts: assembled at the $(l)Fletching Table$():$(br)$(li)$(l)Head$(): damage and on-hit effect$(li)$(l)Shaft$(): weight, gravity, and flight$(li)$(l)Fletching$(): accuracy and stability"
     },
     {
       "type": "patchouli:text",

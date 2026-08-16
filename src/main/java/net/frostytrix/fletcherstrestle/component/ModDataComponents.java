@@ -48,7 +48,7 @@ public class ModDataComponents {
                             .networkSynchronized(ByteBufCodecs.VAR_INT)
                             .build());
 
-    // Stored on the Eagle Whistle item — UUID of the specific eagle the
+    // Stored on the Eagle Whistle item: UUID of the specific eagle the
     // whistle is bound to (or absent if it targets all owned eagles in range).
     public static final Supplier<DataComponentType<UUID>> BOUND_EAGLE =
             DATA_COMPONENT_TYPES.register("bound_eagle", () ->
@@ -57,7 +57,7 @@ public class ModDataComponents {
                             .networkSynchronized(UUIDUtil.STREAM_CODEC)
                             .build());
 
-    // Crossbow attachment — id of the installed attachment def, resolved against the
+    // Crossbow attachment: id of the installed attachment def, resolved against the
     // crossbow_attachment datapack registry at aim/fire time. One universal slot, so one id.
     public static final Supplier<DataComponentType<ResourceLocation>> CROSSBOW_ATTACHMENT =
             DATA_COMPONENT_TYPES.register("crossbow_attachment", () ->
@@ -69,7 +69,7 @@ public class ModDataComponents {
     // Damage value the attachment item (e.g. the bayonet sword) had when it was
     // installed. Kept so the sword can be handed back at its original wear and
     // can never be repaired by re-installing. (We store the int rather than the
-    // ItemStack itself — ItemStack isn't a legal data-component value.)
+    // ItemStack itself: ItemStack isn't a legal data-component value.)
     public static final Supplier<DataComponentType<Integer>> CROSSBOW_ATTACHMENT_DAMAGE =
             DATA_COMPONENT_TYPES.register("crossbow_attachment_damage", () ->
                     DataComponentType.<Integer>builder()

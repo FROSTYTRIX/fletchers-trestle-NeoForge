@@ -93,7 +93,7 @@ public class ModularCrossbowItem extends CrossbowItem {
     }
 
     /**
-     * Ticks the crossbow must be drawn before it loads — a magazine stretches this
+     * Ticks the crossbow must be drawn before it loads: a magazine stretches this
      * by its reload multiplier. Public so the client "pull" animation can divide by
      * the same value and stay in sync with the real draw time.
      */

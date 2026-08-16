@@ -59,7 +59,7 @@ public class ModularArrowRenderer extends ArrowRenderer<ModularArrowEntity> {
 
 // Glass-vial arrows get a tinted "liquid" overlay on top of the head, using
 // the same head sprite layout. The texture should be a white silhouette of
-// just the liquid inside the vial — colour is applied at render time so any
+// just the liquid inside the vial: colour is applied at render time so any
 // potion can re-use the same texture.
         if ("glass_vial".equals(assembly.head())) {
             PotionContents potion = entity.getSyncedItemStack().get(DataComponents.POTION_CONTENTS);
@@ -99,7 +99,7 @@ public class ModularArrowRenderer extends ArrowRenderer<ModularArrowEntity> {
     }
 
     // Same geometry as renderPart but tints each vertex with the given RGBA.
-    // Uses entityCutout (NOT translucent) — the 4 vanes share the central axis,
+    // Uses entityCutout (NOT translucent): the 4 vanes share the central axis,
     // and translucent blending makes them z-fight against each other at the
     // overlap. Cutout is binary (drawn or not), so it renders cleanly. Vanilla
     // TippedArrow uses the same render type for its tip overlay.

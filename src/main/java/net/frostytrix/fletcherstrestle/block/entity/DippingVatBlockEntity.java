@@ -27,7 +27,7 @@ import java.util.Optional;
 
 public class DippingVatBlockEntity extends BlockEntity {
 
-    // Only water and our own liquid-potion fluid are valid — keeps other mods'
+    // Only water and our own liquid-potion fluid are valid: keeps other mods'
     // pipes from shoving lava/milk/etc. into the vat (parity with the Steam Box).
     public final FluidTank fluidTank = new FluidTank(3000,
             fs -> fs.getFluid() == net.minecraft.world.level.material.Fluids.WATER

@@ -20,7 +20,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * Crossbow Bench — assembles bows into crossbows (and back) and installs
+ * Crossbow Bench: assembles bows into crossbows (and back) and installs
  * crossbow attachments. Backed by a {@link CrossbowBenchBlockEntity} so its
  * work slots persist across reloads and drop when the block is broken.
  */
@@ -63,7 +63,7 @@ public class CrossbowBenchBlock extends BaseEntityBlock {
             SimpleContainer inv = be.getInventory();
             ItemStack input = inv.getItem(CrossbowBenchMenu.SLOT_INPUT);
             // A finished crossbow already contains its trigger + attachment, so the
-            // trigger/attachment slots are only representations — don't drop those
+            // trigger/attachment slots are only representations: don't drop those
             // or they'd duplicate. Otherwise the slots hold real items: drop all.
             boolean inputIsCrossbow = input.is(ModItems.MODULAR_CROSSBOW.get());
             Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), input);

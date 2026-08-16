@@ -18,7 +18,7 @@ import java.util.Optional;
 
 /**
  * Built-in bow-riser material defs. The copper riser's "conductive"
- * trait — calls down lightning on hit during a thunderstorm — is
+ * trait: calls down lightning on hit during a thunderstorm: is
  * expressed as a {@code set_arrow_flag} effect that stamps
  * {@code fletcherstrestle:conductive} on the fired arrow; the arrow
  * entity's onHit handler reads that flag.

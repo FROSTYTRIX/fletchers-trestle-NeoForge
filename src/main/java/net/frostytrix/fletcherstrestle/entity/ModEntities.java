@@ -38,7 +38,7 @@ public class ModEntities {
                     EntityType.Builder.of(EagleEntity::new, MobCategory.CREATURE)
                             .sized(0.6F, 0.9F)          // roughly hawk-sized
                             .clientTrackingRange(8)      // players see it at 128 blocks
-                            .updateInterval(1)           // fast sync — it flies
+                            .updateInterval(1)           // fast sync: it flies
                             .build("eagle")
             );
 

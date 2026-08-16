@@ -10,7 +10,7 @@ import net.minecraft.world.item.context.UseOnContext;
 // Eagle Egg. Two uses:
 //   1. Right-click a nest block while holding this → add the egg to the nest
 //      (capped at the nest's max-egg count). Starts an incubation timer.
-//   2. Otherwise inert — broken-nest eggs survive in inventory but lose
+//   2. Otherwise inert: broken-nest eggs survive in inventory but lose
 //      their incubation progress (they're fresh again when placed).
 public class EagleEggItem extends Item {
 

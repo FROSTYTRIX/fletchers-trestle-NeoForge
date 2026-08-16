@@ -14,7 +14,7 @@ import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
 
 /**
- * On-hit: with {@code chance} probability, swaps the shooter's and target's positions.
+ * On-hit, with {@code chance} probability, swaps the shooter's and target's positions.
  * Used by the warped shaft.
  *
  * <p>JSON: {@code { "type": "fletcherstrestle:teleport_swap_with_target", "chance": 1.0 }}

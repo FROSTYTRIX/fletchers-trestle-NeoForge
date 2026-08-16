@@ -87,7 +87,7 @@ versionRange = "${minecraft_version_range}"
 ordering = "NONE"
 side = "BOTH"
 
-# Patchouli — OPTIONAL. When present, it powers the in-game guidebook; when
+# Patchouli: OPTIONAL. When present, it powers the in-game guidebook; when
 # absent, the book and its recipe are hidden and nothing breaks.
 [[dependencies.${ mod_id }]]
 modId = "patchouli"
