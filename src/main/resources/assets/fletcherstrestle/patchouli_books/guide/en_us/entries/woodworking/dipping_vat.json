@@ -1,0 +1,21 @@
+{
+  "name": "The Dipping Vat",
+  "category": "fletcherstrestle:woodworking",
+  "icon": "fletcherstrestle:dipping_vat",
+  "sortnum": 4,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "The $(l)Dipping Vat$() turns a plain $(l)Glass Vial$() arrow into a $(l)potion arrow$(). Fill the vat with any potion, dip an empty glass-vial arrow, and it comes out tipped with that effect."
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "fletcherstrestle:dipping_vat",
+      "text": "Craft a Dipping Vat to tip your arrows."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "On hit, the vial $(l)shatters$() and splashes its potion onto whatever it struck — a delivery system for anything you can brew, from Healing to Poison to Slow Falling."
+    }
+  ]
+}

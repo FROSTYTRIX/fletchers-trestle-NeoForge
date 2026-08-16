@@ -1,0 +1,21 @@
+{
+  "name": "The Fletching Table",
+  "category": "fletcherstrestle:woodworking",
+  "icon": "minecraft:fletching_table",
+  "sortnum": 3,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "The $(l)Fletching Table$() is where it all comes together. Bring your $(l)Pliable Limb$(), a $(l)Riser$(), and a $(l)String$() here to assemble a finished bow — or a $(l)Head$(), $(l)Shaft$(), and $(l)Fletching$() to build a modular arrow."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Tuning",
+      "text": "Assembling a bow plays a short $(l)tuning minigame$(). How well you do becomes the bow's $(l)Tuning %$(), shown in green on its tooltip.$(br2)Higher tuning = a $(l)faster draw$(). Same parts, better hands: a quicker bow. It's worth taking your time."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "The table is the vanilla Fletching Table — right-click it to open the modular menu. Everything you build starts and ends here."
+    }
+  ]
+}

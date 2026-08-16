@@ -6,11 +6,21 @@
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "$(l)Flax$() is the mod's home-grown fibre. Plant $(l)Flax Seeds$() on farmland and harvest the mature crop for flax."
+      "text": "$(l)Flax$() is the mod's home-grown fibre. Plant $(l)Flax Seeds$() on farmland and harvest the mature crop for flax.$(br2)Seeds turn up when you break $(l)grass and ferns$(). You can also just $(l)find$() flax: villages stock it, and a $(l)Fletcher's Camp$() chest holds both flax and string."
     },
     {
       "type": "patchouli:text",
-      "text": "Spin flax into $(l)Flax String$() — a fast, cheap bowstring — so you never have to hunt spiders just to string a bow. It draws a touch shaky if you overhold, but the $(l)Aim$() skill smooths that out."
+      "title": "Where to Find It",
+      "text": "$(li)$(l)Fletcher$() chests — Flax String, raw flax$(li)$(l)Shepherd$() chests — raw flax, Flax String$(li)$(l)Village houses$() — seeds and raw flax$(li)$(l)Shipwrecks$() and $(l)pillager outposts$() — flax and string$(br2)A fletcher's chest can hand you a $(l)ready-made bowstring$() before you've farmed a single seed."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Buying Flax",
+      "text": "You can also just trade for it. The $(l)Fletcher$() sells $(l)Flax String$(), and the $(l)Shepherd$() sells raw $(l)Flax$() — and buys it back if you end up with more than you need.$(br2)See the $(l)Villager Trades$() entry for the full list."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Spin flax into $(l)Flax String$() — a cheap, renewable bowstring — so you never have to hunt spiders just to string a bow.$(br2)It's the weakest string (0.85x velocity) and draws a touch shaky if you overhold, but you can grow it by the stack. The $(l)Aim$() skill smooths the shake out."
     }
   ]
 }

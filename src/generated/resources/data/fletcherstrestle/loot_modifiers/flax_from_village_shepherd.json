@@ -1,0 +1,16 @@
+{
+  "type": "fletcherstrestle:add_item",
+  "conditions": [
+    {
+      "condition": "neoforge:loot_table_id",
+      "loot_table_id": "minecraft:chests/village/village_shepherd"
+    },
+    {
+      "chance": 0.8,
+      "condition": "minecraft:random_chance"
+    }
+  ],
+  "item": "fletcherstrestle:flax",
+  "max_count": 8,
+  "min_count": 4
+}

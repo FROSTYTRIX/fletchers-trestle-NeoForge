@@ -36,6 +36,11 @@ public record SubtleHomingEffect(float range, float strength, int graceTicks) im
 
     @Override
     public void onArrowTick(ModularArrowEntity arrow) {
+        // Server-authoritative: the homing is synced to the client each tick via
+        // hasImpulse below. Running it independently on the client (with a target
+        // the two sides can disagree on) made the arrow visibly stray one way and
+        // then "teleport" when the server's real position arrived.
+        if (arrow.level().isClientSide) return;
         if (arrow.isInGroundPublic() || arrow.tickCount <= graceTicks) return;
         AABB searchBox = arrow.getBoundingBox().inflate(range);
         List<LivingEntity> entities = arrow.level().getEntitiesOfClass(
@@ -43,9 +48,24 @@ public record SubtleHomingEffect(float range, float strength, int graceTicks) im
                 searchBox,
                 e -> e != arrow.getOwner() && e.isAlive());
         if (entities.isEmpty()) return;
-        LivingEntity target = entities.get(0); // first match in range (not distance-sorted)
+
+        // Nearest target — deterministic. The old get(0) picked whatever the
+        // entity iteration happened to return first, which differs between sides.
+        LivingEntity target = null;
+        double bestSqr = Double.MAX_VALUE;
+        for (LivingEntity e : entities) {
+            double d = e.distanceToSqr(arrow);
+            if (d < bestSqr) {
+                bestSqr = d;
+                target = e;
+            }
+        }
+
         Vec3 targetCenter = target.position().add(0, target.getBbHeight() / 2.0, 0);
         Vec3 pull = targetCenter.subtract(arrow.position()).normalize().scale(strength);
         arrow.setDeltaMovement(arrow.getDeltaMovement().add(pull));
+        // Push the corrected velocity to the client so it renders the same curve
+        // the server computes, instead of extrapolating and snapping at impact.
+        arrow.hasImpulse = true;
     }
 }

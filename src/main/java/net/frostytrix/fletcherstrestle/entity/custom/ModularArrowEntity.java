@@ -34,7 +34,8 @@ import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
-public class ModularArrowEntity extends AbstractArrow {
+public class ModularArrowEntity extends AbstractArrow
+        implements net.neoforged.neoforge.entity.IEntityWithComplexSpawn {
     private final Vec3 startPos = null;
 
     // Echo Shard Head
@@ -595,5 +596,37 @@ public class ModularArrowEntity extends AbstractArrow {
     @Override
     public ItemStack getPickResult() {
         return this.getPickupItem().copy();
+    }
+
+    // ---------------------------------------------------------------
+    // Spawn-time velocity sync
+    //
+    // Vanilla's entity spawn packet quantises velocity and clamps EACH AXIS
+    // independently to ±3.9 blocks/tick (ClientboundAddEntityPacket). A fast
+    // modular arrow blows past that: a full draw is ~3.0, and a High Tension
+    // string (1.8x) puts it around 5.4. Because the clamp is per-axis, the
+    // dominant axis gets capped while the others don't — which *rotates* the
+    // client's velocity vector. The client then renders the arrow flying off
+    // at the wrong angle until the server's real positions arrive and snap it
+    // back, reading in-game as "the arrow strays off course, then teleports
+    // right before hitting the target".
+    //
+    // Sending the true velocity ourselves and applying it on the client fixes
+    // the rendered trajectory for any speed.
+    // ---------------------------------------------------------------
+    @Override
+    public void writeSpawnData(net.minecraft.network.RegistryFriendlyByteBuf buffer) {
+        Vec3 v = this.getDeltaMovement();
+        buffer.writeDouble(v.x);
+        buffer.writeDouble(v.y);
+        buffer.writeDouble(v.z);
+    }
+
+    @Override
+    public void readSpawnData(net.minecraft.network.RegistryFriendlyByteBuf additionalData) {
+        double x = additionalData.readDouble();
+        double y = additionalData.readDouble();
+        double z = additionalData.readDouble();
+        this.setDeltaMovement(x, y, z);
     }
 }

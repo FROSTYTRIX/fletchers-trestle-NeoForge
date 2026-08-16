@@ -34,17 +34,18 @@ public final class BuiltinBowStrings {
                 Optional.empty(),
                 List.of()
         ));
-        // Flax — mod's own string item, 1.3× velocity.
+        // Flax — mod's own string item. 0.85× velocity: farmable and renewable,
+        // so it trades real power (and the shaky overdraw) for convenience.
         ctx.register(FLAX, new BowStringDef(
                 Ingredient.of(ModItems.FLAX_STRING.get()),
-                new BowStringStats(1.3f, 1),
+                new BowStringStats(0.85f, 1),
                 Optional.empty(),
                 List.of()
         ));
-        // High-tension — 1.8× velocity, costs 2 durability per shot.
+        // High-tension — 1.4× velocity, costs 2 durability per shot.
         ctx.register(HIGH_TENSION, new BowStringDef(
                 Ingredient.of(ModItems.HIGH_TENSION_STRING.get()),
-                new BowStringStats(1.8f, 2),
+                new BowStringStats(1.4f, 2),
                 Optional.empty(),
                 List.of()
         ));

@@ -1,0 +1,15 @@
+{
+  "type": "fletcherstrestle:add_item",
+  "conditions": [
+    {
+      "condition": "neoforge:loot_table_id",
+      "loot_table_id": "minecraft:chests/shipwreck_supply"
+    },
+    {
+      "chance": 0.5,
+      "condition": "minecraft:random_chance"
+    }
+  ],
+  "item": "fletcherstrestle:flax_string",
+  "max_count": 4
+}
