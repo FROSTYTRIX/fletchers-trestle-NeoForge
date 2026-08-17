@@ -30,7 +30,7 @@ public final class BuiltinBowStrings {
         // Spider: vanilla string. 1× velocity, 1 durability per shot.
         ctx.register(SPIDER, new BowStringDef(
                 Ingredient.of(Items.STRING),
-                new BowStringStats(1.0f, 1),
+                new BowStringStats(1.0f, 1, false),
                 Optional.empty(),
                 List.of()
         ));
@@ -38,14 +38,14 @@ public final class BuiltinBowStrings {
         // so it trades real power (and the shaky overdraw) for convenience.
         ctx.register(FLAX, new BowStringDef(
                 Ingredient.of(ModItems.FLAX_STRING.get()),
-                new BowStringStats(0.85f, 1),
+                new BowStringStats(0.85f, 1, false),
                 Optional.empty(),
                 List.of()
         ));
         // High-tension: 1.4× velocity, costs 2 durability per shot.
         ctx.register(HIGH_TENSION, new BowStringDef(
                 Ingredient.of(ModItems.HIGH_TENSION_STRING.get()),
-                new BowStringStats(1.4f, 2),
+                new BowStringStats(1.4f, 2, true),
                 Optional.empty(),
                 List.of()
         ));

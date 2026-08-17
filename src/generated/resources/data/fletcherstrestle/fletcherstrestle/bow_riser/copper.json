@@ -9,6 +9,7 @@
     "item": "fletcherstrestle:copper_riser"
   },
   "stats": {
-    "max_durability": 400
+    "max_durability": 400,
+    "metal": true
   }
 }

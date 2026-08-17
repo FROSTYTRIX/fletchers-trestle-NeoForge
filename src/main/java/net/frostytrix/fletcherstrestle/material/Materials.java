@@ -28,12 +28,12 @@ public final class Materials {
 
     public static final BowRiserDef DEFAULT_BOW_RISER = new BowRiserDef(
             Ingredient.EMPTY,
-            new BowRiserStats(250, 1f),
+            new BowRiserStats(250, 1f, false),
             Optional.empty(), List.of());
 
     public static final BowStringDef DEFAULT_BOW_STRING = new BowStringDef(
             Ingredient.EMPTY,
-            new BowStringStats(1f, 1),
+            new BowStringStats(1f, 1, false),
             Optional.empty(), List.of());
 
     public static final ArrowHeadDef DEFAULT_ARROW_HEAD = new ArrowHeadDef(

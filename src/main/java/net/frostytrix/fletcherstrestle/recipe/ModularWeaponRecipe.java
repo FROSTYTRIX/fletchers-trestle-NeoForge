@@ -34,10 +34,29 @@ public class ModularWeaponRecipe implements Recipe<FletchingRecipeInput> {
         if (input.isEmpty()) return false;
 
         // Checks if the items in the slots match the ingredients defined in the JSON
-        return this.riser.test(input.riser()) &&
+        boolean partsMatch = this.riser.test(input.riser()) &&
                 this.limbs.test(input.topLimb()) &&
                 this.limbs.test(input.bottomLimb()) &&
                 this.string.test(input.string());
+
+        return partsMatch && riserSupportsString(level, input);
+    }
+
+    /**
+     * A string that pulls hard enough needs a metal riser to hold it: a wooden
+     * one would flex or split. Both sides of the rule are material stats
+     * ({@code requires_metal_riser} and {@code metal}), so a datapack's own
+     * riser or string takes part without any code change.
+     */
+    private static boolean riserSupportsString(Level level, FletchingRecipeInput input) {
+        var provider = level.registryAccess();
+        var string = MaterialResolver.resolveBowString(provider, input.string());
+        if (string.isEmpty() || !string.get().value().stats().requiresMetalRiser()) {
+            return true;
+        }
+        return MaterialResolver.resolveBowRiser(provider, input.riser())
+                .map(riser -> riser.value().stats().metal())
+                .orElse(false);
     }
 
     @Override

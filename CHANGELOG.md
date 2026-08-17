@@ -1,7 +1,6 @@
 # Fletcher's Trestle: 2.5.0
 
-Woven. Flax gets a second life as **linen**, a dyeable textile block family, so
-the crop that strings your bows can furnish the workshop you built it in. The
+Flax gets a second life as **linen**, a dyeable textile block family. The
 **Weapon Rack** finally gives a well-tuned bow somewhere to be admired, and
 **garlands** put those coloured feathers to use as bunting.
 

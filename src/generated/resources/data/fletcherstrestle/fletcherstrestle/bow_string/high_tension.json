@@ -4,6 +4,7 @@
   },
   "stats": {
     "durability_cost": 2,
+    "requires_metal_riser": true,
     "velocity_multiplier": 1.4
   }
 }

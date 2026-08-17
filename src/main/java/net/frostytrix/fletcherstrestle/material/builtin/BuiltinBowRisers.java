@@ -32,20 +32,20 @@ public final class BuiltinBowRisers {
     public static final ResourceKey<BowRiserDef> COPPER = key("copper");
 
     public static void bootstrap(BootstrapContext<BowRiserDef> ctx) {
-        register(ctx, WOOD, ModItems.WOOD_RISER, 250, 1.0f, List.of());
-        register(ctx, IRON, ModItems.IRON_RISER, 750, 0.2f, List.of());
-        register(ctx, COPPER, ModItems.COPPER_RISER, 400, 1.0f,
+        register(ctx, WOOD, ModItems.WOOD_RISER, 250, 1.0f, false, List.of());
+        register(ctx, IRON, ModItems.IRON_RISER, 750, 0.2f, true, List.of());
+        register(ctx, COPPER, ModItems.COPPER_RISER, 400, 1.0f, true,
                 List.of(new SetArrowFlagEffect("fletcherstrestle:conductive", true)));
     }
 
     private static void register(BootstrapContext<BowRiserDef> ctx,
                                  ResourceKey<BowRiserDef> key,
                                  java.util.function.Supplier<? extends ItemLike> ingredient,
-                                 int maxDurability, float inaccuracyMult,
+                                 int maxDurability, float inaccuracyMult, boolean metal,
                                  List<MaterialEffect> effects) {
         ctx.register(key, new BowRiserDef(
                 Ingredient.of(ingredient.get()),
-                new BowRiserStats(maxDurability, inaccuracyMult),
+                new BowRiserStats(maxDurability, inaccuracyMult, metal),
                 Optional.empty(),
                 effects
         ));
