@@ -310,5 +310,13 @@
   "block.fletcherstrestle.black_linen_slab": "Black Linen Slab",
   "block.fletcherstrestle.black_linen_carpet": "Black Linen Carpet",
   "creative_tab.fletcherstrestle.decorations_tab": "Fletcher's Trestle: Decorations",
-  "block.fletcherstrestle.weapon_rack": "Weapon Rack"
+  "block.fletcherstrestle.weapon_rack": "Weapon Rack",
+  "block.fletcherstrestle.nail": "Nail",
+  "item.fletcherstrestle.garland": "Garland",
+  "message.fletcherstrestle.nail_full": "This nail has no room for another garland",
+  "message.fletcherstrestle.garland_start": "Garland anchored. Right-click another nail to hang it.",
+  "message.fletcherstrestle.garland_too_far": "That nail is too far away (max %s blocks)",
+  "gui.fletcherstrestle.garland_feathers": "Woven from %s feathers",
+  "gui.fletcherstrestle.garland_anchored": "Anchored: right-click a second nail",
+  "gui.fletcherstrestle.garland_hint": "Right-click a nail to anchor"
 }

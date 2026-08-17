@@ -14,6 +14,10 @@ public class ModRecipes {
     public static final DeferredRegister<RecipeType<?>> TYPES =
             DeferredRegister.create(Registries.RECIPE_TYPE, "fletcherstrestle");
 
+    public static final Supplier<RecipeSerializer<GarlandRecipe>> GARLAND_SERIALIZER =
+            SERIALIZERS.register("garland", () ->
+                    new net.minecraft.world.item.crafting.SimpleCraftingRecipeSerializer<>(GarlandRecipe::new));
+
     public static final Supplier<RecipeSerializer<ModularWeaponRecipe>> MODULAR_WEAPON_SERIALIZER =
             SERIALIZERS.register("modular_weapon_assembly", ModularWeaponRecipe.Serializer::new);
 

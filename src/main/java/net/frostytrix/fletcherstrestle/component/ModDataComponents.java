@@ -34,6 +34,23 @@ public class ModDataComponents {
                             .build()
             );
 
+    public static final Supplier<DataComponentType<GarlandColours>> GARLAND_COLOURS =
+            DATA_COMPONENT_TYPES.register("garland_colours", () ->
+                    DataComponentType.<GarlandColours>builder()
+                            .persistent(GarlandColours.CODEC)
+                            .networkSynchronized(GarlandColours.STREAM_CODEC)
+                            .build()
+            );
+
+    /** The nail a garland has been anchored to, waiting for its second end. */
+    public static final Supplier<DataComponentType<net.minecraft.core.GlobalPos>> GARLAND_ANCHOR =
+            DATA_COMPONENT_TYPES.register("garland_anchor", () ->
+                    DataComponentType.<net.minecraft.core.GlobalPos>builder()
+                            .persistent(net.minecraft.core.GlobalPos.CODEC)
+                            .networkSynchronized(net.minecraft.core.GlobalPos.STREAM_CODEC)
+                            .build()
+            );
+
     public static final Supplier<DataComponentType<Integer>> QUIVER_SELECTED_SLOT =
             DATA_COMPONENT_TYPES.register("quiver_selected_slot",
                     () -> DataComponentType.<Integer>builder()

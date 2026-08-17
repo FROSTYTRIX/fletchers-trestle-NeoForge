@@ -61,6 +61,11 @@ public class ModBlockEntities {
                     BlockEntityType.Builder.of(WeaponRackBlockEntity::new, ModBlocks.WEAPON_RACK.get()).build(null)
             );
 
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<NailBlockEntity>> NAIL_BE =
+            BLOCK_ENTITIES.register("nail_be", () ->
+                    BlockEntityType.Builder.of(NailBlockEntity::new, ModBlocks.NAIL.get()).build(null)
+            );
+
     public static void register(IEventBus eventBus) {
         BLOCK_ENTITIES.register(eventBus);
     }

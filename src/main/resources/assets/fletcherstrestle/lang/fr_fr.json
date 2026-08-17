@@ -310,5 +310,13 @@
   "block.fletcherstrestle.black_linen_slab": "Dalle de lin noir",
   "block.fletcherstrestle.black_linen_carpet": "Tapis de lin noir",
   "creative_tab.fletcherstrestle.decorations_tab": "Fletcher's Trestle : Décorations",
-  "block.fletcherstrestle.weapon_rack": "Râtelier d'armes"
+  "block.fletcherstrestle.weapon_rack": "Râtelier d'armes",
+  "block.fletcherstrestle.nail": "Clou",
+  "item.fletcherstrestle.garland": "Guirlande",
+  "message.fletcherstrestle.nail_full": "Ce clou ne peut pas accueillir une autre guirlande",
+  "message.fletcherstrestle.garland_start": "Guirlande accrochée. Clic droit sur un autre clou pour la tendre.",
+  "message.fletcherstrestle.garland_too_far": "Ce clou est trop loin (%s blocs maximum)",
+  "gui.fletcherstrestle.garland_feathers": "Tissée à partir de %s plumes",
+  "gui.fletcherstrestle.garland_anchored": "Accrochée : clic droit sur un second clou",
+  "gui.fletcherstrestle.garland_hint": "Clic droit sur un clou pour accrocher"
 }

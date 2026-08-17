@@ -5,6 +5,7 @@ import net.frostytrix.fletcherstrestle.block.custom.*;
 import net.frostytrix.fletcherstrestle.item.ModItems;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
+import net.frostytrix.fletcherstrestle.block.custom.NailBlock;
 import net.frostytrix.fletcherstrestle.block.custom.WeaponRackBlock;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.block.Block;
@@ -83,6 +84,10 @@ public class ModBlocks {
     // drawn by its block-entity renderer, so it shows its real assembly.
     public static final DeferredBlock<Block> WEAPON_RACK = registerBlock("weapon_rack",
             () -> new WeaponRackBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_PLANKS).noOcclusion()));
+
+    // A nail driven into a block face. Anchors a garland; see NailBlock.
+    public static final DeferredBlock<Block> NAIL = registerBlock("nail",
+            () -> new NailBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BARS).noOcclusion().strength(0.4f)));
 
     // ---------------------------------------------------------------
     // Linen: the decorative side of flax. Woven from flax string, so a flax

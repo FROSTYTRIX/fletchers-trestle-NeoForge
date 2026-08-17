@@ -30,6 +30,11 @@ public class ModBlockStateProvider extends BlockStateProvider {
                 models().getExistingFile(modLoc("block/weapon_rack")));
         itemModels().withExistingParent("weapon_rack", modLoc("block/weapon_rack"));
 
+        // Nail: placeable on a floor, wall or ceiling, so the button-style
+        // blockstate handles all six orientations from one model.
+        horizontalFaceBlock(ModBlocks.NAIL.get(), models().getExistingFile(modLoc("block/nail")));
+        itemModels().withExistingParent("nail", modLoc("block/nail"));
+
         // Linen: a wool-like decorative block woven from flax string, in 17
         // colours, each with a block, stairs, slab and carpet. Every variant
         // has its own texture (terracotta-style rather than tinted).

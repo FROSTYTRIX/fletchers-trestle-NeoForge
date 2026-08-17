@@ -112,6 +112,19 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                 .unlockedBy("has_paper", has(Items.PAPER))
                 .save(recipeOutput);
 
+        // Garland: a string and seven feathers. Which feathers you use decides
+        // its colours, so it needs a special recipe that reads the grid.
+        SpecialRecipeBuilder.special(net.frostytrix.fletcherstrestle.recipe.GarlandRecipe::new)
+                .save(recipeOutput, ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "garland").toString());
+
+        // Nails: cheap, and you need a pair for every garland.
+        ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, ModBlocks.NAIL.get(), 4)
+                .pattern("N")
+                .pattern("N")
+                .define('N', Items.IRON_NUGGET)
+                .unlockedBy("has_iron_nugget", has(Items.IRON_NUGGET))
+                .save(recipeOutput);
+
         // Weapon rack: a plank backboard with two pegs.
         ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, ModBlocks.WEAPON_RACK.get())
                 .pattern("PPP")

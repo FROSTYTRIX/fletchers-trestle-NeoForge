@@ -13,6 +13,7 @@ public class ModItemModelProvider extends ItemModelProvider {
 
     @Override
     protected void registerModels() {
+        basicItem(ModItems.GARLAND.get());
         basicItem(ModItems.PLIABLE_OAK_LIMB.get());
         basicItem(ModItems.ROUGH_OAK_LIMB.get());
 

@@ -139,6 +139,8 @@ public class ModCreativeModeTabs {
                     .title(Component.translatable("creative_tab.fletcherstrestle.decorations_tab"))
                     .displayItems((itemDisplayParameters, output) -> {
                         output.accept(ModBlocks.WEAPON_RACK);
+                        output.accept(ModBlocks.NAIL);
+                        output.accept(ModItems.GARLAND.get());
 
                         // Linen, grouped colour by colour: block, stairs, slab, carpet.
                         for (ModBlocks.LinenSet set : ModBlocks.allLinenSets()) {

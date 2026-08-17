@@ -48,6 +48,8 @@ public class ModClientEvents {
         event.registerEntityRenderer(ModEntities.EAGLE.get(), EagleRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntities.WEAPON_RACK_BE.get(),
                 net.frostytrix.fletcherstrestle.block.entity.renderer.WeaponRackRenderer::new);
+        event.registerBlockEntityRenderer(ModBlockEntities.NAIL_BE.get(),
+                net.frostytrix.fletcherstrestle.block.entity.renderer.NailRenderer::new);
     }
 
     @SubscribeEvent

@@ -1,0 +1,147 @@
+{
+  "parent": "block/block",
+  "textures": {
+    "nail": "minecraft:block/smithing_table_top",
+    "particle": "minecraft:block/smithing_table_top"
+  },
+  "elements": [
+    {
+      "__comment": "Shaft. Modelled standing on the floor; the blockstate rotates it onto walls and ceilings.",
+      "from": [
+        7,
+        0,
+        7
+      ],
+      "to": [
+        9,
+        3,
+        9
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            7,
+            13,
+            9,
+            16
+          ],
+          "texture": "#nail"
+        },
+        "south": {
+          "uv": [
+            7,
+            13,
+            9,
+            16
+          ],
+          "texture": "#nail"
+        },
+        "east": {
+          "uv": [
+            7,
+            13,
+            9,
+            16
+          ],
+          "texture": "#nail"
+        },
+        "west": {
+          "uv": [
+            7,
+            13,
+            9,
+            16
+          ],
+          "texture": "#nail"
+        },
+        "up": {
+          "uv": [
+            7,
+            7,
+            9,
+            9
+          ],
+          "texture": "#nail"
+        },
+        "down": {
+          "uv": [
+            7,
+            7,
+            9,
+            9
+          ],
+          "texture": "#nail"
+        }
+      }
+    },
+    {
+      "__comment": "Head, slightly wider than the shaft.",
+      "from": [
+        6.5,
+        3,
+        6.5
+      ],
+      "to": [
+        9.5,
+        4,
+        9.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            6,
+            12,
+            10,
+            13
+          ],
+          "texture": "#nail"
+        },
+        "south": {
+          "uv": [
+            6,
+            12,
+            10,
+            13
+          ],
+          "texture": "#nail"
+        },
+        "east": {
+          "uv": [
+            6,
+            12,
+            10,
+            13
+          ],
+          "texture": "#nail"
+        },
+        "west": {
+          "uv": [
+            6,
+            12,
+            10,
+            13
+          ],
+          "texture": "#nail"
+        },
+        "up": {
+          "uv": [
+            6,
+            6,
+            10,
+            10
+          ],
+          "texture": "#nail"
+        },
+        "down": {
+          "uv": [
+            6,
+            6,
+            10,
+            10
+          ],
+          "texture": "#nail"
+        }
+      }
+    }
+  ]
+}

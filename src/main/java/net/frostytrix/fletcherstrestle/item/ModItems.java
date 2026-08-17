@@ -150,6 +150,11 @@ public class ModItems {
                     .component(ModDataComponents.MAX_QUIVER_SLOTS.get(), 5)));
 
 
+    // Bunting strung between two nails. Its colours come from the feathers it
+    // was woven from, stored in the GARLAND_COLOURS component.
+    public static final DeferredItem<Item> GARLAND = ITEMS.register("garland",
+            () -> new GarlandItem(new Item.Properties()));
+
     public static final DeferredItem<Item> FLETCHER_GUIDE = ITEMS.register("fletcher_guide",
             () -> new FletcherGuideItem(new Item.Properties().stacksTo(1)));
 
