@@ -1,0 +1,50 @@
+{
+  "parent": "fletcherstrestle:marksmanship/weapon_rack",
+  "display": {
+    "icon": {
+      "id": "fletcherstrestle:modular_bow"
+    },
+    "title": {
+      "translate": "advancement.fletcherstrestle.display_weapon.title"
+    },
+    "description": {
+      "translate": "advancement.fletcherstrestle.display_weapon.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "hung_weapon": {
+      "trigger": "minecraft:item_used_on_block",
+      "conditions": {
+        "location": [
+          {
+            "condition": "minecraft:location_check",
+            "predicate": {
+              "block": {
+                "blocks": [
+                  "fletcherstrestle:weapon_rack"
+                ]
+              }
+            }
+          },
+          {
+            "condition": "minecraft:match_tool",
+            "predicate": {
+              "items": [
+                "fletcherstrestle:modular_bow",
+                "fletcherstrestle:modular_crossbow"
+              ]
+            }
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "hung_weapon"
+    ]
+  ]
+}

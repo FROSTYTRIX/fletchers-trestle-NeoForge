@@ -1,0 +1,36 @@
+{
+  "parent": "fletcherstrestle:marksmanship/first_bow",
+  "display": {
+    "icon": {
+      "id": "fletcherstrestle:weapon_rack"
+    },
+    "title": {
+      "translate": "advancement.fletcherstrestle.weapon_rack.title"
+    },
+    "description": {
+      "translate": "advancement.fletcherstrestle.weapon_rack.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "has_rack": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "fletcherstrestle:weapon_rack"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_rack"
+    ]
+  ]
+}

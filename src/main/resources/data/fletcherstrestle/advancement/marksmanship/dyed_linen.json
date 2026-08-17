@@ -1,0 +1,51 @@
+{
+  "parent": "fletcherstrestle:marksmanship/linen",
+  "display": {
+    "icon": {
+      "id": "fletcherstrestle:red_linen"
+    },
+    "title": {
+      "translate": "advancement.fletcherstrestle.dyed_linen.title"
+    },
+    "description": {
+      "translate": "advancement.fletcherstrestle.dyed_linen.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "has_dyed": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "fletcherstrestle:red_linen",
+              "fletcherstrestle:orange_linen",
+              "fletcherstrestle:yellow_linen",
+              "fletcherstrestle:lime_linen",
+              "fletcherstrestle:green_linen",
+              "fletcherstrestle:cyan_linen",
+              "fletcherstrestle:light_blue_linen",
+              "fletcherstrestle:blue_linen",
+              "fletcherstrestle:purple_linen",
+              "fletcherstrestle:magenta_linen",
+              "fletcherstrestle:pink_linen",
+              "fletcherstrestle:brown_linen",
+              "fletcherstrestle:white_linen",
+              "fletcherstrestle:light_gray_linen",
+              "fletcherstrestle:gray_linen",
+              "fletcherstrestle:black_linen"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_dyed"
+    ]
+  ]
+}

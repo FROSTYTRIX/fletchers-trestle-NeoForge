@@ -1,0 +1,36 @@
+{
+  "parent": "fletcherstrestle:marksmanship/linen",
+  "display": {
+    "icon": {
+      "id": "fletcherstrestle:garland"
+    },
+    "title": {
+      "translate": "advancement.fletcherstrestle.garland.title"
+    },
+    "description": {
+      "translate": "advancement.fletcherstrestle.garland.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "has_garland": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "fletcherstrestle:garland"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_garland"
+    ]
+  ]
+}

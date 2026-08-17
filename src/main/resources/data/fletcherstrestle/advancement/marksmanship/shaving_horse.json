@@ -1,0 +1,36 @@
+{
+  "parent": "fletcherstrestle:marksmanship/root",
+  "display": {
+    "icon": {
+      "id": "fletcherstrestle:shaving_horse"
+    },
+    "title": {
+      "translate": "advancement.fletcherstrestle.shaving_horse.title"
+    },
+    "description": {
+      "translate": "advancement.fletcherstrestle.shaving_horse.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "has_block": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "fletcherstrestle:shaving_horse"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_block"
+    ]
+  ]
+}

@@ -1,0 +1,36 @@
+{
+  "parent": "fletcherstrestle:marksmanship/steam_box",
+  "display": {
+    "icon": {
+      "id": "fletcherstrestle:dipping_vat"
+    },
+    "title": {
+      "translate": "advancement.fletcherstrestle.dipping_vat.title"
+    },
+    "description": {
+      "translate": "advancement.fletcherstrestle.dipping_vat.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "has_block": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "fletcherstrestle:dipping_vat"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_block"
+    ]
+  ]
+}

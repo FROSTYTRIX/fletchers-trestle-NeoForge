@@ -1,0 +1,37 @@
+{
+  "parent": "fletcherstrestle:marksmanship/root",
+  "display": {
+    "icon": {
+      "id": "fletcherstrestle:flax"
+    },
+    "title": {
+      "translate": "advancement.fletcherstrestle.flax.title"
+    },
+    "description": {
+      "translate": "advancement.fletcherstrestle.flax.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "has_flax": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "fletcherstrestle:flax",
+              "fletcherstrestle:flax_seeds"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_flax"
+    ]
+  ]
+}

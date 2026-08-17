@@ -1,0 +1,37 @@
+{
+  "parent": "fletcherstrestle:marksmanship/first_arrow",
+  "display": {
+    "icon": {
+      "id": "fletcherstrestle:leather_quiver"
+    },
+    "title": {
+      "translate": "advancement.fletcherstrestle.quiver.title"
+    },
+    "description": {
+      "translate": "advancement.fletcherstrestle.quiver.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "has_quiver": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "fletcherstrestle:leather_quiver",
+              "fletcherstrestle:iron_quiver"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_quiver"
+    ]
+  ]
+}
