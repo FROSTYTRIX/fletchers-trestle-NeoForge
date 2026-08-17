@@ -1,0 +1,27 @@
+{
+  "name": "Nails & Garlands",
+  "category": "fletcherstrestle:woodworking",
+  "icon": "fletcherstrestle:garland",
+  "sortnum": 7,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Every parrot you meet leaves a $(l)coloured feather$(). Weave seven of them onto a string and you get a $(l)Garland$(): bunting to hang across your workshop.$(br2)The feathers you choose decide its colours, so seven brown feathers and a mix of red and blue make very different garlands."
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "fletcherstrestle:nail",
+      "text": "First, nails. They drive into any block face, floor, wall or ceiling."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Hanging one",
+      "text": "Place two nails, then with a garland in hand:$(br)$(li)Right-click the $(l)first nail$() to tie it on$(li)Right-click the $(l)second nail$() to string it across$(br2)While it's tied, the garland trails from your hand so you can see where it will fall. Right-click the same nail again to let go.$(br2)Nails can be up to $(l)12 blocks$() apart."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Stringing them together",
+      "text": "A nail holds up to $(l)four$() garlands, so you can run one span into the next and carry bunting right along a wall, or fan several out from a single point.$(br2)The cord sags under its own weight, and hangs deeper the longer the span.$(br2)To take one down, break either nail: the garland drops back to you."
+    }
+  ]
+}

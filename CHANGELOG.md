@@ -1,8 +1,9 @@
 # Fletcher's Trestle: 2.5.0
 
-Woven. Flax gets a second life as **linen**: a dyeable textile block family, so
-the crop that strings your bows can furnish the workshop you built it in, and
-the **Weapon Rack** finally gives a well-tuned bow somewhere to be admired.
+Woven. Flax gets a second life as **linen**, a dyeable textile block family, so
+the crop that strings your bows can furnish the workshop you built it in. The
+**Weapon Rack** finally gives a well-tuned bow somewhere to be admired, and
+**garlands** put those coloured feathers to use as bunting.
 
 ---
 
@@ -30,6 +31,24 @@ the **Weapon Rack** finally gives a well-tuned bow somewhere to be admired.
   Breaking the wall behind it drops the rack and whatever it held.
 - Crafted from three planks and two sticks.
 
+## 🎀 Nails and garlands
+
+- **Nails** drive into any block face, floor, wall or ceiling. Cheap to make and
+  the anchor point for everything below.
+- **Garlands** are woven from a string and **seven feathers**. The recipe reads
+  what you put in the grid, so the feathers you choose decide the colours, and
+  they are spread **proportionally** along the finished bunting: four red and
+  three blue hangs roughly four-sevenths red, whether the span is two blocks or
+  twelve.
+- **String one up** by right-clicking a nail and then a second one, up to 12
+  blocks away. While it's tied to the first nail the garland trails from your
+  hand, the way a lead does, so you can see where it will fall.
+- The cord **sags under its own weight**, hanging deeper over longer spans, and
+  the pennants follow the curve. A nail holds up to **four** garlands, so you can
+  chain them along a wall or fan them out from one point.
+- Break either nail to take one down. It drops back to you and clears the link
+  at the far end.
+
 ## 🐛 Fixes
 
 - Modular weapons now use the same **item-frame display transform** as vanilla
@@ -38,7 +57,7 @@ the **Weapon Rack** finally gives a well-tuned bow somewhere to be admired.
 
 ## 📖 Guidebook
 
-- New **Linen** and **Weapon Rack** entries.
+- New **Linen**, **Weapon Rack** and **Nails & Garlands** entries.
 
 ---
 
