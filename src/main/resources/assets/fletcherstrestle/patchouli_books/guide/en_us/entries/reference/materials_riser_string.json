@@ -7,12 +7,12 @@
     {
       "type": "patchouli:text",
       "title": "Risers",
-      "text": "The riser is the weapon's core: durability and accuracy.$(br)$(li)$(l)Wood$(): 250 dur$(li)$(l)Copper$(): 400 dur, Conductive$(li)$(l)Iron$(): 750 dur, High Precision$(br2)$(l)Conductive$(): during a thunderstorm, a hit calls lightning. $(l)High Precision$(): cuts a bow's random spread to a fifth."
+      "text": "The riser is the weapon's core: durability and accuracy.$(br)$(li)$(l)Wood$(): 250 dur$(li)$(l)Copper$(): 400 dur, Conductive$(li)$(l)Iron$(): 750 dur, High Precision$(br2)$(l)Copper$() and $(l)Iron$() are the metal risers, the only ones stiff enough to carry a high-tension string.$(br2)$(l)Conductive$(): during a thunderstorm, a hit calls lightning. $(l)High Precision$(): cuts a bow's random spread to a fifth."
     },
     {
       "type": "patchouli:text",
       "title": "Strings",
-      "text": "The string sets arrow velocity.$(br)$(li)$(l)Spider$(): 1.0x$(li)$(l)Flax$(): 0.85x, Shaky$(li)$(l)High Tension$(): 1.4x (costs 2 durability per shot)$(br2)$(l)Flax$() is farmable and renewable, so it trades power for convenience. $(l)Shaky$(): holding a full draw too long jitters your aim."
+      "text": "The string sets arrow velocity.$(br)$(li)$(l)Spider$(): 1.0x$(li)$(l)Flax$(): 0.85x, Shaky$(li)$(l)High Tension$(): 1.4x, costs 2 durability per shot, and needs a $(l)metal riser$()$(br2)$(l)Flax$() is farmable and renewable, so it trades power for convenience. $(l)Shaky$(): holding a full draw too long jitters your aim."
     }
   ]
 }
