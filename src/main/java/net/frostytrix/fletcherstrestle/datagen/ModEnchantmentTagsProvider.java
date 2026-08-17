@@ -21,6 +21,9 @@ public class ModEnchantmentTagsProvider extends EnchantmentTagsProvider {
         this.tag(EnchantmentTags.IN_ENCHANTING_TABLE)
                 .add(ModEnchantments.PHOTOSYNTHESIS)
                 .add(ModEnchantments.BIOLUMINESCENCE)
-                .add(ModEnchantments.GALE_FORCE);
+                .add(ModEnchantments.GALE_FORCE)
+                .add(ModEnchantments.TINKERS_MARK)
+                .add(ModEnchantments.QUICK_NOCK)
+                .add(ModEnchantments.FOLLOW_THROUGH);
     }
 }

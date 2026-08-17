@@ -51,6 +51,15 @@ public class ModDataComponents {
                             .build()
             );
 
+    /** A bow's tuning before Tinker's Mark was applied, so removal can undo it. */
+    public static final Supplier<DataComponentType<Float>> TUNING_BEFORE_MARK =
+            DATA_COMPONENT_TYPES.register("tuning_before_mark", () ->
+                    DataComponentType.<Float>builder()
+                            .persistent(Codec.FLOAT)
+                            .networkSynchronized(ByteBufCodecs.FLOAT)
+                            .build()
+            );
+
     public static final Supplier<DataComponentType<Integer>> QUIVER_SELECTED_SLOT =
             DATA_COMPONENT_TYPES.register("quiver_selected_slot",
                     () -> DataComponentType.<Integer>builder()

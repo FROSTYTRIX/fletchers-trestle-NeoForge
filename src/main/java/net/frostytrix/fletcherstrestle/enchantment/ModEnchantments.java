@@ -27,6 +27,24 @@ public class ModEnchantments {
             ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "gale_force")
     );
 
+    /** Adds a little tuning to a bow, baked in when applied and undone when removed. */
+    public static final ResourceKey<Enchantment> TINKERS_MARK = ResourceKey.create(
+            Registries.ENCHANTMENT,
+            ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "tinkers_mark")
+    );
+
+    /** Advances the quiver to the next arrow type after every shot. */
+    public static final ResourceKey<Enchantment> QUICK_NOCK = ResourceKey.create(
+            Registries.ENCHANTMENT,
+            ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "quick_nock")
+    );
+
+    /** Consecutive hits build damage; a shot that misses resets it. */
+    public static final ResourceKey<Enchantment> FOLLOW_THROUGH = ResourceKey.create(
+            Registries.ENCHANTMENT,
+            ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "follow_through")
+    );
+
     public static void bootstrap(BootstrapContext<Enchantment> context) {
         HolderGetter<Item> items = context.lookup(Registries.ITEM);
 
@@ -68,5 +86,44 @@ public class ModEnchantments {
                         EquipmentSlotGroup.OFFHAND
                 )
         ).build(GALE_FORCE.location()));
+
+        context.register(TINKERS_MARK, Enchantment.enchantment(
+                Enchantment.definition(
+                        items.getOrThrow(ItemTags.BOW_ENCHANTABLE),
+                        1, // weight: rare, it touches the mod's signature stat
+                        5, // max_level
+                        Enchantment.dynamicCost(20, 9),
+                        Enchantment.dynamicCost(70, 9),
+                        6, // anvil_cost
+                        EquipmentSlotGroup.MAINHAND,
+                        EquipmentSlotGroup.OFFHAND
+                )
+        ).build(TINKERS_MARK.location()));
+
+        context.register(QUICK_NOCK, Enchantment.enchantment(
+                Enchantment.definition(
+                        items.getOrThrow(ItemTags.BOW_ENCHANTABLE),
+                        3, // weight
+                        1, // max_level
+                        Enchantment.dynamicCost(12, 6),
+                        Enchantment.dynamicCost(45, 6),
+                        2, // anvil_cost
+                        EquipmentSlotGroup.MAINHAND,
+                        EquipmentSlotGroup.OFFHAND
+                )
+        ).build(QUICK_NOCK.location()));
+
+        context.register(FOLLOW_THROUGH, Enchantment.enchantment(
+                Enchantment.definition(
+                        items.getOrThrow(ItemTags.BOW_ENCHANTABLE),
+                        2, // weight
+                        3, // max_level
+                        Enchantment.dynamicCost(15, 9),
+                        Enchantment.dynamicCost(65, 9),
+                        4, // anvil_cost
+                        EquipmentSlotGroup.MAINHAND,
+                        EquipmentSlotGroup.OFFHAND
+                )
+        ).build(FOLLOW_THROUGH.location()));
     }
 }

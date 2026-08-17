@@ -340,5 +340,8 @@
   "advancement.fletcherstrestle.display_weapon.title": "Trophy Wall",
   "advancement.fletcherstrestle.display_weapon.description": "Hang a bow or crossbow on a Weapon Rack",
   "advancement.fletcherstrestle.garland.title": "Party Trick",
-  "advancement.fletcherstrestle.garland.description": "Weave a Garland from feathers"
+  "advancement.fletcherstrestle.garland.description": "Weave a Garland from feathers",
+  "enchantment.fletcherstrestle.tinkers_mark": "Tinker's Mark",
+  "enchantment.fletcherstrestle.quick_nock": "Quick Nock",
+  "enchantment.fletcherstrestle.follow_through": "Follow Through"
 }

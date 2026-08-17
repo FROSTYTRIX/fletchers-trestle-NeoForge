@@ -173,12 +173,18 @@ public class ModularBowItem extends BowItem {
                 int selected = invStack.getOrDefault(ModDataComponents.QUIVER_SELECTED_SLOT.get(), 0);
                 List<ItemStack> list = ModularQuiverItem.getQuiverContents(invStack);
 
-                // If the selected slot has an arrow, pull it out!
-                if (selected >= 0 && selected < list.size() && !list.get(selected).isEmpty() && list.get(selected).getItem() instanceof net.minecraft.world.item.ArrowItem) {
+                // Take from the selected slot, or the next one that still has
+                // arrows. Without this fallback a quiver goes dead the moment
+                // the selected slot empties, even with arrows in other slots.
+                int usable = firstUsableSlot(list, selected);
+                if (usable >= 0) {
+                    if (usable != selected) {
+                        invStack.set(ModDataComponents.QUIVER_SELECTED_SLOT.get(), usable);
+                    }
                     quiverInvSlot = i;
                     quiverStack = invStack;
-                    quiverSelectedIdx = selected;
-                    extractedArrow = list.get(selected).copy();
+                    quiverSelectedIdx = usable;
+                    extractedArrow = list.get(usable).copy();
                     break;
                 }
             }
@@ -210,6 +216,15 @@ public class ModularBowItem extends BowItem {
             list.set(quiverSelectedIdx, modifiedArrow.isEmpty() ? ItemStack.EMPTY : modifiedArrow);
             ModularQuiverItem.saveQuiverContents(quiverStack, list);
 
+            // Quick Nock: move to the next loaded arrow type after every shot,
+            // so an enchanted bow cycles through the quiver as you fire.
+            if (hasEnchant(level, stack, net.frostytrix.fletcherstrestle.enchantment.ModEnchantments.QUICK_NOCK)) {
+                int next = firstUsableSlot(list, quiverSelectedIdx + 1);
+                if (next >= 0) {
+                    quiverStack.set(ModDataComponents.QUIVER_SELECTED_SLOT.get(), next);
+                }
+            }
+
             // SWAP: Put the Quiver back into the player's inventory
             player.getInventory().setItem(quiverInvSlot, quiverStack);
         }
@@ -232,6 +247,42 @@ public class ModularBowItem extends BowItem {
                 stack.hurtAndBreak(durCost - 1, player, LivingEntity.getSlotForHand(player.getUsedItemHand()));
             }
         }
+    }
+
+    /**
+     * The first slot at or after {@code from} (wrapping) that holds arrows, or
+     * -1 when the quiver is empty.
+     */
+    private static int firstUsableSlot(List<ItemStack> contents, int from) {
+        if (contents.isEmpty()) {
+            return -1;
+        }
+        int size = contents.size();
+        int start = Math.floorMod(from, size);
+        for (int step = 0; step < size; step++) {
+            int idx = (start + step) % size;
+            ItemStack candidate = contents.get(idx);
+            if (!candidate.isEmpty() && candidate.getItem() instanceof net.minecraft.world.item.ArrowItem) {
+                return idx;
+            }
+        }
+        return -1;
+    }
+
+    /** True when the stack carries the given enchantment. */
+    private static boolean hasEnchant(Level level, ItemStack stack,
+                                      net.minecraft.resources.ResourceKey<net.minecraft.world.item.enchantment.Enchantment> key) {
+        return enchantLevel(level, stack, key) > 0;
+    }
+
+    /** Level of the given enchantment on the stack, or 0. */
+    public static int enchantLevel(Level level, ItemStack stack,
+                                   net.minecraft.resources.ResourceKey<net.minecraft.world.item.enchantment.Enchantment> key) {
+        var registry = level.registryAccess()
+                .registryOrThrow(net.minecraft.core.registries.Registries.ENCHANTMENT);
+        return registry.getHolder(key)
+                .map(stack::getEnchantmentLevel)
+                .orElse(0);
     }
 
     public float getDrawTime(ItemStack stack) {
@@ -284,6 +335,17 @@ public class ModularBowItem extends BowItem {
                     player.setXRot(player.getXRot() + (level.random.nextFloat() - 0.5F) * 3.0F);
                 }
             }
+        }
+    }
+
+    @Override
+    public void inventoryTick(ItemStack stack, Level level, net.minecraft.world.entity.Entity entity,
+                              int slotId, boolean isSelected) {
+        super.inventoryTick(stack, level, entity, slotId, isSelected);
+        if (!level.isClientSide) {
+            // Keeps the baked Tinker's Mark bonus in step with the enchantment,
+            // including when it is removed at a grindstone.
+            net.frostytrix.fletcherstrestle.enchantment.TinkersMark.reconcile(level, stack);
         }
     }
 

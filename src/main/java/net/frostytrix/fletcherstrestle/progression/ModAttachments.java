@@ -30,6 +30,15 @@ public final class ModAttachments {
                             .copyOnDeath()
                             .build());
 
+    /**
+     * Follow Through's consecutive-hit streak. Lives on the shooter, so a shot
+     * that misses anything breaks the run. Not saved: a streak should not
+     * survive logging out.
+     */
+    public static final Supplier<AttachmentType<Integer>> FOLLOW_THROUGH_STREAK =
+            ATTACHMENT_TYPES.register("follow_through_streak", () ->
+                    AttachmentType.builder(() -> 0).build());
+
     public static final Supplier<AttachmentType<ArcherySkills>> ARCHERY_SKILLS =
             ATTACHMENT_TYPES.register("archery_skills", () ->
                     AttachmentType.builder(() -> ArcherySkills.EMPTY)

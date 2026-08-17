@@ -340,5 +340,8 @@
   "advancement.fletcherstrestle.display_weapon.title": "Mur de trophées",
   "advancement.fletcherstrestle.display_weapon.description": "Accrochez un arc ou une arbalète sur un râtelier",
   "advancement.fletcherstrestle.garland.title": "Air de fête",
-  "advancement.fletcherstrestle.garland.description": "Tissez une guirlande à partir de plumes"
+  "advancement.fletcherstrestle.garland.description": "Tissez une guirlande à partir de plumes",
+  "enchantment.fletcherstrestle.tinkers_mark": "Marque de l'artisan",
+  "enchantment.fletcherstrestle.quick_nock": "Encochage rapide",
+  "enchantment.fletcherstrestle.follow_through": "Enchaînement"
 }

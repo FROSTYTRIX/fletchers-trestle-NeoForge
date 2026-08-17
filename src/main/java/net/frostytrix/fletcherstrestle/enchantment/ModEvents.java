@@ -72,6 +72,44 @@ public class ModEvents {
         return false;
     }
 
+    /** Damage added per streak step, per level of Follow Through. */
+    private static final float FOLLOW_THROUGH_STEP = 0.02f;
+    /** Longest streak that still counts, so it tops out at a sane bonus. */
+    private static final int FOLLOW_THROUGH_CAP = 5;
+
+    /**
+     * Follow Through: consecutive hits build damage, and a shot that lands on
+     * anything other than a target resets the run. The streak lives on the
+     * shooter rather than the victim, so it rewards a clean sequence of shots.
+     */
+    @SubscribeEvent
+    public static void onFollowThrough(ProjectileImpactEvent event) {
+        if (event.getProjectile().level().isClientSide()) return;
+        if (!(event.getProjectile() instanceof AbstractArrow arrow)) return;
+        if (!(arrow.getOwner() instanceof Player shooter)) return;
+
+        ItemStack bow = arrow.getWeaponItem();
+        if (bow == null || bow.isEmpty()) return;
+        Registry<Enchantment> registry = arrow.level().registryAccess().registryOrThrow(Registries.ENCHANTMENT);
+        int rank = registry.getHolder(ModEnchantments.FOLLOW_THROUGH)
+                .map(bow::getEnchantmentLevel).orElse(0);
+        if (rank <= 0) return;
+
+        var attachment = net.frostytrix.fletcherstrestle.progression.ModAttachments.FOLLOW_THROUGH_STREAK.get();
+
+        if (event.getRayTraceResult().getType() != HitResult.Type.ENTITY) {
+            // Missed: the run is over.
+            shooter.setData(attachment, 0);
+            return;
+        }
+
+        int streak = Math.min(FOLLOW_THROUGH_CAP, shooter.getData(attachment));
+        if (streak > 0) {
+            arrow.setBaseDamage(arrow.getBaseDamage() * (1.0 + FOLLOW_THROUGH_STEP * rank * streak));
+        }
+        shooter.setData(attachment, Math.min(FOLLOW_THROUGH_CAP, streak + 1));
+    }
+
     @SubscribeEvent
     public static void onArrowImpact(ProjectileImpactEvent event) {
         if (event.getProjectile().level().isClientSide()) return;
