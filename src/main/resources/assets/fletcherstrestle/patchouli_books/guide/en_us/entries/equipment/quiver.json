@@ -17,6 +17,11 @@
       "type": "patchouli:crafting",
       "recipe": "fletcherstrestle:iron_quiver",
       "text": "The Iron Quiver holds 5."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Running Dry",
+      "text": "When the selected slot runs out, the quiver moves on to the next slot that still has arrows, so it keeps feeding your bow until it is properly empty.$(br2)The $(l)Quick Nock$() enchantment goes further and advances after $(o)every$() shot, cycling through your arrow types as you fire."
     }
   ]
 }

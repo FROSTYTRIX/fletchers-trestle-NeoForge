@@ -7,11 +7,26 @@
     {
       "type": "patchouli:text",
       "title": "Enchantments",
-      "text": "Three archery enchantments ship with the mod:$(br2)$(l)Bioluminescence$(): consumes a torch to make the arrow carry light, lighting where it lands."
+      "text": "Six archery enchantments ship with the mod.$(br2)$(l)Bioluminescence$(): consumes a torch to make the arrow carry light, lighting where it lands.$(br2)$(l)Gale Force$(): adds a burst of wind to your shots."
     },
     {
       "type": "patchouli:text",
-      "text": "$(l)Gale Force$(): adds a burst of wind to your shots.$(br2)$(l)Photosynthesis$(): a modular bow slowly repairs itself in daylight under open sky. Requires a wooden riser and non-Nether limbs."
+      "text": "$(l)Photosynthesis$(): a modular bow slowly repairs itself in daylight under open sky. Requires a wooden riser and non-Nether limbs."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Tinker's Mark",
+      "text": "Adds $(l)2% tuning per level$(), up to 10% at level five, never past 100%.$(br2)The bonus is worked into the bow itself, so it shows in the tooltip and makes the draw genuinely faster. Grind the enchantment off and the bow returns to the tuning you earned at the table."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Quick Nock",
+      "text": "The quiver advances to the $(l)next loaded arrow type after every shot$(), so you cycle through your quiver as you fire instead of picking one type and staying there."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Follow Through",
+      "text": "Consecutive hits build damage: $(l)2% per hit per level$(), up to five hits, so a full run with the top level lands about 30% harder.$(br2)Any arrow that hits something other than a target ends the run. It rewards not missing."
     }
   ]
 }
