@@ -55,7 +55,6 @@ public final class TinkersMark {
     }
 
     private static BowAssembly withTuning(BowAssembly assembly, float tuning) {
-        return new BowAssembly(assembly.limbMaterial(), assembly.riserMaterial(),
-                assembly.stringMaterial(), tuning);
+        return assembly.withTuning(tuning);
     }
 }

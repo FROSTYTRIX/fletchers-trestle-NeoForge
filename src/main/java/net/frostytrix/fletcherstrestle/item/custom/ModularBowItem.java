@@ -59,7 +59,7 @@ public class ModularBowItem extends BowItem {
             BowAssembly assembly = weapon.get(ModDataComponents.BOW_ASSEMBLY.get());
 
             if (assembly != null && projectile instanceof AbstractArrow arrow) {
-                BowLimbDef limb = Materials.bowLimb(assembly.limbMaterial());
+                BowLimbDef limb = net.frostytrix.fletcherstrestle.material.CompositeLimb.effective(assembly);
                 BowRiserDef riser = Materials.bowRiser(assembly.riserMaterial());
                 BowStringDef string = Materials.bowString(assembly.stringMaterial());
 
@@ -143,8 +143,14 @@ public class ModularBowItem extends BowItem {
         }
 
         tooltipComponents.add(Component.translatable("gui.fletcherstrestle.assembly_parts").withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD));
+        // A composite names both woods, so the tooltip never hides half of what
+        // the bow is actually made from.
         tooltipComponents.add(Component.literal("- ").append(Component.translatable("gui.fletcherstrestle.limbs")).append(": ")
-                .append(Materials.bowLimbName(assembly.limbMaterial())).withStyle(ChatFormatting.GRAY));
+                .append(Materials.bowLimbNames(assembly)).withStyle(ChatFormatting.GRAY));
+        if (assembly.isComposite()) {
+            tooltipComponents.add(Component.translatable("gui.fletcherstrestle.composite")
+                    .withStyle(ChatFormatting.AQUA));
+        }
         tooltipComponents.add(Component.literal("- ").append(Component.translatable("gui.fletcherstrestle.riser")).append(": ")
                 .append(Materials.bowRiserName(assembly.riserMaterial())).withStyle(ChatFormatting.GRAY));
         tooltipComponents.add(Component.literal("- ").append(Component.translatable("gui.fletcherstrestle.string")).append(": ")
@@ -231,7 +237,7 @@ public class ModularBowItem extends BowItem {
 
         // --- 4. SHOOTER-SIDE RELEASE EFFECTS ---
         if (assembly != null) {
-            BowLimbDef limb = Materials.bowLimb(assembly.limbMaterial());
+            BowLimbDef limb = net.frostytrix.fletcherstrestle.material.CompositeLimb.effective(assembly);
             BowRiserDef riser = Materials.bowRiser(assembly.riserMaterial());
             BowStringDef string = Materials.bowString(assembly.stringMaterial());
 
@@ -289,7 +295,7 @@ public class ModularBowItem extends BowItem {
         BowAssembly assembly = stack.get(ModDataComponents.BOW_ASSEMBLY.get());
 
         if (assembly != null) {
-            float baseTime = Materials.bowLimb(assembly.limbMaterial()).stats().drawTimeTicks();
+            float baseTime = net.frostytrix.fletcherstrestle.material.CompositeLimb.stats(assembly).drawTimeTicks();
 
             float tuning = Math.max(0.2f, assembly.tuning());
 
@@ -316,7 +322,7 @@ public class ModularBowItem extends BowItem {
         if (livingEntity instanceof Player player) {
             BowAssembly assembly = stack.get(ModDataComponents.BOW_ASSEMBLY.get());
             if (assembly != null) {
-                BowLimbDef limb = Materials.bowLimb(assembly.limbMaterial());
+                BowLimbDef limb = net.frostytrix.fletcherstrestle.material.CompositeLimb.effective(assembly);
                 String stringId = Materials.normaliseId(assembly.stringMaterial());
 
                 if (limb.stats().givesSlowFalling() && !player.onGround()) {

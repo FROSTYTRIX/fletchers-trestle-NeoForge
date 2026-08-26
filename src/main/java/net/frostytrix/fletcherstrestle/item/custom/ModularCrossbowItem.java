@@ -59,8 +59,14 @@ public class ModularCrossbowItem extends CrossbowItem {
         }
 
         tooltipComponents.add(Component.translatable("gui.fletcherstrestle.assembly_parts").withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD));
+        // A composite names both woods, exactly as the bow does: a crossbow
+        // built from a composite bow keeps both.
         tooltipComponents.add(Component.literal("- ").append(Component.translatable("gui.fletcherstrestle.limbs")).append(": ")
-                .append(Materials.bowLimbName(assembly.limbMaterial())).withStyle(ChatFormatting.GRAY));
+                .append(Materials.bowLimbNames(assembly)).withStyle(ChatFormatting.GRAY));
+        if (assembly.isComposite()) {
+            tooltipComponents.add(Component.translatable("gui.fletcherstrestle.composite")
+                    .withStyle(ChatFormatting.AQUA));
+        }
         tooltipComponents.add(Component.literal("- ").append(Component.translatable("gui.fletcherstrestle.riser")).append(": ")
                 .append(Materials.bowRiserName(assembly.riserMaterial())).withStyle(ChatFormatting.GRAY));
         tooltipComponents.add(Component.literal("- ").append(Component.translatable("gui.fletcherstrestle.string")).append(": ")
@@ -106,7 +112,7 @@ public class ModularCrossbowItem extends CrossbowItem {
     public float getDrawTime(ItemStack stack) {
         BowAssembly assembly = stack.get(ModDataComponents.BOW_ASSEMBLY.get());
         if (assembly != null) {
-            float baseTime = Materials.bowLimb(assembly.limbMaterial()).stats().drawTimeTicks();
+            float baseTime = net.frostytrix.fletcherstrestle.material.CompositeLimb.stats(assembly).drawTimeTicks();
             float tuning = Math.max(0.2f, assembly.tuning());
             return baseTime / tuning;
         }
@@ -309,7 +315,7 @@ public class ModularCrossbowItem extends CrossbowItem {
         BowAssembly assembly = weapon.get(ModDataComponents.BOW_ASSEMBLY.get());
 
         if (assembly != null && projectile instanceof AbstractArrow arrow) {
-            BowLimbDef limb = Materials.bowLimb(assembly.limbMaterial());
+            BowLimbDef limb = net.frostytrix.fletcherstrestle.material.CompositeLimb.effective(assembly);
             BowRiserDef riser = Materials.bowRiser(assembly.riserMaterial());
             BowStringDef string = Materials.bowString(assembly.stringMaterial());
 
@@ -344,7 +350,7 @@ public class ModularCrossbowItem extends CrossbowItem {
 
 
         if (assembly != null) {
-            BowLimbDef limb = Materials.bowLimb(assembly.limbMaterial());
+            BowLimbDef limb = net.frostytrix.fletcherstrestle.material.CompositeLimb.effective(assembly);
             BowRiserDef riser = Materials.bowRiser(assembly.riserMaterial());
             BowStringDef string = Materials.bowString(assembly.stringMaterial());
 
@@ -422,7 +428,7 @@ public class ModularCrossbowItem extends CrossbowItem {
         if (livingEntity instanceof Player player) {
             BowAssembly assembly = stack.get(ModDataComponents.BOW_ASSEMBLY.get());
             if (assembly != null) {
-                BowLimbDef limb = Materials.bowLimb(assembly.limbMaterial());
+                BowLimbDef limb = net.frostytrix.fletcherstrestle.material.CompositeLimb.effective(assembly);
 
                 // Slow-falling-while-aiming is stats-driven (cherry limb sets it).
                 if (limb.stats().givesSlowFalling() && !player.onGround()) {

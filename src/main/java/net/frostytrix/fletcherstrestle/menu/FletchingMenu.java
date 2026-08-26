@@ -183,9 +183,9 @@ public class FletchingMenu extends AbstractContainerMenu {
                 if (this.customTuning != -1.0f) {
                     var base = output.get(ModDataComponents.BOW_ASSEMBLY.get());
                     if (base != null) {
-                        output.set(ModDataComponents.BOW_ASSEMBLY.get(), new BowAssembly(
-                                base.limbMaterial(), base.riserMaterial(), base.stringMaterial(), this.customTuning
-                        ));
+                        // withTuning keeps every other part, including a
+                        // composite's second wood.
+                        output.set(ModDataComponents.BOW_ASSEMBLY.get(), base.withTuning(this.customTuning));
                     }
                 }
                 this.resultSlots.setItem(0, output);

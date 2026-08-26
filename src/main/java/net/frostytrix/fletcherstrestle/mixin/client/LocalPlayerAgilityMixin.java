@@ -40,7 +40,7 @@ public abstract class LocalPlayerAgilityMixin {
         if (use.getItem() instanceof ModularBowItem) {
             BowAssembly assembly = use.get(ModDataComponents.BOW_ASSEMBLY.get());
             if (assembly != null
-                    && Materials.bowLimb(assembly.limbMaterial()).stats().agility()) {
+                    && net.frostytrix.fletcherstrestle.material.CompositeLimb.stats(assembly).agility()) {
                 return 1.0F;
             }
         }

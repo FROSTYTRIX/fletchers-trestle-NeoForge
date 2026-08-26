@@ -2,7 +2,7 @@
   "name": "Modular Crossbows",
   "category": "fletcherstrestle:equipment",
   "icon": "fletcherstrestle:modular_crossbow",
-  "sortnum": 2,
+  "sortnum": 3,
   "pages": [
     {
       "type": "patchouli:text",
@@ -17,6 +17,11 @@
       "type": "patchouli:text",
       "title": "Attachments",
       "text": "$(li)$(l)Scope$(): zoom and steadier aim$(li)$(l)Magazine$(): holds several bolts for burst fire, at the cost of a slower reload$(li)$(l)Bayonet$(): a blade for when they get close$(br2)Attachments swap freely at the bench."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Tuning & Woods",
+      "text": "A crossbow keeps the $(l)Tuning %$() of the bow it was made from, and here it buys a $(l)faster reload$() rather than a faster draw. Build the bow well and the crossbow inherits it.$(br2)It keeps the bow's woods too, so a $(l:equipment/composite_bows)Composite Bow$() becomes a composite crossbow."
     }
   ]
 }

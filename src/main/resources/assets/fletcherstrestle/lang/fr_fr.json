@@ -343,5 +343,6 @@
   "advancement.fletcherstrestle.garland.description": "Tissez une guirlande à partir de plumes",
   "enchantment.fletcherstrestle.tinkers_mark": "Marque de l'artisan",
   "enchantment.fletcherstrestle.quick_nock": "Encochage rapide",
-  "enchantment.fletcherstrestle.follow_through": "Enchaînement"
+  "enchantment.fletcherstrestle.follow_through": "Enchaînement",
+  "gui.fletcherstrestle.composite": "Composite : mélange les deux bois"
 }

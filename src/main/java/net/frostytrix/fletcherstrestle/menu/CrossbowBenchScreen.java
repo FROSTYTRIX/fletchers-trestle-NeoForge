@@ -54,7 +54,7 @@ public class CrossbowBenchScreen extends AbstractContainerScreen<CrossbowBenchMe
         // item tooltip, so crafted bows show "High-Tension" not a raw id).
         var assembly = input.get(ModDataComponents.BOW_ASSEMBLY.get());
         if (assembly != null) {
-            line(g, label("limb") + ": " + Materials.bowLimbName(assembly.limbMaterial()).getString(), 8, 18, s, color);
+            line(g, label("limb") + ": " + Materials.bowLimbNames(assembly).getString(), 8, 18, s, color);
             line(g, label("riser") + ": " + Materials.bowRiserName(assembly.riserMaterial()).getString(), 8, 27, s, color);
             line(g, label("string") + ": " + Materials.bowStringName(assembly.stringMaterial()).getString(), 8, 36, s, color);
         }

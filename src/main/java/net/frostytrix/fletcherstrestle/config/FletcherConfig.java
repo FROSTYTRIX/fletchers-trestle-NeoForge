@@ -16,6 +16,13 @@ public class FletcherConfig {
      */
     public static final ModConfigSpec.BooleanValue EAGLES_NATURAL_SPAWNING;
 
+    /**
+     * Whether two different woods can be laminated into one composite bow.
+     * Off by default: a composite blends both woods' stats, which is strong
+     * enough that a server should opt into it deliberately.
+     */
+    public static final ModConfigSpec.BooleanValue COMPOSITE_BOWS;
+
     // --- MARKSMANSHIP (Phase 2): per-player archery XP / leveling ---
     public static final ModConfigSpec.BooleanValue ARCHERY_SKILL_ENABLED;
     public static final ModConfigSpec.IntValue ARCHERY_XP_PER_HIT;
@@ -65,6 +72,15 @@ public class FletcherConfig {
                         "Enabled by default. The spawn-egg item still works regardless.",
                         "Set to false to disable natural spawning; no other changes needed.")
                 .define("natural_spawning", true);
+        serverBuilder.pop();
+
+        serverBuilder.push("crafting");
+        COMPOSITE_BOWS = serverBuilder
+                .comment(
+                        "Whether a bow can be built from two different woods, creating a composite that",
+                        "blends both limbs' stats. Powerful, so it is off by default.",
+                        "While off, two different limbs simply will not assemble.")
+                .define("composite_bows", false);
         serverBuilder.pop();
 
         SERVER_SPEC = serverBuilder.build();

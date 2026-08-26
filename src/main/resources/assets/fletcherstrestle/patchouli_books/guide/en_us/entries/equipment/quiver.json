@@ -2,7 +2,7 @@
   "name": "The Quiver",
   "category": "fletcherstrestle:equipment",
   "icon": "fletcherstrestle:leather_quiver",
-  "sortnum": 3,
+  "sortnum": 4,
   "pages": [
     {
       "type": "patchouli:text",

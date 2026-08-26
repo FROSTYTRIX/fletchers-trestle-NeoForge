@@ -14,7 +14,7 @@
     },
     {
       "type": "patchouli:text",
-      "text": "Different woods play very differently: birch draws lightning-fast for little damage, dark oak hits like a truck but draws slowly, and jungle lets you $(l)walk at full speed while drawing$(). See $(l)Materials & Stats$() for the full table."
+      "text": "Different woods play very differently: birch draws lightning-fast for little damage, dark oak hits like a truck but draws slowly, and jungle lets you $(l)walk at full speed while drawing$(). See $(l)Materials & Stats$() for the full table.$(br2)Two woods at once? See $(l:equipment/composite_bows)Composite Bows$()."
     }
   ]
 }

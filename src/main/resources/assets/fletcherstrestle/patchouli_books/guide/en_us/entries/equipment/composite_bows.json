@@ -1,0 +1,27 @@
+{
+  "name": "Composite Bows",
+  "category": "fletcherstrestle:equipment",
+  "icon": "fletcherstrestle:modular_bow",
+  "sortnum": 1,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Normally a bow's two limbs must be the same wood. Lay $(l)two different woods$() in the Fletching Table instead and you laminate a $(l)Composite Bow$(): one limb of each, and the stats of both.$(br2)Its tooltip names both woods."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "How It Blends",
+      "text": "$(li)$(l)Draw time$(): the average of the two$(li)$(l)Damage$(): the average of the two$(li)$(l)Traits$(): you keep $(o)every$() trait either wood has$(li)$(l)Effects$(): both woods' effects apply$(br2)So the numbers meet in the middle, but the perks stack."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Worth Knowing",
+      "text": "That makes pairings the interesting part. $(l)Dark Oak$() and $(l)Birch$() land between a slow hammer and a fast flicker. $(l)Crimson$() and $(l)Warped$() gives you Ignited $(o)and$() No Gravity on one bow.$(br2)A composite crossbow works the same way, built from a composite bow at the bench."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Turning It On",
+      "text": "Composites are $(o)off$() by default. Stacking traits is strong, so a server opts in deliberately.$(br2)Set $(l)composite_bows$() to true under $(l)crafting$() in the server config. While it is off, mismatched limbs simply will not assemble."
+    }
+  ]
+}

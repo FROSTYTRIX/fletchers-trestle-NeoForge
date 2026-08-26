@@ -2,7 +2,7 @@
   "name": "Modular Arrows",
   "category": "fletcherstrestle:equipment",
   "icon": "fletcherstrestle:modular_arrow",
-  "sortnum": 1,
+  "sortnum": 2,
   "pages": [
     {
       "type": "patchouli:text",

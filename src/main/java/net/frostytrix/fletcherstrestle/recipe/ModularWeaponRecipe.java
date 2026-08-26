@@ -39,7 +39,26 @@ public class ModularWeaponRecipe implements Recipe<FletchingRecipeInput> {
                 this.limbs.test(input.bottomLimb()) &&
                 this.string.test(input.string());
 
-        return partsMatch && riserSupportsString(level, input);
+        return partsMatch && riserSupportsString(level, input) && limbsGoTogether(level, input);
+    }
+
+    /**
+     * Two different woods only assemble when composite bows are switched on.
+     * Previously any two limbs matched and only the top one was read, so the
+     * bottom limb was silently consumed and its wood thrown away.
+     */
+    private static boolean limbsGoTogether(Level level, FletchingRecipeInput input) {
+        String top = limbId(level.registryAccess(), input.topLimb());
+        String bottom = limbId(level.registryAccess(), input.bottomLimb());
+        return top.equals(bottom)
+                || net.frostytrix.fletcherstrestle.config.FletcherConfig.COMPOSITE_BOWS.get();
+    }
+
+    /** Canonical material id for a limb stack, falling back to oak. */
+    private static String limbId(HolderLookup.Provider provider, ItemStack limb) {
+        return MaterialResolver.resolveBowLimb(provider, limb)
+                .map(h -> h.key().location().toString())
+                .orElse("oak");
     }
 
     /**
@@ -67,9 +86,8 @@ public class ModularWeaponRecipe implements Recipe<FletchingRecipeInput> {
         // namespaced id (e.g. "fletcherstrestle:dark_oak", "mypack:steel").
         // Pre-2.0.0 worlds with bare-path or display-form strings still
         // resolve via MaterialResolver's fallback tiers.
-        String limbMat = MaterialResolver.resolveBowLimb(provider, input.topLimb())
-                .map(h -> h.key().location().toString())
-                .orElse("oak");
+        String limbMat = limbId(provider, input.topLimb());
+        String bottomMat = limbId(provider, input.bottomLimb());
         String riserMat = MaterialResolver.resolveBowRiser(provider, input.riser())
                 .map(h -> h.key().location().toString())
                 .orElse("wood");
@@ -80,7 +98,11 @@ public class ModularWeaponRecipe implements Recipe<FletchingRecipeInput> {
         float defaultTuning = 0.0f;
 
         // FIXED ORDER: limbMat first, then riserMat!
-        BowAssembly assembly = new BowAssembly(limbMat, riserMat, stringMat, defaultTuning);
+        // Two different woods make a composite, and both are recorded so the
+        // bottom limb is no longer silently thrown away.
+        BowAssembly assembly = limbMat.equals(bottomMat)
+                ? new BowAssembly(limbMat, riserMat, stringMat, defaultTuning)
+                : new BowAssembly(limbMat, java.util.Optional.of(bottomMat), riserMat, stringMat, defaultTuning);
         output.set(ModDataComponents.BOW_ASSEMBLY.get(), assembly);
 
         return output;

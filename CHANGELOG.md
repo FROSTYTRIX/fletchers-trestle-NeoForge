@@ -1,3 +1,67 @@
+# Fletcher's Trestle: 2.6.0
+
+Laminated. Two woods can now be built into a single **composite bow** that keeps
+the powers of both. Three new **enchantments**, and the woodworking side of the
+mod finally gets **advancements** of its own.
+
+---
+
+## 🪵 Composite bows
+
+- **Build a bow from two different woods** to get a composite: crimson over
+  warped, dark oak over birch, any pairing you like.
+- **The stats are averaged, the powers are kept.** Draw time and damage are the
+  average of the two woods, but the bow keeps every trait either wood has, and
+  both woods' effects apply. A crimson and warped bow ignites its arrows and
+  fires them without gravity.
+- **Off by default.** Turn composites on with `composite_bows` under `[crafting]`
+  in the server config. While it is off, two different limbs will not assemble.
+- **Each limb shows its own wood**, so you can spot a composite without opening
+  the tooltip. Composite crossbows too.
+- **The Crossbow Bench keeps both woods**, so a composite bow makes a composite
+  crossbow.
+
+## ✨ Enchantments
+
+- **Tinker's Mark** (max V): adds 2% tuning per level, up to 100%. Removing the
+  enchantment puts the bow back to the tuning you earned at the table.
+- **Quick Nock**: moves the quiver to the next loaded arrow type after every shot.
+- **Follow Through** (max III): adds 2% damage per level for each consecutive hit,
+  up to five. Missing resets the streak.
+
+## 🏆 Advancements
+
+- **Eleven new advancements** for the workshop and the decorative blocks, which
+  had none: the Shaving Horse, Steam Box and Dipping Vat, growing flax and
+  spinning it into string, your first quiver, weaving and dyeing linen, hanging a
+  garland, and displaying a weapon on the rack.
+
+## 🐛 Fixes
+
+- **The quiver no longer goes dead.** Fixed a bug where the bow would stop shooting
+  if no arrows were in the player's inventory and the current selected slot empty.
+- **High-tension strings need a metal riser.** Fixed a bug where the guide said a
+  metal riser was required but the Fletching Table let you build the bow anyway.
+- **Crossbow tooltips were hiding half the bow.** Fixed a bug where a composite
+  crossbow named only its upper wood, both on the tooltip and on the Crossbow
+  Bench screen.
+- **Mismatched limbs no longer eat a limb.** Fixed a bug where two different woods
+  crafted happily and then silently threw the bottom limb's wood away.
+
+## 🛠️ Commands
+
+- **`/ft give bow` and `/ft give crossbow` take a `lower_limb`** to spawn a
+  composite, and the crossbow now accepts a `tuning` like the bow does. Pass
+  `none` as the attachment to reach the arguments after it.
+
+## 📖 Guidebook
+
+- New **Composite Bows** entry, linked from Modular Bows and Modular Crossbows.
+- The crossbow entry now explains that **tuning carries over** from the bow it was
+  built from, where it gives a faster reload.
+
+---
+
 # Fletcher's Trestle: 2.5.0
 
 Flax gets a second life as **linen**, a dyeable textile block family. The

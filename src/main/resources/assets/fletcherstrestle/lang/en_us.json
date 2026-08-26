@@ -343,5 +343,6 @@
   "advancement.fletcherstrestle.garland.description": "Weave a Garland from feathers",
   "enchantment.fletcherstrestle.tinkers_mark": "Tinker's Mark",
   "enchantment.fletcherstrestle.quick_nock": "Quick Nock",
-  "enchantment.fletcherstrestle.follow_through": "Follow Through"
+  "enchantment.fletcherstrestle.follow_through": "Follow Through",
+  "gui.fletcherstrestle.composite": "Composite: blends both woods"
 }

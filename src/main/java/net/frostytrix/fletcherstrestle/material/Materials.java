@@ -1,6 +1,7 @@
 package net.frostytrix.fletcherstrestle.material;
 
 import net.frostytrix.fletcherstrestle.FletcherTrestle;
+import net.frostytrix.fletcherstrestle.component.BowAssembly;
 import net.frostytrix.fletcherstrestle.material.stats.*;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
@@ -85,6 +86,22 @@ public final class Materials {
         return MaterialResolver.resolveBowLimbById(idOrLegacy)
                 .map(h -> MaterialResolver.displayName(h.key().location()))
                 .orElseGet(() -> Component.literal(idOrLegacy));
+    }
+
+    /**
+     * The limb line for a weapon tooltip: one wood, or both woods joined when
+     * the assembly is a composite.
+     *
+     * <p>Shared by the bow and the crossbow deliberately. They drifted apart
+     * once already, the crossbow quietly showing only the upper wood.</p>
+     */
+    public static Component bowLimbNames(BowAssembly assembly) {
+        if (!assembly.isComposite()) {
+            return bowLimbName(assembly.limbMaterial());
+        }
+        return bowLimbName(assembly.limbMaterial()).copy()
+                .append(" + ")
+                .append(bowLimbName(assembly.secondLimb().orElseThrow()));
     }
 
     public static Component bowRiserName(String idOrLegacy) {

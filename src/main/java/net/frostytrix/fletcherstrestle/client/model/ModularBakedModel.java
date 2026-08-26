@@ -110,6 +110,10 @@ public class ModularBakedModel implements BakedModel {
         @Override
         public @Nullable BakedModel resolve(BakedModel originalModel, ItemStack stack, @Nullable ClientLevel level, @Nullable LivingEntity entity, int seed) {
             List<ResourceLocation> textures = new ArrayList<>();
+            // Layers flipped about the diagonal, to draw a half-limb as both limbs.
+            List<ResourceLocation> mirroredTextures = new ArrayList<>();
+            // Layers shifted bodily across the sprite: the crossbow's stock.
+            List<ResourceLocation> stockTextures = new ArrayList<>();
             String cacheKey;
 
             // Grab components (they will be null if it's an unfinished/raw item)
@@ -137,6 +141,13 @@ public class ModularBakedModel implements BakedModel {
                 // Each texture lookup honors a def's optional "texture"
                 // override and otherwise falls back to
                 // <materialNamespace>:<basePath>/<folder>/<id><suffix>.
+                // Limb textures cover only one half of the bow. The other half
+                // is the same texture mirrored about its diagonal, which is why
+                // a composite can show two woods without any extra art: the
+                // lower limb is simply the second wood's half, flipped.
+                String lowerLimbMat = bow != null ? bow.secondLimb().orElse(limbMat) : limbMat;
+                mirroredTextures.add(Materials.bowLimbTexture(lowerLimbMat, basePath + "/limbs", "_limb" + pull));
+
                 textures.add(Materials.bowLimbTexture(limbMat, basePath + "/limbs", "_limb" + pull));
                 textures.add(Materials.bowRiserTexture(riserMat, basePath + "/risers", "_riser"));
                 textures.add(Materials.bowStringTexture(stringMat, basePath + "/strings", "_string" + pull));
@@ -148,6 +159,7 @@ public class ModularBakedModel implements BakedModel {
                 }
 
                 cacheKey = "bow_" + Materials.normaliseId(limbMat) + "_"
+                        + Materials.normaliseId(lowerLimbMat) + "_"
                         + Materials.normaliseId(riserMat) + "_"
                         + Materials.normaliseId(stringMat) + pull;
             }
@@ -159,7 +171,18 @@ public class ModularBakedModel implements BakedModel {
                 String riserMat = bow != null ? bow.riserMaterial() : "wood";
                 String stringMat = bow != null ? bow.stringMaterial() : "spider";
 
+                // The stock is no longer painted into every limb texture: it is
+                // the mechanical trigger, shifted so its grip sits behind the
+                // prod. One texture instead of eleven copies of the same body.
+                stockTextures.add(ResourceLocation.fromNamespaceAndPath(
+                        FletcherTrestle.MOD_ID, "item/mechanical_trigger"));
+
+                // Like the bow, the limb texture is half a prod drawn twice:
+                // once as-is, once flipped about the diagonal.
+                String lowerLimbMat = bow != null ? bow.secondLimb().orElse(limbMat) : limbMat;
                 textures.add(Materials.bowLimbTexture(limbMat, basePath + "/limbs", "_limb"));
+                mirroredTextures.add(Materials.bowLimbTexture(lowerLimbMat, basePath + "/limbs", "_limb"));
+
                 textures.add(Materials.bowRiserTexture(riserMat, basePath + "/risers", "_riser"));
 
                 String stringState = state.equals("_charged") ? "_pulling_2" : state;
@@ -183,6 +206,7 @@ public class ModularBakedModel implements BakedModel {
                 }
 
                 cacheKey = "xbow_" + Materials.normaliseId(limbMat) + "_"
+                        + Materials.normaliseId(lowerLimbMat) + "_"
                         + Materials.normaliseId(riserMat) + "_"
                         + Materials.normaliseId(stringMat) + state + "_" + loadedProjectile;
             }
@@ -219,7 +243,20 @@ public class ModularBakedModel implements BakedModel {
 
             BakedModel cached = cache.getIfPresent(cacheKey);
             if (cached == null) {
-                cached = new WrappedBakedModel(bakeLayeredModel(textures), transforms);
+                BakedModel base = bakeLayeredModel(textures, modelState);
+                List<ExtraLayer> extras = new ArrayList<>();
+                if (!stockTextures.isEmpty()) {
+                    extras.add(new ExtraLayer(bakeLayeredModel(stockTextures, modelState),
+                            translated(STOCK_OFFSET_X, STOCK_OFFSET_Y, STOCK_DEPTH_OFFSET)));
+                }
+                if (!mirroredTextures.isEmpty()) {
+                    extras.add(new ExtraLayer(bakeLayeredModel(mirroredTextures, modelState),
+                            ModularBakedModel::flipAboutDiagonal));
+                }
+                if (!extras.isEmpty()) {
+                    base = new StackedBakedModel(base, extras);
+                }
+                cached = new WrappedBakedModel(base, transforms);
                 cache.put(cacheKey, cached);
             }
             return cached;
@@ -254,7 +291,178 @@ public class ModularBakedModel implements BakedModel {
         }
     }
 
+    /**
+     * One pixel in block units, the unit the sprite is laid out in.
+     */
+    private static final float PIXEL = 1 / 16.0f;
+
+    /**
+     * How far the flipped lower limb is nudged clear of the layer slab the
+     * other layers share, in block units: a sixty-fourth of a pixel each way.
+     * Far too small to see, big enough that nothing has to break a tie against
+     * the riser.
+     *
+     * <p>One constant per axis, so any of them can be retuned, or negated to
+     * send the limb the other way, without disturbing the others. Positive X
+     * is right, positive Y is up, positive Z is toward the viewer.</p>
+     */
+    private static final float X_OFFSET = -0.001f;
+    private static final float Y_OFFSET = 0.001f;
+    private static final float DEPTH_OFFSET = -0.001f;
+
+    /**
+     * Where the crossbow's stock sits. It is the mechanical trigger texture
+     * shifted two pixels right and down, so its grip falls behind the prod
+     * instead of on top of it, and pushed further back than the lower limb so
+     * every other layer paints over it.
+     */
+    private static final float STOCK_OFFSET_X = 2 * PIXEL;
+    private static final float STOCK_OFFSET_Y = -2 * PIXEL;
+    private static final float STOCK_DEPTH_OFFSET = -0.002f;
+
+    /** A per-quad edit applied to one layer after it is baked. */
+    @FunctionalInterface
+    private interface QuadOp {
+        BakedQuad apply(BakedQuad quad);
+    }
+
+    /** A separately-baked layer and the edit that positions it. */
+    private record ExtraLayer(BakedModel model, QuadOp op) {
+    }
+
+    /**
+     * Draws the main layer stack, then any separately-baked layers on top.
+     *
+     * <p>Layers that are not simply stacked in place have to be baked on their
+     * own, because a bake applies one model state to everything in it. Their
+     * edits are applied here, to the finished quads, which keeps the maths off
+     * the axes it does not belong on: a flip that only touches x and y cannot
+     * disturb a layer's depth, and a translation cannot disturb its winding.
+     * Depth order between the layers comes from their own offsets rather than
+     * from the order they are emitted in.</p>
+     */
+    private record StackedBakedModel(BakedModel base, List<ExtraLayer> extras) implements BakedModel {
+        @Override
+        public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, RandomSource random) {
+            List<BakedQuad> quads = new ArrayList<>(base.getQuads(state, side, random));
+            for (ExtraLayer extra : extras) {
+                for (BakedQuad quad : extra.model().getQuads(state, side, random)) {
+                    quads.add(extra.op().apply(quad));
+                }
+            }
+            return quads;
+        }
+
+        @Override
+        public boolean useAmbientOcclusion() {
+            return base.useAmbientOcclusion();
+        }
+
+        @Override
+        public boolean isGui3d() {
+            return base.isGui3d();
+        }
+
+        @Override
+        public boolean usesBlockLight() {
+            return base.usesBlockLight();
+        }
+
+        @Override
+        public boolean isCustomRenderer() {
+            return base.isCustomRenderer();
+        }
+
+        @Override
+        public TextureAtlasSprite getParticleIcon() {
+            return base.getParticleIcon();
+        }
+
+        @Override
+        public ItemOverrides getOverrides() {
+            return ItemOverrides.EMPTY;
+        }
+    }
+
+
+    /**
+     * Reflects one quad about the sprite's anti-diagonal: (x, y) becomes
+     * (1 - y, 1 - x) in block space, plus the small nudge clear of the riser's
+     * plane.
+     *
+     * <p>Three things travel together. The positions carry the flip. The
+     * vertex order is reversed, because a reflection turns the winding inside
+     * out and the item render type culls back faces, which is what made the
+     * limb look hollow. The normals are reflected the same way as the
+     * positions, because the item shader lights a quad from its normals: leave
+     * them and the limb is lit as though its front were its back, which reads
+     * as the shading landing on the wrong side.</p>
+     */
+    private static BakedQuad flipAboutDiagonal(BakedQuad quad) {
+        int[] vertices = quad.getVertices();
+        int stride = vertices.length / 4;
+        int[] flipped = new int[vertices.length];
+        for (int i = 0; i < 4; i++) {
+            int out = i * stride;
+            System.arraycopy(vertices, (3 - i) * stride, flipped, out, stride);
+
+            float x = Float.intBitsToFloat(flipped[out]);
+            float y = Float.intBitsToFloat(flipped[out + 1]);
+            float z = Float.intBitsToFloat(flipped[out + 2]);
+            flipped[out] = Float.floatToRawIntBits(1.0f - y + X_OFFSET);
+            flipped[out + 1] = Float.floatToRawIntBits(1.0f - x + Y_OFFSET);
+            flipped[out + 2] = Float.floatToRawIntBits(z + DEPTH_OFFSET);
+
+            // The packed normal is the last int of a vertex in the block format.
+            flipped[out + stride - 1] = reflectPackedNormal(flipped[out + stride - 1]);
+        }
+        return new BakedQuad(flipped, quad.getTintIndex(), reflect(quad.getDirection()),
+                quad.getSprite(), quad.isShade(), quad.hasAmbientOcclusion());
+    }
+
+    /**
+     * Slides a whole layer, leaving its winding, normals and facing alone: a
+     * translation changes none of them.
+     */
+    private static QuadOp translated(float dx, float dy, float dz) {
+        return quad -> {
+            int[] moved = quad.getVertices().clone();
+            int stride = moved.length / 4;
+            for (int i = 0; i < 4; i++) {
+                int out = i * stride;
+                moved[out] = Float.floatToRawIntBits(Float.intBitsToFloat(moved[out]) + dx);
+                moved[out + 1] = Float.floatToRawIntBits(Float.intBitsToFloat(moved[out + 1]) + dy);
+                moved[out + 2] = Float.floatToRawIntBits(Float.intBitsToFloat(moved[out + 2]) + dz);
+            }
+            return new BakedQuad(moved, quad.getTintIndex(), quad.getDirection(),
+                    quad.getSprite(), quad.isShade(), quad.hasAmbientOcclusion());
+        };
+    }
+
+    /** Applies (x, y) -> (-y, -x) to a normal packed as three signed bytes. */
+    private static int reflectPackedNormal(int packed) {
+        int nx = (byte) (packed & 0xFF);
+        int ny = (byte) ((packed >> 8) & 0xFF);
+        int nz = (packed >> 16) & 0xFF;
+        return (packed & 0xFF000000) | (nz << 16) | ((-nx & 0xFF) << 8) | (-ny & 0xFF);
+    }
+
+    /** The same reflection applied to a face direction. Front and back are unmoved. */
+    private static Direction reflect(Direction direction) {
+        return switch (direction) {
+            case EAST -> Direction.DOWN;
+            case WEST -> Direction.UP;
+            case UP -> Direction.WEST;
+            case DOWN -> Direction.EAST;
+            case NORTH, SOUTH -> direction;
+        };
+    }
+
     private BakedModel bakeLayeredModel(List<ResourceLocation> texturePaths) {
+        return bakeLayeredModel(texturePaths, modelState);
+    }
+
+    private BakedModel bakeLayeredModel(List<ResourceLocation> texturePaths, ModelState state) {
         List<Material> materials = texturePaths.stream()
                 .map(loc -> new Material(InventoryMenu.BLOCK_ATLAS, loc))
                 .toList();
@@ -263,7 +471,7 @@ public class ModularBakedModel implements BakedModel {
                     ImmutableList.class, it.unimi.dsi.fastutil.ints.Int2ObjectMap.class, it.unimi.dsi.fastutil.ints.Int2ObjectMap.class);
             ctor.setAccessible(true);
             return ctor.newInstance(ImmutableList.copyOf(materials), Int2ObjectMaps.emptyMap(), Int2ObjectMaps.emptyMap())
-                    .bake(context, baker, spriteGetter, modelState, ItemOverrides.EMPTY);
+                    .bake(context, baker, spriteGetter, state, ItemOverrides.EMPTY);
         } catch (Exception e) {
             throw new RuntimeException("Failed to bake dynamic modular model", e);
         }
