@@ -102,8 +102,8 @@ public class HeavyDummyEntity extends LivingEntity {
         if (heldItem.getItem() instanceof ArmorItem armorItem) {
             EquipmentSlot slot = armorItem.getEquipmentSlot();
 
-            // NEW FILTER: Only allow HEAD, CHEST, LEGS, or FEET
-            // This effectively rejects the 'BODY' slot used by Horse and Wolf armor.
+            // Only head, chest, legs and feet: this rejects the body slot that
+            // horse and wolf armour use.
             if (slot == EquipmentSlot.MAINHAND || slot == EquipmentSlot.OFFHAND || slot == EquipmentSlot.BODY) {
                 return super.interact(player, hand);
             }

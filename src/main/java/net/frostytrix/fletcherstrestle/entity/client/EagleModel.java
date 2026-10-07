@@ -226,8 +226,8 @@ public class EagleModel extends EntityModel<EagleEntity> {
     }
 
     /**
-     * Zeroes every animated group part each frame so rotations don't stack
-     * (same accumulation bug we fixed in ModularArrowRenderer). The artist's
+     * Zeroes every animated group part each frame so rotations don't accumulate
+     * from one frame to the next. The artist's
      * resting pose lives in the baked _r1 cubes, so zero IS the rest pose.
      */
     private void resetParts() {

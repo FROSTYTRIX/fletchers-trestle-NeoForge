@@ -54,7 +54,7 @@ public class QuiverMenu extends AbstractContainerMenu {
             }
         }
 
-        // --- SLOT LAYOUT MATH ---
+        // Slot layout.
 
         int rows = (int) Math.ceil((double) this.maxSlots / 9.0);
 
@@ -111,7 +111,7 @@ public class QuiverMenu extends AbstractContainerMenu {
         return player.getItemInHand(hand).getItem() instanceof ModularQuiverItem;
     }
 
-    // --- SHIFT-CLICK LOGIC ---
+    // Shift-click.
     @Override
     public ItemStack quickMoveStack(Player player, int index) {
         ItemStack itemstack = ItemStack.EMPTY;

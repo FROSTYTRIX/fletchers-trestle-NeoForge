@@ -288,10 +288,8 @@ public class ModularArrowEntity extends AbstractArrow
                 // If the space is empty (or tall grass/water) AND we haven't hit the limit
                 if (currentState.canBeReplaced() && this.ropesPlaced < this.ropeMaxLength) {
 
-                    // We ALWAYS spawn the new block as the "Bottom" piece.
-                    // Because of the 'updateShape' method you wrote in RopeBlock earlier,
-                    // the block above this one will automatically realize it's no longer
-                    // the bottom and visually update its model instantly.
+                    // Each new piece is placed as the bottom one; RopeBlock.updateShape
+                    // turns the piece above it into a middle piece.
                     BlockState ropeState = ModBlocks.ROPE.get().defaultBlockState()
                             .setValue(RopeBlock.PERSISTENT, false)
                             .setValue(RopeBlock.BOTTOM, true);
@@ -324,7 +322,7 @@ public class ModularArrowEntity extends AbstractArrow
             fletching.effects().forEach(e -> e.onArrowTick(this));
         }
 
-        // RESONANCE TIP: Trigger delayed damage
+        // Resonance: the delayed hit.
         if (this.resonanceTicks > 0) {
             this.resonanceTicks--;
 

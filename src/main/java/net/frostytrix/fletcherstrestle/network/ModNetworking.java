@@ -16,8 +16,6 @@ public class ModNetworking {
     public static void register(final RegisterPayloadHandlersEvent event) {
         final PayloadRegistrar registrar = event.registrar(FletcherTrestle.MOD_ID);
 
-        // --- MISSING PACKETS ADDED HERE ---
-
         // Client → Server : change tab in the fletching menu
         registrar.playToServer(
                 FletchingTabPayload.TYPE,

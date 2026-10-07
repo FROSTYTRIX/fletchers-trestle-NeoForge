@@ -31,14 +31,14 @@ public class QuiverScreen extends AbstractContainerScreen<QuiverMenu> {
         int maxSlots = this.menu.slots.size() - 36;
         int rows = (int) Math.ceil((double) maxSlots / 9.0);
 
-        // --- LAYER 1: THE BASE ---
+        // Background.
         // 1a. Splice the Top Half
         guiGraphics.blit(TEXTURE, x, y, 0, 0, this.imageWidth, rows * 18 + 17);
 
         // 1b. Splice the Bottom Half (Player Inventory)
         guiGraphics.blit(TEXTURE, x, y + rows * 18 + 17, 0, 126, this.imageWidth, 96);
 
-        // --- LAYER 2: THE ERASER ---
+        // Blank out the slots the quiver doesn't have.
         // Wipe the empty space BEFORE drawing the slots.
         int emptySlots = (rows * 9) - maxSlots;
         if (emptySlots > 0) {
@@ -47,7 +47,7 @@ public class QuiverScreen extends AbstractContainerScreen<QuiverMenu> {
             guiGraphics.fill(x + 7, lastRowY, x + 7 + 162, lastRowY + 18, 0xFFC6C6C6);
         }
 
-        // --- LAYER 3: THE SLOTS ---
+        // The slots it does have.
         // Now that the canvas is clean, stamp the individual slot backgrounds
         for (int i = 0; i < maxSlots; i++) {
             Slot slot = this.menu.slots.get(i);

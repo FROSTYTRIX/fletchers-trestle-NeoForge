@@ -84,7 +84,7 @@ public class DippingRecipeCategory implements IRecipeCategory<DippingRecipe> {
         // empty modular_arrow icons. Detected via the output item.
         boolean isModularPotion = recipe.output().is(ModItems.MODULAR_ARROW.get());
 
-        // ---- 1. INPUT SLOT ----
+        // Input slot
         List<ItemStack> inputStacks = new ArrayList<>();
         for (ItemStack stack : recipe.inputItem().getItems()) {
             ItemStack copy = stack.copy();
@@ -100,7 +100,7 @@ public class DippingRecipeCategory implements IRecipeCategory<DippingRecipe> {
         builder.addSlot(RecipeIngredientRole.INPUT, 15, 22)
                 .addIngredients(VanillaTypes.ITEM_STACK, inputStacks);
 
-        // ---- 2. FLUID SLOT ----
+        // Fluid slot
         // Pick a sample potion ID for the modular case so the fluid shows
         // a real color and the tooltip names it. Defaults to regeneration
         // because it's instantly recognisable pink.
@@ -143,7 +143,7 @@ public class DippingRecipeCategory implements IRecipeCategory<DippingRecipe> {
                     });
                 });
 
-        // ---- 3. OUTPUT SLOT ----
+        // Output slot
         ItemStack outputDisplay = recipe.output().copy();
         if (isModularPotion) {
             // Show what a filled glass-vial arrow looks like: same assembly

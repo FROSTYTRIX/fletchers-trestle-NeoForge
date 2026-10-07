@@ -68,8 +68,8 @@ public class ModularBakedModel implements BakedModel {
 
     /**
      * Vanilla's item/generated gives every item a 180 degree Y flip in the FIXED
-     * context (item frames, display blocks). Without it our modular weapons sat
-     * backwards relative to vanilla bows wherever FIXED is used.
+     * context (item frames, display blocks). The modular weapons use the same
+     * flip so they face the same way as vanilla bows there.
      */
     private static final ItemTransform FIXED_TRANSFORM = new ItemTransform(
             new Vector3f(0, 180, 0), new Vector3f(0, 0, 0), new Vector3f(1, 1, 1));
@@ -120,7 +120,7 @@ public class ModularBakedModel implements BakedModel {
             BowAssembly bow = stack.get(ModDataComponents.BOW_ASSEMBLY.get());
             ArrowAssembly arrow = stack.get(ModDataComponents.ARROW_ASSEMBLY.get());
 
-            // --- 1. MODULAR BOW ---
+            // Modular bow
             if (basePath.contains("bow") && !basePath.contains("crossbow")) {
                 // Pull-stage thresholds need to match the per-limb draw time
                 // so the bow visually finishes drawing at the same instant
@@ -152,8 +152,8 @@ public class ModularBakedModel implements BakedModel {
                 textures.add(Materials.bowRiserTexture(riserMat, basePath + "/risers", "_riser"));
                 textures.add(Materials.bowStringTexture(stringMat, basePath + "/strings", "_string" + pull));
                 if (!pull.isEmpty()) {
-                    // The "arrow on the bow" silhouette stays in our namespace
-                    //: no def to override it.
+                    // The "arrow on the bow" silhouette is always this mod's:
+                    // no def can override it.
                     textures.add(ResourceLocation.fromNamespaceAndPath(
                             FletcherTrestle.MOD_ID, basePath + "/extras/arrow" + pull));
                 }
@@ -163,7 +163,7 @@ public class ModularBakedModel implements BakedModel {
                         + Materials.normaliseId(riserMat) + "_"
                         + Materials.normaliseId(stringMat) + pull;
             }
-            // --- 2. MODULAR CROSSBOW ---
+            // Modular crossbow
             else if (basePath.contains("crossbow")) {
                 String state = getCrossbowStateSuffix(stack, entity);
 
@@ -171,9 +171,8 @@ public class ModularBakedModel implements BakedModel {
                 String riserMat = bow != null ? bow.riserMaterial() : "wood";
                 String stringMat = bow != null ? bow.stringMaterial() : "spider";
 
-                // The stock is no longer painted into every limb texture: it is
-                // the mechanical trigger, shifted so its grip sits behind the
-                // prod. One texture instead of eleven copies of the same body.
+                // The stock is the mechanical trigger texture, shifted so its
+                // grip sits behind the prod, rather than part of each limb texture.
                 stockTextures.add(ResourceLocation.fromNamespaceAndPath(
                         FletcherTrestle.MOD_ID, "item/mechanical_trigger"));
 
@@ -210,7 +209,7 @@ public class ModularBakedModel implements BakedModel {
                         + Materials.normaliseId(riserMat) + "_"
                         + Materials.normaliseId(stringMat) + state + "_" + loadedProjectile;
             }
-            // --- 3. MODULAR ARROW ---
+            // Modular arrow
             else if (basePath.contains("arrow")) {
                 String headMat = arrow != null ? arrow.head() : "flint";
                 String shaftMat = arrow != null ? arrow.shaft() : "oak";
@@ -236,7 +235,7 @@ public class ModularBakedModel implements BakedModel {
                         + Materials.normaliseId(fletchMat)
                         + (hasLiquid ? "_potion" : "");
             }
-            // --- CATCH ALL ---
+            // Anything else
             else {
                 return originalModel;
             }

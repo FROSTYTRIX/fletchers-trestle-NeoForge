@@ -84,7 +84,7 @@ public class ModularCrossbowItem extends CrossbowItem {
         }
     }
 
-    // --- 1. CHARGING TIME LOGIC ---
+    // ---------------- Charging time ----------------
     @Override
     public int getUseDuration(ItemStack stack, LivingEntity entity) {
         // A magazine makes the draw take reload_multiplier times as long; the
@@ -130,7 +130,7 @@ public class ModularCrossbowItem extends CrossbowItem {
         return super.getMaxDamage(stack);
     }
 
-    // --- 2. QUIVER SWAP & LOADING LOGIC ---
+    // ---------------- Loading from the quiver ----------------
     @Override
     public void releaseUsing(ItemStack stack, Level level, LivingEntity entityLiving, int timeLeft) {
         if (!(entityLiving instanceof Player player)) {
@@ -153,7 +153,7 @@ public class ModularCrossbowItem extends CrossbowItem {
             return;
         }
 
-        // THE QUIVER SWAP TRICK
+        // Quiver swap: put the selected arrows where vanilla looks for ammo.
         int quiverInvSlot = -1;
         ItemStack quiverStack = ItemStack.EMPTY;
         int quiverSelectedIdx = -1;
@@ -180,10 +180,10 @@ public class ModularCrossbowItem extends CrossbowItem {
             player.getInventory().setItem(quiverInvSlot, extractedArrow);
         }
 
-        // VANILLA LOADING
+        // Vanilla loading.
         super.releaseUsing(stack, level, entityLiving, timeLeft);
 
-        // RESTORE THE QUIVER
+        // Put the quiver back.
         if (quiverInvSlot != -1) {
             ItemStack modifiedArrow = player.getInventory().getItem(quiverInvSlot);
             List<ItemStack> list = ModularQuiverItem.getQuiverContents(quiverStack);
@@ -347,7 +347,7 @@ public class ModularCrossbowItem extends CrossbowItem {
         return projectile;
     }
 
-    // --- 3. FIRING LOGIC (Apply Stats) ---
+    // ---------------- Firing ----------------
     @Override
     protected void shootProjectile(LivingEntity shooter, Projectile projectile, int index, float velocity, float inaccuracy, float angle, @Nullable LivingEntity target) {
         ItemStack crossbowStack = shooter.getMainHandItem();

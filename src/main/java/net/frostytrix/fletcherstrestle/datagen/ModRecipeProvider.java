@@ -197,9 +197,8 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                 .unlockedBy("has_book", has(Items.BOOK))
                 .save(recipeOutput.withConditions(modLoaded("patchouli")));
 
-        // Bow -> crossbow assembly moved off the Smithing Table onto the
-        // Crossbow Bench (handled in CrossbowBenchMenu). The bench is the single
-        // source of truth, so the old smithing recipes are intentionally gone.
+        // Bow -> crossbow conversion happens at the Crossbow Bench (see
+        // CrossbowBenchMenu), so there are no smithing recipes for it.
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModBlocks.CROSSBOW_BENCH.get())
                 .pattern("PPP")
                 .pattern("PHP")

@@ -43,9 +43,8 @@ public class ModularWeaponRecipe implements Recipe<FletchingRecipeInput> {
     }
 
     /**
-     * Two different woods only assemble when composite bows are switched on.
-     * Previously any two limbs matched and only the top one was read, so the
-     * bottom limb was silently consumed and its wood thrown away.
+     * Two different woods only assemble when composite bows are switched on;
+     * otherwise both limbs must be the same wood.
      */
     private static boolean limbsGoTogether(Level level, FletchingRecipeInput input) {
         String top = limbId(level.registryAccess(), input.topLimb());
@@ -97,9 +96,8 @@ public class ModularWeaponRecipe implements Recipe<FletchingRecipeInput> {
 
         float defaultTuning = 0.0f;
 
-        // FIXED ORDER: limbMat first, then riserMat.
-        // Two different woods make a composite, and both are recorded so the
-        // bottom limb is no longer silently thrown away.
+        // Limb first, then riser. Two different woods make a composite, and
+        // both are recorded.
         BowAssembly assembly = limbMat.equals(bottomMat)
                 ? new BowAssembly(limbMat, riserMat, stringMat, defaultTuning)
                 : new BowAssembly(limbMat, java.util.Optional.of(bottomMat), riserMat, stringMat, defaultTuning);

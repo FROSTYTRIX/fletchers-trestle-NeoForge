@@ -81,7 +81,7 @@ public class FletchingMenu extends AbstractContainerMenu {
         this.level = playerInventory.player.level();
 
         // ==========================================
-        // OUTPUT SLOT (Index 0)
+        // Output slot (index 0)
         // ==========================================
         this.addSlot(new Slot(this.resultSlots, 0, 124, 35) {
             @Override
@@ -89,7 +89,7 @@ public class FletchingMenu extends AbstractContainerMenu {
                 return false;
             }
 
-            // This fixes the vanishing bow! Items are ONLY consumed when you actually pick up the result.
+            // The parts are only used up when the result is taken.
             @Override
             public void onTake(Player playerIn, ItemStack stack) {
                 boolean restrung = FletchingMenu.this.isBenchWork()
@@ -104,7 +104,7 @@ public class FletchingMenu extends AbstractContainerMenu {
         });
 
         // ==========================================
-        // TAB 0: BOW SLOTS (Indices 0, 1, 2, 3)
+        // Tab 0: bow slots (indices 0, 1, 2, 3)
         // ==========================================
         this.addSlot(new Slot(craftSlots, 0, 45, 17) { // Top Limb
             @Override
@@ -152,7 +152,7 @@ public class FletchingMenu extends AbstractContainerMenu {
         });
 
         // ==========================================
-        // TAB 1: ARROW SLOTS (Indices 4, 5, 6)
+        // Tab 1: arrow slots (indices 4, 5, 6)
         // ==========================================
         this.addSlot(new Slot(craftSlots, 4, 66, 17) { // Arrow Head
             @Override
@@ -222,7 +222,7 @@ public class FletchingMenu extends AbstractContainerMenu {
             if (recipeHolder.isPresent()) {
                 ItemStack output = recipeHolder.get().value().assemble(input, this.level.registryAccess());
 
-                // INJECT CUSTOM TUNING (Order fixed: limbs, riser, string)
+                // Apply the minigame's tuning to the assembled weapon.
                 if (this.customTuning != -1.0f) {
                     var base = output.get(ModDataComponents.BOW_ASSEMBLY.get());
                     if (base != null) {

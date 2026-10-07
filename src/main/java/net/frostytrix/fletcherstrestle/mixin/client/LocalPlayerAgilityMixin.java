@@ -27,9 +27,8 @@ import org.spongepowered.asm.mixin.injection.ModifyConstant;
  * bow: cancelling the slowdown. The callback only fires inside the
  * {@code isUsingItem()} guard, so the held item is always the one being used.</p>
  *
- * <p>This replaces an earlier MOVEMENT_SPEED-attribute approach, which distorted
- * the FOV (vanilla scales FOV by movement speed). Touching only the input
- * impulses leaves speed, and thus FOV: untouched.</p>
+ * <p>A movement-speed attribute would also change the FOV, since vanilla scales
+ * FOV by movement speed. Touching only the input impulses leaves both alone.</p>
  */
 @Mixin(LocalPlayer.class)
 public abstract class LocalPlayerAgilityMixin {

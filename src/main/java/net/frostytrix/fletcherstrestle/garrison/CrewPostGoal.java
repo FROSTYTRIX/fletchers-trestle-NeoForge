@@ -76,8 +76,8 @@ public class CrewPostGoal extends Goal {
 
     @Override
     public boolean canUse() {
-        // canUse only runs on every other tick, and which ones depends on the entity
-        // id, so a tickCount modulo would skip some golems forever. Count instead.
+        // canUse runs every other tick, offset by the entity id, so a tickCount
+        // modulo would never fire for half the golems; a countdown always does.
         if (--scanDelay > 0 || !(golem.level() instanceof ServerLevel level)) {
             return false;
         }

@@ -15,7 +15,7 @@ public record ArrowAssembly(String head, String shaft, String fletching) {
             Codec.STRING.fieldOf("fletching").forGetter(ArrowAssembly::fletching)
     ).apply(inst, ArrowAssembly::new));
 
-    // For syncing between Server and Client (required for rendering!)
+    // For syncing between server and client (rendering needs it).
     public static final StreamCodec<RegistryFriendlyByteBuf, ArrowAssembly> STREAM_CODEC = StreamCodec.composite(
             ByteBufCodecs.STRING_UTF8, ArrowAssembly::head,
             ByteBufCodecs.STRING_UTF8, ArrowAssembly::shaft,

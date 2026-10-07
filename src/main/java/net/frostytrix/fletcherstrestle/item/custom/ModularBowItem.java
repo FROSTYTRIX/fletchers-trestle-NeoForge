@@ -112,7 +112,7 @@ public class ModularBowItem extends BowItem {
         BowRiserDef riser = Materials.bowRiser(assembly.riserMaterial());
         BowStringDef string = Materials.bowString(assembly.stringMaterial());
 
-        // --- DAMAGE MODIFIER ---
+        // Damage.
         arrow.setBaseDamage(arrow.getBaseDamage() * limb.stats().damageMultiplier());
         if (SNAP_SHOT.get()) {
             arrow.setBaseDamage(arrow.getBaseDamage() * 1.1);
@@ -159,7 +159,7 @@ public class ModularBowItem extends BowItem {
                     ? Materials.arrowFletching(Assembly.fletching()).stats().inaccuracyMultiplier()
                     : 1.0f;
 
-            // --- APPLY VELOCITY & INACCURACY ---
+            // Velocity and spread.
             finalVelocity = velocity * string.stats().velocityMultiplier();
             finalInaccuracy = inaccuracy * riser.stats().inaccuracyMultiplier() * fletchInacc;
         }
@@ -220,7 +220,7 @@ public class ModularBowItem extends BowItem {
         if (!(entityLiving instanceof Player player)) return;
         BowAssembly assembly = stack.get(ModDataComponents.BOW_ASSEMBLY.get());
 
-        // --- 1. THE QUIVER SWAP TRICK ---
+        // Quiver swap: put the selected arrows where vanilla looks for ammo.
         int quiverInvSlot = -1;
         ItemStack quiverStack = ItemStack.EMPTY;
         int quiverSelectedIdx = -1;
@@ -255,7 +255,7 @@ public class ModularBowItem extends BowItem {
             player.getInventory().setItem(quiverInvSlot, extractedArrow);
         }
 
-        // --- 2. VANILLA FIRING LOGIC ---
+        // Vanilla firing.
         // Vanilla finds the arrow we just placed, shoots it, and consumes it.
         int chargeTicks = this.getUseDuration(stack, entityLiving) - timeLeft;
         // Archery skill: faster draw shrinks the effective draw time.
@@ -281,7 +281,7 @@ public class ModularBowItem extends BowItem {
                     net.minecraft.sounds.SoundSource.PLAYERS, 0.7f, 1.4f);
         }
 
-        // --- 3. RESTORE THE QUIVER ---
+        // Put the quiver back.
         if (quiverInvSlot != -1) {
             // Get the arrow back (it might be shrunken by 1 now)
             ItemStack modifiedArrow = player.getInventory().getItem(quiverInvSlot);
@@ -304,7 +304,7 @@ public class ModularBowItem extends BowItem {
             player.getInventory().setItem(quiverInvSlot, quiverStack);
         }
 
-        // --- 4. SHOOTER-SIDE RELEASE EFFECTS ---
+        // Release effects on the shooter.
         if (assembly != null) {
             BowLimbDef limb = net.frostytrix.fletcherstrestle.material.CompositeLimb.effective(assembly);
             BowRiserDef riser = Materials.bowRiser(assembly.riserMaterial());

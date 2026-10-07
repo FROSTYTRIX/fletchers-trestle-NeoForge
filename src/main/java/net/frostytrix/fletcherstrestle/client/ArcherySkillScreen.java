@@ -62,8 +62,8 @@ public class ArcherySkillScreen extends Screen {
 
     @Override
     public void renderBackground(GuiGraphics g, int mouseX, int mouseY, float partialTick) {
-        // Plain dim overlay: deliberately NOT calling super, which applies the
-        // 1.21 gaussian blur post-process (that's what made the screen blurry).
+        // Plain dim overlay. Not calling super, which would apply 1.21's
+        // gaussian blur to the whole screen.
         g.fill(0, 0, this.width, this.height, 0xB0000000);
     }
 

@@ -40,7 +40,8 @@ numbers and behaviour may still change.*
 - **The Bolt Warden**: a clockwork golem that crews emplacements. Build one from
   four stripped logs in a T and wind it up with a Mechanical Trigger, which it
   drops again if it's destroyed.
-- **It guards its post**: it stays within 16 blocks of where it was built, runs
+- **It guards its post**: it stays within 16 blocks of where it was built (also
+  configurable), runs
   to whichever loaded post can see a hostile mob, reloads at the crossbow's own
   speed and fires. Magazines fire in bursts.
 - **Hostile mobs only.** It never shoots players, villagers or animals, and holds
@@ -149,8 +150,9 @@ numbers and behaviour may still change.*
 
 ## 📖 Guidebook
 
-- **The material tables are live**: limbs, risers and strings are read from the
-  game, so the numbers are always right and a modpack's materials show up.
+- **The material tables are live**: limbs, risers, strings, arrow heads, shafts
+  and fletchings are read from the game, so the numbers are always right and a
+  modpack's materials show up.
 - New **Out in the World** entry for armed mobs and Trial Chamber loot, and a
   **Garrison** entry.
 - The Fletching Table, Modular Bows, Quiver, Archery Skills, Enchantments and

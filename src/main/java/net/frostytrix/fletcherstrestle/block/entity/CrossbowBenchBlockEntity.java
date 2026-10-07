@@ -20,8 +20,7 @@ import org.jetbrains.annotations.Nullable;
 /**
  * Persistent backing inventory for the Crossbow Bench. Holding the three work
  * slots in a block entity (rather than a transient menu container) means items
- * survive a game close / world reload and drop when the block is broken,
- * fixing the "items vanish on quit" bug.
+ * survive a game close / world reload and drop when the block is broken.
  */
 public class CrossbowBenchBlockEntity extends BlockEntity implements MenuProvider {
 

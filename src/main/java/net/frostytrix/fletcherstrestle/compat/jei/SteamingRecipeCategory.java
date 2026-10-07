@@ -78,7 +78,7 @@ public class SteamingRecipeCategory implements IRecipeCategory<SteamingRecipe> {
         builder.addSlot(RecipeIngredientRole.OUTPUT, 79, 22)
                 .addItemStack(recipe.getResultItem(null));
 
-        // HEAT CATALYST (Hovering below the arrow)
+        // Heat source, below the arrow
         // Campfire icon under the arrow: the recipe needs heat.
         builder.addSlot(RecipeIngredientRole.CATALYST, 49, 42)
                 .addItemStack(new ItemStack(Items.CAMPFIRE));

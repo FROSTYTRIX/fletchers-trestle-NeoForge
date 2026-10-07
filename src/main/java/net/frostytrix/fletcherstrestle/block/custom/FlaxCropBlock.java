@@ -60,7 +60,7 @@ public class FlaxCropBlock extends CropBlock {
             if (net.neoforged.neoforge.common.CommonHooks.canCropGrow(level, pos, state, random.nextInt((int) (25.0F / growthSpeed) + 1) == 0)) {
 
                 if (currentAge == FIRST_STAGE_MAX_AGE) {
-                    // Growing from Stage 7 to Stage 8 (Placing the top half!)
+                    // Growing from stage 7 to stage 8: place the top half.
                     if (level.getBlockState(pos.above()).isAir()) {
                         level.setBlock(pos.above(), this.getStateForAge(currentAge + 1), 2);
                         net.neoforged.neoforge.common.CommonHooks.fireCropGrowPost(level, pos.above(), state);

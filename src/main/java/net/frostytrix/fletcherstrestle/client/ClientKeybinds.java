@@ -64,7 +64,7 @@ public class ClientKeybinds {
         // Handle Keybinds
         while (CYCLE_LEFT.consumeClick()) {
             net.neoforged.neoforge.network.PacketDistributor.sendToServer(new QuiverSlotPacket(false));
-            // This ONLY resets the timer now! The animation won't replay if it's already open.
+            // Only resets the timer, so the slide-in doesn't replay while it's already open.
             QuiverHudOverlay.displayTicks = 60;
         }
 
