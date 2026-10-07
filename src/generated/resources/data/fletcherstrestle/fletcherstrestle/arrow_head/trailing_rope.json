@@ -1,4 +1,9 @@
 {
+  "effects": [
+    {
+      "type": "fletcherstrestle:deploy_rope"
+    }
+  ],
   "ingredient": {
     "item": "fletcherstrestle:rope"
   },

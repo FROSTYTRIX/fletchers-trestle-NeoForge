@@ -37,54 +37,102 @@ public class ModularBowItem extends BowItem {
 
     @Override
     public boolean supportsEnchantment(ItemStack stack, Holder<Enchantment> enchantment) {
-        // Photosynthesis only allows a wooden riser and non-Nether-fungi limbs.
         if (enchantment.is(ModEnchantments.PHOTOSYNTHESIS)) {
             BowAssembly assembly = stack.get(ModDataComponents.BOW_ASSEMBLY.get());
             if (assembly != null) {
-                String riser = assembly.riserMaterial().toLowerCase();
-                String limbs = assembly.limbMaterial().toLowerCase();
-                boolean isWoodRiser = !riser.contains("copper") && !riser.contains("iron");
-                boolean isValidLimbs = !limbs.contains("crimson") && !limbs.contains("warped");
-                return isWoodRiser && isValidLimbs;
+                return canPhotosynthesize(assembly);
             }
         }
         return super.supportsEnchantment(stack, enchantment);
     }
 
+    /**
+     * Photosynthesis needs living wood: a non-metal riser and Overworld limbs. A
+     * composite checks both woods. Used by the enchanting check and the daylight
+     * repair tick.
+     */
+    public static boolean canPhotosynthesize(BowAssembly assembly) {
+        if (Materials.bowRiser(assembly.riserMaterial()).stats().metal()) {
+            return false;
+        }
+        // The composite blend only keeps photosynthetic when both woods have it.
+        return net.frostytrix.fletcherstrestle.material.CompositeLimb.stats(assembly).photosynthetic();
+    }
+
+    /**
+     * Ticks after full draw in which a release still counts as a Snap Shot. About
+     * a third of a second: generous enough to hit on purpose, tight enough that
+     * holding the draw forfeits it.
+     */
+    private static final int SNAP_SHOT_WINDOW = 6;
+
+    /**
+     * Set for the length of one release when it's a Snap Shot, so the projectile
+     * hooks that vanilla calls mid-release can read it. Server thread only.
+     */
+    private static final ThreadLocal<Boolean> SNAP_SHOT = ThreadLocal.withInitial(() -> false);
+
+    private static boolean isSnapShot(Player player, int chargeTicks, float fullDraw) {
+        return net.frostytrix.fletcherstrestle.progression.ArcheryProgression.hasCapstone(
+                        player, net.frostytrix.fletcherstrestle.progression.ArcherySkill.DRAW)
+                && chargeTicks >= fullDraw && chargeTicks <= fullDraw + SNAP_SHOT_WINDOW;
+    }
+
     @Override
     protected Projectile createProjectile(Level level, LivingEntity shooter, ItemStack weapon, ItemStack ammo, boolean isCrit) {
         Projectile projectile = super.createProjectile(level, shooter, weapon, ammo, isCrit);
-
-        if (weapon != null) {
-            BowAssembly assembly = weapon.get(ModDataComponents.BOW_ASSEMBLY.get());
-
-            if (assembly != null && projectile instanceof AbstractArrow arrow) {
-                BowLimbDef limb = net.frostytrix.fletcherstrestle.material.CompositeLimb.effective(assembly);
-                BowRiserDef riser = Materials.bowRiser(assembly.riserMaterial());
-                BowStringDef string = Materials.bowString(assembly.stringMaterial());
-
-                // --- DAMAGE MODIFIER ---
-                arrow.setBaseDamage(arrow.getBaseDamage() * limb.stats().damageMultiplier());
-
-                // Archery skill: crit chance.
-                if (shooter instanceof net.minecraft.world.entity.player.Player p) {
-                    net.frostytrix.fletcherstrestle.progression.ArcheryProgression.rollCrit(p, arrow);
-                }
-
-                // Amphibious lives on stats, not effects.
-                if (limb.stats().amphibious()) {
-                    arrow.getPersistentData().putBoolean("fletcherstrestle:amphibious", true);
-                }
-
-                // --- ON-FIRE EFFECTS: ignite (crimson), no-gravity (warped),
-                //     flag-set (spruce punch, copper conductive), …
-                LivingEntity finalShooter = shooter;
-                limb.effects().forEach(e -> e.onProjectileFired(finalShooter, weapon, arrow));
-                riser.effects().forEach(e -> e.onProjectileFired(finalShooter, weapon, arrow));
-                string.effects().forEach(e -> e.onProjectileFired(finalShooter, weapon, arrow));
-            }
+        if (weapon != null && projectile instanceof AbstractArrow arrow) {
+            applyAssembly(shooter, weapon, arrow);
         }
         return projectile;
+    }
+
+    /**
+     * Skeletons and other bow mobs don't go through {@link #createProjectile}: they
+     * build their arrow themselves and hand it here. Players also pass through here
+     * (vanilla's {@code createProjectile} calls it), so player arrows are skipped to
+     * keep the parts from applying twice.
+     */
+    @Override
+    public AbstractArrow customArrow(AbstractArrow arrow, ItemStack projectileStack, ItemStack weaponStack) {
+        AbstractArrow result = super.customArrow(arrow, projectileStack, weaponStack);
+        if (result.getOwner() instanceof LivingEntity owner && !(owner instanceof Player)) {
+            applyAssembly(owner, weaponStack, result);
+        }
+        return result;
+    }
+
+    /** Puts the bow's parts into a freshly made arrow: damage, crit roll, traits and on-fire effects. */
+    private static void applyAssembly(LivingEntity shooter, ItemStack weapon, AbstractArrow arrow) {
+        BowAssembly assembly = weapon.get(ModDataComponents.BOW_ASSEMBLY.get());
+        if (assembly == null) {
+            return;
+        }
+        BowLimbDef limb = net.frostytrix.fletcherstrestle.material.CompositeLimb.effective(assembly);
+        BowRiserDef riser = Materials.bowRiser(assembly.riserMaterial());
+        BowStringDef string = Materials.bowString(assembly.stringMaterial());
+
+        // --- DAMAGE MODIFIER ---
+        arrow.setBaseDamage(arrow.getBaseDamage() * limb.stats().damageMultiplier());
+        if (SNAP_SHOT.get()) {
+            arrow.setBaseDamage(arrow.getBaseDamage() * 1.1);
+        }
+
+        // Archery skill: crit chance.
+        if (shooter instanceof net.minecraft.world.entity.player.Player p) {
+            net.frostytrix.fletcherstrestle.progression.ArcheryProgression.rollCrit(p, arrow);
+        }
+
+        // Amphibious lives on stats, not effects.
+        if (limb.stats().amphibious()) {
+            arrow.getPersistentData().putBoolean("fletcherstrestle:amphibious", true);
+        }
+
+        // --- ON-FIRE EFFECTS: ignite (crimson), no-gravity (warped),
+        //     flag-set (spruce punch, copper conductive), …
+        limb.effects().forEach(e -> e.onProjectileFired(shooter, weapon, arrow));
+        riser.effects().forEach(e -> e.onProjectileFired(shooter, weapon, arrow));
+        string.effects().forEach(e -> e.onProjectileFired(shooter, weapon, arrow));
     }
 
     @Override
@@ -119,6 +167,10 @@ public class ModularBowItem extends BowItem {
         // Archery skill: steadier aim with level.
         if (shooter instanceof net.minecraft.world.entity.player.Player p) {
             finalInaccuracy *= net.frostytrix.fletcherstrestle.progression.ArcheryProgression.inaccuracyMultiplier(p);
+            // Capstones: a Snap Shot or a dead-calm archer puts it exactly where they look.
+            if (SNAP_SHOT.get() || net.frostytrix.fletcherstrestle.progression.DeadCalm.isCalm(p)) {
+                finalInaccuracy = 0.0f;
+            }
         }
 
         super.shootProjectile(shooter, projectile, index, finalVelocity, finalInaccuracy, angle, target);
@@ -135,6 +187,8 @@ public class ModularBowItem extends BowItem {
             tooltipComponents.add(Component.translatable("gui.fletcherstrestle.unfinished_bow").withStyle(ChatFormatting.RED, ChatFormatting.ITALIC));
             return;
         }
+
+        net.frostytrix.fletcherstrestle.component.MakersStamp.appendTooltip(stack, tooltipComponents);
 
         if (!Screen.hasShiftDown()) {
             tooltipComponents.add(Component.translatable("gui.fletcherstrestle.hold_shift")
@@ -210,7 +264,22 @@ public class ModularBowItem extends BowItem {
         int scaledCharge = (int) ((chargeTicks / customDrawTime) * 20.0f);
         int fakeTimeLeft = this.getUseDuration(stack, entityLiving) - scaledCharge;
 
-        super.releaseUsing(stack, level, entityLiving, fakeTimeLeft);
+        boolean snapShot = !level.isClientSide() && isSnapShot(player, chargeTicks, customDrawTime);
+        SNAP_SHOT.set(snapShot);
+        try {
+            release(stack, level, player, fakeTimeLeft, assembly);
+        } finally {
+            SNAP_SHOT.set(false);
+        }
+        if (snapShot && level instanceof net.minecraft.server.level.ServerLevel serverLevel
+                && player instanceof net.minecraft.server.level.ServerPlayer serverPlayer) {
+            // Feedback: a glint off the string and a chime for the archer.
+            var muzzle = player.getEyePosition().add(player.getLookAngle().scale(0.8));
+            serverLevel.sendParticles(net.minecraft.core.particles.ParticleTypes.END_ROD,
+                    muzzle.x, muzzle.y, muzzle.z, 5, 0.05, 0.05, 0.05, 0.02);
+            serverPlayer.playNotifySound(net.frostytrix.fletcherstrestle.sound.ModSounds.CAPSTONE.get(),
+                    net.minecraft.sounds.SoundSource.PLAYERS, 0.7f, 1.4f);
+        }
 
         // --- 3. RESTORE THE QUIVER ---
         if (quiverInvSlot != -1) {
@@ -253,6 +322,32 @@ public class ModularBowItem extends BowItem {
                 stack.hurtAndBreak(durCost - 1, player, LivingEntity.getSlotForHand(player.getUsedItemHand()));
             }
         }
+    }
+
+    /**
+     * Vanilla's {@code BowItem.releaseUsing}, except that the release sound comes
+     * from the string.
+     */
+    private void release(ItemStack stack, Level level, Player player, int timeLeft, @Nullable BowAssembly assembly) {
+        ItemStack ammo = player.getProjectile(stack);
+        if (ammo.isEmpty()) return;
+
+        int charge = this.getUseDuration(stack, player) - timeLeft;
+        charge = net.neoforged.neoforge.event.EventHooks.onArrowLoose(stack, level, player, charge, true);
+        if (charge < 0) return;
+
+        float power = getPowerForTime(charge);
+        if (power < 0.1f) return;
+
+        List<ItemStack> projectiles = draw(stack, ammo, player);
+        if (level instanceof net.minecraft.server.level.ServerLevel serverLevel && !projectiles.isEmpty()) {
+            this.shoot(serverLevel, player, player.getUsedItemHand(), stack, projectiles,
+                    power * 3.0F, 1.0F, power == 1.0F, null);
+        }
+        if (!level.isClientSide()) {
+            net.frostytrix.fletcherstrestle.sound.WorkshopSounds.playRelease(level, player, assembly, power);
+        }
+        player.awardStat(net.minecraft.stats.Stats.ITEM_USED.get(this));
     }
 
     /**
@@ -323,7 +418,6 @@ public class ModularBowItem extends BowItem {
             BowAssembly assembly = stack.get(ModDataComponents.BOW_ASSEMBLY.get());
             if (assembly != null) {
                 BowLimbDef limb = net.frostytrix.fletcherstrestle.material.CompositeLimb.effective(assembly);
-                String stringId = Materials.normaliseId(assembly.stringMaterial());
 
                 if (limb.stats().givesSlowFalling() && !player.onGround()) {
                     player.addEffect(new MobEffectInstance(MobEffects.SLOW_FALLING, 2, 2, false, false, true));
@@ -333,10 +427,11 @@ public class ModularBowItem extends BowItem {
                 float maxDrawTime = getDrawTime(stack)
                         * net.frostytrix.fletcherstrestle.progression.ArcheryProgression.drawMultiplier(player);
 
-                // Flax string: jitters the aim if the player overdraws. The AIM
-                // skill elongates the grace period before the shake kicks in.
+                // A shaky string (flax) jitters the aim if the player overdraws. The
+                // AIM skill elongates the grace period before the shake kicks in.
                 int flaxGrace = net.frostytrix.fletcherstrestle.progression.ArcheryProgression.flaxGraceTicks(player);
-                if ("flax".equals(stringId) && ticksDrawn > (maxDrawTime + flaxGrace)) {
+                if (Materials.bowString(assembly.stringMaterial()).stats().overdrawShake() && ticksDrawn > (maxDrawTime + flaxGrace)
+                        && !net.frostytrix.fletcherstrestle.progression.DeadCalm.isCalm(player)) {
                     player.setYRot(player.getYRot() + (level.random.nextFloat() - 0.5F) * 3.0F);
                     player.setXRot(player.getXRot() + (level.random.nextFloat() - 0.5F) * 3.0F);
                 }
@@ -359,10 +454,10 @@ public class ModularBowItem extends BowItem {
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
 
-        // 1. Check if the player has a normal arrow in their open inventory
+        // Check if the player has a normal arrow in their open inventory
         boolean hasNormalArrow = !player.getProjectile(stack).isEmpty();
 
-        // 2. Check if the player has a Quiver with an arrow selected
+        // Check if the player has a Quiver with an arrow selected
         boolean hasQuiverArrow = false;
         for (int i = 0; i < player.getInventory().getContainerSize(); i++) {
             ItemStack invStack = player.getInventory().getItem(i);
@@ -370,7 +465,7 @@ public class ModularBowItem extends BowItem {
                 int selected = invStack.getOrDefault(ModDataComponents.QUIVER_SELECTED_SLOT.get(), 0);
                 List<ItemStack> list = ModularQuiverItem.getQuiverContents(invStack);
 
-                // If the selected slot has an arrow, we are good to go!
+                // The selected slot has an arrow.
                 if (selected >= 0 && selected < list.size() && !list.get(selected).isEmpty() && list.get(selected).getItem() instanceof net.minecraft.world.item.ArrowItem) {
                     hasQuiverArrow = true;
                     break;
@@ -378,12 +473,15 @@ public class ModularBowItem extends BowItem {
             }
         }
 
-        // 3. If they are in Survival and have NO ammo anywhere, block the shot.
+        // If they are in Survival and have NO ammo anywhere, block the shot.
         if (!player.getAbilities().instabuild && !hasNormalArrow && !hasQuiverArrow) {
             return InteractionResultHolder.fail(stack);
         } else {
-            // Otherwise, allow them to start pulling the bow!
+            // Otherwise start drawing.
             player.startUsingItem(hand);
+            if (!level.isClientSide()) {
+                net.frostytrix.fletcherstrestle.sound.WorkshopSounds.playDraw(level, player, getDrawTime(stack));
+            }
             return InteractionResultHolder.consume(stack);
         }
     }

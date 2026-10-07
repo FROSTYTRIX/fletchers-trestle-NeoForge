@@ -24,11 +24,11 @@ public record FletchingTabPayload(int tabId) implements CustomPacketPayload {
         return TYPE;
     }
 
-    // This handles what happens when the Server receives the click!
+    // This handles what happens when the Server receives the click.
     public static void handleData(final FletchingTabPayload payload, final IPayloadContext context) {
         context.enqueueWork(() -> {
             Player player = context.player();
-            // If the player has the Fletching Menu open, change its tab and force a recipe check!
+            // If the player has the Fletching Menu open, change its tab and force a recipe check.
             if (player.containerMenu instanceof FletchingMenu menu) {
                 menu.activeTab = payload.tabId();
                 menu.slotsChanged(menu.craftSlots); // Re-evaluate recipes immediately

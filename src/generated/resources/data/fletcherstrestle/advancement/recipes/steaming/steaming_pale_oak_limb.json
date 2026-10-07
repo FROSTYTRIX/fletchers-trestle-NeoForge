@@ -1,11 +1,11 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_potato": {
+    "has_rough_pale_oak_limb": {
       "conditions": {
         "items": [
           {
-            "items": "minecraft:potato"
+            "items": "fletcherstrestle:rough_pale_oak_limb"
           }
         ]
       },
@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "fletcherstrestle:test_potato"
+        "recipe": "fletcherstrestle:steaming_pale_oak_limb"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -21,12 +21,12 @@
   "requirements": [
     [
       "has_the_recipe",
-      "has_potato"
+      "has_rough_pale_oak_limb"
     ]
   ],
   "rewards": {
     "recipes": [
-      "fletcherstrestle:test_potato"
+      "fletcherstrestle:steaming_pale_oak_limb"
     ]
   }
 }

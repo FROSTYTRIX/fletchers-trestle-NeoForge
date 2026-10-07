@@ -1,4 +1,9 @@
 {
+  "effects": [
+    {
+      "type": "fletcherstrestle:resonance"
+    }
+  ],
   "ingredient": {
     "item": "minecraft:echo_shard"
   },

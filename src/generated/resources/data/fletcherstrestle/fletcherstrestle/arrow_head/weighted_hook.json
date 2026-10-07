@@ -1,4 +1,9 @@
 {
+  "effects": [
+    {
+      "type": "fletcherstrestle:grapple"
+    }
+  ],
   "ingredient": {
     "item": "fletcherstrestle:weighted_hook"
   },

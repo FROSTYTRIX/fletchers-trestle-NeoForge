@@ -22,6 +22,10 @@ public final class ModCriteria {
             TRIGGERS.register("archery_level", ArcheryLevelTrigger::new);
     public static final Supplier<AttachmentInstalledTrigger> ATTACHMENT_INSTALLED =
             TRIGGERS.register("attachment_installed", AttachmentInstalledTrigger::new);
+    public static final Supplier<CapstoneTrigger> CAPSTONE =
+            TRIGGERS.register("capstone", CapstoneTrigger::new);
+    public static final Supplier<RestringTrigger> RESTRING =
+            TRIGGERS.register("restring", RestringTrigger::new);
 
     public static void register(IEventBus bus) {
         TRIGGERS.register(bus);

@@ -28,20 +28,15 @@ public class ModularQuiverItem extends Item {
     }
 
 
-    // --- BUNDLE STYLE: Clicking an item ONTO the Quiver ---
     @Override
     public boolean overrideOtherStackedOnMe(ItemStack quiver, ItemStack carriedStack, Slot slot, ClickAction action, Player player, SlotAccess access) {
-        int maxSlots = quiver.getOrDefault(ModDataComponents.MAX_QUIVER_SLOTS.get(), 9);
-
         if (action != ClickAction.SECONDARY || !slot.allowModification(player)) return false;
 
         List<ItemStack> list = getQuiverContents(quiver);
 
-        // Extracting from Quiver
         if (carriedStack.isEmpty()) {
             int selected = quiver.getOrDefault(ModDataComponents.QUIVER_SELECTED_SLOT.get(), 0);
 
-            // Safety check in case the selected slot exceeds the list size
             if (selected < list.size() && !list.get(selected).isEmpty()) {
                 access.set(list.get(selected).copy());
                 list.set(selected, ItemStack.EMPTY);
@@ -49,34 +44,12 @@ public class ModularQuiverItem extends Item {
                 return true;
             }
         }
-        // Inserting into Quiver
         else if (carriedStack.getItem() instanceof ArrowItem) {
-            for (int i = 0; i < maxSlots; i++) {
-                // Grow the list as needed so the index is always valid.
-                if (i >= list.size()) {
-                    list.add(ItemStack.EMPTY);
-                }
-
-                ItemStack inSlot = list.get(i);
-                if (inSlot.isEmpty()) {
-                    list.set(i, carriedStack.copy());
-                    carriedStack.setCount(0);
-                    saveQuiverContents(quiver, list);
-                    return true;
-                } else if (ItemStack.isSameItemSameComponents(inSlot, carriedStack) && inSlot.getCount() < inSlot.getMaxStackSize()) {
-                    int space = inSlot.getMaxStackSize() - inSlot.getCount();
-                    int transfer = Math.min(space, carriedStack.getCount());
-                    inSlot.grow(transfer);
-                    carriedStack.shrink(transfer);
-                    saveQuiverContents(quiver, list);
-                    if (carriedStack.isEmpty()) return true;
-                }
-            }
+            return insert(quiver, carriedStack);
         }
         return false;
     }
 
-    // --- TOOLTIP: Show Selected Arrow ---
     @Override
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
         int selected = stack.getOrDefault(ModDataComponents.QUIVER_SELECTED_SLOT.get(), 0);
@@ -91,7 +64,69 @@ public class ModularQuiverItem extends Item {
         }
     }
 
-    // --- Helpers ---
+
+    /**
+     * Moves as many of {@code arrows} into the quiver as fit, topping up matching
+     * stacks and filling empty slots. Shrinks {@code arrows}; true if any moved.
+     */
+    public static boolean insert(ItemStack quiver, ItemStack arrows) {
+        if (!(arrows.getItem() instanceof ArrowItem)) return false;
+        int maxSlots = quiver.getOrDefault(ModDataComponents.MAX_QUIVER_SLOTS.get(), 9);
+        List<ItemStack> list = getQuiverContents(quiver);
+        int before = arrows.getCount();
+        for (int i = 0; i < Math.min(maxSlots, list.size()) && !arrows.isEmpty(); i++) {
+            ItemStack inSlot = list.get(i);
+            if (inSlot.isEmpty()) {
+                list.set(i, arrows.copy());
+                arrows.setCount(0);
+            } else if (ItemStack.isSameItemSameComponents(inSlot, arrows) && inSlot.getCount() < inSlot.getMaxStackSize()) {
+                int transfer = Math.min(inSlot.getMaxStackSize() - inSlot.getCount(), arrows.getCount());
+                inSlot.grow(transfer);
+                arrows.shrink(transfer);
+            }
+        }
+        if (arrows.getCount() == before) return false;
+        saveQuiverContents(quiver, list);
+        return true;
+    }
+
+    /**
+     * Takes one arrow from the selected slot, moving the selection on to the next
+     * loaded slot when that one is empty. Empty if the quiver holds no arrows.
+     */
+    public static ItemStack takeOne(ItemStack quiver) {
+        int maxSlots = quiver.getOrDefault(ModDataComponents.MAX_QUIVER_SLOTS.get(), 9);
+        List<ItemStack> list = getQuiverContents(quiver);
+        int slots = Math.min(maxSlots, list.size());
+        int selected = quiver.getOrDefault(ModDataComponents.QUIVER_SELECTED_SLOT.get(), 0);
+        for (int step = 0; step < slots; step++) {
+            int slot = Math.floorMod(selected + step, slots);
+            if (!list.get(slot).isEmpty()) {
+                ItemStack one = list.get(slot).split(1);
+                saveQuiverContents(quiver, list);
+                if (slot != selected) {
+                    quiver.set(ModDataComponents.QUIVER_SELECTED_SLOT.get(), slot);
+                }
+                return one;
+            }
+        }
+        return ItemStack.EMPTY;
+    }
+
+    /** Whether any slot holds arrows. */
+    public static boolean hasArrows(ItemStack quiver) {
+        for (ItemStack stack : getQuiverContents(quiver)) {
+            if (!stack.isEmpty()) return true;
+        }
+        return false;
+    }
+
+    /** The arrows in the selected slot, or an empty stack. Drawn sticking out of the quiver. */
+    public static ItemStack selectedArrows(ItemStack quiver) {
+        List<ItemStack> contents = getQuiverContents(quiver);
+        int selected = quiver.getOrDefault(ModDataComponents.QUIVER_SELECTED_SLOT.get(), 0);
+        return selected >= 0 && selected < contents.size() ? contents.get(selected) : ItemStack.EMPTY;
+    }
     public static List<ItemStack> getQuiverContents(ItemStack quiver) {
         ItemContainerContents contents = quiver.getOrDefault(DataComponents.CONTAINER, ItemContainerContents.EMPTY);
         NonNullList<ItemStack> list = NonNullList.withSize(9, ItemStack.EMPTY);

@@ -91,7 +91,16 @@ public class ShavingHorseBlock extends BaseEntityBlock {
                     horse.currentShaves++;
 
                     stack.hurtAndBreak(1, player, Player.getSlotForHand(hand));
-                    level.playSound(null, pos, SoundEvents.AXE_STRIP, SoundSource.BLOCKS, 1.0F, 1.0F);
+                    level.playSound(null, pos, net.frostytrix.fletcherstrestle.sound.ModSounds.SHAVING_HORSE_SHAVE.get(),
+                            SoundSource.BLOCKS, 1.0F, 0.85F + level.getRandom().nextFloat() * 0.3F);
+                    // Shavings curl off the log, in the log's own colours.
+                    if (level instanceof net.minecraft.server.level.ServerLevel serverLevel) {
+                        serverLevel.sendParticles(
+                                new net.minecraft.core.particles.ItemParticleOption(
+                                        net.minecraft.core.particles.ParticleTypes.ITEM, storedLog.copyWithCount(1)),
+                                pos.getX() + 0.5, pos.getY() + 0.9, pos.getZ() + 0.5,
+                                6, 0.2, 0.05, 0.2, 0.08);
+                    }
 
                     if (horse.currentShaves >= recipeHolder.get().value().getShavesRequired()) {
                         ItemStack result = recipeHolder.get().value().assemble(input, level.registryAccess());

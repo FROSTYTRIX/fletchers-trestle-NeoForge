@@ -1,3 +1,163 @@
+# Fletcher's Trestle: 2.7.0
+
+Well Armed. Skeletons and pillagers now carry **modular weapons** built from the
+woods around them, a finished bow can be **restrung and retuned**, and maxing a
+skill branch unlocks a **capstone**. The workshop finally makes some noise,
+and the **Garrison** arrives as a first, work-in-progress look.
+
+---
+
+## 💀 Armed mobs
+
+- **Every skeleton, stray, bogged and pillager now spawns with a modular bow or
+  crossbow.** The basic one is oak limbs, a wooden riser and a spider silk string.
+- **A third to two thirds of them carry something better,** depending on the local
+  difficulty: at least one limb is made of a **signature wood**. Strays use
+  spruce, bogged use mangrove, and skeletons and pillagers use the wood of the
+  biome they spawn in: birch in a birch forest, jungle in a jungle. Where only oak
+  grows, they pick another Overworld wood.
+- **Risers and strings vary too.** Two in three risers are wood, the rest copper
+  or iron. Strings are spider silk, flax or high tension, in that order of
+  likelihood, and a high-tension string always comes with a metal riser.
+- **Composites can turn up** while `composite_bows` is on.
+- **`/summon` with NBT is left alone**: a mob given its gear by the command keeps
+  exactly that gear.
+- **Limb and riser traits work for them**: a stray's bow fires its arrows the way
+  yours would. Enchantments the game gave the mob carry over to the new weapon.
+- **Fully data-driven**: which mobs, how often and which woods live in two data
+  maps, `mob_armory` and `native_woods`. Turn the whole thing off with
+  `armed_mobs` under `[world]`.
+
+## 🏰 The Garrison (work in progress)
+
+*A first playable version: the models and textures are placeholders, and the
+numbers and behaviour may still change.*
+
+- **The Emplacement**: a swivel mount for a crossbow, modular or vanilla. Mount
+  the crossbow, fit a quiver for ammunition, and point it at the field it should
+  cover: it fires 45° either side of its facing, 16 blocks out, 32 with a Scope
+  (all three in the server config).
+- **The Bolt Warden**: a clockwork golem that crews emplacements. Build one from
+  four stripped logs in a T and wind it up with a Mechanical Trigger, which it
+  drops again if it's destroyed.
+- **It guards its post**: it stays within 16 blocks of where it was built, runs
+  to whichever loaded post can see a hostile mob, reloads at the crossbow's own
+  speed and fires. Magazines fire in bursts.
+- **Hostile mobs only.** It never shoots players, villagers or animals, and holds
+  fire while anyone stands in the line. Every shot wears the crossbow, the bolts
+  can be picked back up, and its kills give no archery XP.
+- **Redstone** holds a post's fire, and a **comparator** reads its quiver.
+- **New advancement**: Wind It Up, for building your first Bolt Warden.
+
+## 🔧 Bench work
+
+- **Restring a bow or crossbow** at the Fletching Table: put the finished weapon
+  in the riser slot, leave the limb slots empty, and add a string. It swaps the
+  string and restores **half the durability**.
+- **Retune it** by playing the minigame with the weapon in place. Retuning costs
+  10% durability, unless you restring at the same time.
+- **Everything else is kept**: enchantments, name, both woods of a composite and
+  a crossbow's attachment.
+- **Maker's stamp**: weapons now remember who built them, shown on the tooltip.
+  Bought ones are signed by a village fletcher.
+
+## 🎯 Capstones
+
+- **Max a skill branch to unlock its capstone.** Each costs 10 points, and an
+  archer can own **two of the three**.
+  - **Snap Shot** (Draw): release just as you reach full draw for no spread and
+    +10% damage.
+  - **Called Shot** (Crit): headshots always crit.
+  - **Dead Calm** (Aim): sneak and hold still for a second for no spread, no flax
+    shake, and one more step of scope zoom.
+- **Headshots follow the mob's shape.** On long, low mobs like cows, horses and
+  spiders, the head is the front of the body, not the top.
+- **Four new advancements**: archery levels 40 and 50, your first capstone, two
+  capstones, and your first restring.
+
+## 🏹 The quiver
+
+- **It hangs on your back.** Turn it off with `quiver_on_back` in the client
+  config.
+- **The selected arrow sticks out of it**, fletching up, in your inventory and on
+  your back. Coloured fletchings and tipped arrows show their colours.
+
+## 🔊 Sounds
+
+- **Bows creak as you draw** and click at full draw. **Each string has its own
+  release sound.**
+- **The workshop is alive**: the Steam Box hisses and steams while it works, the
+  Shaving Horse throws shavings, and the Fletching Table plucks.
+- **Hits sound off**: a ding on a headshot, a thunk on the Archery Target, and a
+  bell on a bullseye.
+
+## 🗝️ Trial Chambers
+
+- **Vaults can hold modular bows and crossbows**, already tuned, plus books with
+  the mod's enchantments. Ominous vaults roll better tuning and rarer woods.
+- **Pale oak limbs** turn up in vaults and supply chests, and steam like any
+  other wood. They had no source on 1.21.1.
+
+## 🧩 For modpacks and addons
+
+- **No more reserved ids.** The glass vial, resonance tip, weighted hook,
+  trailing rope, black hole and vex behaviours are now effects anyone can put
+  on their own parts: `splash_potion`, `resonance`, `grapple`, `deploy_rope`,
+  `black_hole` and `phase_through_blocks`, each with its own numbers to tune.
+  A pack that overrides one of those six parts' files should add the effect to
+  its copy, or the part loses its trick.
+- **New stat flags**: `photosynthetic` on limbs (what Photosynthesis checks,
+  false for crimson and warped) and `overdraw_shake` on strings (the flax
+  wobble).
+- **The Fletching Table takes any part with a material file.** New parts no
+  longer also need adding to the slot tags.
+- **The guidebook's tables are live for arrow parts too**: heads, shafts and
+  fletchings list a pack's own parts and traits.
+- **Garland feathers** and their colours are an item data map,
+  `garland_feather`, and garland strings an item tag.
+- **The Garrison is data too**: block, item and entity tags for what a warden
+  is built from, what winds it up and what it shoots, a loot table for its
+  drops, and a `[garrison]` server config for range, cone and home radius.
+- **Java addons** get two new effect hooks that can take over an arrow's
+  impact entirely.
+- The config screen now names every option, in English and French.
+
+## 🐛 Fixes
+
+- **Garlands no longer vanish.** Fixed a bug where a garland disappeared as soon
+  as the nail it was first tied to went off screen.
+- **The quiver bar fits the quiver.** Fixed a bug where switching arrows showed
+  a nine-slot bar, whether the quiver had three slots or five.
+- **Pillagers can use modular crossbows.** Fixed a bug where a pillager holding
+  one never fired.
+- **Traits work on vanilla arrows.** Fixed a bug where amphibious, punch and
+  conductive did nothing when a modular bow fired a plain arrow.
+- **Headshots land where the arrow does.** Fixed a bug where hits were measured
+  from where the arrow was a tick earlier, which also threw off the Heavy Dummy's
+  readout.
+- **Photosynthesis checks the whole bow.** Fixed a bug where a bow with an iron
+  riser, or a Nether wood as its lower limb, could still repair in sunlight.
+- Fixed a bug where a leftover test recipe baked potatoes in the Steam Box.
+- Fixed a bug where the stripped oak shaving recipe was misspelled.
+- Fixed a bug where about thirty texts showed their raw translation key.
+
+## ⚙️ Configuration
+
+- `restring_repair` and `retune_cost` under `[crafting]`, `capstone_cost` and
+  `max_capstones` under `[marksmanship]`, `armed_mobs` under `[world]`, the new
+  `[garrison]` section, and `quiver_on_back` in the client config.
+
+## 📖 Guidebook
+
+- **The material tables are live**: limbs, risers and strings are read from the
+  game, so the numbers are always right and a modpack's materials show up.
+- New **Out in the World** entry for armed mobs and Trial Chamber loot, and a
+  **Garrison** entry.
+- The Fletching Table, Modular Bows, Quiver, Archery Skills, Enchantments and
+  Villager Trades entries cover the new features.
+
+---
+
 # Fletcher's Trestle: 2.6.0
 
 Laminated. Two woods can now be built into a single **composite bow** that keeps
@@ -6,7 +166,7 @@ mod finally gets **advancements** of its own.
 
 ---
 
-## 🪵 Composite bows
+## 🪵 Composite bows 
 
 - **Build a bow from two different woods** to get a composite: crimson over
   warped, dark oak over birch, any pairing you like.

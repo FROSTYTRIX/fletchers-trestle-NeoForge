@@ -23,6 +23,14 @@ public class ModGlobalLootModifierProvider extends GlobalLootModifierProvider {
 
     @Override
     protected void start() {
+        // Trial Chambers: modular weapons, the mod's enchanted books, and pale oak,
+        // whose limbs have no other source on 1.21.1. Each injects a small table of
+        // our own as a bonus roll, so vanilla's rewards are left untouched.
+        trialChamber("trial_vault", "chests/trial_chambers/reward", 0.35f);
+        trialChamber("trial_ominous_vault", "chests/trial_chambers/reward_ominous", 0.6f);
+        trialChamber("trial_supplies", "chests/trial_chambers/corridor", 0.5f);
+        trialChamber("trial_supplies", "chests/trial_chambers/supply", 0.5f);
+
         this.add("mechanical_trigger_from_pillager_outpost",
                 new AddItemModifier(new LootItemCondition[]{
                         new LootTableIdCondition.Builder(ResourceLocation.withDefaultNamespace("chests/pillager_outpost")).build(),
@@ -185,5 +193,16 @@ public class ModGlobalLootModifierProvider extends GlobalLootModifierProvider {
                 new ParrotFeatherModifier(new LootItemCondition[]{
                         new LootTableIdCondition.Builder(ResourceLocation.withDefaultNamespace("entities/parrot")).build()
                 }));
+    }
+
+    private void trialChamber(String table, String target, float chance) {
+        String name = table + "_in_" + target.substring(target.lastIndexOf('/') + 1);
+        this.add(name, new net.neoforged.neoforge.common.loot.AddTableLootModifier(
+                new LootItemCondition[]{
+                        new LootTableIdCondition.Builder(ResourceLocation.withDefaultNamespace(target)).build(),
+                        LootItemRandomChanceCondition.randomChance(chance).build()
+                },
+                net.minecraft.resources.ResourceKey.create(net.minecraft.core.registries.Registries.LOOT_TABLE,
+                        ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "inject/" + table))));
     }
 }

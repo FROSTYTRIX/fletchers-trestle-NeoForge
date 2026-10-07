@@ -148,6 +148,32 @@ public class SteamBoxBlock extends BaseEntityBlock {
         return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
     }
 
+    /**
+     * Steam: a light wisp while the box is heated and filled, heavy steam and a hiss
+     * while it's cooking. Client-side, from the synced tank, the server's
+     * {@code steaming} flag and the heat source below.
+     */
+    @Override
+    public void animateTick(BlockState state, Level level, BlockPos pos, net.minecraft.util.RandomSource random) {
+        if (!(level.getBlockEntity(pos) instanceof SteamBoxBlockEntity box)) return;
+        if (!SteamBoxBlockEntity.hasHeatBelow(level, pos) || box.getFluidTank().getFluidAmount() <= 0) return;
+
+        boolean steaming = box.isSteaming();
+        int puffs = steaming ? 2 : (random.nextInt(3) == 0 ? 1 : 0);
+        for (int i = 0; i < puffs; i++) {
+            double x = pos.getX() + 0.25 + random.nextDouble() * 0.5;
+            double y = pos.getY() + 0.8; // the lid sits at 12.5/16
+            double z = pos.getZ() + 0.25 + random.nextDouble() * 0.5;
+            level.addParticle(net.minecraft.core.particles.ParticleTypes.WHITE_SMOKE,
+                    x, y, z, 0.0, 0.03 + random.nextDouble() * 0.02, 0.0);
+        }
+        if (steaming && random.nextInt(8) == 0) {
+            level.playLocalSound(pos.getX() + 0.5, pos.getY() + 0.8, pos.getZ() + 0.5,
+                    net.frostytrix.fletcherstrestle.sound.ModSounds.STEAM_BOX_HISS.get(), SoundSource.BLOCKS,
+                    1.0f, 0.9f + random.nextFloat() * 0.2f, false);
+        }
+    }
+
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> blockEntityType) {

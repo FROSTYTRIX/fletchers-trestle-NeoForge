@@ -1,0 +1,101 @@
+{
+  "_comment": "Every listed mob that spawns with a vanilla bow or crossbow gets the modular one. Limbs start as oak; between min_chance and max_chance (by local difficulty) at least one limb becomes a signature wood: the mob's own 'woods', the spawn biome's woods when 'native_woods' is on (see worldgen/biome/native_woods.json), or 'fallback' in treeless or oak-only biomes. 'common' woods only ever pair in a composite, and composites only happen while the server allows composite bows. Riser and string are rolled from the weighted 'risers' and 'strings' tables; a string that needs a metal riser is only rolled on one. Warped is never in the defaults: its arrows ignore gravity and mob aim leads for gravity.",
+  "values": {
+    "minecraft:skeleton": {
+      "min_chance": 0.33,
+      "max_chance": 0.66,
+      "common": [
+        "oak"
+      ],
+      "native_woods": true,
+      "fallback": [
+        "spruce",
+        "birch",
+        "jungle",
+        "acacia",
+        "dark_oak",
+        "cherry"
+      ],
+      "composite_chance": 0.25,
+      "risers": {
+        "wood": 4,
+        "copper": 1,
+        "iron": 1
+      },
+      "strings": {
+        "spider": 3,
+        "flax": 2,
+        "high_tension": 1
+      }
+    },
+    "minecraft:stray": {
+      "min_chance": 0.33,
+      "max_chance": 0.66,
+      "common": [
+        "oak"
+      ],
+      "woods": [
+        "spruce"
+      ],
+      "composite_chance": 0.25,
+      "risers": {
+        "wood": 4,
+        "copper": 1,
+        "iron": 1
+      },
+      "strings": {
+        "spider": 3,
+        "flax": 2,
+        "high_tension": 1
+      }
+    },
+    "minecraft:bogged": {
+      "min_chance": 0.33,
+      "max_chance": 0.66,
+      "common": [
+        "oak"
+      ],
+      "woods": [
+        "mangrove"
+      ],
+      "composite_chance": 0.5,
+      "risers": {
+        "wood": 4,
+        "copper": 1,
+        "iron": 1
+      },
+      "strings": {
+        "spider": 3,
+        "flax": 2,
+        "high_tension": 1
+      }
+    },
+    "minecraft:pillager": {
+      "min_chance": 0.33,
+      "max_chance": 0.66,
+      "common": [
+        "oak"
+      ],
+      "native_woods": true,
+      "fallback": [
+        "spruce",
+        "birch",
+        "jungle",
+        "acacia",
+        "dark_oak",
+        "cherry"
+      ],
+      "composite_chance": 0.25,
+      "risers": {
+        "wood": 4,
+        "copper": 1,
+        "iron": 1
+      },
+      "strings": {
+        "spider": 3,
+        "flax": 2,
+        "high_tension": 1
+      }
+    }
+  }
+}

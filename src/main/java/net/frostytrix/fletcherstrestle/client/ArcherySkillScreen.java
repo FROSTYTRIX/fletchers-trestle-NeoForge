@@ -1,5 +1,10 @@
 package net.frostytrix.fletcherstrestle.client;
 
+import java.util.List;
+import java.util.ArrayList;
+import net.minecraft.ChatFormatting;
+import net.frostytrix.fletcherstrestle.config.FletcherConfig;
+import net.frostytrix.fletcherstrestle.progression.ArcherySkills;
 import net.frostytrix.fletcherstrestle.network.SpendSkillPacket;
 import net.frostytrix.fletcherstrestle.progression.ArcherySkill;
 import net.minecraft.client.gui.GuiGraphics;
@@ -9,19 +14,23 @@ import net.minecraft.network.chat.Component;
 import net.neoforged.neoforge.network.PacketDistributor;
 
 /**
- * Simple archery skill-tree screen (Phase 2). Reads the synced
+ * Simple archery skill-tree screen. Reads the synced
  * {@link ClientArcheryData} and lets the player spend points across the three
  * branches via a {@link SpendSkillPacket} to the server.
  */
 public class ArcherySkillScreen extends Screen {
 
-    private static final int WIDTH = 200;
-    private static final int HEIGHT = 140;
-    private static final int ROW_H = 28;
+    private static final int WIDTH = 230;
+    private static final int HEIGHT = 176;
+    private static final int ROW_H = 42;
+    private static final int FIRST_ROW = 38;
+
+    private static final Component PLUS = Component.literal("+");
+    private static final Component STAR = Component.literal("\u2605");
 
     private int left;
     private int top;
-    private final Button[] plusButtons = new Button[ArcherySkill.values().length];
+    private final Button[] buttons = new Button[ArcherySkill.values().length];
 
     public ArcherySkillScreen() {
         super(Component.translatable("gui.fletcherstrestle.skill_screen_title"));
@@ -34,17 +43,20 @@ public class ArcherySkillScreen extends Screen {
 
         ArcherySkill[] skills = ArcherySkill.values();
         for (int i = 0; i < skills.length; i++) {
-            final int branch = i;
-            int rowY = this.top + 36 + i * ROW_H;
-            this.plusButtons[i] = Button.builder(Component.literal("+"), b -> spend(branch))
-                    .bounds(this.left + WIDTH - 30, rowY, 20, 20)
+            final ArcherySkill skill = skills[i];
+            int rowY = this.top + FIRST_ROW + i * ROW_H;
+            // One button per branch: "+" while ranking up, then the star that buys
+            // the capstone once the branch is maxed.
+            this.buttons[i] = Button.builder(PLUS, b -> spend(skill))
+                    .bounds(this.left + WIDTH - 30, rowY + 4, 20, 20)
                     .build();
-            this.addRenderableWidget(this.plusButtons[i]);
+            this.addRenderableWidget(this.buttons[i]);
         }
     }
 
-    private void spend(int branch) {
-        PacketDistributor.sendToServer(new SpendSkillPacket(branch));
+    private void spend(ArcherySkill skill) {
+        boolean capstone = ClientArcheryData.rank(skill) >= ArcherySkill.MAX_RANK;
+        PacketDistributor.sendToServer(new SpendSkillPacket(skill.ordinal(), capstone));
         // The server validates, applies, and syncs ClientArcheryData back.
     }
 
@@ -67,6 +79,7 @@ public class ArcherySkillScreen extends Screen {
         g.fill(this.left + WIDTH - 1, this.top, this.left + WIDTH, this.top + HEIGHT, 0xFF5A4632);
 
         int points = ClientArcheryData.pointsAvailable();
+        ArcherySkills owned = ClientArcheryData.skills();
 
         // Title + points (shadowed for legibility).
         g.drawCenteredString(this.font, this.title, this.left + WIDTH / 2, this.top + 8, 0xFFFFFF);
@@ -74,16 +87,33 @@ public class ArcherySkillScreen extends Screen {
                 Component.translatable("gui.fletcherstrestle.skill_points", points),
                 this.left + WIDTH / 2, this.top + 20, 0xFFD700);
 
+        List<Component> tooltip = null;
         ArcherySkill[] skills = ArcherySkill.values();
         for (int i = 0; i < skills.length; i++) {
-            int rank = ClientArcheryData.rank(skills[i]);
+            ArcherySkill skill = skills[i];
+            int rank = ClientArcheryData.rank(skill);
             boolean maxed = rank >= ArcherySkill.MAX_RANK;
-            this.plusButtons[i].active = points > 0 && !maxed;
+            CapstoneState state = capstoneState(skill, owned, points);
 
-            int rowY = this.top + 36 + i * ROW_H;
-            g.drawString(this.font, branchName(skills[i]), this.left + 12, rowY + 1, 0xFFFFFF, true);
-            g.drawString(this.font, rank + "/" + ArcherySkill.MAX_RANK + "  " + effectText(skills[i], rank),
-                    this.left + 12, rowY + 12, 0xB0B0B0, true);
+            Button button = this.buttons[i];
+            button.setMessage(maxed ? STAR : PLUS);
+            button.active = maxed ? state == CapstoneState.AVAILABLE : points > 0;
+            button.visible = state != CapstoneState.OWNED;
+
+            int rowY = this.top + FIRST_ROW + i * ROW_H;
+            g.drawString(this.font, branchName(skill), this.left + 12, rowY, 0xFFFFFF, true);
+            g.drawString(this.font, Component.literal(rank + "/" + ArcherySkill.MAX_RANK + "  ")
+                    .append(effectText(skill, rank)), this.left + 12, rowY + 11, 0xB0B0B0, true);
+
+            Component capstone = Component.literal("\u2605 ").append(
+                    Component.translatable("gui.fletcherstrestle.capstone." + skill.capstoneId()));
+            g.drawString(this.font, capstone, this.left + 12, rowY + 23, state.colour, true);
+
+            boolean overLine = mouseX >= this.left + 8 && mouseX < this.left + WIDTH - 34
+                    && mouseY >= rowY + 21 && mouseY < rowY + 33;
+            if (overLine || (button.visible && button.isHovered() && maxed)) {
+                tooltip = capstoneTooltip(skill, state, owned);
+            }
         }
 
         // Render widgets directly: calling super.render() would re-draw the
@@ -91,6 +121,50 @@ public class ArcherySkillScreen extends Screen {
         for (net.minecraft.client.gui.components.Renderable r : this.renderables) {
             r.render(g, mouseX, mouseY, partialTick);
         }
+        if (tooltip != null) {
+            g.renderComponentTooltip(this.font, tooltip, mouseX, mouseY);
+        }
+    }
+
+    /** Where a capstone stands for this archer, and the colour its line is drawn in. */
+    private enum CapstoneState {
+        OWNED(0xFFD700),
+        AVAILABLE(0xFFFFFF),
+        NOT_ENOUGH_POINTS(0x9A8A6A),
+        AT_LIMIT(0x6A6A6A),
+        LOCKED(0x5A5A5A);
+
+        final int colour;
+
+        CapstoneState(int colour) {
+            this.colour = colour;
+        }
+    }
+
+    private static CapstoneState capstoneState(ArcherySkill skill, ArcherySkills owned, int points) {
+        if (owned.hasCapstone(skill)) return CapstoneState.OWNED;
+        if (ClientArcheryData.rank(skill) < ArcherySkill.MAX_RANK) return CapstoneState.LOCKED;
+        if (owned.capstoneCount() >= FletcherConfig.MAX_CAPSTONES.get()) return CapstoneState.AT_LIMIT;
+        if (points < FletcherConfig.CAPSTONE_COST.get()) return CapstoneState.NOT_ENOUGH_POINTS;
+        return CapstoneState.AVAILABLE;
+    }
+
+    private static List<Component> capstoneTooltip(ArcherySkill skill, CapstoneState state, ArcherySkills owned) {
+        String id = skill.capstoneId();
+        List<Component> lines = new ArrayList<>();
+        lines.add(Component.translatable("gui.fletcherstrestle.capstone." + id).withStyle(ChatFormatting.GOLD));
+        lines.add(Component.translatable("gui.fletcherstrestle.capstone." + id + ".desc").withStyle(ChatFormatting.GRAY));
+        Component status = switch (state) {
+            case OWNED -> Component.translatable("gui.fletcherstrestle.capstone.owned").withStyle(ChatFormatting.GREEN);
+            case LOCKED -> Component.translatable("gui.fletcherstrestle.capstone.locked").withStyle(ChatFormatting.DARK_GRAY);
+            case AT_LIMIT -> Component.translatable("gui.fletcherstrestle.capstone.limit",
+                    FletcherConfig.MAX_CAPSTONES.get()).withStyle(ChatFormatting.RED);
+            case NOT_ENOUGH_POINTS, AVAILABLE -> Component.translatable("gui.fletcherstrestle.capstone.cost",
+                    FletcherConfig.CAPSTONE_COST.get(), owned.capstoneCount(),
+                    FletcherConfig.MAX_CAPSTONES.get()).withStyle(ChatFormatting.YELLOW);
+        };
+        lines.add(status);
+        return lines;
     }
 
     private static Component branchName(ArcherySkill skill) {
@@ -101,11 +175,14 @@ public class ArcherySkillScreen extends Screen {
         };
     }
 
-    private static String effectText(ArcherySkill skill, int rank) {
+    private static Component effectText(ArcherySkill skill, int rank) {
         return switch (skill) {
-            case DRAW -> String.format("x%.2f draw", 1.0f - 0.02f * rank);
-            case CRIT -> (int) (0.03f * rank * 100) + "% crit";
-            case AIM -> String.format("x%.2f spread", 1.0f - 0.03f * rank);
+            case DRAW -> Component.translatable("gui.fletcherstrestle.skill_effect.draw",
+                    String.format("%.2f", 1.0f - 0.02f * rank));
+            case CRIT -> Component.translatable("gui.fletcherstrestle.skill_effect.crit",
+                    (int) (0.03f * rank * 100));
+            case AIM -> Component.translatable("gui.fletcherstrestle.skill_effect.aim",
+                    String.format("%.2f", 1.0f - 0.03f * rank));
         };
     }
 

@@ -2,6 +2,7 @@
   "ingredient": {
     "item": "fletcherstrestle:high_tension_string"
   },
+  "release_sound": "fletcherstrestle:bow.release.high_tension",
   "stats": {
     "durability_cost": 2,
     "requires_metal_riser": true,

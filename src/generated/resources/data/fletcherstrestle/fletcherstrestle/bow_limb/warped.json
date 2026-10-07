@@ -8,6 +8,7 @@
     "item": "fletcherstrestle:pliable_warped_limb"
   },
   "stats": {
-    "draw_time_ticks": 20.0
+    "draw_time_ticks": 20.0,
+    "photosynthetic": false
   }
 }

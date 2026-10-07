@@ -26,6 +26,15 @@ public record DamageMultiplierIfTargetBelowHealthEffect(float threshold, float m
     ).apply(inst, DamageMultiplierIfTargetBelowHealthEffect::new));
 
     @Override
+
+    public java.util.Optional<net.minecraft.network.chat.Component> describe() {
+
+        return java.util.Optional.of(net.minecraft.network.chat.Component.translatable("trait.fletcherstrestle.executioner"));
+
+    }
+
+
+    @Override
     public MaterialEffectType<? extends MaterialEffect> type() {
         return ModMaterialEffectTypes.DAMAGE_MULTIPLIER_IF_TARGET_BELOW_HEALTH.get();
     }

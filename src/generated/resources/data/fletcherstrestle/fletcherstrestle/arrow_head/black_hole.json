@@ -1,4 +1,9 @@
 {
+  "effects": [
+    {
+      "type": "fletcherstrestle:black_hole"
+    }
+  ],
   "ingredient": {
     "item": "minecraft:barrier"
   },

@@ -1,0 +1,11 @@
+{
+  "values": {
+    "minecraft:feather": { "colour": "#F2F2F2" },
+    "fletcherstrestle:red_feather": { "colour": "#B02E26" },
+    "fletcherstrestle:blue_feather": { "colour": "#3C44AA" },
+    "fletcherstrestle:green_feather": { "colour": "#5E7C16" },
+    "fletcherstrestle:cyan_feather": { "colour": "#169C9C" },
+    "fletcherstrestle:light_gray_feather": { "colour": "#9D9D97" },
+    "fletcherstrestle:brown_feather": { "colour": "#835432" }
+  }
+}

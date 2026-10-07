@@ -20,13 +20,13 @@ import java.util.Optional;
 public class ModVillagerTradesEvent {
     @SubscribeEvent
     public static void onVillagerTrades(VillagerTradesEvent event) {
-        // We only want to modify the Fletcher!
+        // We only want to modify the Fletcher.
         if (event.getType() == VillagerProfession.FLETCHER) {
 
             // Get the list of possible trades for Novice (Level 1)
             List<VillagerTrades.ItemListing> level1Trades = event.getTrades().get(1);
 
-            // 1. Nuke everything
+            // Nuke everything
             level1Trades.clear();
 
             // Vanilla Trades

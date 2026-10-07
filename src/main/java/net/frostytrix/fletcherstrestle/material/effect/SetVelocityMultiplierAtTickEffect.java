@@ -23,6 +23,15 @@ public record SetVelocityMultiplierAtTickEffect(int tick, float multiplier) impl
     ).apply(inst, SetVelocityMultiplierAtTickEffect::new));
 
     @Override
+
+    public java.util.Optional<net.minecraft.network.chat.Component> describe() {
+
+        return java.util.Optional.of(net.minecraft.network.chat.Component.translatable("trait.fletcherstrestle.boost"));
+
+    }
+
+
+    @Override
     public MaterialEffectType<? extends MaterialEffect> type() {
         return ModMaterialEffectTypes.SET_VELOCITY_MULTIPLIER_AT_TICK.get();
     }

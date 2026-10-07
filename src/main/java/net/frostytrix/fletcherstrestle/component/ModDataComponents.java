@@ -51,6 +51,18 @@ public class ModDataComponents {
                             .build()
             );
 
+    /**
+     * Who made this weapon: a player's name, or {@link net.frostytrix.fletcherstrestle.component.MakersStamp#VILLAGE}
+     * for one bought from a Fletcher. Shown on the tooltip; survives restringing and the Crossbow Bench.
+     */
+    public static final Supplier<DataComponentType<String>> CRAFTED_BY =
+            DATA_COMPONENT_TYPES.register("crafted_by", () ->
+                    DataComponentType.<String>builder()
+                            .persistent(Codec.STRING)
+                            .networkSynchronized(ByteBufCodecs.STRING_UTF8)
+                            .build()
+            );
+
     /** A bow's tuning before Tinker's Mark was applied, so removal can undo it. */
     public static final Supplier<DataComponentType<Float>> TUNING_BEFORE_MARK =
             DATA_COMPONENT_TYPES.register("tuning_before_mark", () ->

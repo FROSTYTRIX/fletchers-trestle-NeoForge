@@ -25,5 +25,24 @@ public class ModEnchantmentTagsProvider extends EnchantmentTagsProvider {
                 .add(ModEnchantments.TINKERS_MARK)
                 .add(ModEnchantments.QUICK_NOCK)
                 .add(ModEnchantments.FOLLOW_THROUGH);
+
+        // Librarians sell them as books, like any vanilla table enchantment.
+        this.tag(EnchantmentTags.TRADEABLE)
+                .add(ModEnchantments.PHOTOSYNTHESIS)
+                .add(ModEnchantments.BIOLUMINESCENCE)
+                .add(ModEnchantments.GALE_FORCE)
+                .add(ModEnchantments.TINKERS_MARK)
+                .add(ModEnchantments.QUICK_NOCK)
+                .add(ModEnchantments.FOLLOW_THROUGH);
+
+        // The Fletcher's enchanted bows and crossbows roll from this tag, so the
+        // mod's own trader can sell the mod's own enchantments.
+        this.tag(EnchantmentTags.ON_TRADED_EQUIPMENT)
+                .add(ModEnchantments.PHOTOSYNTHESIS)
+                .add(ModEnchantments.BIOLUMINESCENCE)
+                .add(ModEnchantments.GALE_FORCE)
+                .add(ModEnchantments.TINKERS_MARK)
+                .add(ModEnchantments.QUICK_NOCK)
+                .add(ModEnchantments.FOLLOW_THROUGH);
     }
 }

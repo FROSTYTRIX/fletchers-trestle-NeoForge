@@ -1,0 +1,32 @@
+{
+  "parent": "fletcherstrestle:marksmanship/capstone",
+  "display": {
+    "icon": {
+      "id": "minecraft:amethyst_cluster"
+    },
+    "title": {
+      "translate": "advancement.fletcherstrestle.capstone_two.title"
+    },
+    "description": {
+      "translate": "advancement.fletcherstrestle.capstone_two.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "done": {
+      "trigger": "fletcherstrestle:capstone",
+      "conditions": {
+        "owned": {
+          "min": 2
+        }
+      }
+    }
+  },
+  "requirements": [
+    [
+      "done"
+    ]
+  ]
+}

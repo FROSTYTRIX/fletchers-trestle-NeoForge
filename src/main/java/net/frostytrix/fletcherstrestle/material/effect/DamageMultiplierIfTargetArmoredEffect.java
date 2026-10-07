@@ -23,6 +23,15 @@ public record DamageMultiplierIfTargetArmoredEffect(float multiplier) implements
     ).apply(inst, DamageMultiplierIfTargetArmoredEffect::new));
 
     @Override
+
+    public java.util.Optional<net.minecraft.network.chat.Component> describe() {
+
+        return java.util.Optional.of(net.minecraft.network.chat.Component.translatable("trait.fletcherstrestle.armor_piercing"));
+
+    }
+
+
+    @Override
     public MaterialEffectType<? extends MaterialEffect> type() {
         return ModMaterialEffectTypes.DAMAGE_MULTIPLIER_IF_TARGET_ARMORED.get();
     }

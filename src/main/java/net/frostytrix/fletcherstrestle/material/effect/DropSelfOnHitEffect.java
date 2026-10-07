@@ -24,6 +24,15 @@ public record DropSelfOnHitEffect(float chance) implements MaterialEffect {
     ).apply(inst, DropSelfOnHitEffect::new));
 
     @Override
+
+    public java.util.Optional<net.minecraft.network.chat.Component> describe() {
+
+        return java.util.Optional.of(net.minecraft.network.chat.Component.translatable("trait.fletcherstrestle.recovery"));
+
+    }
+
+
+    @Override
     public MaterialEffectType<? extends MaterialEffect> type() {
         return ModMaterialEffectTypes.DROP_SELF_ON_HIT.get();
     }

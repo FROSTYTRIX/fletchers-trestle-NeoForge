@@ -13,6 +13,15 @@
       "type": "patchouli:text",
       "title": "Skill Tree",
       "text": "Every level grants a point to spend across three branches:$(br)$(li)$(l)Draw$(): faster draw$(li)$(l)Crit$(): chance to crit$(li)$(l)Aim$(): tighter spread, and a longer grace before a flax string starts to shake."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Capstones",
+      "text": "Max a branch and a $(l)capstone$() lights up at its tip. Each costs $(l)10 points$(), and you may own $(l)two of the three$(): at level 50 that spends every point, so the last stretch of levelling becomes a choice."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(li)$(l)Snap Shot$() (Draw): release just as you reach full draw for no spread and +10% damage.$(li)$(l)Called Shot$() (Crit): headshots always crit.$(li)$(l)Dead Calm$() (Aim): sneak and hold still for a second for no spread, no flax shake, and a deeper scope."
     }
   ]
 }

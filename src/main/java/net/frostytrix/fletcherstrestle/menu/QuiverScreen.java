@@ -39,7 +39,7 @@ public class QuiverScreen extends AbstractContainerScreen<QuiverMenu> {
         guiGraphics.blit(TEXTURE, x, y + rows * 18 + 17, 0, 126, this.imageWidth, 96);
 
         // --- LAYER 2: THE ERASER ---
-        // Wipe the empty space BEFORE drawing the slots!
+        // Wipe the empty space BEFORE drawing the slots.
         int emptySlots = (rows * 9) - maxSlots;
         if (emptySlots > 0) {
             int lastRowY = y + 17 + ((rows - 1) * 18);

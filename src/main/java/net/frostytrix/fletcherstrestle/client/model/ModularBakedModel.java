@@ -94,7 +94,7 @@ public class ModularBakedModel implements BakedModel {
             return new ItemTransforms(thirdPersonLeft, thirdPersonRight, firstPersonLeft, firstPersonRight,
                     ItemTransform.NO_TRANSFORM, ItemTransform.NO_TRANSFORM, groundTransform, FIXED_TRANSFORM);
         }
-        // Otherwise, fall back to the standard Bow transforms you already had
+        // Bows.
         else {
             ItemTransform thirdPersonRight = new ItemTransform(new Vector3f(-80, 260, -40), new Vector3f(-1 * f, -2 * f, 2.5f * f), new Vector3f(0.9f, 0.9f, 0.9f));
             ItemTransform thirdPersonLeft = new ItemTransform(new Vector3f(-80, -280, 40), new Vector3f(-1 * f, -2 * f, 2.5f * f), new Vector3f(0.9f, 0.9f, 0.9f));
@@ -102,7 +102,7 @@ public class ModularBakedModel implements BakedModel {
             ItemTransform firstPersonLeft = new ItemTransform(new Vector3f(0, 90, -25), new Vector3f(1.13f * f, 3.2f * f, 1.13f * f), new Vector3f(0.68f, 0.68f, 0.68f));
 
             return new ItemTransforms(thirdPersonLeft, thirdPersonRight, firstPersonLeft, firstPersonRight,
-                    ItemTransform.NO_TRANSFORM, ItemTransform.NO_TRANSFORM, groundTransform, FIXED_TRANSFORM); // <-- Replaced ground argument
+                    ItemTransform.NO_TRANSFORM, ItemTransform.NO_TRANSFORM, groundTransform, FIXED_TRANSFORM);
         }
     }
 
@@ -133,7 +133,7 @@ public class ModularBakedModel implements BakedModel {
                 }
                 String pull = getPullSuffix(stack, entity, maxPull);
 
-                // FALLBACK LOGIC: if no assembly, render oak/wood/spider.
+                // No assembly (a bare item): render oak/wood/spider.
                 String limbMat = bow != null ? bow.limbMaterial() : "oak";
                 String riserMat = bow != null ? bow.riserMaterial() : "wood";
                 String stringMat = bow != null ? bow.stringMaterial() : "spider";
@@ -220,15 +220,15 @@ public class ModularBakedModel implements BakedModel {
                 textures.add(Materials.arrowFletchingTexture(fletchMat, basePath + "/fletchings", "_fletching")); // tint idx 1
                 textures.add(Materials.arrowHeadTexture(headMat, basePath + "/heads", "_head"));      // tint idx 2
 
-                // Glass-vial arrows that have been dipped get a fourth layer:
-                // the "liquid" silhouette tinted to the potion's color via the
+                // A potion-carrying head that has been dipped gets a fourth layer:
+                // its "_liquid" silhouette, tinted to the potion's colour via the
                 // ItemColor handler registered in ModClientEvents.
                 String headIdNormalised = Materials.normaliseId(headMat);
-                boolean hasLiquid = "glass_vial".equals(headIdNormalised)
-                        && stack.get(DataComponents.POTION_CONTENTS) != null;
+                boolean hasLiquid = stack.get(DataComponents.POTION_CONTENTS) != null
+                        && Materials.arrowHead(headMat).effects().stream()
+                        .anyMatch(e -> e instanceof net.frostytrix.fletcherstrestle.material.effect.SplashPotionEffect);
                 if (hasLiquid) {
-                    textures.add(ResourceLocation.fromNamespaceAndPath(
-                            FletcherTrestle.MOD_ID, basePath + "/heads/glass_vial_liquid")); // tint idx 3
+                    textures.add(Materials.arrowHeadTexture(headMat, basePath + "/heads", "_liquid")); // tint idx 3
                 }
 
                 cacheKey = "arrow_" + headIdNormalised + "_"
@@ -335,11 +335,8 @@ public class ModularBakedModel implements BakedModel {
      *
      * <p>Layers that are not simply stacked in place have to be baked on their
      * own, because a bake applies one model state to everything in it. Their
-     * edits are applied here, to the finished quads, which keeps the maths off
-     * the axes it does not belong on: a flip that only touches x and y cannot
-     * disturb a layer's depth, and a translation cannot disturb its winding.
-     * Depth order between the layers comes from their own offsets rather than
-     * from the order they are emitted in.</p>
+     * edits are applied here, to the finished quads. Depth order between the
+     * layers comes from their offsets, not from the order they are emitted in.</p>
      */
     private record StackedBakedModel(BakedModel base, List<ExtraLayer> extras) implements BakedModel {
         @Override
@@ -390,13 +387,9 @@ public class ModularBakedModel implements BakedModel {
      * (1 - y, 1 - x) in block space, plus the small nudge clear of the riser's
      * plane.
      *
-     * <p>Three things travel together. The positions carry the flip. The
-     * vertex order is reversed, because a reflection turns the winding inside
-     * out and the item render type culls back faces, which is what made the
-     * limb look hollow. The normals are reflected the same way as the
-     * positions, because the item shader lights a quad from its normals: leave
-     * them and the limb is lit as though its front were its back, which reads
-     * as the shading landing on the wrong side.</p>
+     * <p>A reflection reverses the winding, so the vertex order is reversed too
+     * (the item render type culls back faces). The normals are reflected with
+     * the positions, since the item shader lights a quad from its normals.</p>
      */
     private static BakedQuad flipAboutDiagonal(BakedQuad quad) {
         int[] vertices = quad.getVertices();

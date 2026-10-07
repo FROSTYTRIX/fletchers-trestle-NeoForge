@@ -57,7 +57,7 @@ public class DippingRecipeCategory implements IRecipeCategory<DippingRecipe> {
 
     @Override
     public Component getTitle() {
-        return Component.literal("Dipping Vat");
+        return Component.translatable("block.fletcherstrestle.dipping_vat");
     }
 
     @Override
@@ -132,12 +132,10 @@ public class DippingRecipeCategory implements IRecipeCategory<DippingRecipe> {
                                 // For modular arrows, the fluid is just an example,
                                 // any potion works. Make that clear in the tooltip.
                                 if (recipe.requiredPotion().isEmpty()) {
-                                    tooltip.add(0, Component.literal("Any potion (example: ")
-                                            .append(dummyPotion.getHoverName())
-                                            .append(Component.literal(")"))
+                                    tooltip.add(0, Component.translatable("jei.fletcherstrestle.any_potion", dummyPotion.getHoverName())
                                             .withStyle(ChatFormatting.AQUA));
                                 } else {
-                                    tooltip.add(0, Component.literal("Fluid: ").append(dummyPotion.getHoverName()));
+                                    tooltip.add(0, Component.translatable("jei.fletcherstrestle.fluid", dummyPotion.getHoverName()));
                                 }
                                 tooltip.add(Component.literal(fluidStack.getAmount() + " mB").withStyle(ChatFormatting.GRAY));
                             }

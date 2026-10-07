@@ -26,6 +26,15 @@ public record TeleportSwapWithTargetEffect(float chance) implements MaterialEffe
     ).apply(inst, TeleportSwapWithTargetEffect::new));
 
     @Override
+
+    public java.util.Optional<net.minecraft.network.chat.Component> describe() {
+
+        return java.util.Optional.of(net.minecraft.network.chat.Component.translatable("trait.fletcherstrestle.translocation"));
+
+    }
+
+
+    @Override
     public MaterialEffectType<? extends MaterialEffect> type() {
         return ModMaterialEffectTypes.TELEPORT_SWAP_WITH_TARGET.get();
     }

@@ -36,12 +36,12 @@ public record DippingRecipe(Ingredient inputItem, int inputCount, Optional<Strin
             return false;
         }
 
-        // 1b. Modular arrows can only be dipped if their head is the
-        //     glass_vial type: the only head designed to hold a payload.
-        //     This stops e.g. broadhead arrows from accidentally being
-        //     converted into potion arrows.
+        // 1b. Modular arrows can only be dipped if their head holds a potion
+        //     (the splash_potion effect, as on the glass vial). This stops e.g.
+        //     broadhead arrows from being converted into potion arrows.
         ArrowAssembly assembly = input.item().get(ModDataComponents.ARROW_ASSEMBLY.get());
-        if (assembly != null && !"glass_vial".equals(assembly.head())) {
+        if (assembly != null && net.frostytrix.fletcherstrestle.material.Materials.arrowHead(assembly.head()).effects()
+                .stream().noneMatch(e -> e instanceof net.frostytrix.fletcherstrestle.material.effect.SplashPotionEffect)) {
             return false;
         }
 

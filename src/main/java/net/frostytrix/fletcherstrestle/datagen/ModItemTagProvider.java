@@ -56,6 +56,13 @@ public class ModItemTagProvider extends ItemTagsProvider {
                 .add(ModItems.IRON_RISER.get())
         ;
 
+        tag(ModTags.Items.GARLAND_STRINGS)
+                .add(Items.STRING)
+                .add(ModItems.FLAX_STRING.get());
+
+        tag(ModTags.Items.MECHANISMS)
+                .add(ModItems.MECHANICAL_TRIGGER.get());
+
         tag(ModTags.Items.BOW_STRINGS)
                 .add(Items.STRING)
                 .add(ModItems.HIGH_TENSION_STRING.get())

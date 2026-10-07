@@ -32,23 +32,30 @@ public final class BuiltinBowStrings {
                 Ingredient.of(Items.STRING),
                 new BowStringStats(1.0f, 1, false),
                 Optional.empty(),
-                List.of()
+                List.of(),
+                Optional.of(sound("bow.release.spider"))
         ));
         // Flax: mod's own string item. 0.85× velocity: farmable and renewable,
         // so it trades real power (and the shaky overdraw) for convenience.
         ctx.register(FLAX, new BowStringDef(
                 Ingredient.of(ModItems.FLAX_STRING.get()),
-                new BowStringStats(0.85f, 1, false),
+                new BowStringStats(0.85f, 1, false, true),
                 Optional.empty(),
-                List.of()
+                List.of(),
+                Optional.of(sound("bow.release.flax"))
         ));
         // High-tension: 1.4× velocity, costs 2 durability per shot.
         ctx.register(HIGH_TENSION, new BowStringDef(
                 Ingredient.of(ModItems.HIGH_TENSION_STRING.get()),
                 new BowStringStats(1.4f, 2, true),
                 Optional.empty(),
-                List.of()
+                List.of(),
+                Optional.of(sound("bow.release.high_tension"))
         ));
+    }
+
+    private static ResourceLocation sound(String name) {
+        return ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, name);
     }
 
     private static ResourceKey<BowStringDef> key(String name) {

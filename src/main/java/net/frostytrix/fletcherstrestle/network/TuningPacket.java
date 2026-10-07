@@ -28,10 +28,14 @@ public record TuningPacket(float quality) implements CustomPacketPayload {
             Player player = context.player();
 
             if (player.containerMenu instanceof FletchingMenu fletchingMenu) {
-                // Set the score from the minigame
-                fletchingMenu.customTuning = message.quality(); // or message.score()
+                // Set the score from the minigame. It comes from the client, so keep it
+                // inside the range the minigame can actually produce: a forged 1000%
+                // would otherwise make a bow that draws instantly.
+                float floor = net.frostytrix.fletcherstrestle.config.FletcherConfig.MINIGAME_MIN_SCORE.get().floatValue();
+                float quality = Float.isNaN(message.quality()) ? floor : message.quality();
+                fletchingMenu.customTuning = net.minecraft.util.Mth.clamp(quality, floor, 1.0f);
 
-                // Force the menu to recalculate the result slot to apply the new tuning!
+                // Force the menu to recalculate the result slot to apply the new tuning.
                 fletchingMenu.slotsChanged(fletchingMenu.craftSlots);
             }
         });

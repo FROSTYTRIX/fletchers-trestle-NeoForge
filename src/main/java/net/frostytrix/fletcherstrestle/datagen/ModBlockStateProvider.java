@@ -30,6 +30,11 @@ public class ModBlockStateProvider extends BlockStateProvider {
                 models().getExistingFile(modLoc("block/weapon_rack")));
         itemModels().withExistingParent("weapon_rack", modLoc("block/weapon_rack"));
 
+        // Emplacement: faces the field it covers. Hand-written model.
+        horizontalBlock(ModBlocks.EMPLACEMENT.get(),
+                models().getExistingFile(modLoc("block/emplacement")));
+        itemModels().withExistingParent("emplacement", modLoc("block/emplacement"));
+
         // Nail: placeable on a floor, wall or ceiling, so the button-style
         // blockstate handles all six orientations from one model.
         horizontalFaceBlock(ModBlocks.NAIL.get(), models().getExistingFile(modLoc("block/nail")));

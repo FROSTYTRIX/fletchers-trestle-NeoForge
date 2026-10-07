@@ -23,17 +23,35 @@ public class FletcherConfig {
      */
     public static final ModConfigSpec.BooleanValue COMPOSITE_BOWS;
 
-    // --- MARKSMANSHIP (Phase 2): per-player archery XP / leveling ---
+    /** Master switch for mobs spawning with modular weapons (see the mob_armory data map). */
+    public static final ModConfigSpec.BooleanValue ARMED_MOBS;
+
+    /** Share of a weapon's durability that one restring gives back. */
+    public static final ModConfigSpec.DoubleValue RESTRING_REPAIR;
+
+    /** Share of a weapon's durability that retuning it at the table costs. */
+    public static final ModConfigSpec.DoubleValue RETUNE_COST;
+
+    // --- GARRISON ---
+    public static final ModConfigSpec.IntValue GARRISON_RANGE;
+    public static final ModConfigSpec.IntValue GARRISON_SCOPED_RANGE;
+    public static final ModConfigSpec.IntValue GARRISON_HALF_CONE;
+    public static final ModConfigSpec.IntValue GARRISON_HOME_RADIUS;
+
+    // --- MARKSMANSHIP: per-player archery XP / leveling ---
     public static final ModConfigSpec.BooleanValue ARCHERY_SKILL_ENABLED;
     public static final ModConfigSpec.IntValue ARCHERY_XP_PER_HIT;
     public static final ModConfigSpec.IntValue ARCHERY_XP_HEADSHOT_BONUS;
     public static final ModConfigSpec.IntValue ARCHERY_XP_PER_KILL;
     public static final ModConfigSpec.IntValue ARCHERY_MAX_LEVEL;
+    public static final ModConfigSpec.IntValue CAPSTONE_COST;
+    public static final ModConfigSpec.IntValue MAX_CAPSTONES;
 
     // --- CLIENT CONFIG (Local UI only) ---
     public static final ModConfigSpec CLIENT_SPEC;
     public static final ModConfigSpec.DoubleValue QUIVER_HUD_X;
     public static final ModConfigSpec.DoubleValue QUIVER_HUD_Y;
+    public static final ModConfigSpec.BooleanValue QUIVER_ON_BACK;
 
     static {
         // Build Server Config
@@ -63,6 +81,15 @@ public class FletcherConfig {
         ARCHERY_MAX_LEVEL = serverBuilder
                 .comment("Maximum archery level a player can reach.")
                 .defineInRange("max_level", 50, 1, 1000);
+        CAPSTONE_COST = serverBuilder
+                .comment(
+                        "Skill points a capstone costs. Capstones unlock at the tip of a maxed branch.",
+                        "At the defaults (max level 50, 3 branches of 10 ranks, cost 10, two capstones)",
+                        "a fully levelled archer spends exactly every point.")
+                .defineInRange("capstone_cost", 10, 1, 1000);
+        MAX_CAPSTONES = serverBuilder
+                .comment("How many of the three capstones one archer may own. Choosing is the point.")
+                .defineInRange("max_capstones", 2, 0, 3);
         serverBuilder.pop();
 
         serverBuilder.push("eagles");
@@ -81,6 +108,42 @@ public class FletcherConfig {
                         "blends both limbs' stats. Powerful, so it is off by default.",
                         "While off, two different limbs simply will not assemble.")
                 .define("composite_bows", false);
+        RESTRING_REPAIR = serverBuilder
+                .comment(
+                        "Restringing a bow or crossbow at the Fletching Table restores this share of its",
+                        "durability (0.5 = half). Photosynthesis is the other repair route, for wooden bows.")
+                .defineInRange("restring_repair", 0.5, 0.0, 1.0);
+        RETUNE_COST = serverBuilder
+                .comment(
+                        "Retuning a bow or crossbow without restringing it costs this share of its durability:",
+                        "tuning works the string. A retune that would break the weapon is refused.")
+                .defineInRange("retune_cost", 0.1, 0.0, 1.0);
+        serverBuilder.pop();
+
+        serverBuilder.push("world");
+        ARMED_MOBS = serverBuilder
+                .comment(
+                        "Whether skeletons, strays, bogged and pillagers can spawn carrying modular bows and",
+                        "crossbows. Which mobs, how often and which woods live in the data map",
+                        "data/fletcherstrestle/data_maps/entity_type/mob_armory.json, so packs can extend it.")
+                .define("armed_mobs", true);
+        serverBuilder.pop();
+
+        serverBuilder.push("garrison");
+        GARRISON_RANGE = serverBuilder
+                .comment("How far an emplacement shoots, in blocks.")
+                .defineInRange("range", 16, 1, 128);
+        GARRISON_SCOPED_RANGE = serverBuilder
+                .comment("Its range with a scope (any attachment that zooms) fitted.")
+                .defineInRange("scoped_range", 32, 1, 128);
+        GARRISON_HALF_CONE = serverBuilder
+                .comment("Half the firing cone, in degrees either side of the emplacement's facing.")
+                .defineInRange("half_cone", 45, 1, 180);
+        GARRISON_HOME_RADIUS = serverBuilder
+                .comment(
+                        "How far a Bolt Warden strays from where it was built, and how far from there it",
+                        "looks for emplacements to crew.")
+                .defineInRange("home_radius", 16, 2, 64);
         serverBuilder.pop();
 
         SERVER_SPEC = serverBuilder.build();
@@ -92,6 +155,11 @@ public class FletcherConfig {
                 .defineInRange("quiver_hud_x", 0f, -2000, 2000);
         QUIVER_HUD_Y = clientBuilder.comment("Y position of the Quiver HUD")
                 .defineInRange("quiver_hud_y", 15f, 0, 2000);
+        clientBuilder.pop();
+        clientBuilder.push("rendering");
+        QUIVER_ON_BACK = clientBuilder
+                .comment("Show quivers on players' backs.")
+                .define("quiver_on_back", true);
         clientBuilder.pop();
         CLIENT_SPEC = clientBuilder.build();
     }

@@ -44,7 +44,7 @@ public class SteamingRecipeCategory implements IRecipeCategory<SteamingRecipe> {
 
     @Override
     public Component getTitle() {
-        return Component.literal("Steam Box");
+        return Component.translatable("block.fletcherstrestle.steam_box");
     }
 
     @Override
@@ -79,7 +79,7 @@ public class SteamingRecipeCategory implements IRecipeCategory<SteamingRecipe> {
                 .addItemStack(recipe.getResultItem(null));
 
         // HEAT CATALYST (Hovering below the arrow)
-        // This puts a campfire icon underneath the process so players know it needs heat!
+        // Campfire icon under the arrow: the recipe needs heat.
         builder.addSlot(RecipeIngredientRole.CATALYST, 49, 42)
                 .addItemStack(new ItemStack(Items.CAMPFIRE));
     }

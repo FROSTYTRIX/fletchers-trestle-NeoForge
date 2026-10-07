@@ -1,0 +1,21 @@
+{
+  "processor": "net.frostytrix.fletcherstrestle.compat.patchouli.MaterialTableProcessor",
+  "components": [
+    {
+      "type": "patchouli:header",
+      "text": "#header",
+      "x": -1,
+      "y": 0
+    },
+    {
+      "type": "patchouli:separator",
+      "y": 12
+    },
+    {
+      "type": "patchouli:text",
+      "text": "#text",
+      "x": 0,
+      "y": 22
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "I": {
+      "item": "minecraft:iron_ingot"
+    },
+    "L": {
+      "tag": "minecraft:logs"
+    }
+  },
+  "pattern": [
+    " I ",
+    "ILI",
+    "L L"
+  ],
+  "result": {
+    "count": 1,
+    "id": "fletcherstrestle:emplacement"
+  }
+}

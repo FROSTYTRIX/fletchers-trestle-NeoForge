@@ -122,7 +122,7 @@ public class RopeBlock extends Block implements SimpleWaterloggedBlock {
 
     @Override
     protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
-        // 1. Only react if the player is holding the Rope item
+        // Only react if the player is holding the Rope item
         if (stack.is(this.asItem())) {
 
             // If the player is sneaking, we let them place it normally (against the side/top)
@@ -131,7 +131,7 @@ public class RopeBlock extends Block implements SimpleWaterloggedBlock {
             }
 
             if (!level.isClientSide) {
-                // 2. Find the bottom of the current rope chain
+                // Find the bottom of the current rope chain
                 BlockPos.MutableBlockPos searchPos = pos.mutable();
 
                 // Move down as long as the block at searchPos is a Rope
@@ -144,7 +144,7 @@ public class RopeBlock extends Block implements SimpleWaterloggedBlock {
                     }
                 }
 
-                // 3. We've found the first non-rope block. Can we place a rope here?
+                // We've found the first non-rope block. Can we place a rope here?
                 BlockState targetState = level.getBlockState(searchPos);
                 if (targetState.canBeReplaced()) {
 
@@ -155,7 +155,7 @@ public class RopeBlock extends Block implements SimpleWaterloggedBlock {
 
                     level.setBlock(searchPos, newState, 3);
 
-                    // 4. Effects and Item consumption
+                    // Effects and Item consumption
                     level.playSound(null, searchPos, SoundEvents.WOOL_PLACE,
                             SoundSource.BLOCKS, 1.0F, 1.0F);
 

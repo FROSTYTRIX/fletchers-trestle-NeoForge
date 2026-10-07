@@ -2,6 +2,7 @@ package net.frostytrix.fletcherstrestle.client;
 
 import net.frostytrix.fletcherstrestle.progression.ArcheryProgression;
 import net.frostytrix.fletcherstrestle.progression.ArcherySkill;
+import net.frostytrix.fletcherstrestle.progression.ArcherySkills;
 
 /**
  * Client-side mirror of the local player's archery XP + skill ranks, kept in
@@ -20,12 +21,14 @@ public final class ClientArcheryData {
     public static int draw = 0;
     public static int crit = 0;
     public static int aim = 0;
+    public static int capstones = 0;
 
-    public static void set(int xp, int draw, int crit, int aim) {
+    public static void set(int xp, int draw, int crit, int aim, int capstones) {
         ClientArcheryData.xp = xp;
         ClientArcheryData.draw = draw;
         ClientArcheryData.crit = crit;
         ClientArcheryData.aim = aim;
+        ClientArcheryData.capstones = capstones;
         ClientArcheryData.loaded = true;
     }
 
@@ -34,7 +37,15 @@ public final class ClientArcheryData {
     }
 
     public static int pointsSpent() {
-        return draw + crit + aim;
+        return skills().total();
+    }
+
+    public static ArcherySkills skills() {
+        return new ArcherySkills(draw, crit, aim, capstones);
+    }
+
+    public static boolean hasCapstone(ArcherySkill skill) {
+        return skills().hasCapstone(skill);
     }
 
     public static int pointsAvailable() {

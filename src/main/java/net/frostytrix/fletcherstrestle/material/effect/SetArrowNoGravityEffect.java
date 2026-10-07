@@ -19,6 +19,11 @@ public record SetArrowNoGravityEffect() implements MaterialEffect {
     public static final MapCodec<SetArrowNoGravityEffect> CODEC = MapCodec.unit(SetArrowNoGravityEffect::new);
 
     @Override
+    public java.util.Optional<net.minecraft.network.chat.Component> describe() {
+        return java.util.Optional.of(net.minecraft.network.chat.Component.translatable("trait.fletcherstrestle.no_gravity"));
+    }
+
+    @Override
     public MaterialEffectType<? extends MaterialEffect> type() {
         return ModMaterialEffectTypes.SET_ARROW_NO_GRAVITY.get();
     }

@@ -98,7 +98,7 @@ public class HeavyDummyEntity extends LivingEntity {
         ItemStack heldItem = player.getItemInHand(hand);
 
 
-        // 1. Equip Armor
+        // Equip Armor
         if (heldItem.getItem() instanceof ArmorItem armorItem) {
             EquipmentSlot slot = armorItem.getEquipmentSlot();
 
@@ -123,7 +123,7 @@ public class HeavyDummyEntity extends LivingEntity {
             return InteractionResult.sidedSuccess(this.level().isClientSide);
         }
 
-        // 2. Unequip Armor (Shift-Right-Click with empty hand)
+        // Unequip Armor (Shift-Right-Click with empty hand)
         if (player.isShiftKeyDown() && heldItem.isEmpty()) {
             // Find highest armor piece and pop it off
             for (int i = 3; i >= 0; i--) {
@@ -185,16 +185,16 @@ public class HeavyDummyEntity extends LivingEntity {
 
     @Override
     protected void actuallyHurt(DamageSource source, float damageAmount) {
-        // 1. Record health before Minecraft applies the damage
+        // Record health before Minecraft applies the damage
         float healthBefore = this.getHealth();
 
-        // 2. Let the game calculate armor reduction and apply the hit
+        // Let the game calculate armor reduction and apply the hit
         super.actuallyHurt(source, damageAmount);
 
-        // 3. Calculate exactly how much health was lost
+        // Calculate exactly how much health was lost
         float actualDamageTaken = healthBefore - this.getHealth();
 
-        // 4. If the hit did damage and came from a projectile (like your Modular Arrow)
+        // If the hit did damage and came from a projectile (like your Modular Arrow)
         if (actualDamageTaken > 0 && source.getDirectEntity() != null) {
             Entity projectile = source.getDirectEntity();
 
@@ -209,22 +209,27 @@ public class HeavyDummyEntity extends LivingEntity {
             }
 
             // Calculate where the arrow hit relative to the dummy's feet (0.0 to 1.8)
-            double hitHeight = projectile.getY() - this.getY();
+            // Measured where the arrow entered, not where its tick began.
+            double hitY = projectile instanceof net.minecraft.world.entity.projectile.AbstractArrow arrowHit
+                    ? net.frostytrix.fletcherstrestle.progression.ArcheryProgression.impactPoint(arrowHit, this).y
+                    : projectile.getY();
+            double hitHeight = hitY - this.getY();
 
             // Determine the zone based on height
             String zone;
             if (hitHeight >= 1.4) {
-                zone = "Head";
+                zone = "head";
             } else if (hitHeight >= 0.7) {
-                zone = "Torso";
+                zone = "torso";
             } else {
-                zone = "Legs";
+                zone = "legs";
             }
 
             if (source.getEntity() instanceof Player player) {
                 player.displayClientMessage(
-                        net.minecraft.network.chat.Component.literal(
-                                String.format("🎯 [%s Hit] - %.1f Damage", zone, actualDamageTaken)
+                        net.minecraft.network.chat.Component.translatable("message.fletcherstrestle.dummy_hit",
+                                net.minecraft.network.chat.Component.translatable("message.fletcherstrestle.dummy_zone." + zone),
+                                String.format("%.1f", actualDamageTaken)
                         ), true // 'true' puts it in the action bar above the hotbar
                 );
             }

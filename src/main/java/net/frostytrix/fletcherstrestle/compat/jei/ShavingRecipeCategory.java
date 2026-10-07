@@ -40,7 +40,7 @@ public class ShavingRecipeCategory implements IRecipeCategory<ShavingHorseRecipe
 
     @Override
     public Component getTitle() {
-        return Component.literal("Shaving Horse");
+        return Component.translatable("block.fletcherstrestle.shaving_horse");
     }
 
     @Override
@@ -57,8 +57,8 @@ public class ShavingRecipeCategory implements IRecipeCategory<ShavingHorseRecipe
     public void draw(ShavingHorseRecipe recipe, mezz.jei.api.gui.ingredient.IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics, double mouseX, double mouseY) {
         this.arrow.draw(guiGraphics, 45, 12);
 
-        // Draw the required clicks text just below the arrow!
-        Component text = Component.literal(recipe.getShavesRequired() + "x Clicks");
+        // Required clicks, below the arrow.
+        Component text = Component.translatable("jei.fletcherstrestle.shaves_required", recipe.getShavesRequired());
         Minecraft minecraft = Minecraft.getInstance();
         int width = minecraft.font.width(text);
         guiGraphics.drawString(minecraft.font, text, 57 - (width / 2), 32, 0xFF808080, false);
@@ -74,7 +74,7 @@ public class ShavingRecipeCategory implements IRecipeCategory<ShavingHorseRecipe
         builder.addSlot(RecipeIngredientRole.OUTPUT, 79, 12)
                 .addItemStack(recipe.getResultItem(null));
 
-        // Let's add a visual-only Drawknife floating above the arrow so players know what tool to use!
+        // Visual-only drawknife above the arrow, to show the tool.
         builder.addInvisibleIngredients(RecipeIngredientRole.CATALYST).addItemStack(new ItemStack(ModItems.DRAWKNIFE.get()));
     }
 }

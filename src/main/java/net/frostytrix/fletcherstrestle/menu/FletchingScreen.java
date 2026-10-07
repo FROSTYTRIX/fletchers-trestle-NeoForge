@@ -30,16 +30,20 @@ public class FletchingScreen extends AbstractContainerScreen<FletchingMenu> {
         super(menu, playerInventory, title);
     }
 
+    private static final Component ASSEMBLE = Component.translatable("gui.fletcherstrestle.assemble");
+    private static final Component RETUNE = Component.translatable("gui.fletcherstrestle.retune");
+
     private boolean canAssemble() {
-        // Validation now perfectly mirrors the RecipeManager's output logic
-        return !this.menu.resultSlots.getItem(0).isEmpty();
+        // Validation mirrors the RecipeManager's output logic. Bench work can be
+        // retuned before there's a result.
+        return !this.menu.resultSlots.getItem(0).isEmpty() || this.menu.isBenchWork();
     }
 
     @Override
     protected void init() {
         super.init();
 
-        this.assembleButton = net.minecraft.client.gui.components.Button.builder(Component.literal("Assemble"), b -> {
+        this.assembleButton = net.minecraft.client.gui.components.Button.builder(Component.translatable("gui.fletcherstrestle.assemble"), b -> {
             if (canAssemble()) {
                 this.isTuning = true;
                 this.targetPosition = 0.15f + (float) (Math.random() * 0.70f);
@@ -56,6 +60,7 @@ public class FletchingScreen extends AbstractContainerScreen<FletchingMenu> {
         if (this.assembleButton != null) {
             this.assembleButton.visible = this.menu.activeTab == 0;
             this.assembleButton.active = canAssemble() && !this.isTuning;
+            this.assembleButton.setMessage(this.menu.isBenchWork() ? RETUNE : ASSEMBLE);
         }
     }
 
@@ -179,6 +184,12 @@ public class FletchingScreen extends AbstractContainerScreen<FletchingMenu> {
         float quality = Math.max(minScore, 1.0f - (distance * multiplier));
 
         PacketDistributor.sendToServer(new TuningPacket(quality));
+
+        // Pluck pitched by the score: high for a clean result, low for a poor one.
+        Minecraft.getInstance().getSoundManager().play(
+                net.minecraft.client.resources.sounds.SimpleSoundInstance.forUI(
+                        net.frostytrix.fletcherstrestle.sound.ModSounds.FLETCHING_PLUCK.get(),
+                        0.6f + quality * 0.9f));
 
         this.isTuning = false;
         this.barPosition = 0.0f;

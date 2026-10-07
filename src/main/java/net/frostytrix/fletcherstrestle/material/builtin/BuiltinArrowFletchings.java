@@ -19,7 +19,7 @@ import java.util.Optional;
 
 /**
  * Built-in arrow-fletching material defs. {@code bound} (drop-on-hit) and {@code serrated} (homing)
- * use effects; {@code vex} (block-phase) is stateful and keyed off its id in {@code ModularArrowEntity}.
+ * use effects; {@code vex} phases through a block with {@code phase_through_blocks}.
  */
 public final class BuiltinArrowFletchings {
     private BuiltinArrowFletchings() {
@@ -49,7 +49,8 @@ public final class BuiltinArrowFletchings {
                 List.of(new SubtleHomingEffect(5.0f, 1.0f, 2)));
         register(ctx, BOUND, Ingredient.of(Items.LEATHER), 1.00f,
                 List.of(new DropSelfOnHitEffect(0.25f)));
-        register(ctx, VEX, Ingredient.of(Items.VEX_ARMOR_TRIM_SMITHING_TEMPLATE), 1.00f, List.of());
+        register(ctx, VEX, Ingredient.of(Items.VEX_ARMOR_TRIM_SMITHING_TEMPLATE), 1.00f,
+                List.of(new net.frostytrix.fletcherstrestle.material.effect.PhaseThroughBlocksEffect(1)));
 
         register(ctx, RED_FEATHER, Ingredient.of(ModItems.RED_FEATHER.get()), 1.00f, List.of());
         register(ctx, BLUE_FEATHER, Ingredient.of(ModItems.BLUE_FEATHER.get()), 1.00f, List.of());

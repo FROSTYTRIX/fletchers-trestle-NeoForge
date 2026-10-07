@@ -19,9 +19,7 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LightningBolt;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.item.ItemStack;
@@ -47,18 +45,21 @@ public class ModularArrowEntity extends AbstractArrow
     private int bounceCount = 0;
     private static final int MAX_BOUNCES = 3;
 
-    // Vex Fletching: pass through one block of cover, once per arrow.
-    private boolean hasPhased = false;
+    // Phasing (vex fletching): blocks passed through so far.
+    private int phasedBlocks = 0;
 
     //Grappling
     private int hookTicks = 0;
-    private static final int MAX_HOOK_DURATION = 100; // 5 seconds
+    // The grapple effect's settings, copied in when it hooks.
+    private int hookMaxTicks = 100;
+    private double hookPull = 0.15;
+    private double hookMaxDistance = 32;
 
     // Rope Deployment
     private boolean isDeployingRope = false;
     private int ropesPlaced = 0;
     private BlockPos ropeAnchorPos = null;
-    private static final int MAX_ROPE_LENGTH = 20;
+    private int ropeMaxLength = 20;
 
     private static final EntityDataAccessor<Boolean> IS_HOOKED =
             SynchedEntityData.defineId(ModularArrowEntity.class, EntityDataSerializers.BOOLEAN);
@@ -149,6 +150,24 @@ public class ModularArrowEntity extends AbstractArrow
         return new ArrowAssembly("flint", "oak", "feather");
     }
 
+    /** The arrow's three parts' effects, head first. */
+    private java.util.List<net.frostytrix.fletcherstrestle.material.MaterialEffect> partEffects() {
+        ArrowAssembly assembly = this.getAssembly();
+        java.util.List<net.frostytrix.fletcherstrestle.material.MaterialEffect> all = new java.util.ArrayList<>(
+                net.frostytrix.fletcherstrestle.material.Materials.arrowHead(assembly.head()).effects());
+        all.addAll(net.frostytrix.fletcherstrestle.material.Materials.arrowShaft(assembly.shaft()).effects());
+        all.addAll(net.frostytrix.fletcherstrestle.material.Materials.arrowFletching(assembly.fletching()).effects());
+        return all;
+    }
+
+    /** The first effect of this kind on any of the arrow's parts. */
+    public <T extends net.frostytrix.fletcherstrestle.material.MaterialEffect> java.util.Optional<T> partEffect(Class<T> kind) {
+        for (var effect : partEffects()) {
+            if (kind.isInstance(effect)) return java.util.Optional.of(kind.cast(effect));
+        }
+        return java.util.Optional.empty();
+    }
+
     private void applyFlightModifiers(ItemStack ammo) {
         ArrowAssembly assembly = ammo.get(ModDataComponents.ARROW_ASSEMBLY.get());
         if (assembly != null) {
@@ -186,32 +205,33 @@ public class ModularArrowEntity extends AbstractArrow
     protected void onHitEntity(EntityHitResult result) {
         ArrowAssembly assembly = this.getAssembly();
 
-        // Black-hole arrow: spawn the set-piece at impact and consume the arrow.
-        if (assembly != null && "black_hole".equals(assembly.head())) {
+        // An effect that takes the whole hit over goes first.
+        for (var effect : partEffects()) {
+            if (effect.replacesArrowHit(this, result)) return;
+        }
+
+        // Black hole: spawn the set-piece at impact and consume the arrow.
+        if (partEffect(net.frostytrix.fletcherstrestle.material.effect.SpawnBlackHoleEffect.class).isPresent()) {
             BlackHoleEntity.spawnAt(this.level(), result.getLocation());
             this.discard();
             return;
         }
 
-        // Glass-vial arrows shatter on impact and splash whatever potion they
-        // were dipped in. Resolves before everything else so it can't be
-        // combined with other head effects. Kept id-keyed (not an effect),
-        // it reads the arrow's POTION_CONTENTS and needs stateful handling.
-        if ("glass_vial".equals(assembly.head())) {
-            applyGlassVialEffect(result.getLocation());
+        // A potion-carrying head shatters on impact and splashes whatever potion
+        // it was dipped in, instead of any other hit.
+        var splash = partEffect(net.frostytrix.fletcherstrestle.material.effect.SplashPotionEffect.class);
+        if (splash.isPresent()) {
+            applyGlassVialEffect(result.getLocation(), splash.get().radius());
             return;
         }
 
-        // Resonance setup: head-specific multi-tick state that freezes the
-        // arrow and queues delayed damage. Stays here because it needs to
-        // mutate arrow state in coordinated ways the simple effect hook
-        // doesn't expose. Future "stateful effect" extension can lift it.
+        // Resonance: freezes the arrow in the target and queues delayed damage.
         double velocityOnImpact = this.getDeltaMovement().length();
-        if ("resonance_tip".equals(assembly.head())
-                && result.getEntity() instanceof LivingEntity resonanceTarget) {
-            this.resonanceTicks = 20;
+        var resonance = partEffect(net.frostytrix.fletcherstrestle.material.effect.ResonanceEffect.class);
+        if (resonance.isPresent() && result.getEntity() instanceof LivingEntity resonanceTarget) {
+            this.resonanceTicks = Math.max(1, resonance.get().delay());
             this.resonanceTargetId = resonanceTarget.getId();
-            this.resonanceDamage = (float) (this.getBaseDamage() * velocityOnImpact) * 0.3f;
+            this.resonanceDamage = (float) (this.getBaseDamage() * velocityOnImpact) * resonance.get().damageFactor();
             this.level().playSound(null, this.getX(), this.getY(), this.getZ(),
                     SoundEvents.WARDEN_HEARTBEAT, this.getSoundSource(), 1.0f, 2.0f);
             this.setDeltaMovement(Vec3.ZERO);
@@ -238,14 +258,8 @@ public class ModularArrowEntity extends AbstractArrow
 
         // Copper "conductive" lightning: reads the persistent flag stamped
         // by the copper riser's set_arrow_flag effect at fire time.
-        if (result.getEntity() instanceof LivingEntity target
-                && this.getPersistentData().getBoolean("fletcherstrestle:conductive")
-                && this.level().isThundering()) {
-            LightningBolt lightning = EntityType.LIGHTNING_BOLT.create(this.level());
-            if (lightning != null) {
-                lightning.moveTo(target.position());
-                this.level().addFreshEntity(lightning);
-            }
+        if (result.getEntity() instanceof LivingEntity target) {
+            net.frostytrix.fletcherstrestle.entity.ArrowTraits.conduct(this, target);
         }
     }
 
@@ -272,12 +286,12 @@ public class ModularArrowEntity extends AbstractArrow
                 BlockState currentState = this.level().getBlockState(nextPos);
 
                 // If the space is empty (or tall grass/water) AND we haven't hit the limit
-                if (currentState.canBeReplaced() && this.ropesPlaced < MAX_ROPE_LENGTH) {
+                if (currentState.canBeReplaced() && this.ropesPlaced < this.ropeMaxLength) {
 
                     // We ALWAYS spawn the new block as the "Bottom" piece.
                     // Because of the 'updateShape' method you wrote in RopeBlock earlier,
                     // the block above this one will automatically realize it's no longer
-                    // the bottom and visually update its model instantly!
+                    // the bottom and visually update its model instantly.
                     BlockState ropeState = ModBlocks.ROPE.get().defaultBlockState()
                             .setValue(RopeBlock.PERSISTENT, false)
                             .setValue(RopeBlock.BOTTOM, true);
@@ -316,7 +330,7 @@ public class ModularArrowEntity extends AbstractArrow
 
             Entity target = this.level().getEntity(this.resonanceTargetId);
 
-            // 1. STICK TO TARGET: If the target is alive, follow it!
+            // Stick to the target while it's alive.
             if (target != null && target.isAlive()) {
                 // Snap the arrow to the center of the target's body
                 this.setPos(target.getX(), target.getY() + (target.getBbHeight() / 2.0), target.getZ());
@@ -326,7 +340,7 @@ public class ModularArrowEntity extends AbstractArrow
                 return;
             }
 
-            // 2. DETONATION
+            // DETONATION
             if (this.resonanceTicks == 0) {
                 if (!this.level().isClientSide && target instanceof LivingEntity livingTarget) {
 
@@ -351,31 +365,22 @@ public class ModularArrowEntity extends AbstractArrow
             }
         }
 
-        if (!this.level().isClientSide && this.isInWater()) {
-            if (this.getPersistentData().getBoolean("fletcherstrestle:amphibious")) {
-                this.setDeltaMovement(this.getDeltaMovement().scale(1.65D));
-
-                if (this.level() instanceof ServerLevel serverLevel) {
-                    serverLevel.sendParticles(ParticleTypes.BUBBLE_POP,
-                            this.getX(), this.getY(), this.getZ(), 1, 0.0, 0.0, 0.0, 0.0);
-                }
-            }
-        }
+        net.frostytrix.fletcherstrestle.entity.ArrowTraits.amphibiousTick(this);
 
         if (this.isHooked() && !this.level().isClientSide) {
             Entity owner = this.getOwner();
 
             if (owner instanceof Player player && player.isAlive()) {
-                // 1. Calculate the distance vector
+                // Calculate the distance vector
                 Vec3 arrowPos = this.position();
                 Vec3 playerPos = player.position();
                 Vec3 pullVec = arrowPos.subtract(playerPos);
 
                 double distance = pullVec.length();
 
-                // 2. Apply the pull if the player isn't right on top of the hook
-                if (distance > 1.5 && distance < 32) {
-                    double pullStrength = 0.15; // Tweak this for speed
+                // Apply the pull if the player isn't right on top of the hook
+                if (distance > 1.5 && distance < this.hookMaxDistance) {
+                    double pullStrength = this.hookPull;
 
                     // Normalize the direction and multiply by strength
                     Vec3 velocity = pullVec.normalize().scale(pullStrength);
@@ -391,8 +396,8 @@ public class ModularArrowEntity extends AbstractArrow
                     this.breakHook();
                 }
 
-                // 3. Time-out safety
-                if (this.hookTicks > MAX_HOOK_DURATION) {
+                // Time-out safety
+                if (this.hookTicks > this.hookMaxTicks) {
                     this.breakHook();
                 }
             } else {
@@ -423,18 +428,23 @@ public class ModularArrowEntity extends AbstractArrow
     protected void onHitBlock(BlockHitResult result) {
         ArrowAssembly assembly = this.getAssembly();
 
-        // Black-hole arrow: spawn the set-piece at impact and consume the arrow.
-        if (assembly != null && "black_hole".equals(assembly.head())) {
+        // An effect that takes the whole hit over goes first.
+        for (var effect : partEffects()) {
+            if (effect.replacesArrowHitBlock(this, result)) return;
+        }
+
+        // Black hole: spawn the set-piece at impact and consume the arrow.
+        if (partEffect(net.frostytrix.fletcherstrestle.material.effect.SpawnBlackHoleEffect.class).isPresent()) {
             BlackHoleEntity.spawnAt(this.level(), result.getLocation());
             this.discard();
             return;
         }
 
-        // VEX FLETCHING: phase through one block of cover. Skips the impact
-        // entirely the first time we hit a block; subsequent hits behave normally.
-        // Bypasses every other head/shaft interaction with the surface.
-        if (!this.hasPhased && "vex".equals(assembly.fletching())) {
-            this.hasPhased = true;
+        // Phasing (vex fletching): pass through the first block(s) of cover,
+        // skipping the impact and every other interaction with the surface.
+        var phasing = partEffect(net.frostytrix.fletcherstrestle.material.effect.PhaseThroughBlocksEffect.class);
+        if (phasing.isPresent() && this.phasedBlocks < phasing.get().blocks()) {
+            this.phasedBlocks++;
             if (this.level() instanceof ServerLevel sl) {
                 sl.sendParticles(ParticleTypes.SOUL,
                         this.getX(), this.getY(), this.getZ(),
@@ -451,12 +461,17 @@ public class ModularArrowEntity extends AbstractArrow
             return;
         }
 
-        if ("glass_vial".equals(assembly.head())) {
-            applyGlassVialEffect(result.getLocation());
+        var splash = partEffect(net.frostytrix.fletcherstrestle.material.effect.SplashPotionEffect.class);
+        if (splash.isPresent()) {
+            applyGlassVialEffect(result.getLocation(), splash.get().radius());
             return;
         }
 
-        if ("weighted_hook".equals(assembly.head())) {
+        var grapple = partEffect(net.frostytrix.fletcherstrestle.material.effect.GrappleEffect.class);
+        if (grapple.isPresent()) {
+            this.hookPull = grapple.get().pull();
+            this.hookMaxTicks = grapple.get().maxTicks();
+            this.hookMaxDistance = grapple.get().maxDistance();
             this.entityData.set(IS_HOOKED, true);
             this.setSoundEvent(SoundEvents.TRIPWIRE_ATTACH); // Mechanical "clink"
             // We don't call super.onHitBlock yet if we want to keep it from "embedding" fully
@@ -465,13 +480,15 @@ public class ModularArrowEntity extends AbstractArrow
             super.onHitBlock(result);
         }
 
-        if ("trailing_rope".equals(assembly.head())) {
+        var rope = partEffect(net.frostytrix.fletcherstrestle.material.effect.DeployRopeEffect.class);
+        if (rope.isPresent()) {
 
             // We ONLY deploy if the arrow hits the underside of a block (the ceiling)
             if (result.getDirection() == Direction.DOWN && !this.level().isClientSide) {
-                // Start the deployment sequence!
+                // Start the deployment sequence.
                 this.isDeployingRope = true;
                 this.ropesPlaced = 0;
+                this.ropeMaxLength = rope.get().maxLength();
                 this.ropeAnchorPos = result.getBlockPos();
             }
 
@@ -503,7 +520,7 @@ public class ModularArrowEntity extends AbstractArrow
     // ThrownPotion's distance-based dilution: full effect at impact point,
     // weaker the further you are, no effect past the radius. Glass breaks
     // regardless of whether the arrow held a potion.
-    private void applyGlassVialEffect(Vec3 hitPos) {
+    private void applyGlassVialEffect(Vec3 hitPos, double radius) {
         Level lvl = this.level();
 
         // Glass shatter: sound + neutral water splash particles.
@@ -519,7 +536,6 @@ public class ModularArrowEntity extends AbstractArrow
             // recipe writes it there when dipping a glass-vial arrow).
             PotionContents potion = getPickupItem().get(DataComponents.POTION_CONTENTS);
             if (potion != null) {
-                final double radius = 4.0;
                 AABB area = new AABB(
                         hitPos.x - radius, hitPos.y - radius, hitPos.z - radius,
                         hitPos.x + radius, hitPos.y + radius, hitPos.z + radius);
@@ -564,19 +580,7 @@ public class ModularArrowEntity extends AbstractArrow
     @Override
     protected void doKnockback(LivingEntity entity, DamageSource damageSource) {
         super.doKnockback(entity, damageSource);
-
-        if (!this.getPersistentData().getBoolean("fletcherstrestle:punch")) return;
-
-        double resistance = Math.max(0.0,
-                1.0 - entity.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE));
-        Vec3 push = this.getDeltaMovement()
-                .multiply(1.0, 0.0, 1.0)
-                .normalize()
-                .scale(0.6 * 0.6 * resistance);  // strength 0.6 * vanilla's 0.6 scale
-        if (push.lengthSqr() > 0) {
-            entity.push(push.x, 0.1, push.z);
-            entity.hurtMarked = true;
-        }
+        net.frostytrix.fletcherstrestle.entity.ArrowTraits.punch(this, entity);
     }
 
     @Override

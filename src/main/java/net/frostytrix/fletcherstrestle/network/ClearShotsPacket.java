@@ -31,17 +31,17 @@ public record ClearShotsPacket(BlockPos pos, int containerId) implements CustomP
     }
 
     public void handle(Player player) {
-        // 1. Check if the player currently has the ArcheryTargetMenu open and the IDs match
+        // Check if the player currently has the ArcheryTargetMenu open and the IDs match
         if (player.containerMenu instanceof ArcheryTargetMenu menu && menu.containerId == this.containerId()) {
 
-            // 2. Fetch the correct, server-validated BlockPos from the server menu
+            // Fetch the correct, server-validated BlockPos from the server menu
             BlockPos actualPos = menu.getTargetPos();
 
-            // 3. Find the BlockEntity at the correct position and clear it
+            // Find the BlockEntity at the correct position and clear it
             if (player.level().getBlockEntity(actualPos) instanceof ArcheryTargetBlockEntity be) {
                 be.clearShots();
 
-                // 4. Also clear the server-side menu's internal list so it is synced
+                // Also clear the server-side menu's internal list so it is synced
                 menu.setShots(Collections.emptyList());
             }
         }

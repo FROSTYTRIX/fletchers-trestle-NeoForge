@@ -16,6 +16,15 @@
     {
       "type": "patchouli:text",
       "text": "The table is the vanilla Fletching Table: right-click it to open the modular menu. Everything you build starts and ends here."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Bench Work",
+      "text": "A bow isn't finished forever. Put a finished bow or crossbow in the $(l)riser slot$(), where its riser would go, and leave the limb slots empty.$(br2)$(li)Add a $(l)string$() to $(l)restring$() it: the string is swapped and half its durability comes back.$(li)Press $(l)Retune$() to replay the minigame for a new tuning, at a small durability cost."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Restring and retune together and the retune is free.$(br2)Everything else stays: enchantments, name, both woods of a composite, a crossbow's attachment.$(br2)Every weapon finished here carries its $(l)maker's stamp$(): your name, on its tooltip."
     }
   ]
 }

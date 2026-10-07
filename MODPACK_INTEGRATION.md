@@ -2,8 +2,8 @@
 
 This mod's bow and arrow material system is **fully data-driven**. Every
 limb, riser, string, arrow head, shaft, and fletching is loaded from a
-datapack registry — including all the stats and most of the on-hit /
-on-flight behaviors. Modpack makers add new materials, swap old ones,
+datapack registry, including all the stats and every on-hit / on-flight
+behavior. No material id is special-cased in code. Modpack makers add new materials, swap old ones,
 or tune everything by writing JSON. No companion mod required.
 
 This document is the contract: what you can change, where the files go,
@@ -102,7 +102,9 @@ fields fall back to sane defaults.
   "draw_time_ticks": 20.0,
   "damage_multiplier": 1.0,
   "amphibious": false,
-  "gives_slow_falling": false
+  "gives_slow_falling": false,
+  "agility": false,
+  "photosynthetic": true
 }
 ```
 
@@ -112,6 +114,11 @@ fields fall back to sane defaults.
 | `damage_multiplier`   | 1.0     | Multiplier applied to base arrow damage.                                 |
 | `amphibious`          | false   | Whether shooting works at full strength underwater.                      |
 | `gives_slow_falling`  | false   | Whether aiming this bow grants Slow Falling to the player.               |
+| `agility`             | false   | The archer walks at full speed while drawing.                            |
+| `photosynthetic`      | true    | The wood can feed on sunlight, which the Photosynthesis enchantment needs. Crimson and warped set it false. |
+
+A **composite** (two different woods) averages draw time and damage, keeps
+every trait either wood has, and is only `photosynthetic` if both woods are.
 
 Optional sub-record `crossbow_overrides` lets a single limb tune its
 stats just for the crossbow:
@@ -139,19 +146,28 @@ stats just for the crossbow:
 |-------------------------|---------|---------------------------------------------------------------|
 | `max_durability`        | required| Weapon durability cap when this riser is used.                |
 | `inaccuracy_multiplier` | 1.0     | Multiplier on base arrow inaccuracy. 0.2 = laser-precise.     |
+| `metal`                 | false   | A metal riser: it can carry a string that `requires_metal_riser`, and it rules out Photosynthesis. |
 
 ### `bow_string`
 ```json
 "stats": {
   "velocity_multiplier": 1.0,
-  "durability_cost": 1
+  "durability_cost": 1,
+  "requires_metal_riser": false,
+  "overdraw_shake": false
 }
 ```
 
-| Field                 | Default | Meaning                                              |
-|-----------------------|---------|------------------------------------------------------|
-| `velocity_multiplier` | 1.0     | Multiplier on projectile initial speed.              |
-| `durability_cost`     | 1       | Durability consumed per shot.                        |
+| Field                  | Default | Meaning                                              |
+|------------------------|---------|------------------------------------------------------|
+| `velocity_multiplier`  | 1.0     | Multiplier on projectile initial speed.              |
+| `durability_cost`      | 1       | Durability consumed per shot.                        |
+| `requires_metal_riser` | false   | Only builds (and only rolls on mobs and loot) with a `metal` riser. |
+| `overdraw_shake`       | false   | Holding past full draw shakes the aim, as flax does. The Aim skill lengthens the grace period. |
+
+Strings also take an optional top-level **`release_sound`**: the sound id the
+bow plays when it looses an arrow. It's a plain id, so it can name a sound
+defined only in your resource pack's `sounds.json`.
 
 ### `arrow_head`
 ```json
@@ -191,7 +207,7 @@ about *which def types* it makes sense to attach to.
 
 | Effect runs on this lifecycle hook                    | Only fires when attached to             |
 |-------------------------------------------------------|-----------------------------------------|
-| `onArrowSpawn`, `onArrowTick`, `onPreArrowHit`, `onArrowHit`, `onArrowHitBlock` | `arrow_head` / `arrow_shaft` / `arrow_fletching` |
+| `onArrowSpawn`, `onArrowTick`, `onPreArrowHit`, `onArrowHit`, `onArrowHitBlock`, `replacesArrowHit`, `replacesArrowHitBlock` | `arrow_head` / `arrow_shaft` / `arrow_fletching` |
 | `onBowRelease`, `onProjectileFired`                   | `bow_limb` / `bow_riser` / `bow_string` |
 
 The dispatch is one-directional — the bow doesn't run arrow-hit
@@ -393,6 +409,55 @@ Applies a MobEffect to the **shooter** on release. **Built-in:** acacia limb.
 { "type": "fletcherstrestle:apply_effect_to_shooter",
   "effect": "minecraft:speed", "duration": 30, "amplifier": 1 }
 ```
+
+### Arrow specials (the arrow carries them out)
+
+*Attach to: `arrow_head`, `arrow_shaft` or `arrow_fletching`.* These hold
+state across ticks, so the arrow runs them itself; the effect switches them
+on and sets their numbers. Put one on any part of your own to reuse it.
+
+#### `fletcherstrestle:black_hole`
+The arrow collapses into a black hole where it lands and is used up. No parameters.
+
+#### `fletcherstrestle:splash_potion`
+```json
+{ "type": "fletcherstrestle:splash_potion", "radius": 4.0 }
+```
+The head carries a potion. Only heads with this effect can be dipped in
+the Dipping Vat. On impact it shatters and splashes the potion over every
+mob within `radius` blocks, weaker toward the edge. Once dipped, the item
+model adds a `<head texture>_liquid` layer tinted to the potion.
+
+#### `fletcherstrestle:resonance`
+```json
+{ "type": "fletcherstrestle:resonance", "delay": 20, "damage_factor": 0.3 }
+```
+The arrow lodges in the mob it hits; after `delay` ticks it goes off for
+`damage_factor` times its impact damage, ignoring the hurt cooldown.
+
+#### `fletcherstrestle:phase_through_blocks`
+```json
+{ "type": "fletcherstrestle:phase_through_blocks", "blocks": 1 }
+```
+The arrow slips through the first `blocks` blocks it hits.
+
+#### `fletcherstrestle:grapple`
+```json
+{ "type": "fletcherstrestle:grapple", "pull": 0.15, "max_ticks": 100, "max_distance": 32.0 }
+```
+The arrow hooks into the block it hits and reels the shooter in by `pull`
+per tick, until they arrive, drift past `max_distance`, or `max_ticks` pass.
+
+#### `fletcherstrestle:deploy_rope`
+```json
+{ "type": "fletcherstrestle:deploy_rope", "max_length": 20 }
+```
+Shot into the underside of a block, the arrow anchors there and lets down
+a climbable rope, up to `max_length` blocks or until it reaches the floor.
+
+When an arrow has several, the order is: black hole, then phasing (block
+hits only), then splash potion, then resonance (mob hits) or grapple and
+rope (block hits).
 
 ### Scripted escape hatch
 
@@ -601,25 +666,14 @@ No companion mod required.
 
 ## What's still hardcoded
 
-A handful of head behaviors are too entangled with the arrow's tick
-lifecycle to externalise cleanly without a richer state API. These stay
-keyed off built-in material ids in Java code:
+No material is special-cased by id any more: every behavior above is an
+effect or a stat, and the built-in materials use the same JSON a pack does.
+What remains in code:
 
-- `glass_vial` (head) — splashes its stored potion contents on impact.
-- `resonance_tip` (head) — delayed echo damage with target-locking.
-- `weighted_hook` (head) — sticks to blocks and pulls the shooter.
-- `trailing_rope` (head) — drops a chain of rope blocks downward from impact.
-- `vex` (fletching) — phases through one block of cover.
-- `flax` (string) — aim jitter when the player overdraws past the
-  bow's max draw time + 40 ticks. Logic lives in
-  `ModularBowItem.onUseTick`.
-
-A modpack can still **add** new materials with these ids (or override
-the built-ins) and they'll use the standard data path, but the
-specific stateful behaviors above only fire if the id string matches
-the built-in id. A future API extension may expose hooks to lift these
-to the effect system too — until then, treat their ids as reserved
-keywords.
+- The **crossbow stock** is always drawn from `fletcherstrestle:item/mechanical_trigger`.
+- **Villager trades**: which professions and levels sell modular weapons, and
+  their prices. The parts themselves are rolled from the registries.
+- The **rope** that `deploy_rope` lets down is always this mod's rope block.
 
 ---
 
@@ -648,27 +702,84 @@ whichever lifecycle hooks it cares about (`onArrowSpawn`, `onArrowTick`,
 `onProjectileFired`), and exposes a `MapCodec<MyCustomEffect>` for
 JSON parsing.
 
+Two hooks take a hit over entirely: `replacesArrowHit` and
+`replacesArrowHitBlock`. Return `true` and the arrow skips its own specials,
+vanilla damage and every other effect for that impact, so finish the arrow
+off yourself (usually `arrow.discard()`). They run before anything else.
+
+Override `describe()` to give the effect a short trait name: the guidebook's
+material tables are built from the live registries and list it.
+
 Modpack JSONs reference it as `"type": "mypack:my_effect"`.
 
 ---
 
-## Recipes
+## Fletching Table slots
 
-The fletching menu's recipe is itself data-driven via tags:
+A slot accepts any item that a material def's `ingredient` matches, so a new
+material needs nothing else. The item tags below are a second way in, for
+items you want a slot to take without a def of their own:
 
-| Tag                                | Slot it gates                                       |
+| Tag                                | Slot                                                |
 |------------------------------------|-----------------------------------------------------|
-| `fletcherstrestle:bow_limbs`       | Bow limb slot (pliable / steamed limbs)             |
-| `fletcherstrestle:rough_limbs`     | Arrow shaft slot (unsteamed limbs + sticks)         |
+| `fletcherstrestle:bow_limbs`       | Bow limb slots (pliable / steamed limbs)            |
+| `fletcherstrestle:rough_limbs`     | Arrow shaft slot (unsteamed limbs)                  |
 | `fletcherstrestle:bow_risers`      | Riser slot                                          |
 | `fletcherstrestle:bow_strings`     | Bow string slot                                     |
 | `fletcherstrestle:arrow_heads`     | Arrow head slot                                     |
 | `fletcherstrestle:arrow_fletching` | Arrow fletching slot                                |
 
-A modpack adding a new material should also extend the matching tag so
-the fletching menu accepts the item in that slot. The material's
-`ingredient` field controls **which** material id results; the tag
-controls **whether the slot accepts the item at all**.
+The workshop recipes (`fletcherstrestle:shaving`, `steaming`, `dipping`) are
+ordinary datapack recipes, so a new wood gets its rough and pliable limbs the
+same way the built-ins do.
+
+---
+
+## Beyond materials
+
+Everything else the mod hands out is data too.
+
+### Armed mobs
+`data/<ns>/data_maps/entity_type/mob_armory.json` lists which mobs spawn with
+modular weapons and how they're made (chance to be modified, signature woods,
+composite chance, weighted riser and string tables, tuning range). Biome woods
+live in `data/<ns>/data_maps/worldgen/biome/native_woods.json`; keys can be
+biome ids or `#tags`. The server config switch is `[world] armed_mobs`.
+
+### Loot
+The `fletcherstrestle:random_assembly` loot function turns a bare
+`modular_bow` or `modular_crossbow` entry into a finished weapon:
+
+```json
+{ "function": "fletcherstrestle:random_assembly",
+  "min_tuning": 0.6, "max_tuning": 0.95, "limbs": ["pale_oak"] }
+```
+
+`limbs` is optional (empty means any). Riser and string are random, and a
+string that needs a metal riser always gets one.
+
+### Garlands
+Which items count as garland feathers, and their colours, is the item data
+map `data/<ns>/data_maps/item/garland_feather.json`:
+
+```json
+{ "values": { "mypack:peacock_feather": { "colour": "#1F7A8C" } } }
+```
+
+The string can be anything in `#fletcherstrestle:garland_strings`.
+
+### The Garrison
+| What | Where |
+|------|-------|
+| Blocks a Bolt Warden is built from | block tag `fletcherstrestle:garrison_golem_body` (stripped logs and woods) |
+| The item that winds it up (and fits the Crossbow Bench) | item tag `fletcherstrestle:mechanisms` |
+| Its drops | loot table `fletcherstrestle:entities/garrison_golem` |
+| Extra things to shoot | entity type tag `fletcherstrestle:garrison_targets` |
+| Hostile mobs to leave alone | entity type tag `fletcherstrestle:garrison_ignores` |
+| Range, scoped range, cone, home radius | server config `[garrison]` |
+
+Emplacements shoot hostile mobs (`Enemy`) plus `garrison_targets`, minus
+`garrison_ignores`, and mount any crossbow, modded ones included.
 
 ---
 
@@ -729,6 +840,6 @@ unknown id still produces an item — it just renders as "unfinished".
 2. Texture at `assets/<pack>/textures/entity/projectiles/<part>/<id>.png` ✓
 3. Translation key `material.<pack>.<id>` in your lang file ✓
 4. Ingredient item exists (single item, item list, or tag) ✓
-5. Tag entry for the fletching menu slot ✓
+5. Nothing else: the Fletching Table accepts any item your `ingredient` matches ✓
 
 That's it.

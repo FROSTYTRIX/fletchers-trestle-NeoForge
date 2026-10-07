@@ -178,7 +178,7 @@ public final class SpyglassHuntHandler {
         }
         chosen.setHuntTarget(target);
         player.displayClientMessage(
-                Component.literal("Your eagle locks onto " + target.getName().getString() + "."),
+                Component.translatable("message.fletcherstrestle.eagle_locks_on", target.getName()),
                 true);
     }
 

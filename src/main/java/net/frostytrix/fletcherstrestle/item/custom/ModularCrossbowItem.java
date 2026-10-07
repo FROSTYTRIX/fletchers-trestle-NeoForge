@@ -52,6 +52,8 @@ public class ModularCrossbowItem extends CrossbowItem {
             return;
         }
 
+        net.frostytrix.fletcherstrestle.component.MakersStamp.appendTooltip(stack, tooltipComponents);
+
         if (!Screen.hasShiftDown()) {
             tooltipComponents.add(Component.translatable("gui.fletcherstrestle.hold_shift")
                     .withStyle(ChatFormatting.DARK_GRAY, ChatFormatting.ITALIC));
@@ -131,7 +133,12 @@ public class ModularCrossbowItem extends CrossbowItem {
     // --- 2. QUIVER SWAP & LOADING LOGIC ---
     @Override
     public void releaseUsing(ItemStack stack, Level level, LivingEntity entityLiving, int timeLeft) {
-        if (!(entityLiving instanceof Player player)) return;
+        if (!(entityLiving instanceof Player player)) {
+            // A pillager (or any crossbow mob) loads the vanilla way: its AI releases
+            // at the vanilla charge time and has no quiver to swap in.
+            super.releaseUsing(stack, level, entityLiving, timeLeft);
+            return;
+        }
 
         // Ensure we actually pulled it back far enough to load. A magazine
         // crossbow requires the longer (reload_multiplier) draw; until then we
@@ -146,7 +153,7 @@ public class ModularCrossbowItem extends CrossbowItem {
             return;
         }
 
-        // 1. THE QUIVER SWAP TRICK
+        // THE QUIVER SWAP TRICK
         int quiverInvSlot = -1;
         ItemStack quiverStack = ItemStack.EMPTY;
         int quiverSelectedIdx = -1;
@@ -173,10 +180,10 @@ public class ModularCrossbowItem extends CrossbowItem {
             player.getInventory().setItem(quiverInvSlot, extractedArrow);
         }
 
-        // 2. VANILLA LOADING
+        // VANILLA LOADING
         super.releaseUsing(stack, level, entityLiving, timeLeft);
 
-        // 3. RESTORE THE QUIVER
+        // RESTORE THE QUIVER
         if (quiverInvSlot != -1) {
             ItemStack modifiedArrow = player.getInventory().getItem(quiverInvSlot);
             List<ItemStack> list = ModularQuiverItem.getQuiverContents(quiverStack);
@@ -185,7 +192,7 @@ public class ModularCrossbowItem extends CrossbowItem {
             player.getInventory().setItem(quiverInvSlot, quiverStack);
         }
 
-        // 4. MAGAZINE: top up the charge to magazine_size, consuming one extra
+        // MAGAZINE: top up the charge to magazine_size, consuming one extra
         // arrow per added bolt (creative doesn't consume). Only magazine
         // crossbows enter this; normal crossbows are unaffected.
         int mag = magazineSize(stack, entityLiving);
@@ -232,7 +239,7 @@ public class ModularCrossbowItem extends CrossbowItem {
     // ---------------- Magazine attachment ----------------
 
     /** Magazine capacity from the installed attachment def, or 1 if none. */
-    private static int magazineSize(ItemStack stack, LivingEntity entity) {
+    public static int magazineSize(ItemStack stack, LivingEntity entity) {
         ResourceLocation id = stack.get(ModDataComponents.CROSSBOW_ATTACHMENT.get());
         if (id == null) return 1;
         var def = entity.level().registryAccess()
@@ -374,6 +381,10 @@ public class ModularCrossbowItem extends CrossbowItem {
         // Archery skill: steadier aim with level.
         if (shooter instanceof Player p) {
             finalInaccuracy *= net.frostytrix.fletcherstrestle.progression.ArcheryProgression.inaccuracyMultiplier(p);
+            // Dead Calm capstone: still and sneaking means dead on.
+            if (net.frostytrix.fletcherstrestle.progression.DeadCalm.isCalm(p)) {
+                finalInaccuracy = 0.0f;
+            }
         }
 
         super.shootProjectile(shooter, projectile, index, finalVelocity, finalInaccuracy, angle, target);
@@ -390,7 +401,7 @@ public class ModularCrossbowItem extends CrossbowItem {
                     int selected = invStack.getOrDefault(ModDataComponents.QUIVER_SELECTED_SLOT.get(), 0);
                     List<ItemStack> list = ModularQuiverItem.getQuiverContents(invStack);
 
-                    // If the selected slot has an arrow, pull it out!
+                    // If the selected slot has an arrow, pull it out.
                     if (selected >= 0 && selected < list.size() && !list.get(selected).isEmpty() && list.get(selected).getItem() instanceof net.minecraft.world.item.ArrowItem) {
                         quiverInvSlot = i;
                         quiverStack = invStack;
@@ -442,7 +453,7 @@ public class ModularCrossbowItem extends CrossbowItem {
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
 
-        // If it's already loaded, bypass the ammo check and shoot it!
+        // If it's already loaded, bypass the ammo check and shoot it.
         if (isCharged(stack)) {
             return super.use(level, player, hand);
         }

@@ -125,6 +125,8 @@ public class ModCreativeModeTabs {
 
                         output.accept(ModItems.MAGAZINE.get());
                         output.accept(ModBlocks.CROSSBOW_BENCH);
+                        output.accept(ModBlocks.EMPLACEMENT);
+                        output.accept(ModItems.GARRISON_GOLEM_SPAWN_EGG.get());
 
                     })
                     .build());

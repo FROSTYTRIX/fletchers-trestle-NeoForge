@@ -66,6 +66,11 @@ public class ModBlockEntities {
                     BlockEntityType.Builder.of(NailBlockEntity::new, ModBlocks.NAIL.get()).build(null)
             );
 
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<EmplacementBlockEntity>> EMPLACEMENT_BE =
+            BLOCK_ENTITIES.register("emplacement_be", () ->
+                    BlockEntityType.Builder.of(EmplacementBlockEntity::new, ModBlocks.EMPLACEMENT.get()).build(null)
+            );
+
     public static void register(IEventBus eventBus) {
         BLOCK_ENTITIES.register(eventBus);
     }

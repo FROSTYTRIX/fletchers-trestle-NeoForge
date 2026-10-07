@@ -50,7 +50,7 @@ public class EagleWhistleItem extends Item {
             List<EagleEntity> targets = findTargets(stack, player);
             if (targets.isEmpty()) {
                 player.displayClientMessage(
-                        Component.literal("No eagles in range."), true);
+                        Component.translatable("message.fletcherstrestle.whistle_none"), true);
             } else if (player.isShiftKeyDown()) {
                 recall(targets, player);
             } else {
@@ -79,11 +79,11 @@ public class EagleWhistleItem extends Item {
             if (player.isShiftKeyDown()) {
                 held.remove(ModDataComponents.BOUND_EAGLE.get());
                 player.displayClientMessage(
-                        Component.literal("Whistle unbound."), true);
+                        Component.translatable("message.fletcherstrestle.whistle_unbound"), true);
             } else {
                 held.set(ModDataComponents.BOUND_EAGLE.get(), eagle.getUUID());
                 player.displayClientMessage(
-                        Component.literal("Whistle bound to " + eagle.getName().getString() + "."),
+                        Component.translatable("message.fletcherstrestle.whistle_bound", eagle.getName()),
                         true);
             }
             player.level().playSound(null, player.getX(), player.getY(), player.getZ(),
@@ -115,7 +115,7 @@ public class EagleWhistleItem extends Item {
         boolean newMode = !targets.get(0).isFetchModeEnabled();
         for (EagleEntity e : targets) e.setFetchModeEnabled(newMode);
         player.displayClientMessage(
-                Component.literal("Eagles: fetch " + (newMode ? "ON" : "OFF")), true);
+                Component.translatable(newMode ? "message.fletcherstrestle.eagles_fetch_on" : "message.fletcherstrestle.eagles_fetch_off"), true);
     }
 
     private static void recall(List<EagleEntity> targets, Player player) {
@@ -126,6 +126,6 @@ public class EagleWhistleItem extends Item {
             e.getNavigation().moveTo(player.getX(), player.getY() + 1.5, player.getZ(), 1.4);
         }
         player.displayClientMessage(
-                Component.literal("Eagles recalled."), true);
+                Component.translatable("message.fletcherstrestle.whistle_recalled"), true);
     }
 }

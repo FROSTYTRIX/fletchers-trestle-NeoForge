@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "fletcherstrestle:block/emplacement",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "fletcherstrestle:block/emplacement"
+    },
+    "facing=south": {
+      "model": "fletcherstrestle:block/emplacement",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "fletcherstrestle:block/emplacement",
+      "y": 270
+    }
+  }
+}

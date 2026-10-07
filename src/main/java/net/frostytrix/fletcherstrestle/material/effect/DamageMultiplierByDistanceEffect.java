@@ -22,6 +22,15 @@ public record DamageMultiplierByDistanceEffect(float perBlock) implements Materi
     ).apply(inst, DamageMultiplierByDistanceEffect::new));
 
     @Override
+
+    public java.util.Optional<net.minecraft.network.chat.Component> describe() {
+
+        return java.util.Optional.of(net.minecraft.network.chat.Component.translatable("trait.fletcherstrestle.distance"));
+
+    }
+
+
+    @Override
     public MaterialEffectType<? extends MaterialEffect> type() {
         return ModMaterialEffectTypes.DAMAGE_MULTIPLIER_BY_DISTANCE.get();
     }

@@ -3,6 +3,7 @@ package net.frostytrix.fletcherstrestle.entity;
 import net.frostytrix.fletcherstrestle.FletcherTrestle;
 import net.frostytrix.fletcherstrestle.entity.custom.BlackHoleEntity;
 import net.frostytrix.fletcherstrestle.entity.custom.EagleEntity;
+import net.frostytrix.fletcherstrestle.entity.custom.GarrisonGolemEntity;
 import net.frostytrix.fletcherstrestle.entity.custom.HeavyDummyEntity;
 import net.frostytrix.fletcherstrestle.entity.custom.ModularArrowEntity;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -49,6 +50,14 @@ public class ModEntities {
                             .clientTrackingRange(10)
                             .updateInterval(1)
                             .build("black_hole")
+            );
+
+    public static final Supplier<EntityType<GarrisonGolemEntity>> GARRISON_GOLEM =
+            ENTITY_TYPES.register("garrison_golem", () ->
+                    EntityType.Builder.of(GarrisonGolemEntity::new, MobCategory.MISC)
+                            .sized(0.7F, 1.9F)
+                            .clientTrackingRange(10)
+                            .build("garrison_golem")
             );
 
     public static void register(IEventBus eventBus) {

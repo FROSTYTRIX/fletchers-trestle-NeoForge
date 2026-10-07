@@ -23,6 +23,16 @@ public interface MaterialEffect {
 
     MaterialEffectType<? extends MaterialEffect> type();
 
+    /**
+     * A short trait name for the guidebook's material tables ("Ignited", "Punch"),
+     * or empty for effects that don't summarise as a trait. Pack effects that leave
+     * this empty simply don't appear there, so the tables never claim more than
+     * they can describe.
+     */
+    default java.util.Optional<net.minecraft.network.chat.Component> describe() {
+        return java.util.Optional.empty();
+    }
+
     /** Once, when the arrow is added to the world. */
     default void onArrowSpawn(ModularArrowEntity arrow) {
     }
@@ -40,6 +50,21 @@ public interface MaterialEffect {
     }
 
     default void onArrowHitBlock(ModularArrowEntity arrow, BlockHitResult result) {
+    }
+
+    /**
+     * Return true to take an entity hit over entirely: the arrow's own specials,
+     * vanilla damage and every other effect are skipped. Runs before all of them,
+     * so an effect that returns true must finish the arrow off itself (usually
+     * with {@code arrow.discard()}).
+     */
+    default boolean replacesArrowHit(ModularArrowEntity arrow, EntityHitResult result) {
+        return false;
+    }
+
+    /** The same for a block hit: the arrow neither sticks nor runs other block effects. */
+    default boolean replacesArrowHitBlock(ModularArrowEntity arrow, BlockHitResult result) {
+        return false;
     }
 
     /** When a bow/crossbow releases a shot. */

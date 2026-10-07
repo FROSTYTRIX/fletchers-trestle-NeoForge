@@ -99,23 +99,25 @@ public class EagleNestBlock extends BaseEntityBlock {
         if (player.isShiftKeyDown()) {
             if (nest.isClaimed() && player.getUUID().equals(nest.getOwnerUUID())) {
                 nest.unclaim();
-                player.displayClientMessage(Component.literal("Nest unclaimed."), true);
+                player.displayClientMessage(Component.translatable("message.fletcherstrestle.nest_unclaimed"), true);
             }
             return InteractionResult.SUCCESS;
         }
 
         if (nest.isClaimed()) {
-            String label = nest.getOwnerName() != null ? nest.getOwnerName() : "unknown";
+            Component label = nest.getOwnerName() != null
+                    ? Component.literal(nest.getOwnerName())
+                    : Component.translatable("message.fletcherstrestle.unknown_owner");
             int eggs = nest.eggCount();
             player.displayClientMessage(
-                    Component.literal("Nest of " + label + ": " + eggs + " egg(s)."),
+                    Component.translatable("message.fletcherstrestle.nest_info", label, eggs),
                     true);
             return InteractionResult.SUCCESS;
         }
 
         nest.claim(player.getUUID(), player.getName().getString());
         player.displayClientMessage(
-                Component.literal("You claimed this nest."), true);
+                Component.translatable("message.fletcherstrestle.nest_claimed"), true);
         return InteractionResult.SUCCESS;
     }
 

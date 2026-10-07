@@ -97,7 +97,7 @@ public class ModularWeaponRecipe implements Recipe<FletchingRecipeInput> {
 
         float defaultTuning = 0.0f;
 
-        // FIXED ORDER: limbMat first, then riserMat!
+        // FIXED ORDER: limbMat first, then riserMat.
         // Two different woods make a composite, and both are recorded so the
         // bottom limb is no longer silently thrown away.
         BowAssembly assembly = limbMat.equals(bottomMat)

@@ -21,6 +21,15 @@ public record PierceLevelEffect(int level) implements MaterialEffect {
     ).apply(inst, PierceLevelEffect::new));
 
     @Override
+
+    public java.util.Optional<net.minecraft.network.chat.Component> describe() {
+
+        return java.util.Optional.of(net.minecraft.network.chat.Component.translatable("trait.fletcherstrestle.pierce"));
+
+    }
+
+
+    @Override
     public MaterialEffectType<? extends MaterialEffect> type() {
         return ModMaterialEffectTypes.PIERCE_LEVEL.get();
     }

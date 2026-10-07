@@ -44,10 +44,10 @@ public class ClientKeybinds {
     public static void onClientTick(ClientTickEvent.Post event) {
         ClientState.isFreeLooking = ClientKeybinds.FREE_LOOK_KEY.isDown();
 
-        // 1. Save the old animation state for the smooth lerp
+        // Save the old animation state for the smooth lerp
         QuiverHudOverlay.slideProgressO = QuiverHudOverlay.slideProgress;
 
-        // 2. Process the timer and animation states
+        // Process the timer and animation states
         if (QuiverHudOverlay.displayTicks > 0) {
             QuiverHudOverlay.displayTicks--;
             // If the timer is active, slide IN (up to a max of 10)
@@ -61,7 +61,7 @@ public class ClientKeybinds {
             }
         }
 
-        // 3. Handle Keybinds
+        // Handle Keybinds
         while (CYCLE_LEFT.consumeClick()) {
             net.neoforged.neoforge.network.PacketDistributor.sendToServer(new QuiverSlotPacket(false));
             // This ONLY resets the timer now! The animation won't replay if it's already open.

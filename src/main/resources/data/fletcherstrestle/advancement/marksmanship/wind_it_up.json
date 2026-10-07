@@ -1,0 +1,38 @@
+{
+  "parent": "fletcherstrestle:marksmanship/first_crossbow",
+  "display": {
+    "icon": {
+      "id": "fletcherstrestle:mechanical_trigger"
+    },
+    "title": {
+      "translate": "advancement.fletcherstrestle.wind_it_up.title"
+    },
+    "description": {
+      "translate": "advancement.fletcherstrestle.wind_it_up.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "built_golem": {
+      "trigger": "minecraft:summoned_entity",
+      "conditions": {
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "type": "fletcherstrestle:garrison_golem"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "built_golem"
+    ]
+  ]
+}

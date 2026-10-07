@@ -14,31 +14,31 @@ public class ArrowPhysicsEvents {
     @SubscribeEvent
     public static void onArrowSpawn(EntityJoinLevelEvent event) {
 
-        // 1. Check if the entity joining the world is an arrow
+        // Check if the entity joining the world is an arrow
         if (event.getEntity() instanceof AbstractArrow arrow) {
 
-            // 2. Find out who shot it
+            // Find out who shot it
             Entity shooter = arrow.getOwner();
 
-            // 3. Check if the shooter exists and is actively riding a horse
+            // Check if the shooter exists and is actively riding a horse
             if (shooter != null && shooter.getVehicle() instanceof AbstractHorse horse) {
 
-                // 4. Get the horse's exact directional velocity (X, Y, Z momentum)
+                // Get the horse's exact directional velocity (X, Y, Z momentum)
                 Vec3 horseVelocity = horse.getDeltaMovement();
 
                 // Only apply math if the horse is actually moving
                 if (horseVelocity.lengthSqr() > 0.001) {
 
-                    // 5. Get the arrow's base velocity (what vanilla Minecraft calculated)
+                    // Get the arrow's base velocity (what vanilla Minecraft calculated)
                     Vec3 arrowVelocity = arrow.getDeltaMovement();
 
-                    // 6. VECTOR MATH: Add the horse's momentum to the arrow's momentum!
+                    // Add the horse's momentum to the arrow's.
                     // We multiply the horse's velocity slightly because Minecraft's internal friction
                     // makes raw velocity values feel a bit sluggish on projectiles.
                     double momentumMultiplier = 1.5;
                     Vec3 newVelocity = arrowVelocity.add(horseVelocity.scale(momentumMultiplier));
 
-                    // 7. Apply the new super-charged vector
+                    // Apply the new super-charged vector
                     arrow.setDeltaMovement(newVelocity);
 
                     // Force the game engine to recognize the sudden change in physics

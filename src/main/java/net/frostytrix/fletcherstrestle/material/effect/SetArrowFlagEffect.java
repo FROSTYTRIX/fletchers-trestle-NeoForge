@@ -24,6 +24,13 @@ public record SetArrowFlagEffect(String key, boolean value) implements MaterialE
             Codec.BOOL.optionalFieldOf("value", true).forGetter(SetArrowFlagEffect::value)
     ).apply(inst, SetArrowFlagEffect::new));
 
+    /** A set flag reads as its own trait: {@code fletcherstrestle:punch} becomes "Punch". */
+    @Override
+    public java.util.Optional<net.minecraft.network.chat.Component> describe() {
+        if (!value) return java.util.Optional.empty();
+        return java.util.Optional.of(net.minecraft.network.chat.Component.translatable("trait." + key.replace(':', '.')));
+    }
+
     @Override
     public MaterialEffectType<? extends MaterialEffect> type() {
         return ModMaterialEffectTypes.SET_ARROW_FLAG.get();

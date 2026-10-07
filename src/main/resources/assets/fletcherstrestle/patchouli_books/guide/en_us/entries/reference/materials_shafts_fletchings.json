@@ -5,18 +5,38 @@
   "sortnum": 3,
   "pages": [
     {
-      "type": "patchouli:text",
-      "title": "Shafts",
-      "text": "One shaft per wood; most carry a modifier.$(br)$(li)$(l)Jungle$(): Bounce$(li)$(l)Acacia$(): Boost$(li)$(l)Dark Oak$(): Pierce$(li)$(l)Mangrove$(): Slower$(li)$(l)Cherry$(): Health Steal$(li)$(l)Pale Oak$(): Backstab$(li)$(l)Crimson$(): Executioner$(li)$(l)Warped$(): Translocation"
+      "type": "fletcherstrestle:material_table",
+      "header": "Shafts",
+      "kind": "arrow_shaft",
+      "intro": "One shaft per wood; most carry a modifier.",
+      "from": 0,
+      "to": 6
+    },
+    {
+      "type": "fletcherstrestle:material_table_more",
+      "kind": "arrow_shaft",
+      "from": 6
     },
     {
       "type": "patchouli:text",
-      "text": "$(l)Bounce$(): ricochets up to 3 times. $(l)Boost$(): +40% speed after 0.5s. $(l)Pierce$(): passes through one enemy. $(l)Slower$(): Slowness III. $(l)Health Steal$(): heals you on hit. $(l)Backstab$(): +40% from behind. $(l)Executioner$(): +50% below half health. $(l)Translocation$(): swaps you and the target."
+      "text": "$(l)Bounce$(): ricochets up to 3 times. $(l)Boost$(): +40% speed after 0.5s. $(l)Pierce$(): passes through one enemy. $(l)Slowness$(): slows the target. $(l)Health Steal$(): heals you on hit. $(l)Backstab$(): +40% from behind. $(l)Executioner$(): +50% below half health. $(l)Translocation$(): swaps you and the target."
+    },
+    {
+      "type": "fletcherstrestle:material_table",
+      "header": "Fletchings",
+      "kind": "arrow_fletching",
+      "intro": "Fletchings tune accuracy: lower spread is steadier.",
+      "from": 0,
+      "to": 6
+    },
+    {
+      "type": "fletcherstrestle:material_table_more",
+      "kind": "arrow_fletching",
+      "from": 6
     },
     {
       "type": "patchouli:text",
-      "title": "Fletchings",
-      "text": "Fletchings tune accuracy and stability.$(br)$(li)$(l)Feather$(): 1.0x$(li)$(l)Rigid$(): 0.84x$(li)$(l)Trailing$(): 0.75x, Stable$(li)$(l)Serrated$(): Homing$(li)$(l)Bound$(): Recovery$(li)$(l)Vex$(): Ghostly$(br2)$(l)Coloured feathers$() (parrot/eagle drops) are cosmetic variants of Feather."
+      "text": "$(l)Homing$(): drifts toward the nearest target. $(l)Recovery$(): sometimes drops back for you to pick up. $(l)Ghostly$(): slips through the first block it hits.$(br2)$(l)Coloured feathers$() (parrot and eagle drops) are cosmetic variants of Feather."
     }
   ]
 }

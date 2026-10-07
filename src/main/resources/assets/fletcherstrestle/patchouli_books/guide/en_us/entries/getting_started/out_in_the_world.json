@@ -1,0 +1,27 @@
+{
+  "name": "Out in the World",
+  "category": "fletcherstrestle:getting_started",
+  "icon": "minecraft:skeleton_skull",
+  "sortnum": 2,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "title": "Armed Mobs",
+      "text": "$(l)Skeletons$(), $(l)strays$(), $(l)bogged$() and $(l)pillagers$() carry modular weapons. The plain ones are oak, but a third to two thirds of them (more in harder regions) carry their own wood: a stray spruce, a bogged mangrove, a skeleton or pillager whatever grows where it spawned.$(br2)Read the limbs before they fire: crimson arrows burn, mangrove ones cut through water."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Some sit on $(l)copper$() or $(l)iron$() risers, and a few of those carry a $(l)high-tension$() string: in a thunderstorm, a copper riser's arrows call lightning.$(br2)Where the server allows composite bows, some laminate their wood with oak or a second local wood.$(br2)Like any mob's weapon, it sometimes drops when they die."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Trial Chambers",
+      "text": "$(l)Trial Chamber$() vaults can hold modular bows and crossbows, this mod's enchanted books, and $(l)pale oak limbs$(). Ominous vaults give better-tuned weapons.$(br2)Corridor and supply chests carry flax and string."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Pale Oak",
+      "text": "Pale oak doesn't grow in this version of the game, so its limbs can only be $(o)found$(): in $(l)Trial Chamber$() vaults and supply chests. Steam a rough pale oak limb to make it pliable."
+    }
+  ]
+}

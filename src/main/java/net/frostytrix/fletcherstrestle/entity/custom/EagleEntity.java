@@ -38,7 +38,7 @@ import java.util.EnumSet;
 public class EagleEntity extends TamableAnimal {
 
     // ---------------------------------------------------------------
-    // Synced data: declaration order is critical!
+    // Synced data: declaration order is critical.
     // These IDs are assigned sequentially at class load time.
     // NEVER reorder these fields.
     // ---------------------------------------------------------------
@@ -145,7 +145,7 @@ public class EagleEntity extends TamableAnimal {
     }
 
     // ---------------------------------------------------------------
-    // Step 2: Attributes
+    // Attributes
     // ---------------------------------------------------------------
     public static AttributeSupplier.Builder createAttributes() {
         return Animal.createLivingAttributes()
@@ -157,7 +157,7 @@ public class EagleEntity extends TamableAnimal {
     }
 
     // ---------------------------------------------------------------
-    // Step 3: Synced data registration
+    // Synced data registration
     // ---------------------------------------------------------------
     @Override
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
@@ -168,7 +168,7 @@ public class EagleEntity extends TamableAnimal {
     }
 
     // ---------------------------------------------------------------
-    // Step 4: AI Goal stack
+    // AI Goal stack
     // ---------------------------------------------------------------
     @Override
     protected void registerGoals() {
@@ -204,7 +204,7 @@ public class EagleEntity extends TamableAnimal {
     }
 
     // ---------------------------------------------------------------
-    // Step 7: Taming
+    // Taming
     // ---------------------------------------------------------------
     @Override
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
@@ -242,8 +242,8 @@ public class EagleEntity extends TamableAnimal {
                     boolean newMode = !this.isFetchModeEnabled();
                     this.setFetchModeEnabled(newMode);
                     player.displayClientMessage(
-                            net.minecraft.network.chat.Component.literal(
-                                    newMode ? "Eagle: fetch mode ON" : "Eagle: fetch mode OFF"),
+                            net.minecraft.network.chat.Component.translatable(
+                                    newMode ? "message.fletcherstrestle.eagle_fetch_on" : "message.fletcherstrestle.eagle_fetch_off"),
                             true);
                     this.playSound(ModSounds.EAGLE_AMBIENT.get(), 0.5f,
                             newMode ? 1.4f : 0.9f);
@@ -260,7 +260,7 @@ public class EagleEntity extends TamableAnimal {
     }
 
     // ---------------------------------------------------------------
-    // Step 9: Save/Load
+    // Save/Load
     // ---------------------------------------------------------------
     @Override
     public void addAdditionalSaveData(CompoundTag tag) {
@@ -348,7 +348,7 @@ public class EagleEntity extends TamableAnimal {
     }
 
     // ---------------------------------------------------------------
-    // Step 12: Flying navigation
+    // Flying navigation
     // ---------------------------------------------------------------
     @Override
     protected PathNavigation createNavigation(Level level) {
@@ -1019,8 +1019,8 @@ public class EagleEntity extends TamableAnimal {
             if (++huntTicks > HUNT_MAX_TICKS) {
                 if (eagle.getOwner() instanceof Player owner) {
                     owner.displayClientMessage(
-                            net.minecraft.network.chat.Component.literal(
-                                    "Your eagle disengages."),
+                            net.minecraft.network.chat.Component.translatable(
+                                    "message.fletcherstrestle.eagle_disengages"),
                             true);
                 }
                 stop();
@@ -1315,7 +1315,7 @@ public class EagleEntity extends TamableAnimal {
 
             if (eagle.getOwner() instanceof Player owner) {
                 owner.displayClientMessage(
-                        net.minecraft.network.chat.Component.literal("Your eagles laid an egg."),
+                        net.minecraft.network.chat.Component.translatable("message.fletcherstrestle.eagle_laid_egg"),
                         true);
             }
         }

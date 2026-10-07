@@ -10,7 +10,7 @@ import net.neoforged.neoforge.registries.NeoForgeRegistries;
 import java.util.function.Supplier;
 
 /**
- * Player data attachments for the marksmanship system (Phase 2).
+ * Player data attachments for the marksmanship system.
  *
  * <p>{@code ARCHERY_XP} stores total archery XP on the player.
  * {@code copyOnDeath()} keeps it across respawns: the design says XP is

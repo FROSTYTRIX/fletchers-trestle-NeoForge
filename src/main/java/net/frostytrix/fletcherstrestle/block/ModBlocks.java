@@ -85,6 +85,12 @@ public class ModBlocks {
     public static final DeferredBlock<Block> WEAPON_RACK = registerBlock("weapon_rack",
             () -> new WeaponRackBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_PLANKS).noOcclusion()));
 
+    // A crossbow emplacement, crewed by a garrison golem. Its crossbow and quiver
+    // are drawn by its block-entity renderer.
+    public static final DeferredBlock<Block> EMPLACEMENT = registerBlock("emplacement",
+            () -> new net.frostytrix.fletcherstrestle.block.custom.EmplacementBlock(
+                    BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_PLANKS).noOcclusion().strength(2.5f)));
+
     // A nail driven into a block face. Anchors a garland; see NailBlock.
     public static final DeferredBlock<Block> NAIL = registerBlock("nail",
             () -> new NailBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BARS).noOcclusion().strength(0.4f)));

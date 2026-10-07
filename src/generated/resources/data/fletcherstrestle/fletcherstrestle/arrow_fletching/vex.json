@@ -1,4 +1,9 @@
 {
+  "effects": [
+    {
+      "type": "fletcherstrestle:phase_through_blocks"
+    }
+  ],
   "ingredient": {
     "item": "minecraft:vex_armor_trim_smithing_template"
   },

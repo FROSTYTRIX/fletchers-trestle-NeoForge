@@ -35,6 +35,15 @@ public record DamageMultiplierOnBackstabEffect(
     ).apply(inst, DamageMultiplierOnBackstabEffect::new));
 
     @Override
+
+    public java.util.Optional<net.minecraft.network.chat.Component> describe() {
+
+        return java.util.Optional.of(net.minecraft.network.chat.Component.translatable("trait.fletcherstrestle.backstab"));
+
+    }
+
+
+    @Override
     public MaterialEffectType<? extends MaterialEffect> type() {
         return ModMaterialEffectTypes.DAMAGE_MULTIPLIER_ON_BACKSTAB.get();
     }

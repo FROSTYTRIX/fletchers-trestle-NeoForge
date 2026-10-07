@@ -10,7 +10,7 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 
 import java.util.function.Supplier;
 
-// Custom sound events for the eagle. The files referenced from sounds.json are vanilla
+// Custom sound events for the mod. The files referenced from sounds.json are vanilla
 // placeholders for now: swapping in real .ogg files only needs a sounds.json change, no code.
 public final class ModSounds {
 
@@ -26,6 +26,24 @@ public final class ModSounds {
     public static final Supplier<SoundEvent> EAGLE_TAME = register("eagle.tame");
     public static final Supplier<SoundEvent> EAGLE_FLAP = register("eagle.flap");
     public static final Supplier<SoundEvent> EAGLE_DIVE = register("eagle.dive");
+
+    // The workshop and the bow. Like the eagle, these point at vanilla files for now
+    // (see sounds.json): pitch and volume live there, so they can be tuned or swapped
+    // for real recordings without touching code.
+    public static final Supplier<SoundEvent> BOW_DRAW = register("bow.draw");
+    public static final Supplier<SoundEvent> BOW_READY = register("bow.ready");
+    public static final Supplier<SoundEvent> BOW_RELEASE = register("bow.release");
+    public static final Supplier<SoundEvent> STRING_FLAX = register("bow.release.flax");
+    public static final Supplier<SoundEvent> STRING_SPIDER = register("bow.release.spider");
+    public static final Supplier<SoundEvent> STRING_HIGH_TENSION = register("bow.release.high_tension");
+    public static final Supplier<SoundEvent> STEAM_BOX_HISS = register("steam_box.hiss");
+    public static final Supplier<SoundEvent> STEAM_BOX_DONE = register("steam_box.done");
+    public static final Supplier<SoundEvent> SHAVING_HORSE_SHAVE = register("shaving_horse.shave");
+    public static final Supplier<SoundEvent> TARGET_HIT = register("archery_target.hit");
+    public static final Supplier<SoundEvent> TARGET_BULLSEYE = register("archery_target.bullseye");
+    public static final Supplier<SoundEvent> HEADSHOT = register("headshot");
+    public static final Supplier<SoundEvent> FLETCHING_PLUCK = register("fletching.pluck");
+    public static final Supplier<SoundEvent> CAPSTONE = register("capstone");
 
     private static DeferredHolder<SoundEvent, SoundEvent> register(String name) {
         ResourceLocation id = ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, name);

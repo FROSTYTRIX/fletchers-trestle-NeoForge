@@ -50,11 +50,28 @@ public class ModClientEvents {
                 net.frostytrix.fletcherstrestle.block.entity.renderer.WeaponRackRenderer::new);
         event.registerBlockEntityRenderer(ModBlockEntities.NAIL_BE.get(),
                 net.frostytrix.fletcherstrestle.block.entity.renderer.NailRenderer::new);
+        event.registerBlockEntityRenderer(ModBlockEntities.EMPLACEMENT_BE.get(),
+                net.frostytrix.fletcherstrestle.block.entity.renderer.EmplacementRenderer::new);
+        event.registerEntityRenderer(ModEntities.GARRISON_GOLEM.get(),
+                net.frostytrix.fletcherstrestle.entity.client.GarrisonGolemRenderer::new);
+    }
+
+    /** The quiver on every player's back, both arm models. */
+    @SubscribeEvent
+    public static void addPlayerLayers(EntityRenderersEvent.AddLayers event) {
+        for (net.minecraft.client.resources.PlayerSkin.Model model : event.getSkins()) {
+            if (event.getSkin(model) instanceof net.minecraft.client.renderer.entity.player.PlayerRenderer renderer) {
+                renderer.addLayer(new net.frostytrix.fletcherstrestle.client.render.QuiverBackLayer(
+                        renderer, event.getContext().getItemRenderer()));
+            }
+        }
     }
 
     @SubscribeEvent
     public static void registerLayerDefinitions(EntityRenderersEvent.RegisterLayerDefinitions event) {
         event.registerLayerDefinition(EagleModel.LAYER_LOCATION, EagleModel::createBodyLayer);
+        event.registerLayerDefinition(net.frostytrix.fletcherstrestle.entity.client.GarrisonGolemRenderer.LAYER_LOCATION,
+                net.frostytrix.fletcherstrestle.entity.client.GarrisonGolemRenderer::createBodyLayer);
     }
 
     @SubscribeEvent
@@ -64,14 +81,21 @@ public class ModClientEvents {
 
     private static final ResourceLocation ARROW_SLIT_ID =
             ResourceLocation.fromNamespaceAndPath(MOD_ID, "arrow_slit");
+    private static final java.util.Set<ResourceLocation> QUIVER_IDS = java.util.Set.of(
+            ResourceLocation.fromNamespaceAndPath(MOD_ID, "leather_quiver"),
+            ResourceLocation.fromNamespaceAndPath(MOD_ID, "iron_quiver"));
 
-    // Wrap every baked arrow_slit variant with the dynamic disguise model.
+    // Wrap every baked arrow_slit variant with the dynamic disguise model, and
+    // the quivers with the model that draws their selected arrow.
     @SubscribeEvent
     public static void onModifyBakingResult(ModelEvent.ModifyBakingResult event) {
         java.util.Map<net.minecraft.client.resources.model.ModelResourceLocation, net.minecraft.client.resources.model.BakedModel> models = event.getModels();
         for (var entry : models.entrySet()) {
             if (entry.getKey().id().equals(ARROW_SLIT_ID)) {
                 entry.setValue(new net.frostytrix.fletcherstrestle.client.model.ArrowSlitBakedModel(entry.getValue()));
+            } else if (QUIVER_IDS.contains(entry.getKey().id())
+                    && net.minecraft.client.resources.model.ModelResourceLocation.INVENTORY_VARIANT.equals(entry.getKey().variant())) {
+                entry.setValue(new net.frostytrix.fletcherstrestle.client.model.QuiverBakedModel(entry.getValue()));
             }
         }
     }
@@ -84,6 +108,8 @@ public class ModClientEvents {
         while (ClientKeybinds.GALLOP_LOCK_KEY.consumeClick()) {
             ClientState.isGallopLocked = !ClientState.isGallopLocked;
         }
+
+        net.frostytrix.fletcherstrestle.client.DrawReadyCue.tick();
 
         //Quiver Logic
         if (ClientKeybinds.QUIVER_MODIFIER.isDown()) {
@@ -112,10 +138,10 @@ public class ModClientEvents {
 
         if (player == null) return;
 
-        // 1. Check if our modifier key is actively being held down
+        // Check if our modifier key is actively being held down
         if (ClientKeybinds.QUIVER_MODIFIER.isDown()) {
 
-            // 2. Verify the player actually has a quiver in their inventory
+            // Verify the player actually has a quiver in their inventory
             boolean hasQuiver = false;
             for (int i = 0; i < player.getInventory().getContainerSize(); i++) {
                 if (player.getInventory().getItem(i).getItem() instanceof ModularQuiverItem) {
@@ -125,10 +151,10 @@ public class ModClientEvents {
             }
 
             if (hasQuiver) {
-                // 3. CANCEL the vanilla event so the hotbar stops scrolling
+                // CANCEL the vanilla event so the hotbar stops scrolling
                 event.setCanceled(true);
 
-                // 4. Calculate direction and fire the packet!
+                // Scroll direction, sent to the server.
                 double delta = event.getScrollDeltaY();
                 if (delta != 0) {
                     // Scroll down cycles right, scroll up cycles left.
@@ -175,6 +201,14 @@ public class ModClientEvents {
             // PotionContents.getColor() returns RGB; combine with full alpha.
             return 0xFF000000 | (pc.getColor() & 0xFFFFFF);
         }, ModItems.MODULAR_ARROW.get());
+
+        // The arrow drawn in a quiver keeps its own colours: a tipped arrow's
+        // potion, a dipped glass vial. The quiver's own layers are untinted.
+        var colors = event.getItemColors();
+        event.register((stack, tintIndex) -> {
+            ItemStack arrow = ModularQuiverItem.selectedArrows(stack);
+            return arrow.isEmpty() ? 0xFFFFFFFF : colors.getColor(arrow, tintIndex);
+        }, ModItems.LEATHER_QUIVER.get(), ModItems.IRON_QUIVER.get());
     }
 
     @SubscribeEvent
@@ -239,6 +273,10 @@ public class ModClientEvents {
                 && held.getItem() instanceof ModularCrossbowItem
                 && net.minecraft.world.item.CrossbowItem.isCharged(held)) {
             float scopeZoom = scopeZoomFor(player, held);
+            // Dead Calm: a settled archer's scope reaches one step further.
+            if (scopeZoom < 1.0F && net.frostytrix.fletcherstrestle.progression.DeadCalm.isCalm(player)) {
+                scopeZoom *= 0.75F;
+            }
             if (scopeZoom < 1.0F) {
                 event.setNewFovModifier(event.getFovModifier() * scopeZoom);
             }

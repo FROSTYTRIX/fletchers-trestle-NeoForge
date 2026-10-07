@@ -58,5 +58,234 @@
         "type": "event"
       }
     ]
+  },
+  "bow.draw": {
+    "category": "player",
+    "subtitle": "subtitles.fletcherstrestle.bow.draw",
+    "sounds": [
+      {
+        "name": "minecraft:block/wooden_trapdoor/open1",
+        "volume": 0.25,
+        "pitch": 0.75
+      },
+      {
+        "name": "minecraft:block/wooden_trapdoor/open2",
+        "volume": 0.25,
+        "pitch": 0.75
+      },
+      {
+        "name": "minecraft:block/wooden_trapdoor/open3",
+        "volume": 0.25,
+        "pitch": 0.75
+      },
+      {
+        "name": "minecraft:block/wooden_trapdoor/open4",
+        "volume": 0.25,
+        "pitch": 0.75
+      },
+      {
+        "name": "minecraft:block/wooden_trapdoor/open5",
+        "volume": 0.25,
+        "pitch": 0.75
+      }
+    ]
+  },
+  "bow.ready": {
+    "category": "player",
+    "subtitle": "subtitles.fletcherstrestle.bow.ready",
+    "sounds": [
+      {
+        "name": "minecraft:random/click",
+        "volume": 0.3,
+        "pitch": 1.4
+      }
+    ]
+  },
+  "bow.release": {
+    "category": "player",
+    "subtitle": "subtitles.fletcherstrestle.bow.release",
+    "sounds": [
+      {
+        "name": "minecraft:random/bow",
+        "volume": 1.0,
+        "pitch": 1.0
+      }
+    ]
+  },
+  "bow.release.flax": {
+    "category": "player",
+    "subtitle": "subtitles.fletcherstrestle.bow.release.flax",
+    "sounds": [
+      {
+        "name": "minecraft:random/bow",
+        "volume": 0.9,
+        "pitch": 0.8
+      }
+    ]
+  },
+  "bow.release.spider": {
+    "category": "player",
+    "subtitle": "subtitles.fletcherstrestle.bow.release.spider",
+    "sounds": [
+      {
+        "name": "minecraft:random/bow",
+        "volume": 1.0,
+        "pitch": 1.05
+      }
+    ]
+  },
+  "bow.release.high_tension": {
+    "category": "player",
+    "subtitle": "subtitles.fletcherstrestle.bow.release.high_tension",
+    "sounds": [
+      {
+        "name": "minecraft:item/crossbow/shoot1",
+        "volume": 0.9,
+        "pitch": 1.25
+      },
+      {
+        "name": "minecraft:item/crossbow/shoot2",
+        "volume": 0.9,
+        "pitch": 1.25
+      },
+      {
+        "name": "minecraft:item/crossbow/shoot3",
+        "volume": 0.9,
+        "pitch": 1.25
+      }
+    ]
+  },
+  "steam_box.hiss": {
+    "category": "block",
+    "subtitle": "subtitles.fletcherstrestle.steam_box.hiss",
+    "sounds": [
+      {
+        "name": "minecraft:random/fizz",
+        "volume": 0.08,
+        "pitch": 1.6
+      }
+    ]
+  },
+  "steam_box.done": {
+    "category": "block",
+    "subtitle": "subtitles.fletcherstrestle.steam_box.done",
+    "sounds": [
+      {
+        "name": "minecraft:dig/wood1",
+        "volume": 0.6,
+        "pitch": 0.6
+      },
+      {
+        "name": "minecraft:dig/wood2",
+        "volume": 0.6,
+        "pitch": 0.6
+      },
+      {
+        "name": "minecraft:dig/wood3",
+        "volume": 0.6,
+        "pitch": 0.6
+      },
+      {
+        "name": "minecraft:dig/wood4",
+        "volume": 0.6,
+        "pitch": 0.6
+      }
+    ]
+  },
+  "shaving_horse.shave": {
+    "category": "block",
+    "subtitle": "subtitles.fletcherstrestle.shaving_horse.shave",
+    "sounds": [
+      {
+        "name": "minecraft:item/axe/strip1",
+        "volume": 0.9,
+        "pitch": 1.2
+      },
+      {
+        "name": "minecraft:item/axe/strip2",
+        "volume": 0.9,
+        "pitch": 1.2
+      },
+      {
+        "name": "minecraft:item/axe/strip3",
+        "volume": 0.9,
+        "pitch": 1.2
+      },
+      {
+        "name": "minecraft:item/axe/strip4",
+        "volume": 0.9,
+        "pitch": 1.2
+      }
+    ]
+  },
+  "archery_target.hit": {
+    "category": "block",
+    "subtitle": "subtitles.fletcherstrestle.archery_target.hit",
+    "sounds": [
+      {
+        "name": "minecraft:dig/cloth1",
+        "volume": 0.8,
+        "pitch": 0.6
+      },
+      {
+        "name": "minecraft:dig/cloth2",
+        "volume": 0.8,
+        "pitch": 0.6
+      },
+      {
+        "name": "minecraft:dig/cloth3",
+        "volume": 0.8,
+        "pitch": 0.6
+      },
+      {
+        "name": "minecraft:dig/cloth4",
+        "volume": 0.8,
+        "pitch": 0.6
+      }
+    ]
+  },
+  "archery_target.bullseye": {
+    "category": "block",
+    "subtitle": "subtitles.fletcherstrestle.archery_target.bullseye",
+    "sounds": [
+      {
+        "name": "minecraft:note/bell",
+        "volume": 0.5,
+        "pitch": 1.5
+      }
+    ]
+  },
+  "headshot": {
+    "category": "player",
+    "subtitle": "subtitles.fletcherstrestle.headshot",
+    "sounds": [
+      {
+        "name": "minecraft:random/successful_hit",
+        "volume": 0.6,
+        "pitch": 1.0
+      }
+    ]
+  },
+  "fletching.pluck": {
+    "category": "block",
+    "subtitle": "subtitles.fletcherstrestle.fletching.pluck",
+    "sounds": [
+      {
+        "name": "minecraft:note/guitar",
+        "volume": 0.8,
+        "pitch": 1.0
+      }
+    ]
+  },
+  "capstone": {
+    "category": "player",
+    "subtitle": "subtitles.fletcherstrestle.capstone",
+    "sounds": [
+      {
+        "name": "minecraft:block/amethyst/shimmer",
+        "volume": 0.6,
+        "pitch": 1.3
+      }
+    ]
   }
 }

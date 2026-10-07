@@ -28,6 +28,19 @@ public record ApplyMobEffectToShooterEffect(
             Codec.INT.optionalFieldOf("amplifier", 0).forGetter(ApplyMobEffectToShooterEffect::amplifier)
     ).apply(inst, ApplyMobEffectToShooterEffect::new));
 
+    /** "Speedy" for the acacia speed buff; any other effect reads as "<effect> on release". */
+    @Override
+    public java.util.Optional<net.minecraft.network.chat.Component> describe() {
+        String named = effect.unwrapKey()
+                .map(k -> "trait.fletcherstrestle.shooter." + k.location().getPath())
+                .orElse("");
+        if (!named.isEmpty() && net.minecraft.locale.Language.getInstance().has(named)) {
+            return java.util.Optional.of(net.minecraft.network.chat.Component.translatable(named));
+        }
+        return java.util.Optional.of(net.minecraft.network.chat.Component.translatable(
+                "trait.fletcherstrestle.shooter_effect", effect.value().getDisplayName()));
+    }
+
     @Override
     public MaterialEffectType<? extends MaterialEffect> type() {
         return ModMaterialEffectTypes.APPLY_EFFECT_TO_SHOOTER.get();

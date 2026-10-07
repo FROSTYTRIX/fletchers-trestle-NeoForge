@@ -10,6 +10,7 @@
   },
   "stats": {
     "damage_multiplier": 1.1,
-    "draw_time_ticks": 24.0
+    "draw_time_ticks": 24.0,
+    "photosynthetic": false
   }
 }

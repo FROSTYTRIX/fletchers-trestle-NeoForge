@@ -8,9 +8,9 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.context.UseOnContext;
 
 // Eagle Egg. Two uses:
-//   1. Right-click a nest block while holding this → add the egg to the nest
+//   Right-click a nest block while holding this → add the egg to the nest
 //      (capped at the nest's max-egg count). Starts an incubation timer.
-//   2. Otherwise inert: broken-nest eggs survive in inventory but lose
+//   Otherwise inert: broken-nest eggs survive in inventory but lose
 //      their incubation progress (they're fresh again when placed).
 public class EagleEggItem extends Item {
 
@@ -30,7 +30,7 @@ public class EagleEggItem extends Item {
         if (player == null) return InteractionResult.PASS;
 
         if (!nest.hasEggSpace()) {
-            player.displayClientMessage(Component.literal("This nest is already full."), true);
+            player.displayClientMessage(Component.translatable("message.fletcherstrestle.nest_full"), true);
             return InteractionResult.CONSUME;
         }
         nest.addEgg(context.getLevel().getGameTime());

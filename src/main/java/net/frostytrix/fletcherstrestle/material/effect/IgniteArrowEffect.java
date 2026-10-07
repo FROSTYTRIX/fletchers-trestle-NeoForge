@@ -22,6 +22,11 @@ public record IgniteArrowEffect(int seconds) implements MaterialEffect {
     ).apply(inst, IgniteArrowEffect::new));
 
     @Override
+    public java.util.Optional<net.minecraft.network.chat.Component> describe() {
+        return java.util.Optional.of(net.minecraft.network.chat.Component.translatable("trait.fletcherstrestle.ignited"));
+    }
+
+    @Override
     public MaterialEffectType<? extends MaterialEffect> type() {
         return ModMaterialEffectTypes.IGNITE_ARROW.get();
     }

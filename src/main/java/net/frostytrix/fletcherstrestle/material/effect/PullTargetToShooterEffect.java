@@ -27,6 +27,15 @@ public record PullTargetToShooterEffect(float strength, float minLift) implement
     ).apply(inst, PullTargetToShooterEffect::new));
 
     @Override
+
+    public java.util.Optional<net.minecraft.network.chat.Component> describe() {
+
+        return java.util.Optional.of(net.minecraft.network.chat.Component.translatable("trait.fletcherstrestle.puller"));
+
+    }
+
+
+    @Override
     public MaterialEffectType<? extends MaterialEffect> type() {
         return ModMaterialEffectTypes.PULL_TARGET_TO_SHOOTER.get();
     }

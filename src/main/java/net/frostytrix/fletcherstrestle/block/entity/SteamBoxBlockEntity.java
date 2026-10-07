@@ -116,9 +116,21 @@ public class SteamBoxBlockEntity extends BlockEntity {
         super(ModBlockEntities.STEAM_BOX_BE.get(), pos, state);
     }
 
+    /**
+     * Whether anything is actually cooking this tick. Server-computed and synced
+     * only when it flips, so the client can draw steam without needing the box's
+     * inventory or the recipe lookup.
+     */
+    private boolean steaming;
+
+    public boolean isSteaming() {
+        return steaming;
+    }
+
     public void tick(Level level, BlockPos pos, BlockState state) {
         if (level == null || level.isClientSide()) return;
 
+        boolean cookedThisTick = false;
         if (hasHeatBelow(level, pos)) {
             for (int i = 0; i < 16; i++) {
                 ItemStack currentItem = itemHandler.getStackInSlot(i);
@@ -135,6 +147,7 @@ public class SteamBoxBlockEntity extends BlockEntity {
                         // Progress only advances while there's enough water in the tank.
                         if (fluidTank.getFluidAmount() >= requiredWater) {
                             cookingTimes[i]++;
+                            cookedThisTick = true;
 
                             if (cookingTimes[i] >= requiredTime) {
                                 // Consume water
@@ -146,6 +159,10 @@ public class SteamBoxBlockEntity extends BlockEntity {
                                 itemHandler.setStackInSlot(i, result);
 
                                 cookingTimes[i] = 0;
+                                // The limb is done.
+                                level.playSound(null, pos, net.frostytrix.fletcherstrestle.sound.ModSounds.STEAM_BOX_DONE.get(),
+                                        net.minecraft.sounds.SoundSource.BLOCKS, 1.0f,
+                                        0.9f + level.getRandom().nextFloat() * 0.2f);
                             }
                         }
                     } else {
@@ -156,6 +173,12 @@ public class SteamBoxBlockEntity extends BlockEntity {
                     cookingTimes[i] = 0;
                 }
             }
+        }
+
+        if (cookedThisTick != steaming) {
+            steaming = cookedThisTick;
+            setChanged();
+            level.sendBlockUpdated(pos, state, state, 3);
         }
 
         // Move finished limbs out of the (GUI-less) box:
@@ -340,6 +363,7 @@ public class SteamBoxBlockEntity extends BlockEntity {
         tag.put("inventory", itemHandler.serializeNBT(registries));
         tag.put("fluid", fluidTank.writeToNBT(registries, new CompoundTag()));
         tag.putIntArray("cookingTimes", cookingTimes);
+        tag.putBoolean("steaming", steaming);
     }
 
     @Override
@@ -349,5 +373,6 @@ public class SteamBoxBlockEntity extends BlockEntity {
         fluidTank.readFromNBT(registries, tag.getCompound("fluid"));
         cookingTimes = tag.getIntArray("cookingTimes");
         if (cookingTimes.length != 16) cookingTimes = new int[16];
+        steaming = tag.getBoolean("steaming");
     }
 }

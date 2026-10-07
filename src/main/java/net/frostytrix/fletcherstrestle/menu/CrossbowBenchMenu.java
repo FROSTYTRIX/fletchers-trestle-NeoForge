@@ -86,7 +86,7 @@ public class CrossbowBenchMenu extends AbstractContainerMenu {
         this.addSlot(new Slot(container, SLOT_TRIGGER, 64, 46) {
             @Override
             public boolean mayPlace(ItemStack s) {
-                return s.is(ModItems.MECHANICAL_TRIGGER.get());
+                return s.is(net.frostytrix.fletcherstrestle.tags.ModTags.Items.MECHANISMS);
             }
 
             @Override
@@ -217,12 +217,24 @@ public class CrossbowBenchMenu extends AbstractContainerMenu {
         this.lastTriggerPresent = this.container.getItem(SLOT_TRIGGER).is(ModItems.MECHANICAL_TRIGGER.get());
     }
 
+    /**
+     * The same weapon as the other kind (bow to crossbow or back). It keeps its parts,
+     * its maker and its wear. Enchantments don't cross over, so a Tinker's Mark bonus
+     * baked into the tuning is taken back off, so a round trip can't make it
+     * permanent. The wear carries over, so a round trip isn't a free repair.
+     */
     private static ItemStack withAssemblyOf(ItemStack source, net.minecraft.world.item.Item resultItem) {
         ItemStack out = new ItemStack(resultItem);
         var assembly = source.get(ModDataComponents.BOW_ASSEMBLY.get());
         if (assembly != null) {
-            out.set(ModDataComponents.BOW_ASSEMBLY.get(), assembly);
+            Float base = source.get(ModDataComponents.TUNING_BEFORE_MARK.get());
+            out.set(ModDataComponents.BOW_ASSEMBLY.get(), base != null ? assembly.withTuning(base) : assembly);
         }
+        String maker = source.get(ModDataComponents.CRAFTED_BY.get());
+        if (maker != null) {
+            out.set(ModDataComponents.CRAFTED_BY.get(), maker);
+        }
+        out.setDamageValue(Math.min(source.getDamageValue(), Math.max(0, out.getMaxDamage() - 1)));
         return out;
     }
 

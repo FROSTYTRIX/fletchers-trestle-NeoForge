@@ -1,6 +1,7 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "fletcherstrestle:item/iron_quiver"
+    "layer0": "fletcherstrestle:item/iron_quiver_back",
+    "layer1": "fletcherstrestle:item/iron_quiver_front"
   }
 }

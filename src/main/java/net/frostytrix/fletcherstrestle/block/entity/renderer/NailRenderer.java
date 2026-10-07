@@ -14,6 +14,7 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Matrix4f;
 
@@ -172,6 +173,20 @@ public class NailRenderer implements BlockEntityRenderer<NailBlockEntity> {
                     colours == null ? GarlandColours.EMPTY : colours);
             return;
         }
+    }
+
+    /**
+     * A garland is drawn by the nail it was first tied to, so the culling box spans
+     * every garland this nail holds, end to end, with room below for the sag and
+     * the pennants.
+     */
+    @Override
+    public AABB getRenderBoundingBox(NailBlockEntity nail) {
+        AABB box = new AABB(nail.getBlockPos());
+        for (NailBlockEntity.Span span : nail.getSpans()) {
+            box = box.minmax(new AABB(span.target()));
+        }
+        return box.expandTowards(0, -(SAG_FAR + 1.0), 0);
     }
 
     /** Point along the span at {@code t}, pulled down by a parabolic sag. */

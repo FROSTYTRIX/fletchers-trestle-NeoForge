@@ -58,6 +58,7 @@ public class ModServerEvents {
     // returns the craft slots to the inventory: in time to be persisted.
     @SubscribeEvent
     public static void onPlayerLoggedOut(PlayerEvent.PlayerLoggedOutEvent event) {
+        net.frostytrix.fletcherstrestle.progression.DeadCalm.forget(event.getEntity());
         if (event.getEntity() instanceof ServerPlayer player
                 && player.containerMenu != player.inventoryMenu) {
             player.doCloseContainer();
@@ -72,7 +73,7 @@ public class ModServerEvents {
         }
     }
 
-    // --- Marksmanship XP (Phase 2) ---
+    // --- Marksmanship XP ---
 
     /** Awards archery XP when a player's arrow lands on a living target. */
     @SubscribeEvent
@@ -87,10 +88,11 @@ public class ModServerEvents {
 
         int xp = FletcherConfig.ARCHERY_XP_PER_HIT.get();
         // Headshot: arrow impact lands in the top ~30% of the target's hitbox.
-        float height = Math.max(0.1f, target.getBbHeight());
-        double fraction = (arrow.getY() - target.getY()) / height;
-        if (fraction >= 0.7) {
+        if (ArcheryProgression.isHeadshot(arrow, target)) {
             xp += FletcherConfig.ARCHERY_XP_HEADSHOT_BONUS.get();
+            // Headshot ding, for the shooter only.
+            shooter.playNotifySound(net.frostytrix.fletcherstrestle.sound.ModSounds.HEADSHOT.get(),
+                    net.minecraft.sounds.SoundSource.PLAYERS, 1.0f, 1.0f);
             net.frostytrix.fletcherstrestle.progression.ModCriteria.HEADSHOT.get()
                     .trigger(shooter, shooter.distanceTo(target));
         }
@@ -109,6 +111,46 @@ public class ModServerEvents {
         if (!(arrow.getOwner() instanceof ServerPlayer shooter)) return;
 
         ArcheryProgression.addXp(shooter, FletcherConfig.ARCHERY_XP_PER_KILL.get());
+    }
+
+    /**
+     * Centre-ring radius on the target face, as a fraction of the block. The red
+     * ring in {@code archery_target.png} sits about 2 pixels from the centre, and
+     * the face maps 1:1 onto block pixels, so a hit on or inside it counts.
+     */
+    private static final float BULLSEYE_RADIUS = 2f / 16f;
+
+    /**
+     * Called Shot, the Crit capstone: a headshot is always a crit. It runs before
+     * damage is applied and skips arrows whose ordinary crit roll already landed,
+     * so a lucky roll and the capstone never stack.
+     */
+    @SubscribeEvent
+    public static void onCalledShot(net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent event) {
+        if (!(event.getSource().getDirectEntity() instanceof AbstractArrow arrow)) return;
+        if (!(arrow.getOwner() instanceof ServerPlayer shooter)) return;
+        if (!ArcheryProgression.hasCapstone(shooter, net.frostytrix.fletcherstrestle.progression.ArcherySkill.CRIT)) return;
+        if (arrow.getPersistentData().getBoolean(ArcheryProgression.SKILL_CRIT_TAG)) return;
+
+        LivingEntity target = event.getEntity();
+        if (!ArcheryProgression.isHeadshot(arrow, target)) return;
+
+        event.setAmount(event.getAmount() * 1.5f);
+        if (target.level() instanceof net.minecraft.server.level.ServerLevel serverLevel) {
+            serverLevel.sendParticles(net.minecraft.core.particles.ParticleTypes.CRIT,
+                    target.getX(), target.getEyeY(), target.getZ(), 10, 0.2, 0.2, 0.2, 0.2);
+        }
+    }
+
+    /** Dead Calm needs to know, every tick and on both sides, how long each archer has held still. */
+    @SubscribeEvent
+    public static void onPlayerTick(net.neoforged.neoforge.event.tick.PlayerTickEvent.Post event) {
+        var player = event.getEntity();
+        boolean settled = net.frostytrix.fletcherstrestle.progression.DeadCalm.tick(player);
+        if (settled && player instanceof ServerPlayer serverPlayer) {
+            serverPlayer.playNotifySound(net.frostytrix.fletcherstrestle.sound.ModSounds.CAPSTONE.get(),
+                    net.minecraft.sounds.SoundSource.PLAYERS, 0.4f, 0.9f);
+        }
     }
 
     @SubscribeEvent
@@ -161,6 +203,17 @@ public class ModServerEvents {
                 localX, localY, localZ, u, v, estimatedDamage, speed,
                 arrow.level().getGameTime()
         ));
+
+        // The thunk of straw taking an arrow, and a bell for the centre ring.
+        // The face spans 2/16 to 14/16 of the block, so its centre is (0.5, 0.5).
+        var level = arrow.level();
+        level.playSound(null, hitPos, net.frostytrix.fletcherstrestle.sound.ModSounds.TARGET_HIT.get(),
+                net.minecraft.sounds.SoundSource.BLOCKS, 1.0f, 0.9f + level.getRandom().nextFloat() * 0.2f);
+        float offCentre = (float) Math.hypot(u - 0.5f, v - 0.5f);
+        if (offCentre <= BULLSEYE_RADIUS) {
+            level.playSound(null, hitPos, net.frostytrix.fletcherstrestle.sound.ModSounds.TARGET_BULLSEYE.get(),
+                    net.minecraft.sounds.SoundSource.BLOCKS, 1.0f, 1.0f);
+        }
 
         for (var player : arrow.level().players()) {
             if (player.containerMenu instanceof net.frostytrix.fletcherstrestle.menu.ArcheryTargetMenu menu

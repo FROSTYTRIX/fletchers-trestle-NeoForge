@@ -52,8 +52,10 @@ public class FletcherTrestle {
         ModMenuTypes.register(modEventBus);
         ModBlockEntities.register(modEventBus);
         ModEntities.register(modEventBus);
+        net.frostytrix.fletcherstrestle.garrison.ModPoiTypes.register(modEventBus);
         ModEffects.register(modEventBus);
         ModLootModifiers.register(modEventBus);
+        net.frostytrix.fletcherstrestle.loot.ModLootFunctions.register(modEventBus);
         ModFluidTypes.FLUID_TYPES.register(modEventBus);
         ModFluids.FLUIDS.register(modEventBus);
         ModSounds.register(modEventBus);
@@ -91,6 +93,8 @@ public class FletcherTrestle {
 
     private void registerEntityAttributes(EntityAttributeCreationEvent event) {
         event.put(ModEntities.HEAVY_DUMMY.get(), HeavyDummyEntity.createAttributes().build());
+        event.put(ModEntities.GARRISON_GOLEM.get(),
+                net.frostytrix.fletcherstrestle.entity.custom.GarrisonGolemEntity.createAttributes().build());
     }
 
     // Restrict where wild eagles spawn. The biome modifier narrows them to

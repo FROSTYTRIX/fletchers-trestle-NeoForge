@@ -2,5 +2,6 @@
   "ingredient": {
     "item": "minecraft:string"
   },
+  "release_sound": "fletcherstrestle:bow.release.spider",
   "stats": {}
 }

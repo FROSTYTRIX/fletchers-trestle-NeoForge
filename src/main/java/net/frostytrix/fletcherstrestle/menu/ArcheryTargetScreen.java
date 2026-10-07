@@ -131,7 +131,7 @@ public class ArcheryTargetScreen extends AbstractContainerScreen<ArcheryTargetMe
         scrollOffset = Math.min(scrollOffset, maxOffset);
 
         // "Point List" header
-        g.drawString(font, "Point List", ox, topPos + 13, 0x333333, false);
+        g.drawString(font, Component.translatable("gui.fletcherstrestle.target.point_list"), ox, topPos + 13, 0x333333, false);
 
         for (int i = 0; i < visibleRows; i++) {
             int idx = i + scrollOffset;
@@ -165,7 +165,7 @@ public class ArcheryTargetScreen extends AbstractContainerScreen<ArcheryTargetMe
                             "  Z: " + String.format("%.3f", s.z()),
                     ox + 2, oy + 13, 0x333333, false);
         } else {
-            g.drawString(font, "Point infos :", ox + 2, oy + 3, 0x555555, false);
+            g.drawString(font, Component.translatable("gui.fletcherstrestle.target.point_info"), ox + 2, oy + 3, 0x555555, false);
         }
     }
 
@@ -239,9 +239,9 @@ public class ArcheryTargetScreen extends AbstractContainerScreen<ArcheryTargetMe
             int ddx = mx - px, ddy = my - py;
             if (ddx * ddx + ddy * ddy <= 16) {
                 List<FormattedCharSequence> lines = List.of(
-                        Component.literal("Point #" + (i + 1)).getVisualOrderText(),
-                        Component.literal("Dmg: " + String.format("%.2f", s.estimatedDamage())).getVisualOrderText(),
-                        Component.literal("Spd: " + String.format("%.3f", s.speed())).getVisualOrderText()
+                        Component.translatable("gui.fletcherstrestle.target.point", i + 1).getVisualOrderText(),
+                        Component.translatable("gui.fletcherstrestle.target.damage", String.format("%.2f", s.estimatedDamage())).getVisualOrderText(),
+                        Component.translatable("gui.fletcherstrestle.target.speed", String.format("%.3f", s.speed())).getVisualOrderText()
                 );
                 g.renderTooltip(font, lines, mx, my);
                 break;

@@ -125,6 +125,16 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                 .unlockedBy("has_iron_nugget", has(Items.IRON_NUGGET))
                 .save(recipeOutput);
 
+        // Emplacement: an iron-banded swivel on a log post.
+        ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, ModBlocks.EMPLACEMENT.get())
+                .pattern(" I ")
+                .pattern("ILI")
+                .pattern("L L")
+                .define('I', Items.IRON_INGOT)
+                .define('L', ItemTags.LOGS)
+                .unlockedBy("has_crossbow", has(Items.CROSSBOW))
+                .save(recipeOutput);
+
         // Weapon rack: a plank backboard with two pegs.
         ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, ModBlocks.WEAPON_RACK.get())
                 .pattern("PPP")
@@ -258,11 +268,11 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
         SteamingRecipeBuilder.steaming(Ingredient.of(ModItems.ROUGH_WARPED_LIMB.get()), ModItems.PLIABLE_WARPED_LIMB.get())
                 .unlockedBy("has_rough_warped_limb", has(ModItems.ROUGH_WARPED_LIMB.get()))
                 .save(recipeOutput, ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "steaming_warped_limb"));
-        //test craft
-        SteamingRecipeBuilder.steaming(Ingredient.of(Items.POTATO), Items.BAKED_POTATO)
-                .unlockedBy("has_potato", has(Items.POTATO))
-                .save(recipeOutput, ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "test_potato"));
-
+        // Pale oak has no logs on 1.21.1, so its rough limbs only come from loot
+        // (Trial Chamber vaults, armed mobs). This lets one found that way become a bow.
+        SteamingRecipeBuilder.steaming(Ingredient.of(ModItems.ROUGH_PALE_OAK_LIMB.get()), ModItems.PLIABLE_PALE_OAK_LIMB.get())
+                .unlockedBy("has_rough_pale_oak_limb", has(ModItems.ROUGH_PALE_OAK_LIMB.get()))
+                .save(recipeOutput, ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "steaming_pale_oak_limb"));
         ShavingRecipeBuilder.shaving(Ingredient.of(Items.STICK), ModItems.ROUGH_OAK_LIMB.get())
                 .shavesRequired(1)
                 .unlockedBy("has_stick_stem", has(Items.STICK))
@@ -282,7 +292,7 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                 .save(recipeOutput, ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "shaving_stripped_oak_log"));
         ShavingRecipeBuilder.shaving(Ingredient.of(Items.STRIPPED_OAK_WOOD), ModItems.ROUGH_OAK_LIMB.get())
                 .unlockedBy("has_oak_log", has(Items.OAK_LOG))
-                .save(recipeOutput, ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "shaving_strippe_oak_wood"));
+                .save(recipeOutput, ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "shaving_stripped_oak_wood"));
 
         // Spruce
         ShavingRecipeBuilder.shaving(Ingredient.of(Items.SPRUCE_LOG), ModItems.ROUGH_SPRUCE_LIMB.get())

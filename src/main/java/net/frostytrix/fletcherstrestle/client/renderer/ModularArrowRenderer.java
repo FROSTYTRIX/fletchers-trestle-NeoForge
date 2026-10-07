@@ -31,7 +31,7 @@ public class ModularArrowRenderer extends ArrowRenderer<ModularArrowEntity> {
         ArrowAssembly assembly = entity.getSyncedItemStack().get(ModDataComponents.ARROW_ASSEMBLY.get());
         if (assembly == null) return;
 
-        // 1. Prepare the rotation and shake (Vanilla Logic)
+        // Prepare the rotation and shake (Vanilla Logic)
         poseStack.pushPose();
         poseStack.mulPose(Axis.YP.rotationDegrees(Mth.lerp(partialTicks, entity.yRotO, entity.getYRot()) - 90.0F));
         poseStack.mulPose(Axis.ZP.rotationDegrees(Mth.lerp(partialTicks, entity.xRotO, entity.getXRot())));
@@ -44,9 +44,9 @@ public class ModularArrowRenderer extends ArrowRenderer<ModularArrowEntity> {
         poseStack.scale(0.05625F, 0.05625F, 0.05625F);
         poseStack.translate(-4.0D, 0.0D, 0.0D);
 
-        // 2. Render the Layers
+        // Render the Layers
         // We render three times: Shaft -> Fletching -> Head
-// 2. Render the Layers
+// Render the Layers
         renderPart(poseStack, buffer, packedLight, getTexture(assembly, "shaft"));
 
 // Scale up microscopically so fletching renders just outside the shaft

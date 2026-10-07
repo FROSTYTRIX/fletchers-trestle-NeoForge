@@ -30,6 +30,15 @@ public record SubtleHomingEffect(float range, float strength, int graceTicks) im
     ).apply(inst, SubtleHomingEffect::new));
 
     @Override
+
+    public java.util.Optional<net.minecraft.network.chat.Component> describe() {
+
+        return java.util.Optional.of(net.minecraft.network.chat.Component.translatable("trait.fletcherstrestle.homing"));
+
+    }
+
+
+    @Override
     public MaterialEffectType<? extends MaterialEffect> type() {
         return ModMaterialEffectTypes.SUBTLE_HOMING.get();
     }

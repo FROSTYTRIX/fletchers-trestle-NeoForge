@@ -1,0 +1,101 @@
+{
+  "_comment": "The woods that grow in each biome, beyond oak. Keys are biome ids or #tags; a biome should only be matched once. The Nether's treeless skeleton biomes borrow crimson so their archers feel local. Warped forest is left out on purpose (see mob_armory.json).",
+  "values": {
+    "#minecraft:is_taiga": {
+      "woods": [
+        "spruce"
+      ]
+    },
+    "#minecraft:is_jungle": {
+      "woods": [
+        "jungle"
+      ]
+    },
+    "#minecraft:is_savanna": {
+      "woods": [
+        "acacia"
+      ]
+    },
+    "minecraft:forest": {
+      "woods": [
+        "birch"
+      ]
+    },
+    "minecraft:flower_forest": {
+      "woods": [
+        "birch"
+      ]
+    },
+    "minecraft:birch_forest": {
+      "woods": [
+        "birch"
+      ]
+    },
+    "minecraft:old_growth_birch_forest": {
+      "woods": [
+        "birch"
+      ]
+    },
+    "minecraft:meadow": {
+      "woods": [
+        "birch"
+      ]
+    },
+    "minecraft:dark_forest": {
+      "woods": [
+        "dark_oak",
+        "birch"
+      ]
+    },
+    "minecraft:grove": {
+      "woods": [
+        "spruce"
+      ]
+    },
+    "minecraft:snowy_plains": {
+      "woods": [
+        "spruce"
+      ]
+    },
+    "minecraft:windswept_hills": {
+      "woods": [
+        "spruce"
+      ]
+    },
+    "minecraft:windswept_forest": {
+      "woods": [
+        "spruce"
+      ]
+    },
+    "minecraft:windswept_gravelly_hills": {
+      "woods": [
+        "spruce"
+      ]
+    },
+    "minecraft:cherry_grove": {
+      "woods": [
+        "cherry"
+      ]
+    },
+    "minecraft:mangrove_swamp": {
+      "woods": [
+        "mangrove"
+      ]
+    },
+    "minecraft:crimson_forest": {
+      "woods": [
+        "crimson"
+      ]
+    },
+    "minecraft:soul_sand_valley": {
+      "woods": [
+        "crimson"
+      ]
+    },
+    "minecraft:nether_wastes": {
+      "woods": [
+        "crimson"
+      ]
+    }
+  }
+}

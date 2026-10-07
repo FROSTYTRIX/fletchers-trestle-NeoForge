@@ -2,6 +2,7 @@ package net.frostytrix.fletcherstrestle.enchantment;
 
 import net.frostytrix.fletcherstrestle.FletcherTrestle;
 import net.frostytrix.fletcherstrestle.component.BowAssembly;
+import net.frostytrix.fletcherstrestle.item.custom.ModularBowItem;
 import net.frostytrix.fletcherstrestle.component.ModDataComponents;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -246,16 +247,9 @@ public class ModEvents {
 
                 if (enchLevel > 0) {
                     // A modular bow only photosynthesises with a wooden riser and non-Nether limbs.
-                    if (stack.has(ModDataComponents.BOW_ASSEMBLY.get())) {
-                        BowAssembly assembly = stack.get(ModDataComponents.BOW_ASSEMBLY.get());
-                        String riser = assembly.riserMaterial().toLowerCase();
-                        String limbs = assembly.limbMaterial().toLowerCase();
-
-                        boolean isWoodRiser = !riser.contains("copper");
-                        boolean isValidLimb = !limbs.contains("crimson") && !limbs.contains("warped");
-                        if (!isWoodRiser || !isValidLimb) {
-                            return;
-                        }
+                    BowAssembly assembly = stack.get(ModDataComponents.BOW_ASSEMBLY.get());
+                    if (assembly != null && !ModularBowItem.canPhotosynthesize(assembly)) {
+                        return;
                     }
 
                     stack.setDamageValue(Math.max(0, stack.getDamageValue() - enchLevel));

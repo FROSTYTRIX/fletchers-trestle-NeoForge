@@ -107,16 +107,18 @@ public class EaglePerchBlock extends BaseEntityBlock {
             if (perch.isClaimed() && player.getUUID().equals(perch.getOwnerUUID())) {
                 clearEaglePerchPos(level, perch.getEagleUUID());
                 perch.unclaim();
-                player.displayClientMessage(Component.literal("Perch unclaimed."), true);
+                player.displayClientMessage(Component.translatable("message.fletcherstrestle.perch_unclaimed"), true);
             }
             return InteractionResult.SUCCESS;
         }
 
         if (perch.isClaimed()) {
             // Show info
-            String ownerLabel = perch.getOwnerName() != null ? perch.getOwnerName() : "unknown";
+            Component ownerLabel = perch.getOwnerName() != null
+                    ? Component.literal(perch.getOwnerName())
+                    : Component.translatable("message.fletcherstrestle.unknown_owner");
             player.displayClientMessage(
-                    Component.literal("Perch claimed by " + ownerLabel + "."), true);
+                    Component.translatable("message.fletcherstrestle.perch_info", ownerLabel), true);
             return InteractionResult.SUCCESS;
         }
 
@@ -124,13 +126,13 @@ public class EaglePerchBlock extends BaseEntityBlock {
         EagleEntity eagle = findClaimableEagle(level, player, pos);
         if (eagle == null) {
             player.displayClientMessage(
-                    Component.literal("No idle eagle nearby to claim this perch."), true);
+                    Component.translatable("message.fletcherstrestle.perch_no_eagle"), true);
             return InteractionResult.SUCCESS;
         }
         perch.claim(player.getUUID(), player.getName().getString(), eagle.getUUID());
         eagle.setPerchPos(pos);
         player.displayClientMessage(
-                Component.literal("Eagle bound to this perch."), true);
+                Component.translatable("message.fletcherstrestle.perch_bound"), true);
         return InteractionResult.SUCCESS;
     }
 

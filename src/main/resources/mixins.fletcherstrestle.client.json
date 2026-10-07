@@ -7,7 +7,8 @@
     "CameraMixin",
     "ItemInHandRendererMixin",
     "LocalPlayerAgilityMixin",
-    "MountSteeringMixin"
+    "MountSteeringMixin",
+    "SkeletonModelMixin"
   ],
   "injectors": {
     "defaultRequire": 1

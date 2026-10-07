@@ -11,7 +11,7 @@ import net.neoforged.neoforge.data.event.GatherDataEvent;
 
 import java.util.concurrent.CompletableFuture;
 
-// The bus = EventBusSubscriber.Bus.MOD is crucial here so NeoForge finds the event
+// Bus.MOD, so NeoForge finds the event
 @EventBusSubscriber(modid = FletcherTrestle.MOD_ID)
 public class ModDataGenerator {
 
@@ -22,13 +22,13 @@ public class ModDataGenerator {
         CompletableFuture<HolderLookup.Provider> lookupProvider = event.getLookupProvider();
         ExistingFileHelper existingFileHelper = event.getExistingFileHelper();
 
-        // 1. The Datapack Provider (Generates the Photosynthesis JSON)
+        // The Datapack Provider (Generates the Photosynthesis JSON)
         CompletableFuture<HolderLookup.Provider> datapackProvider = generator.addProvider(
                 event.includeServer(),
                 new ModDatapackProvider(packOutput, lookupProvider)
         ).getRegistryProvider();
 
-        // 2. The Tags Provider (Adds Photosynthesis to the Enchanting Table)
+        // The Tags Provider (Adds Photosynthesis to the Enchanting Table)
         generator.addProvider(
                 event.includeServer(),
                 new ModEnchantmentTagsProvider(packOutput, datapackProvider, existingFileHelper)

@@ -29,6 +29,15 @@ public record ApplyMobEffectEffect(Holder<MobEffect> effect, int duration, int a
     ).apply(inst, ApplyMobEffectEffect::new));
 
     @Override
+
+    public java.util.Optional<net.minecraft.network.chat.Component> describe() {
+
+        return java.util.Optional.of(effect.value().getDisplayName());
+
+    }
+
+
+    @Override
     public MaterialEffectType<? extends MaterialEffect> type() {
         return ModMaterialEffectTypes.APPLY_EFFECT.get();
     }

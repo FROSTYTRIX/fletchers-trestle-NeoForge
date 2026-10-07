@@ -31,6 +31,15 @@ public record BounceOnBlockEffect(float chance, int maxBounces, float retention)
     ).apply(inst, BounceOnBlockEffect::new));
 
     @Override
+
+    public java.util.Optional<net.minecraft.network.chat.Component> describe() {
+
+        return java.util.Optional.of(net.minecraft.network.chat.Component.translatable("trait.fletcherstrestle.bounce"));
+
+    }
+
+
+    @Override
     public MaterialEffectType<? extends MaterialEffect> type() {
         return ModMaterialEffectTypes.BOUNCE_ON_BLOCK.get();
     }

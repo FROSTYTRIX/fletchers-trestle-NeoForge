@@ -36,7 +36,7 @@ public record QuiverSlotPacket(boolean cycleRight) implements CustomPacketPayloa
 
                     int current = stack.getOrDefault(ModDataComponents.QUIVER_SELECTED_SLOT.get(), 0);
 
-                    // Dynamic modulo math to wrap around the specific size of this quiver tier!
+                    // Wrap around this quiver's own slot count.
                     int next = payload.cycleRight() ? (current + 1) % maxSlots : (current - 1 + maxSlots) % maxSlots;
 
                     stack.set(ModDataComponents.QUIVER_SELECTED_SLOT.get(), next);

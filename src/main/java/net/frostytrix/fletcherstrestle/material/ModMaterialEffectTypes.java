@@ -176,6 +176,33 @@ public final class ModMaterialEffectTypes {
             EFFECT_TYPES.register("scripted_callback",
                     () -> new MaterialEffectType<>(ScriptedCallbackEffect.CODEC));
 
+    // --- Arrow specials: hits the simple hooks can't express, handled by the arrow
+    // itself when one of these is on any of its parts ---
+
+    public static final Supplier<MaterialEffectType<SpawnBlackHoleEffect>> BLACK_HOLE =
+            EFFECT_TYPES.register("black_hole",
+                    () -> new MaterialEffectType<>(SpawnBlackHoleEffect.CODEC));
+
+    public static final Supplier<MaterialEffectType<SplashPotionEffect>> SPLASH_POTION =
+            EFFECT_TYPES.register("splash_potion",
+                    () -> new MaterialEffectType<>(SplashPotionEffect.CODEC));
+
+    public static final Supplier<MaterialEffectType<ResonanceEffect>> RESONANCE =
+            EFFECT_TYPES.register("resonance",
+                    () -> new MaterialEffectType<>(ResonanceEffect.CODEC));
+
+    public static final Supplier<MaterialEffectType<PhaseThroughBlocksEffect>> PHASE_THROUGH_BLOCKS =
+            EFFECT_TYPES.register("phase_through_blocks",
+                    () -> new MaterialEffectType<>(PhaseThroughBlocksEffect.CODEC));
+
+    public static final Supplier<MaterialEffectType<GrappleEffect>> GRAPPLE =
+            EFFECT_TYPES.register("grapple",
+                    () -> new MaterialEffectType<>(GrappleEffect.CODEC));
+
+    public static final Supplier<MaterialEffectType<DeployRopeEffect>> DEPLOY_ROPE =
+            EFFECT_TYPES.register("deploy_rope",
+                    () -> new MaterialEffectType<>(DeployRopeEffect.CODEC));
+
     public static void register(IEventBus bus) {
         EFFECT_TYPES.register(bus);
     }

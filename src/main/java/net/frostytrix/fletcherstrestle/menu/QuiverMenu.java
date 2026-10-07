@@ -25,7 +25,7 @@ public class QuiverMenu extends AbstractContainerMenu {
         super(ModMenuTypes.QUIVER_MENU.get(), id);
         this.player = playerInv.player;
 
-        // 1. Determine which hand holds the quiver
+        // Determine which hand holds the quiver
         if (player.getMainHandItem().getItem() instanceof ModularQuiverItem) {
             this.hand = InteractionHand.MAIN_HAND;
         } else {
@@ -34,10 +34,10 @@ public class QuiverMenu extends AbstractContainerMenu {
 
         ItemStack quiver = player.getItemInHand(hand);
 
-        // 2. Fetch the dynamic capacity
+        // Fetch the dynamic capacity
         this.maxSlots = quiver.getOrDefault(ModDataComponents.MAX_QUIVER_SLOTS.get(), 9);
 
-        // 3. Initialize the dynamic container
+        // Initialize the dynamic container
         this.quiverContainer = new SimpleContainer(this.maxSlots) {
             @Override
             public void setChanged() {
@@ -46,7 +46,7 @@ public class QuiverMenu extends AbstractContainerMenu {
             }
         };
 
-        // 4. Load items from the Quiver into the Container
+        // Load items from the Quiver into the Container
         List<ItemStack> list = ModularQuiverItem.getQuiverContents(quiver);
         for (int i = 0; i < this.maxSlots; i++) {
             if (i < list.size()) {
@@ -58,7 +58,7 @@ public class QuiverMenu extends AbstractContainerMenu {
 
         int rows = (int) Math.ceil((double) this.maxSlots / 9.0);
 
-        // 5. Add Dynamic Quiver Slots
+        // Add Dynamic Quiver Slots
         for (int i = 0; i < this.maxSlots; i++) {
             int row = i / 9;
             int col = i % 9;
@@ -79,7 +79,7 @@ public class QuiverMenu extends AbstractContainerMenu {
             });
         }
 
-        // 6. Add Player Inventory (Dynamically shifted down!)
+        // Player inventory, shifted down to fit the quiver's rows.
         int playerInvY = 31 + (rows * 18);
         for (int i = 0; i < 3; ++i) {
             for (int j = 0; j < 9; ++j) {
@@ -87,7 +87,7 @@ public class QuiverMenu extends AbstractContainerMenu {
             }
         }
 
-        // 7. Add Player Hotbar
+        // Add Player Hotbar
         int hotbarY = playerInvY + 58;
         for (int i = 0; i < 9; ++i) {
             this.addSlot(new Slot(playerInv, i, 8 + i * 18, hotbarY));

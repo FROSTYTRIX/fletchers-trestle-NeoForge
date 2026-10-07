@@ -23,7 +23,12 @@ public class ModBlockTagProvider extends BlockTagsProvider {
                 .add(ModBlocks.STEAM_BOX.get())
                 .add(ModBlocks.DIPPING_VAT.get())
                 .add(ModBlocks.ARROW_SLIT.get())
+                .add(ModBlocks.EMPLACEMENT.get())
         ;
+
+        this.tag(net.frostytrix.fletcherstrestle.tags.ModTags.Blocks.GARRISON_GOLEM_BODY)
+                .addTag(net.neoforged.neoforge.common.Tags.Blocks.STRIPPED_LOGS)
+                .addTag(net.neoforged.neoforge.common.Tags.Blocks.STRIPPED_WOODS);
 
         this.tag(BlockTags.MINEABLE_WITH_PICKAXE)
                 ;

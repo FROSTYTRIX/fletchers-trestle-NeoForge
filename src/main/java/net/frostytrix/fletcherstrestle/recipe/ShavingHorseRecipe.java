@@ -64,7 +64,7 @@ public class ShavingHorseRecipe implements Recipe<SingleRecipeInput> {
         public static final MapCodec<ShavingHorseRecipe> CODEC = RecordCodecBuilder.mapCodec(inst -> inst.group(
                 Ingredient.CODEC_NONEMPTY.fieldOf("ingredient").forGetter(r -> r.input),
                 ItemStack.STRICT_CODEC.fieldOf("result").forGetter(r -> r.result),
-                Codec.INT.optionalFieldOf("shaves_required", 3).forGetter(r -> r.shavesRequired) // Defaults to 3 clicks!
+                Codec.INT.optionalFieldOf("shaves_required", 3).forGetter(r -> r.shavesRequired) // Defaults to 3 clicks.
         ).apply(inst, ShavingHorseRecipe::new));
 
         public static final StreamCodec<RegistryFriendlyByteBuf, ShavingHorseRecipe> STREAM_CODEC = StreamCodec.of(

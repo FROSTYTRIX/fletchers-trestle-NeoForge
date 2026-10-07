@@ -2,7 +2,9 @@
   "ingredient": {
     "item": "fletcherstrestle:flax_string"
   },
+  "release_sound": "fletcherstrestle:bow.release.flax",
   "stats": {
+    "overdraw_shake": true,
     "velocity_multiplier": 0.85
   }
 }

@@ -35,6 +35,7 @@ public class ModBlockLootTableProvider extends BlockLootSubProvider {
         }
 
         dropSelf(ModBlocks.WEAPON_RACK.get());
+        dropSelf(ModBlocks.EMPLACEMENT.get());
         dropSelf(ModBlocks.NAIL.get());
         dropSelf(ModBlocks.STEAM_BOX.get());
         dropSelf(ModBlocks.SHAVING_HORSE.get());

@@ -37,7 +37,7 @@ public class ArrowRecipeCategory implements IRecipeCategory<ModularArrowRecipe> 
 
     @Override
     public Component getTitle() {
-        return Component.literal("Fletching (Arrows)");
+        return Component.translatable("jei.fletcherstrestle.arrow_fletching");
     }
 
     @Override
@@ -54,19 +54,19 @@ public class ArrowRecipeCategory implements IRecipeCategory<ModularArrowRecipe> 
     public void setRecipe(IRecipeLayoutBuilder builder, ModularArrowRecipe recipe, IFocusGroup focuses) {
         // Menu coords offset by -10, -10
 
-        // 1. Arrow Head (Menu was 66, 17 -> JEI is 56, 7)
+        // Arrow Head (Menu was 66, 17 -> JEI is 56, 7)
         builder.addSlot(RecipeIngredientRole.INPUT, 56, 7)
                 .addIngredients(recipe.getHead());
 
-        // 2. Arrow Shaft (Menu was 48, 35 -> JEI is 38, 25)
+        // Arrow Shaft (Menu was 48, 35 -> JEI is 38, 25)
         builder.addSlot(RecipeIngredientRole.INPUT, 38, 25)
                 .addIngredients(recipe.getShaft());
 
-        // 3. Arrow Fletching (Menu was 30, 53 -> JEI is 20, 43)
+        // Arrow Fletching (Menu was 30, 53 -> JEI is 20, 43)
         builder.addSlot(RecipeIngredientRole.INPUT, 20, 43)
                 .addIngredients(recipe.getFletching());
 
-        // 4. Output Slot (Menu was 124, 35 -> JEI is 114, 25)
+        // Output Slot (Menu was 124, 35 -> JEI is 114, 25)
         builder.addSlot(RecipeIngredientRole.OUTPUT, 114, 25)
                 .addItemStack(recipe.getResultItem(null).copyWithCount(4)); // Show 4 arrows in JEI output
     }

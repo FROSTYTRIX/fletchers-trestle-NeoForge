@@ -11,6 +11,15 @@ public enum ArcherySkill {
 
     public static final int MAX_RANK = 10;
 
+    /** Lang id of the capstone at the tip of this branch. */
+    public String capstoneId() {
+        return switch (this) {
+            case DRAW -> "snap_shot";
+            case CRIT -> "called_shot";
+            case AIM -> "dead_calm";
+        };
+    }
+
     public int rank(ArcherySkills skills) {
         return switch (this) {
             case DRAW -> skills.draw();
@@ -22,9 +31,9 @@ public enum ArcherySkill {
     /** Returns a copy of {@code skills} with this branch's rank increased by one. */
     public ArcherySkills increment(ArcherySkills skills) {
         return switch (this) {
-            case DRAW -> new ArcherySkills(skills.draw() + 1, skills.crit(), skills.aim());
-            case CRIT -> new ArcherySkills(skills.draw(), skills.crit() + 1, skills.aim());
-            case AIM -> new ArcherySkills(skills.draw(), skills.crit(), skills.aim() + 1);
+            case DRAW -> new ArcherySkills(skills.draw() + 1, skills.crit(), skills.aim(), skills.capstones());
+            case CRIT -> new ArcherySkills(skills.draw(), skills.crit() + 1, skills.aim(), skills.capstones());
+            case AIM -> new ArcherySkills(skills.draw(), skills.crit(), skills.aim() + 1, skills.capstones());
         };
     }
 }

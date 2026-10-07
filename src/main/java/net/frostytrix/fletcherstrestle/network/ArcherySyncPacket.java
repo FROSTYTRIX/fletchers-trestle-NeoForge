@@ -9,8 +9,8 @@ import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 
-/** Server -> client: the local player's archery XP and skill ranks. */
-public record ArcherySyncPacket(int xp, int draw, int crit, int aim) implements CustomPacketPayload {
+/** Server -> client: the local player's archery XP, skill ranks and capstones. */
+public record ArcherySyncPacket(int xp, int draw, int crit, int aim, int capstones) implements CustomPacketPayload {
     public static final Type<ArcherySyncPacket> TYPE =
             new Type<>(ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "archery_sync"));
 
@@ -19,6 +19,7 @@ public record ArcherySyncPacket(int xp, int draw, int crit, int aim) implements 
             ByteBufCodecs.VAR_INT, ArcherySyncPacket::draw,
             ByteBufCodecs.VAR_INT, ArcherySyncPacket::crit,
             ByteBufCodecs.VAR_INT, ArcherySyncPacket::aim,
+            ByteBufCodecs.VAR_INT, ArcherySyncPacket::capstones,
             ArcherySyncPacket::new
     );
 
@@ -29,6 +30,6 @@ public record ArcherySyncPacket(int xp, int draw, int crit, int aim) implements 
 
     public static void handle(final ArcherySyncPacket payload, final IPayloadContext context) {
         context.enqueueWork(() ->
-                ClientArcheryData.set(payload.xp(), payload.draw(), payload.crit(), payload.aim()));
+                ClientArcheryData.set(payload.xp(), payload.draw(), payload.crit(), payload.aim(), payload.capstones()));
     }
 }

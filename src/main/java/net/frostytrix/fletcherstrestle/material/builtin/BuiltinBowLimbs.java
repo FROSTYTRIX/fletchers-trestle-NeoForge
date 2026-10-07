@@ -55,9 +55,10 @@ public final class BuiltinBowLimbs {
         register(ctx, MANGROVE, ModItems.PLIABLE_MANGROVE_LIMB, 22.0f, 1.00f, true, false, List.of());
         register(ctx, CHERRY, ModItems.PLIABLE_CHERRY_LIMB, 20.0f, 0.85f, false, true, List.of());
         register(ctx, PALE_OAK, ModItems.PLIABLE_PALE_OAK_LIMB, 26.0f, 1.00f, false, false, List.of());
-        register(ctx, CRIMSON, ModItems.PLIABLE_CRIMSON_LIMB, 24.0f, 1.10f, false, false,
+        // Nether fungi: no sunlight to feed on, so no Photosynthesis.
+        registerNether(ctx, CRIMSON, ModItems.PLIABLE_CRIMSON_LIMB, 24.0f, 1.10f,
                 List.of(new IgniteArrowEffect(100)));
-        register(ctx, WARPED, ModItems.PLIABLE_WARPED_LIMB, 20.0f, 1.00f, false, false,
+        registerNether(ctx, WARPED, ModItems.PLIABLE_WARPED_LIMB, 20.0f, 1.00f,
                 List.of(new SetArrowNoGravityEffect()));
     }
 
@@ -79,6 +80,20 @@ public final class BuiltinBowLimbs {
         ctx.register(key, new BowLimbDef(
                 Ingredient.of(ingredient.get()),
                 new BowLimbStats(drawTime, damageMult, amphibious, givesSlowFalling, agility),
+                Optional.empty(),
+                effects,
+                Optional.empty()
+        ));
+    }
+
+    private static void registerNether(BootstrapContext<BowLimbDef> ctx,
+                                       ResourceKey<BowLimbDef> key,
+                                       java.util.function.Supplier<? extends ItemLike> ingredient,
+                                       float drawTime, float damageMult,
+                                       List<MaterialEffect> effects) {
+        ctx.register(key, new BowLimbDef(
+                Ingredient.of(ingredient.get()),
+                new BowLimbStats(drawTime, damageMult, false, false, false, false),
                 Optional.empty(),
                 effects,
                 Optional.empty()

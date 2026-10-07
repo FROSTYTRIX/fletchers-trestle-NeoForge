@@ -1,4 +1,9 @@
 {
+  "effects": [
+    {
+      "type": "fletcherstrestle:splash_potion"
+    }
+  ],
   "ingredient": {
     "item": "minecraft:glass_bottle"
   },

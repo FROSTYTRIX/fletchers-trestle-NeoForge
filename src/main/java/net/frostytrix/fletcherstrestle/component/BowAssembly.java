@@ -33,6 +33,11 @@ public record BowAssembly(String limbMaterial, Optional<String> secondLimb,
         return new BowAssembly(limbMaterial, secondLimb, riserMaterial, stringMaterial, newTuning);
     }
 
+    /** The same weapon with a new string; every other part, both woods included, is kept. */
+    public BowAssembly withString(String newString) {
+        return new BowAssembly(limbMaterial, secondLimb, riserMaterial, newString, tuning);
+    }
+
     /** True when this bow was laminated from two different woods. */
     public boolean isComposite() {
         return secondLimb.isPresent() && !secondLimb.get().equals(limbMaterial);

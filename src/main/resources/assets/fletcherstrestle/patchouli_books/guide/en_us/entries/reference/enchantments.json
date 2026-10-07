@@ -7,7 +7,7 @@
     {
       "type": "patchouli:text",
       "title": "Enchantments",
-      "text": "Six archery enchantments ship with the mod.$(br2)$(l)Bioluminescence$(): consumes a torch to make the arrow carry light, lighting where it lands.$(br2)$(l)Gale Force$(): adds a burst of wind to your shots."
+      "text": "Six archery enchantments ship with the mod. Find them at the enchanting table, from $(l)Librarians$(), and in $(l)Trial Chamber$() vaults.$(br2)$(l)Bioluminescence$(): consumes a torch to make the arrow carry light, lighting where it lands.$(br2)$(l)Gale Force$(): adds a burst of wind to your shots."
     },
     {
       "type": "patchouli:text",

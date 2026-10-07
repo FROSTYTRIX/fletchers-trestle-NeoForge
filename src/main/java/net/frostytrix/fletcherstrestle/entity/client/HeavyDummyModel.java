@@ -13,7 +13,7 @@ public class HeavyDummyModel<T extends HeavyDummyEntity> extends HumanoidModel<T
     public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(
             ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "heavy_dummy"), "main");
 
-    // 1. We must define these fields manually since HumanoidModel doesn't have them
+    // We must define these fields manually since HumanoidModel doesn't have them
     public final ModelPart jacket;
     public final ModelPart rightSleeve;
     public final ModelPart leftSleeve;
@@ -22,7 +22,7 @@ public class HeavyDummyModel<T extends HeavyDummyEntity> extends HumanoidModel<T
 
     public HeavyDummyModel(ModelPart root) {
         super(root);
-        // 2. Initialize the fields by grabbing them from the root
+        // Initialize the fields by grabbing them from the root
         this.jacket = root.getChild("jacket");
         this.rightSleeve = root.getChild("right_sleeve");
         this.leftSleeve = root.getChild("left_sleeve");

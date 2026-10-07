@@ -50,7 +50,9 @@ public final class CompositeLimb {
                 // config-gated rather than watered down.
                 sa.amphibious() || sb.amphibious(),
                 sa.givesSlowFalling() || sb.givesSlowFalling(),
-                sa.agility() || sb.agility()
+                sa.agility() || sb.agility(),
+                // A requirement rather than a power: both woods must qualify.
+                sa.photosynthetic() && sb.photosynthetic()
         );
 
         List<MaterialEffect> effects = new ArrayList<>(a.effects());

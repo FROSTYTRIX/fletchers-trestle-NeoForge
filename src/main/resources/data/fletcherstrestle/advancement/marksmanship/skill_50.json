@@ -1,0 +1,32 @@
+{
+  "parent": "fletcherstrestle:marksmanship/skill_40",
+  "display": {
+    "icon": {
+      "id": "minecraft:heart_of_the_sea"
+    },
+    "title": {
+      "translate": "advancement.fletcherstrestle.skill_50.title"
+    },
+    "description": {
+      "translate": "advancement.fletcherstrestle.skill_50.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "done": {
+      "trigger": "fletcherstrestle:archery_level",
+      "conditions": {
+        "level": {
+          "min": 50
+        }
+      }
+    }
+  },
+  "requirements": [
+    [
+      "done"
+    ]
+  ]
+}

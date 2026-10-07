@@ -5,6 +5,7 @@ import net.frostytrix.fletcherstrestle.component.ModDataComponents;
 import net.frostytrix.fletcherstrestle.recipe.ArrowRecipeInput;
 import net.frostytrix.fletcherstrestle.recipe.FletchingRecipeInput;
 import net.frostytrix.fletcherstrestle.recipe.ModRecipes;
+import net.frostytrix.fletcherstrestle.material.MaterialResolver;
 import net.frostytrix.fletcherstrestle.tags.ModTags;
 import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
@@ -19,7 +20,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class FletchingMenu extends AbstractContainerMenu {
     public int activeTab = 0;
-    public float customTuning = -1.0f; // Tracks the minigame score!
+    public float customTuning = -1.0f; // Tracks the minigame score.
 
     private final Player player;
     private final Level level;
@@ -37,6 +38,38 @@ public class FletchingMenu extends AbstractContainerMenu {
     }
 
     public final ResultContainer resultSlots = new ResultContainer();
+
+    // A part fits its slot if a material def accepts it, so a datapack's new parts
+    // work without also joining the item tags. The tags remain a second way in.
+    private boolean isLimb(ItemStack stack) {
+        return stack.is(ModTags.Items.BOW_LIMBS)
+                || MaterialResolver.resolveBowLimb(level.registryAccess(), stack).isPresent();
+    }
+
+    private boolean isRiser(ItemStack stack) {
+        return stack.is(ModTags.Items.BOW_RISERS)
+                || MaterialResolver.resolveBowRiser(level.registryAccess(), stack).isPresent();
+    }
+
+    private boolean isString(ItemStack stack) {
+        return stack.is(ModTags.Items.BOW_STRINGS)
+                || MaterialResolver.resolveBowString(level.registryAccess(), stack).isPresent();
+    }
+
+    private boolean isHead(ItemStack stack) {
+        return stack.is(ModTags.Items.ARROW_HEADS)
+                || MaterialResolver.resolveArrowHead(level.registryAccess(), stack).isPresent();
+    }
+
+    private boolean isShaft(ItemStack stack) {
+        return stack.is(ModTags.Items.ROUGH_LIMBS)
+                || MaterialResolver.resolveArrowShaft(level.registryAccess(), stack).isPresent();
+    }
+
+    private boolean isFletching(ItemStack stack) {
+        return stack.is(ModTags.Items.ARROW_FLETCHING)
+                || MaterialResolver.resolveArrowFletching(level.registryAccess(), stack).isPresent();
+    }
 
     public FletchingMenu(int containerId, Inventory playerInventory) {
         this(containerId, playerInventory, new SimpleContainer(7));
@@ -59,6 +92,11 @@ public class FletchingMenu extends AbstractContainerMenu {
             // This fixes the vanishing bow! Items are ONLY consumed when you actually pick up the result.
             @Override
             public void onTake(Player playerIn, ItemStack stack) {
+                boolean restrung = FletchingMenu.this.isBenchWork()
+                        && !FletchingMenu.this.craftSlots.getItem(3).isEmpty();
+                if (restrung && playerIn instanceof net.minecraft.server.level.ServerPlayer serverPlayer) {
+                    net.frostytrix.fletcherstrestle.progression.ModCriteria.RESTRING.get().trigger(serverPlayer);
+                }
                 FletchingMenu.this.shrinkInputs();
                 FletchingMenu.this.customTuning = -1.0f; // Reset tuning for the next craft
                 super.onTake(playerIn, stack);
@@ -71,7 +109,7 @@ public class FletchingMenu extends AbstractContainerMenu {
         this.addSlot(new Slot(craftSlots, 0, 45, 17) { // Top Limb
             @Override
             public boolean mayPlace(@NotNull ItemStack stack) {
-                return stack.is(ModTags.Items.BOW_LIMBS);
+                return isLimb(stack);
             }
 
             @Override
@@ -82,7 +120,7 @@ public class FletchingMenu extends AbstractContainerMenu {
         this.addSlot(new Slot(craftSlots, 1, 45, 53) { // Bottom Limb
             @Override
             public boolean mayPlace(@NotNull ItemStack stack) {
-                return stack.is(ModTags.Items.BOW_LIMBS);
+                return isLimb(stack);
             }
 
             @Override
@@ -90,10 +128,10 @@ public class FletchingMenu extends AbstractContainerMenu {
                 return FletchingMenu.this.activeTab == 0;
             }
         });
-        this.addSlot(new Slot(craftSlots, 2, 21, 35) { // Riser
+        this.addSlot(new Slot(craftSlots, 2, 21, 35) { // Riser, or a finished weapon for bench work
             @Override
             public boolean mayPlace(@NotNull ItemStack stack) {
-                return stack.is(ModTags.Items.BOW_RISERS);
+                return isRiser(stack) || BenchWork.isFinishedWeapon(stack);
             }
 
             @Override
@@ -104,7 +142,7 @@ public class FletchingMenu extends AbstractContainerMenu {
         this.addSlot(new Slot(craftSlots, 3, 69, 35) { // String
             @Override
             public boolean mayPlace(@NotNull ItemStack stack) {
-                return stack.is(ModTags.Items.BOW_STRINGS);
+                return isString(stack);
             }
 
             @Override
@@ -119,7 +157,7 @@ public class FletchingMenu extends AbstractContainerMenu {
         this.addSlot(new Slot(craftSlots, 4, 66, 17) { // Arrow Head
             @Override
             public boolean mayPlace(@NotNull ItemStack stack) {
-                return stack.is(ModTags.Items.ARROW_HEADS);
+                return isHead(stack);
             }
 
             @Override
@@ -130,7 +168,7 @@ public class FletchingMenu extends AbstractContainerMenu {
         this.addSlot(new Slot(craftSlots, 5, 48, 35) { // Arrow Shaft
             @Override
             public boolean mayPlace(@NotNull ItemStack stack) {
-                return stack.is(ModTags.Items.ROUGH_LIMBS);
+                return isShaft(stack);
             }
 
             @Override
@@ -141,7 +179,7 @@ public class FletchingMenu extends AbstractContainerMenu {
         this.addSlot(new Slot(craftSlots, 6, 30, 53) { // Arrow Fletching
             @Override
             public boolean mayPlace(@NotNull ItemStack stack) {
-                return stack.is(ModTags.Items.ARROW_FLETCHING);
+                return isFletching(stack);
             }
 
             @Override
@@ -165,7 +203,12 @@ public class FletchingMenu extends AbstractContainerMenu {
     public void slotsChanged(Container container) {
         super.slotsChanged(container);
 
-        if (this.activeTab == 0) {
+        if (this.activeTab == 0 && isBenchWork()) {
+            // A finished weapon in the riser slot: restring and/or retune it.
+            this.resultSlots.setItem(0, BenchWork.result(this.level.registryAccess(),
+                    this.craftSlots.getItem(2), this.craftSlots.getItem(3), this.customTuning));
+
+        } else if (this.activeTab == 0) {
             // Check Bow Recipe
             FletchingRecipeInput input = new FletchingRecipeInput(
                     this.craftSlots.getItem(2), // Riser
@@ -188,6 +231,8 @@ public class FletchingMenu extends AbstractContainerMenu {
                         output.set(ModDataComponents.BOW_ASSEMBLY.get(), base.withTuning(this.customTuning));
                     }
                 }
+                // The maker's stamp: whoever finishes it at the table.
+                output.set(ModDataComponents.CRAFTED_BY.get(), this.player.getName().getString());
                 this.resultSlots.setItem(0, output);
             } else {
                 this.resultSlots.setItem(0, ItemStack.EMPTY);
@@ -214,6 +259,12 @@ public class FletchingMenu extends AbstractContainerMenu {
 
         // Tells the client UI to refresh the assemble button state
         this.broadcastChanges();
+    }
+
+    /** True when the bow tab holds a finished weapon to restring or retune rather than parts to assemble. */
+    public boolean isBenchWork() {
+        return this.activeTab == 0 && BenchWork.applies(
+                this.craftSlots.getItem(2), this.craftSlots.getItem(0), this.craftSlots.getItem(1));
     }
 
     public void shrinkInputs() {
@@ -255,12 +306,14 @@ public class FletchingMenu extends AbstractContainerMenu {
                 if (!this.moveItemStackTo(itemstack1, 8, 44, false)) return ItemStack.EMPTY;
             } else if (index >= 8 && index < 44) {
                 if (this.activeTab == 0) {
-                    if (itemstack1.is(ModTags.Items.BOW_LIMBS)) {
+                    if (isLimb(itemstack1)) {
                         if (!this.moveItemStackTo(itemstack1, 1, 3, false)) return ItemStack.EMPTY;
-                    } else if (itemstack1.is(ModTags.Items.BOW_RISERS)) {
+                    } else if (isRiser(itemstack1)) {
                         if (!this.moveItemStackTo(itemstack1, 3, 4, false)) return ItemStack.EMPTY;
-                    } else if (itemstack1.is(ModTags.Items.BOW_STRINGS)) {
+                    } else if (isString(itemstack1)) {
                         if (!this.moveItemStackTo(itemstack1, 4, 5, false)) return ItemStack.EMPTY;
+                    } else if (BenchWork.isFinishedWeapon(itemstack1)) {
+                        if (!this.moveItemStackTo(itemstack1, 3, 4, false)) return ItemStack.EMPTY;
                     } else if (index >= 8 && index < 35) {
                         if (!this.moveItemStackTo(itemstack1, 35, 44, false)) return ItemStack.EMPTY;
                     } else if (index >= 35 && index < 44) {
@@ -268,11 +321,11 @@ public class FletchingMenu extends AbstractContainerMenu {
                     }
                 } else if (this.activeTab == 1) {
                     // Route shift-clicked parts to the matching arrow slot by tag.
-                    if (itemstack1.is(ModTags.Items.ARROW_HEADS)) {
+                    if (isHead(itemstack1)) {
                         if (!this.moveItemStackTo(itemstack1, 5, 6, false)) return ItemStack.EMPTY;
-                    } else if (itemstack1.is(ModTags.Items.ROUGH_LIMBS)) {
+                    } else if (isShaft(itemstack1)) {
                         if (!this.moveItemStackTo(itemstack1, 6, 7, false)) return ItemStack.EMPTY;
-                    } else if (itemstack1.is(ModTags.Items.ARROW_FLETCHING)) {
+                    } else if (isFletching(itemstack1)) {
                         if (!this.moveItemStackTo(itemstack1, 7, 8, false)) return ItemStack.EMPTY;
                     } else if (index >= 8 && index < 35) {
                         if (!this.moveItemStackTo(itemstack1, 35, 44, false)) return ItemStack.EMPTY;

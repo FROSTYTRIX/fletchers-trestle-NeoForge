@@ -15,7 +15,7 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 public class ModItems {
     public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(FletcherTrestle.MOD_ID);
 
-    // 0. The Knife
+    // The Knife
     public static final DeferredItem<Item> DRAWKNIFE = ITEMS.register("drawknife",
             () -> new Item(new Item.Properties().durability(250)));
 
@@ -24,7 +24,7 @@ public class ModItems {
     public static final DeferredItem<Item> MAGAZINE = ITEMS.register("magazine",
             () -> new Item(new Item.Properties()));
 
-    // 1. Limbs
+    // Limbs
     public static final DeferredItem<Item> ROUGH_OAK_LIMB = ITEMS.register("rough_oak_limb",
             () -> new Item(new Item.Properties()));
     public static final DeferredItem<Item> PLIABLE_OAK_LIMB = ITEMS.register("pliable_oak_limb",
@@ -81,7 +81,7 @@ public class ModItems {
             () -> new Item(new Item.Properties()));
 
 
-    // 2. Risers
+    // Risers
     public static final DeferredItem<Item> WOOD_RISER = ITEMS.register("wood_riser",
             () -> new Item(new Item.Properties()));
 
@@ -110,7 +110,7 @@ public class ModItems {
     public static final DeferredItem<Item> MECHANICAL_TRIGGER = ITEMS.register("mechanical_trigger",
             () -> new Item(new Item.Properties()));
 
-    // 3. Strings
+    // Strings
     public static final DeferredItem<Item> HIGH_TENSION_STRING = ITEMS.register("high_tension_string",
             () -> new Item(new Item.Properties()));
 
@@ -163,6 +163,8 @@ public class ModItems {
             () -> new HeavyDummyItem(new Item.Properties()));
 
 
+    public static final DeferredItem<Item> GARRISON_GOLEM_SPAWN_EGG = ITEMS.register("garrison_golem_spawn_egg",
+            () -> new net.neoforged.neoforge.common.DeferredSpawnEggItem(ModEntities.GARRISON_GOLEM, 0xC9A66B, 0x6E6E6E, new Item.Properties()));
     public static final DeferredItem<Item> EAGLE_SPAWN_EGG = ITEMS.register("eagle_spawn_egg", () -> new SpawnEggItem(ModEntities.EAGLE.get(), 0x5C4033, 0xF5C842, new Item.Properties()));
 
     public static final DeferredItem<Item> EAGLE_WHISTLE = ITEMS.register("eagle_whistle",

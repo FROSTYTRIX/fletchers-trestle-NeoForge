@@ -43,7 +43,7 @@ public class FletchingRecipeCategory implements IRecipeCategory<ModularWeaponRec
 
     @Override
     public Component getTitle() {
-        return Component.literal("Fletching"); // Or use Component.translatable("block.fletcherstrestle.fletching_trestle")
+        return Component.translatable("gui.fletcherstrestle.fletching");
     }
 
     @Override
@@ -58,7 +58,7 @@ public class FletchingRecipeCategory implements IRecipeCategory<ModularWeaponRec
 
     @Override
     public void setRecipe(IRecipeLayoutBuilder builder, ModularWeaponRecipe recipe, IFocusGroup focuses) {
-        // 1. ADD ALL FOUR SLOTS EXPLICITLY
+        // ADD ALL FOUR SLOTS EXPLICITLY
 
         // Riser slot
         builder.addSlot(RecipeIngredientRole.INPUT, 11, 25).addIngredients(recipe.getRiser());
@@ -72,7 +72,7 @@ public class FletchingRecipeCategory implements IRecipeCategory<ModularWeaponRec
         builder.addSlot(RecipeIngredientRole.INPUT, 59, 25).addIngredients(recipe.getString());
 
 
-        // 2. GENERATE DYNAMIC OUTPUT
+        // GENERATE DYNAMIC OUTPUT
         List<ItemStack> outputPermutations = new java.util.ArrayList<>();
 
         ItemStack[] risers = recipe.getRiser().getItems();
@@ -102,7 +102,7 @@ public class FletchingRecipeCategory implements IRecipeCategory<ModularWeaponRec
             outputPermutations.add(out);
         }
 
-        // 3. ADD OUTPUT SLOT
+        // ADD OUTPUT SLOT
         builder.addSlot(RecipeIngredientRole.OUTPUT, 114, 25).addItemStacks(outputPermutations);
     }
 
