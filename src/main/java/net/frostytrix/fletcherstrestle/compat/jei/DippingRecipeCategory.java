@@ -22,13 +22,11 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.PotionContents;
-import net.minecraft.world.item.component.CustomData;
 import net.neoforged.neoforge.fluids.FluidStack;
 
 import java.util.ArrayList;
@@ -110,9 +108,8 @@ public class DippingRecipeCategory implements IRecipeCategory<DippingRecipe> {
         FluidStack fluidToDisplay = new FluidStack(
                 ModFluids.LIQUID_POTION_SOURCE.get(), recipe.fluidAmount());
         if (fluidPotionId != null) {
-            CompoundTag tag = new CompoundTag();
-            tag.putString("potion", fluidPotionId);
-            fluidToDisplay.set(DataComponents.CUSTOM_DATA, CustomData.of(tag));
+            BuiltInRegistries.POTION.getHolder(ResourceLocation.parse(fluidPotionId)).ifPresent(potion ->
+                    fluidToDisplay.set(DataComponents.POTION_CONTENTS, new PotionContents(potion)));
         }
 
         builder.addSlot(RecipeIngredientRole.INPUT, 43, 22)
@@ -120,25 +117,20 @@ public class DippingRecipeCategory implements IRecipeCategory<DippingRecipe> {
                 .setFluidRenderer(recipe.fluidAmount(), false, 16, 16)
                 .addTooltipCallback((recipeSlotView, tooltip) -> {
                     recipeSlotView.getDisplayedIngredient(NeoForgeTypes.FLUID_STACK).ifPresent(fluidStack -> {
-                        net.minecraft.world.item.component.CustomData data = fluidStack.get(DataComponents.CUSTOM_DATA);
-                        if (data != null && data.contains("potion")) {
-                            String potionId = data.copyTag().getString("potion");
-                            var potionHolder = BuiltInRegistries.POTION.getHolder(ResourceLocation.parse(potionId)).orElse(null);
-
-                            if (potionHolder != null) {
-                                tooltip.clear(); // drop the default "Water" line
-                                ItemStack dummyPotion = new ItemStack(Items.POTION);
-                                dummyPotion.set(DataComponents.POTION_CONTENTS, new PotionContents(potionHolder));
-                                // For modular arrows, the fluid is just an example,
-                                // any potion works. Make that clear in the tooltip.
-                                if (recipe.requiredPotion().isEmpty()) {
-                                    tooltip.add(0, Component.translatable("jei.fletcherstrestle.any_potion", dummyPotion.getHoverName())
-                                            .withStyle(ChatFormatting.AQUA));
-                                } else {
-                                    tooltip.add(0, Component.translatable("jei.fletcherstrestle.fluid", dummyPotion.getHoverName()));
-                                }
-                                tooltip.add(Component.literal(fluidStack.getAmount() + " mB").withStyle(ChatFormatting.GRAY));
+                        PotionContents contents = net.frostytrix.fletcherstrestle.fluid.PotionFluid.contents(fluidStack);
+                        if (!contents.equals(PotionContents.EMPTY)) {
+                            tooltip.clear(); // drop the default "Water" line
+                            ItemStack dummyPotion = new ItemStack(Items.POTION);
+                            dummyPotion.set(DataComponents.POTION_CONTENTS, contents);
+                            // For modular arrows, the fluid is just an example,
+                            // any potion works. Make that clear in the tooltip.
+                            if (recipe.requiredPotion().isEmpty()) {
+                                tooltip.add(0, Component.translatable("jei.fletcherstrestle.any_potion", dummyPotion.getHoverName())
+                                        .withStyle(ChatFormatting.AQUA));
+                            } else {
+                                tooltip.add(0, Component.translatable("jei.fletcherstrestle.fluid", dummyPotion.getHoverName()));
                             }
+                            tooltip.add(Component.literal(fluidStack.getAmount() + " mB").withStyle(ChatFormatting.GRAY));
                         }
                     });
                 });

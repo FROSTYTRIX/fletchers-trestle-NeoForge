@@ -1,3 +1,28 @@
+# Fletcher's Trestle: 2.7.1
+
+Well Mixed. The Dipping Vat now keeps every potion whole, so mixed potions from
+**Potion Blender**, or any mod that builds potions from custom effects, tip your
+arrows with all of their effects.
+
+---
+
+## 🧪 Potion Blender
+
+- **Combined potions work in the Dipping Vat.** Fixed a bug where a potion made
+  only of custom effects, like a Potion Blender blend, turned into water when it
+  was poured into the vat.
+- **Every effect carries over**: onto glass-vial arrows and vanilla tipped arrows,
+  and into bottles filled back out of the vat, which keep their Combined Potion
+  name.
+- Only the same potion tops up a vat that already holds one.
+- Vats from older saves are converted when they load, potion and all.
+
+## 📖 Guidebook
+
+- The Dipping Vat entry mentions mixed potions.
+
+---
+
 # Fletcher's Trestle: 2.7.0
 
 Well Armed. Skeletons and pillagers now carry **modular weapons** built from the

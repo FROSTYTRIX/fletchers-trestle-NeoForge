@@ -7,14 +7,12 @@ import net.frostytrix.fletcherstrestle.component.ArrowAssembly;
 import net.frostytrix.fletcherstrestle.component.ModDataComponents;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.component.DataComponents;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.alchemy.PotionContents;
-import net.minecraft.world.item.component.CustomData;
+import net.frostytrix.fletcherstrestle.fluid.PotionFluid;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
@@ -47,12 +45,7 @@ public record DippingRecipe(Ingredient inputItem, int inputCount, Optional<Strin
 
         // If the recipe requires a specific potion, the tank must hold exactly that one.
         if (this.requiredPotion.isPresent()) {
-            CustomData customData = input.fluid().get(DataComponents.CUSTOM_DATA);
-            if (customData == null || !customData.contains("potion")) {
-                return false;
-            }
-            String potionInTank = customData.copyTag().getString("potion");
-            return potionInTank.equals(this.requiredPotion.get());
+            return PotionFluid.potionId(input.fluid()).equals(this.requiredPotion.get());
         }
 
         return true;
@@ -70,18 +63,13 @@ public record DippingRecipe(Ingredient inputItem, int inputCount, Optional<Strin
             result.set(ModDataComponents.ARROW_ASSEMBLY.get(), assembly);
         }
 
-        // Only transfer the potion effect for generic recipes (no requiredPotion). A recipe that
-        // demands a specific potion keeps its plain result instead of inheriting the effect.
+        // Only transfer the potion for generic recipes (no requiredPotion). A recipe that
+        // demands a specific potion keeps its plain result instead of inheriting it.
+        // The whole contents carry over, so mixed and custom potions survive.
         if (this.requiredPotion.isEmpty()) {
-            CustomData customData = input.fluid().get(DataComponents.CUSTOM_DATA);
-            if (customData != null && customData.contains("potion")) {
-                String potionId = customData.copyTag().getString("potion");
-                var potionHolder = BuiltInRegistries.POTION
-                        .getHolder(ResourceLocation.parse(potionId)).orElse(null);
-
-                if (potionHolder != null) {
-                    result.set(DataComponents.POTION_CONTENTS, new PotionContents(potionHolder));
-                }
+            PotionContents contents = PotionFluid.contents(input.fluid());
+            if (!contents.equals(PotionContents.EMPTY)) {
+                result.set(DataComponents.POTION_CONTENTS, contents);
             }
         }
         return result;

@@ -2,8 +2,6 @@ package net.frostytrix.fletcherstrestle.event;
 
 import net.frostytrix.fletcherstrestle.FletcherTrestle;
 import net.frostytrix.fletcherstrestle.fluid.ModFluidTypes;
-import net.minecraft.core.component.DataComponents;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.alchemy.PotionContents;
 import net.neoforged.api.distmarker.Dist;
@@ -37,15 +35,9 @@ public class ModClientFluidEvents {
             // Dynamic colour: tint to the stored potion's colour.
             @Override
             public int getTintColor(FluidStack stack) {
-                net.minecraft.world.item.component.CustomData customData = stack.get(DataComponents.CUSTOM_DATA);
-                if (customData != null && customData.contains("potion")) {
-                    String potionId = customData.copyTag().getString("potion");
-                    var potionHolder = BuiltInRegistries.POTION.getHolder(ResourceLocation.parse(potionId)).orElse(null);
-
-                    if (potionHolder != null) {
-                        PotionContents contents = new PotionContents(potionHolder);
-                        return contents.getColor() | 0xFF000000;
-                    }
+                PotionContents contents = net.frostytrix.fletcherstrestle.fluid.PotionFluid.contents(stack);
+                if (!contents.equals(PotionContents.EMPTY)) {
+                    return contents.getColor() | 0xFF000000;
                 }
                 return 0xFF385DC6; // default blue when no potion is present
             }

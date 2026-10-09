@@ -1,5 +1,6 @@
 package net.frostytrix.fletcherstrestle.block.entity;
 
+import net.frostytrix.fletcherstrestle.fluid.PotionFluid;
 import net.frostytrix.fletcherstrestle.recipe.DippingRecipe;
 import net.frostytrix.fletcherstrestle.recipe.DippingRecipeInput;
 import net.frostytrix.fletcherstrestle.recipe.ModRecipes;
@@ -61,6 +62,13 @@ public class DippingVatBlockEntity extends BlockEntity {
     protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         super.loadAdditional(tag, registries);
         fluidTank.readFromNBT(registries, tag.getCompound("Fluid"));
+        // Older saves stored only the potion's id; rewrite it in full so it
+        // still merges with what gets poured in next.
+        FluidStack stored = fluidTank.getFluid();
+        FluidStack upgraded = PotionFluid.upgrade(stored);
+        if (upgraded != stored) {
+            fluidTank.setFluid(upgraded);
+        }
     }
 
     // --- NETWORK SYNC FOR THE RENDERER ---
@@ -98,14 +106,7 @@ public class DippingVatBlockEntity extends BlockEntity {
 
                     // Rebuild the Potion item with the right effect.
                     if (isOurPotion) {
-                        net.minecraft.world.item.component.CustomData customData = currentFluid.get(DataComponents.CUSTOM_DATA);
-                        if (customData != null && customData.contains("potion")) {
-                            String potionId = customData.copyTag().getString("potion");
-                            var potionHolder = net.minecraft.core.registries.BuiltInRegistries.POTION.getHolder(net.minecraft.resources.ResourceLocation.parse(potionId)).orElse(null);
-                            if (potionHolder != null) {
-                                filledBottle.set(DataComponents.POTION_CONTENTS, new net.minecraft.world.item.alchemy.PotionContents(potionHolder));
-                            }
-                        }
+                        filledBottle = PotionFluid.toBottle(currentFluid);
                     } else {
                         // Plain water (piped or bucketed in).
                         var waterHolder = net.minecraft.core.registries.BuiltInRegistries.POTION.getHolder(net.minecraft.resources.ResourceLocation.parse("minecraft:water")).orElse(null);
@@ -133,44 +134,29 @@ public class DippingVatBlockEntity extends BlockEntity {
             }
         }
 
-        // Manual fill: pour a (non-water) potion bottle into the tank.
+        // Manual fill: pour a (non-water) potion bottle into the tank. The whole
+        // potion goes in, custom effects and all, and only the same potion tops it up.
         if (itemInHand.is(Items.POTION)) {
             PotionContents potionContents = itemInHand.get(DataComponents.POTION_CONTENTS);
             if (potionContents != null && !potionContents.is(Potions.WATER)) {
+                FluidStack poured = PotionFluid.fromBottle(itemInHand, 1000);
 
-                String potionId = potionContents.potion()
-                        .flatMap(holder -> holder.unwrapKey())
-                        .map(key -> key.location().toString())
-                        .orElse("minecraft:water");
+                if ((fluidTank.isEmpty() || FluidStack.isSameFluidSameComponents(fluidTank.getFluid(), poured))
+                        && fluidTank.getFluidAmount() <= 2000) {
+                    fluidTank.fill(poured, IFluidHandler.FluidAction.EXECUTE);
 
-                net.minecraft.world.item.component.CustomData customData = fluidTank.getFluid().get(DataComponents.CUSTOM_DATA);
-                String savedPotionId = "";
-                if (customData != null && customData.contains("potion")) {
-                    savedPotionId = customData.copyTag().getString("potion");
-                }
-
-                if (fluidTank.isEmpty() || savedPotionId.equals(potionId)) {
-                    if (fluidTank.getFluidAmount() <= 2000) {
-                        CompoundTag fluidTag = new CompoundTag();
-                        fluidTag.putString("potion", potionId);
-
-                        FluidStack potionFluid = new FluidStack(net.frostytrix.fletcherstrestle.fluid.ModFluids.LIQUID_POTION_SOURCE.get(), 1000);
-                        potionFluid.set(DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.of(fluidTag));
-                        fluidTank.fill(potionFluid, IFluidHandler.FluidAction.EXECUTE);
-
-                        if (!player.getAbilities().instabuild) {
-                            itemInHand.shrink(1);
-                            ItemStack emptyBottle = new ItemStack(Items.GLASS_BOTTLE);
-                            if (itemInHand.isEmpty()) {
-                                player.setItemInHand(hand, emptyBottle);
-                            } else if (!player.getInventory().add(emptyBottle)) {
-                                player.drop(emptyBottle, false);
-                            }
+                    if (!player.getAbilities().instabuild) {
+                        itemInHand.shrink(1);
+                        ItemStack emptyBottle = new ItemStack(Items.GLASS_BOTTLE);
+                        if (itemInHand.isEmpty()) {
+                            player.setItemInHand(hand, emptyBottle);
+                        } else if (!player.getInventory().add(emptyBottle)) {
+                            player.drop(emptyBottle, false);
                         }
-
-                        level.playSound(null, this.worldPosition, SoundEvents.BOTTLE_EMPTY, SoundSource.BLOCKS, 1.0F, 1.0F);
-                        return true;
                     }
+
+                    level.playSound(null, this.worldPosition, SoundEvents.BOTTLE_EMPTY, SoundSource.BLOCKS, 1.0F, 1.0F);
+                    return true;
                 }
             }
         }

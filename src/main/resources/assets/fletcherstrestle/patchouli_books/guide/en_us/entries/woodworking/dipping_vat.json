@@ -6,7 +6,7 @@
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "The $(l)Dipping Vat$() turns a plain $(l)Glass Vial$() arrow into a $(l)potion arrow$(). Fill the vat with any potion, dip an empty glass-vial arrow, and it comes out tipped with that effect."
+      "text": "The $(l)Dipping Vat$() turns a plain $(l)Glass Vial$() arrow into a $(l)potion arrow$(). Fill the vat with any potion, dip an empty glass-vial arrow, and it comes out tipped with that effect.$(br2)Mixed potions keep every effect, Potion Blender's included."
     },
     {
       "type": "patchouli:crafting",
