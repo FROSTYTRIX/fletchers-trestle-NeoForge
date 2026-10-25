@@ -76,6 +76,16 @@ neoForge {
         // This run config launches GameTestServer and runs all registered gametests, then exits.
         // By default, the server will crash when no gametests are provided.
         // The gametest system is also enabled by default for other run configs under the /test command.
+        // Boots straight into the "Showcase" world at 1920x1080 and takes the mod
+        // page's screenshots by itself, following tools/showcase/shots.txt (see
+        // client/ShowcaseDirector). Screenshots land in run/screenshots.
+        showcase {
+            client()
+            programArguments.addAll '--quickPlaySingleplayer', 'Showcase', '--width', '1920', '--height', '1080'
+            // -Pshots=<file> runs another list instead, e.g. a few retakes.
+            systemProperty 'fletcherstrestle.showcase', file(project.findProperty('shots') ?: 'tools/showcase/shots.txt').absolutePath
+        }
+
         gameTestServer {
             type = "gameTestServer"
             systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
@@ -138,6 +148,9 @@ dependencies {
     compileOnly "maven.modrinth:jade:${jade_version}"
     compileOnly "maven.modrinth:the-one-probe:${top_version}"
     compileOnly "maven.modrinth:wthit:${wthit_version}"
+
+    // Potion Blender, for testing combined potions in the Dipping Vat. Not shipped as a dependency.
+    localRuntime "maven.modrinth:potion-blender:${potion_blender_version}"
 
     // Patchouli — optional in-game guidebook. Compile against its API and load it
     // in the dev runClient (same pattern as JEI). The mod stays optional at

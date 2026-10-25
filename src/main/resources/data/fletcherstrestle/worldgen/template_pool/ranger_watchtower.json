@@ -1,0 +1,15 @@
+{
+  "name": "fletcherstrestle:ranger_watchtower",
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "fletcherstrestle:ranger_watchtower",
+        "processors": "fletcherstrestle:ranger_watchtower",
+        "projection": "rigid"
+      }
+    }
+  ]
+}

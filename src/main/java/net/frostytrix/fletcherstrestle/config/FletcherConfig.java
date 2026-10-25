@@ -131,7 +131,7 @@ public class FletcherConfig {
 
         serverBuilder.push("garrison");
         GARRISON_RANGE = serverBuilder
-                .comment("How far an emplacement shoots, in blocks.")
+                .comment("How far an emplacement shoots, in blocks, measured across the ground: height doesn't count against it.")
                 .defineInRange("range", 16, 1, 128);
         GARRISON_SCOPED_RANGE = serverBuilder
                 .comment("Its range with a scope (any attachment that zooms) fitted.")

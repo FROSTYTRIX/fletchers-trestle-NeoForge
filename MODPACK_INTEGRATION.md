@@ -773,13 +773,64 @@ The string can be anything in `#fletcherstrestle:garland_strings`.
 |------|-------|
 | Blocks a Bolt Warden is built from | block tag `fletcherstrestle:garrison_golem_body` (stripped logs and woods) |
 | The item that winds it up (and fits the Crossbow Bench) | item tag `fletcherstrestle:mechanisms` |
-| Its drops | loot table `fletcherstrestle:entities/garrison_golem` |
+| Its drops | loot table `fletcherstrestle:entities/garrison_golem` (the Mechanical Trigger), plus two of the logs it was built from |
+| Planks that repair it | item tag `minecraft:planks` |
 | Extra things to shoot | entity type tag `fletcherstrestle:garrison_targets` |
 | Hostile mobs to leave alone | entity type tag `fletcherstrestle:garrison_ignores` |
 | Range, scoped range, cone, home radius | server config `[garrison]` |
 
 Emplacements shoot hostile mobs (`Enemy`) plus `garrison_targets`, minus
 `garrison_ignores`, and mount any crossbow, modded ones included.
+
+A warden takes its look from the log you wind up. The eleven vanilla woods
+(stripped logs, woods, stems, hyphae and bamboo blocks) are matched by name; a
+modded log gets whichever of them has the closest map colour, so it needs no
+setup. Its textures are `textures/entity/garrison_golem/<wood>.png`, generated
+by `tools/garrison/make_garrison_art.py` along with the model and the
+Emplacement's art; a resource pack can repaint them as usual.
+
+Emplacement range is measured across the ground, so a post up a wall or a
+tower covers as much ground as one at its foot; it engages up to 32 blocks
+above or below itself.
+
+### Structures
+Both structures are plain datapack worldgen and can be overridden or switched
+off like vanilla ones.
+
+| What | Fletcher's Camp | Ranger's Watchtower |
+|------|-----------------|---------------------|
+| Structure | `fletcherstrestle:fletchers_camp` | `fletcherstrestle:ranger_watchtower` |
+| Biomes | tag `has_structure/fletchers_camp` | tag `has_structure/ranger_watchtower` |
+| Rarity | structure set `fletchers_camp` (spacing 28, separation 9) | structure set `ranger_watchtower` (spacing 36, separation 12) |
+| Chest loot | `chests/fletchers_camp` | `chests/ranger_watchtower` (always a Mechanical Trigger) |
+| Weathering | none | processor list `ranger_watchtower` (mossy and cracked stone) |
+| Template | `structure/fletchers_camp.nbt` | `structure/ranger_watchtower.nbt`, built by `tools/watchtower/build_watchtower.py` |
+
+The watchtower uses the structure type **`fletcherstrestle:level_jigsaw`**: every
+field of `minecraft:jigsaw`, plus two of its own, so it only stands on level,
+dry ground instead of half-buried on a hillside:
+
+```json
+{
+  "type": "fletcherstrestle:level_jigsaw",
+  "...": "all the usual jigsaw fields",
+  "footprint_radius": 5,
+  "max_height_difference": 3
+}
+```
+
+It checks the ground on a 3x3 grid `footprint_radius` blocks either side of
+the structure's middle and skips the spot if it rises or falls by more than
+`max_height_difference`, or if any of it is under water. It works for any
+single-building jigsaw structure, yours included.
+
+### Sounds
+Every sound the mod plays is a sound event in
+`assets/fletcherstrestle/sounds.json` (eagle calls, bow draws and releases per
+string, the Bolt Warden's clockwork, the workshop), so a resource pack can
+replace or retune any of them without code. Most play recordings cut by
+`tools/sounds/build_sounds.py`; a string's `release_sound` can also name a
+sound of your own.
 
 ---
 

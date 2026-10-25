@@ -13,7 +13,27 @@
     },
     {
       "type": "patchouli:text",
-      "text": "Tame an eagle and it becomes a hunting partner. Use an $(l)Eagle Whistle$() to toggle fetch mode and recall it from range, or bind it to an $(l)Eagle Perch$() so it stays home when you're away."
+      "text": "Tame an eagle with raw rabbit or fish and it keeps you company: circling overhead while you travel, landing on a lookout nearby when you stop, and flying as your wingman on an elytra.$(br2)An $(l)Eagle Whistle$() cycles its orders (fetch, guard) and, sneaking, recalls it to land beside you. Bind it to an $(l)Eagle Perch$() and it glides home to wait while you're away."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "The Stoop",
+      "text": "Mark a mob by watching it through a $(l)spyglass$() for three seconds. Your eagle climbs high above it and dives: each strike does a little damage and leaves the target $(l)glowing$(), then it climbs and dives again. It softens and spots; the kill is yours.$(br2)Wild eagles hunt rabbits and fish for themselves."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "A Wild Life",
+      "text": "Eagles fly in daylight and roost at night, head tucked, on their nest or a high lookout; storms send them under the trees. Over steep slopes they ride the updraft.$(br2)Wild eagles carry their kills home to feed their eaglets, and defend a nest with young: a few warning dives, then the real thing."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "On Guard",
+      "text": "A guarding eagle stoops on any mob that hurts you; it never turns on players or your other pets.$(br2)Idle near water, a tame eagle sometimes goes fishing and brings you its catch."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Care",
+      "text": "Feed a hurt eagle rabbit or fish to heal it. Below a third of its health it can't fly: it limps on the ground, wing hanging, until you do.$(br2)Tame eagles moult a $(l)brown feather$() every few minutes. Hit in flight, an eagle drops whatever it was carrying.$(br2)Tired of the feathers? Rub $(l)honeycomb$() into them and it stops moulting, until rain or a swim washes the wax out."
     },
     {
       "type": "patchouli:text",

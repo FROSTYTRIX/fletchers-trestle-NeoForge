@@ -76,3 +76,15 @@ will now generate in forest / taiga / plains / meadow biomes.
   `spacing` / `separation` (bigger = rarer; villages are 34 / 8).
 - **Biomes:** `tags/worldgen/biome/has_structure/fletchers_camp.json`.
 - **Loot:** `loot_table/chests/fletchers_camp.json`.
+
+---
+
+## Ranger's Watchtower — `fletcherstrestle:ranger_watchtower`
+
+This one isn't built by hand: `tools/watchtower/build_watchtower.py` places it
+block by block and writes `data/fletcherstrestle/structure/ranger_watchtower.nbt`
+directly (`--preview DIR` renders it). To change it, edit `build()` there and
+rerun, or load the `.nbt` in game with a Structure Block, change it and save it
+back over the file (after which, edit the `.nbt` rather than rerunning the
+script). Its stone is weathered by the processor list
+`worldgen/processor_list/ranger_watchtower.json`.

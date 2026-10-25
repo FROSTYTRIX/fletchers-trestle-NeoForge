@@ -1,0 +1,425 @@
+{
+  "parent": "block/block",
+  "textures": {
+    "end": "fletcherstrestle:block/emplacement_wood_end",
+    "iron": "fletcherstrestle:block/emplacement_iron",
+    "wood": "fletcherstrestle:block/emplacement_wood",
+    "particle": "fletcherstrestle:block/emplacement_wood"
+  },
+  "elements": [
+    {
+      "name": "swivel plate",
+      "from": [
+        4,
+        15,
+        4
+      ],
+      "to": [
+        12,
+        16,
+        12
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            4,
+            0,
+            12,
+            1
+          ],
+          "texture": "#iron"
+        },
+        "south": {
+          "uv": [
+            4,
+            0,
+            12,
+            1
+          ],
+          "texture": "#iron"
+        },
+        "west": {
+          "uv": [
+            4,
+            0,
+            12,
+            1
+          ],
+          "texture": "#iron"
+        },
+        "east": {
+          "uv": [
+            4,
+            0,
+            12,
+            1
+          ],
+          "texture": "#iron"
+        },
+        "up": {
+          "uv": [
+            4,
+            4,
+            12,
+            12
+          ],
+          "texture": "#end"
+        },
+        "down": {
+          "uv": [
+            4,
+            4,
+            12,
+            12
+          ],
+          "texture": "#end"
+        }
+      }
+    },
+    {
+      "name": "left fork",
+      "from": [
+        4,
+        16,
+        7
+      ],
+      "to": [
+        6,
+        20,
+        9
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            10,
+            0,
+            12,
+            4
+          ],
+          "texture": "#wood"
+        },
+        "south": {
+          "uv": [
+            4,
+            0,
+            6,
+            4
+          ],
+          "texture": "#wood"
+        },
+        "west": {
+          "uv": [
+            7,
+            0,
+            9,
+            4
+          ],
+          "texture": "#wood"
+        },
+        "east": {
+          "uv": [
+            7,
+            0,
+            9,
+            4
+          ],
+          "texture": "#wood"
+        },
+        "up": {
+          "uv": [
+            4,
+            7,
+            6,
+            9
+          ],
+          "texture": "#end"
+        },
+        "down": {
+          "uv": [
+            4,
+            7,
+            6,
+            9
+          ],
+          "texture": "#end"
+        }
+      }
+    },
+    {
+      "name": "right fork",
+      "from": [
+        10,
+        16,
+        7
+      ],
+      "to": [
+        12,
+        20,
+        9
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            4,
+            0,
+            6,
+            4
+          ],
+          "texture": "#wood"
+        },
+        "south": {
+          "uv": [
+            10,
+            0,
+            12,
+            4
+          ],
+          "texture": "#wood"
+        },
+        "west": {
+          "uv": [
+            7,
+            0,
+            9,
+            4
+          ],
+          "texture": "#wood"
+        },
+        "east": {
+          "uv": [
+            7,
+            0,
+            9,
+            4
+          ],
+          "texture": "#wood"
+        },
+        "up": {
+          "uv": [
+            10,
+            7,
+            12,
+            9
+          ],
+          "texture": "#end"
+        },
+        "down": {
+          "uv": [
+            10,
+            7,
+            12,
+            9
+          ],
+          "texture": "#end"
+        }
+      }
+    },
+    {
+      "name": "left fork cap",
+      "from": [
+        3.75,
+        20,
+        6.75
+      ],
+      "to": [
+        6.25,
+        20.5,
+        9.25
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            9.75,
+            0.0,
+            12.25,
+            0.5
+          ],
+          "texture": "#iron"
+        },
+        "south": {
+          "uv": [
+            3.75,
+            0.0,
+            6.25,
+            0.5
+          ],
+          "texture": "#iron"
+        },
+        "west": {
+          "uv": [
+            6.75,
+            0.0,
+            9.25,
+            0.5
+          ],
+          "texture": "#iron"
+        },
+        "east": {
+          "uv": [
+            6.75,
+            0.0,
+            9.25,
+            0.5
+          ],
+          "texture": "#iron"
+        },
+        "up": {
+          "uv": [
+            3.75,
+            6.75,
+            6.25,
+            9.25
+          ],
+          "texture": "#iron"
+        },
+        "down": {
+          "uv": [
+            3.75,
+            6.75,
+            6.25,
+            9.25
+          ],
+          "texture": "#iron"
+        }
+      }
+    },
+    {
+      "name": "right fork cap",
+      "from": [
+        9.75,
+        20,
+        6.75
+      ],
+      "to": [
+        12.25,
+        20.5,
+        9.25
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            3.75,
+            0.0,
+            6.25,
+            0.5
+          ],
+          "texture": "#iron"
+        },
+        "south": {
+          "uv": [
+            9.75,
+            0.0,
+            12.25,
+            0.5
+          ],
+          "texture": "#iron"
+        },
+        "west": {
+          "uv": [
+            6.75,
+            0.0,
+            9.25,
+            0.5
+          ],
+          "texture": "#iron"
+        },
+        "east": {
+          "uv": [
+            6.75,
+            0.0,
+            9.25,
+            0.5
+          ],
+          "texture": "#iron"
+        },
+        "up": {
+          "uv": [
+            9.75,
+            6.75,
+            12.25,
+            9.25
+          ],
+          "texture": "#iron"
+        },
+        "down": {
+          "uv": [
+            9.75,
+            6.75,
+            12.25,
+            9.25
+          ],
+          "texture": "#iron"
+        }
+      }
+    },
+    {
+      "name": "trunnion pin",
+      "from": [
+        3.5,
+        18.125,
+        7.625
+      ],
+      "to": [
+        12.5,
+        18.875,
+        8.375
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            3.5,
+            0.0,
+            12.5,
+            0.75
+          ],
+          "texture": "#iron"
+        },
+        "south": {
+          "uv": [
+            3.5,
+            0.0,
+            12.5,
+            0.75
+          ],
+          "texture": "#iron"
+        },
+        "west": {
+          "uv": [
+            7.625,
+            0.0,
+            8.375,
+            0.75
+          ],
+          "texture": "#iron"
+        },
+        "east": {
+          "uv": [
+            7.625,
+            0.0,
+            8.375,
+            0.75
+          ],
+          "texture": "#iron"
+        },
+        "up": {
+          "uv": [
+            3.5,
+            7.625,
+            12.5,
+            8.375
+          ],
+          "texture": "#iron"
+        },
+        "down": {
+          "uv": [
+            3.5,
+            7.625,
+            12.5,
+            8.375
+          ],
+          "texture": "#iron"
+        }
+      }
+    }
+  ]
+}

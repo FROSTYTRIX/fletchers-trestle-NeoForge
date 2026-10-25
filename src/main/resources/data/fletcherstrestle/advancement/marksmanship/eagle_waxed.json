@@ -1,0 +1,30 @@
+{
+  "parent": "fletcherstrestle:marksmanship/tame_eagle",
+  "display": {
+    "icon": {
+      "id": "minecraft:honeycomb"
+    },
+    "title": {
+      "translate": "advancement.fletcherstrestle.eagle_waxed.title"
+    },
+    "description": {
+      "translate": "advancement.fletcherstrestle.eagle_waxed.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "waxed": {
+      "trigger": "fletcherstrestle:eagle",
+      "conditions": {
+        "event": "waxed"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "waxed"
+    ]
+  ]
+}

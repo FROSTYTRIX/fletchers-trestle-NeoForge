@@ -30,10 +30,11 @@ public class ModBlockStateProvider extends BlockStateProvider {
                 models().getExistingFile(modLoc("block/weapon_rack")));
         itemModels().withExistingParent("weapon_rack", modLoc("block/weapon_rack"));
 
-        // Emplacement: faces the field it covers. Hand-written model.
+        // Emplacement: faces the field it covers. Its models come from
+        // tools/garrison/make_garrison_art.py; the item shows the stand with its yoke and cradle.
         horizontalBlock(ModBlocks.EMPLACEMENT.get(),
                 models().getExistingFile(modLoc("block/emplacement")));
-        itemModels().withExistingParent("emplacement", modLoc("block/emplacement"));
+        itemModels().withExistingParent("emplacement", modLoc("block/emplacement_item"));
 
         // Nail: placeable on a floor, wall or ceiling, so the button-style
         // blockstate handles all six orientations from one model.

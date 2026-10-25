@@ -1,0 +1,30 @@
+{
+  "parent": "fletcherstrestle:marksmanship/wind_it_up",
+  "display": {
+    "icon": {
+      "id": "fletcherstrestle:emplacement"
+    },
+    "title": {
+      "translate": "advancement.fletcherstrestle.field_of_fire.title"
+    },
+    "description": {
+      "translate": "advancement.fletcherstrestle.field_of_fire.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "captain_down": {
+      "trigger": "fletcherstrestle:garrison",
+      "conditions": {
+        "event": "field_of_fire"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "captain_down"
+    ]
+  ]
+}

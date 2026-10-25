@@ -119,7 +119,6 @@ public class ModItems {
 
     // Coloured feathers: alternate fletchings (same stats as a plain feather).
     // Drop from parrots (red/blue/green/cyan/light_gray by colour) and the eagle (brown).
-    // TODO: Redo the placeholder item/fletching textures: colour-pick from the actual mob colours.
     public static final DeferredItem<Item> RED_FEATHER = ITEMS.register("red_feather",
             () -> new Item(new Item.Properties()));
     public static final DeferredItem<Item> BLUE_FEATHER = ITEMS.register("blue_feather",

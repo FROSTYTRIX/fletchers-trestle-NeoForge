@@ -1,0 +1,40 @@
+{
+  "parent": "fletcherstrestle:marksmanship/first_crossbow",
+  "display": {
+    "icon": {
+      "id": "minecraft:spyglass"
+    },
+    "title": {
+      "translate": "advancement.fletcherstrestle.ranger_watchtower.title"
+    },
+    "description": {
+      "translate": "advancement.fletcherstrestle.ranger_watchtower.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "found": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "fletcherstrestle:ranger_watchtower"
+              }
+            }
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "found"
+    ]
+  ]
+}

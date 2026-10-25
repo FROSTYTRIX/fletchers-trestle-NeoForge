@@ -1,0 +1,30 @@
+{
+  "parent": "fletcherstrestle:marksmanship/tame_eagle",
+  "display": {
+    "icon": {
+      "id": "minecraft:salmon"
+    },
+    "title": {
+      "translate": "advancement.fletcherstrestle.eagle_fed_eaglet.title"
+    },
+    "description": {
+      "translate": "advancement.fletcherstrestle.eagle_fed_eaglet.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "fed_eaglet": {
+      "trigger": "fletcherstrestle:eagle",
+      "conditions": {
+        "event": "fed_eaglet"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "fed_eaglet"
+    ]
+  ]
+}

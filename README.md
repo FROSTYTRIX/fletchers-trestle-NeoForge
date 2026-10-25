@@ -111,6 +111,18 @@ Requires **Java 21** and an internet connection for Gradle to download NeoForge 
 
 ---
 
+## 🔊 Sounds
+
+Most sounds are cut from free recordings by `tools/sounds/build_sounds.py`:
+
+- Eagle calls: **National Park Service**, Yellowstone sound library (public domain).
+- Bows, crossbows and the Bolt Warden's ratchet: **Still North Media**, *Medieval sound effects - Weapon Textures* (CC0).
+- Clockwork ticks and steam: **bart** on OpenGameArt (CC0).
+- Wood cracking and hammering: **rubberduck** on OpenGameArt (CC0).
+- Wingbeats: **Kenney** (CC0).
+
+---
+
 ## 📜 License
 
 This mod is released under the **MIT License**. See [LICENSE](LICENSE) for details.  

@@ -1,0 +1,19 @@
+# Retakes: rebuild the scenes, then only the shots that need another go.
+# ./gradlew runShowcase -Pshots=tools/showcase/retake.txt
+cmd gamemode spectator
+cmd function showcase:build
+wait 320
+hud off
+cmd function showcase:time/golden
+cmd function showcase:cam/watchtower
+wait 160
+shot watchtower
+cmd function showcase:time/night
+cmd function showcase:garrison_attack
+cmd function showcase:cam/garrison_front
+wait 45
+shot garrison_night_1
+wait 20
+shot garrison_night_2
+hud on
+quit

@@ -1,5 +1,5 @@
 {
-  "name": "The Garrison (WIP)",
+  "name": "The Garrison",
   "category": "fletcherstrestle:companions",
   "icon": "fletcherstrestle:emplacement",
   "sortnum": 1,
@@ -9,17 +9,17 @@
       "entity": "fletcherstrestle:garrison_golem",
       "scale": 0.7,
       "name": "Bolt Warden",
-      "text": "A clockwork crew for your defences. It has no weapon of its own: its whole job is to man an $(l)Emplacement$() and work the crossbow on it.$(br2)$(o)Work in progress: placeholder looks, and it may still change.$()"
+      "text": "A wooden toy soldier with a clockwork heart, and a crew for your defences. It has no weapon of its own: its whole job is to man an $(l)Emplacement$() and work the crossbow on it."
     },
     {
       "type": "patchouli:text",
       "title": "Winding It Up",
-      "text": "Stand three $(l)stripped logs$() in a row on top of a fourth, like a T. Use a $(l)Mechanical Trigger$() on the middle log of the top row and the logs become a Bolt Warden.$(br2)The trigger is its heart: it drops again if the warden is destroyed."
+      "text": "Stand three $(l)stripped logs$() in a row on top of a fourth, like a T. Use a $(l)Mechanical Trigger$() on the middle log of the top row and the logs become a Bolt Warden, made of that log's wood.$(br2)The trigger is its heart: it drops again, with two of its logs, if the warden is destroyed."
     },
     {
       "type": "patchouli:crafting",
       "recipe": "fletcherstrestle:emplacement",
-      "text": "The Emplacement faces the way you look when you place it. That facing is the middle of its firing cone, 45° either side."
+      "text": "The Emplacement faces the way you look when you place it. That facing is the middle of its firing cone, 45° either side, and its crossbow turns as far as the edge and no further. Range counts across the ground: up a tower, it reaches just as far."
     },
     {
       "type": "patchouli:text",
@@ -29,12 +29,22 @@
     {
       "type": "patchouli:text",
       "title": "On Watch",
-      "text": "A warden keeps within 16 blocks of where it was built, and crews any post in that area. When a hostile mob enters a loaded post's cone, it runs to that post, reloads at the crossbow's own speed and fires.$(br2)Range is 16 blocks, 32 with a $(l)Scope$(). A $(l)Magazine$() fires in bursts."
+      "text": "A warden keeps within 16 blocks of where it was built and crews any post in that area. When a hostile mob enters a loaded post's cone, it winds itself up, runs there, cranks the reload at the crossbow's own speed and fires.$(br2)It favours a $(l)Scope$() for far targets and a $(l)Magazine$() for crowds, and changes posts when another has the shot."
     },
     {
       "type": "patchouli:text",
       "title": "Rules of Engagement",
-      "text": "Wardens only ever shoot hostile mobs, and hold fire while anyone else stands in the line. Every shot wears the crossbow down, the bolts can be picked back up, and kills give no archery experience: the warden pulled the trigger, not you."
+      "text": "Wardens only ever shoot hostile mobs, and hold fire while anyone else stands in the line. Every shot wears the crossbow, the bolts can be picked back up, and kills give no archery experience: the warden pulled the trigger, not you.$(br2)Out of bolts, it shrugs and moves on to the next loaded post."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Upkeep",
+      "text": "A warden cracks as it takes damage. Right-click it with $(l)planks$() to patch it up.$(br2)Hit it yourself and it cowers away; it never fights back. Off duty, it tinkers with its crossbows and salutes as you walk by, unless you sneak past."
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Ranger's Watchtowers",
+      "text": "Old rangers' lookouts still stand in forests, taigas, hills and savannas. Up the ladder, three emplacements guard the platform, and beside them lies the T of a warden that was never wound up.$(br2)The chest there always holds a $(l)Mechanical Trigger$(): wind the warden up and the post is yours."
     }
   ]
 }

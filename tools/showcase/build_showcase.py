@@ -375,20 +375,112 @@ def market(fn):
     g.place(fn)
 
 
+WARDEN_WOODS = ["oak", "spruce", "birch", "jungle", "acacia", "dark_oak", "mangrove", "cherry",
+                "crimson", "warped", "bamboo"]
+
+
+def quiver(*arrows):
+    slots = ",".join(f"{{slot:{i},item:{a}}}" for i, a in enumerate(arrows))
+    return f'{{id:"{NS}:iron_quiver",count:1,components:{{"minecraft:container":[{slots}]}}}}'
+
+
+def emplacement(fn, x, y, z, facing, crossbow=None, ammo=None):
+    contents = f"Crossbow:{crossbow or '{}'},Quiver:{ammo or '{}'}"
+    fn.set(x, y, z, f"{NS}:emplacement[facing={facing}]{{{contents}}}")
+
+
+def warden(fn, x, y, z, wood, yaw, still=True):
+    ai = "NoAI:1b," if still else ""
+    fn.summon(f"{NS}:garrison_golem", x, y, z, f'{ai}PersistenceRequired:1b,Wood:"{wood}",Rotation:[{yaw}f,0f]')
+
+
+def garrison(fn):
+    fn.comment("The Garrison: a curtain wall with three manned emplacements, a field in front for the enemy.")
+    fn.fill(-1, -1, 68, 31, -1, 100, "grass_block")
+    fn.fill(2, -1, 85, 28, -1, 99, "coarse_dirt")
+    fn.fill(4, -1, 87, 26, -1, 97, "gravel")
+    # the wall: three blocks thick, four high, crenellated along the front
+    fn.fill(2, 0, 82, 28, 3, 84, "stone_bricks")
+    fn.fill(2, 0, 82, 28, 0, 82, "mossy_stone_bricks")
+    for x in range(2, 29):
+        if x % 2 == 0 and x not in (6, 15, 24):
+            fn.set(x, 4, 82, "stone_brick_wall")
+    for x in (2, 28):
+        fn.fill(x, 0, 81, x, 6, 85, "stone_bricks")
+        fn.fill(x, 7, 81, x, 7, 85, "stone_brick_slab[type=bottom]")
+    # stairs up the back, each step on stone
+    for i in range(4):
+        z = 88 - i
+        if i:
+            fn.fill(13, 0, z, 17, i - 1, z, "stone_bricks")
+        fn.fill(13, i, z, 17, i, z, "stone_brick_stairs[facing=north,half=bottom]")
+    # three posts, each with a different attachment, quivers full
+    arrows = (arrow("broadhead", "spruce", "red_feather", 64), arrow("bodkin_point", "dark_oak", "feather", 64))
+    posts = [
+        (6, bow("spruce", "iron", "high_tension", 0.95, crossbow=True, attachment="scope"), "oak"),
+        (15, bow("dark_oak", "iron", "spider", 0.97, crossbow=True, attachment="magazine", charged=True), "dark_oak"),
+        (24, bow("cherry", "copper", "flax", 0.9, crossbow=True), "cherry"),
+    ]
+    for x, crossbow, wood in posts:
+        emplacement(fn, x, 4, 82, "north", crossbow, quiver(*arrows))
+        warden(fn, x + 0.5, 4, 83.6, wood, 180)
+    # off duty, below the wall
+    warden(fn, 7.5, 0, 92.5, "birch", 200)
+    warden(fn, 22.5, 0, 91.5, "warped", 150)
+    fn.set(5, 0, 94, "barrel[facing=up]")
+    fn.set(6, 0, 95, "barrel[facing=up]")
+    fn.set(24, 0, 95, f"{NS}:crossbow_bench")
+    for x, z in ((10, 90), (20, 90)):
+        fn.fill(x, 0, z, x, 2, z, "spruce_fence")
+        fn.set(x, 3, z, "lantern")
+    sign(fn, 15, 2, 85, "south", "The Garrison", "spruce")
+
+
+def lineup(fn):
+    fn.comment("Eleven Bolt Wardens, one per wood, on parade.")
+    fn.fill(33, -1, 70, 57, -1, 92, "grass_block")
+    fn.fill(34, -1, 77, 56, -1, 83, "polished_andesite")
+    fn.fill(34, -1, 79, 56, -1, 79, "polished_deepslate")
+    for i, wood in enumerate(WARDEN_WOODS):
+        x = 35 + i * 2
+        warden(fn, x + 0.5, 0, 79.5, wood, 0)
+        fn.set(x, 0, 81, f"spruce_sign[rotation=0]{{front_text:{{color:\"black\",messages:['\"{nice(wood)}\"','\"\"','\"\"','\"\"']}}}}")
+    for x in (34, 56):
+        fn.fill(x, 0, 77, x, 3, 77, "stripped_spruce_log[axis=y]")
+        fn.set(x, 4, 77, "lantern")
+
+
+def watchtower(fn):
+    fn.comment("A Ranger's Watchtower from its template, among spruces, an eagle on its nest.")
+    fn.fill(58, -1, 68, 80, -1, 104, "grass_block")
+    fn.c(f"place template {NS}:ranger_watchtower 63 {BASE_Y - 1} 80")
+    for x, z in ((59, 72), (77, 74), (60, 96), (58, 86), (80, 84)):
+        fn.c(f"place feature minecraft:spruce {x} {BASE_Y} {z}")
+    # the nest sits on the peak: template (5, 26, 5)
+    fn.summon(f"{NS}:eagle", 68.5, 26 - 1 + 0.25, 85.5, "NoAI:1b,PersistenceRequired:1b,Rotation:[160f,0f]")
+
+
 # ---------------------------------------------------------------- functions
 
-AREA = (-3, -2, -3, 80, 12, 66)   # x1, y1, z1, x2, y2, z2 (local)
+AREA = (-3, -2, -3, 82, 31, 106)   # x1, y1, z1, x2, y2, z2 (local)
 
 CAMERAS = {
     "workshop": (8.5, 1.5, 24.5, 180, 4),
     "workshop_inside": (12.5, 1.0, 9.0, 140, 10),
     "steam_box": (5.5, 1.2, 6.5, 145, 12),
     "armory": (32.5, 1.6, 11.5, 180, 4),
-    "range": (7.5, 5.5, 66.5, 180, 14),
+    "range": (7.5, 9.0, 70.0, 180, 28),
     "range_aerial": (-8.5, 14.0, 44.5, -90, 32),
     "eagle": (3.5, 1.0, 50.5, 18, 20),
     "armed_mobs": (34.0, 1.4, 33.5, 180, 3),
     "market": (63.5, 2.0, 21.5, 180, 6),
+    "garrison": (23.0, 2.6, 73.5, 36, -4),
+    "garrison_crew": (17.6, 6.1, 87.2, 156, 16),
+    "garrison_front": (16.5, 4.4, 78.6, 10, 8),
+    "emplacement": (12.8, 4.6, 79.8, -45, 20),
+    "lineup": (45.5, 0.6, 89.0, 180, -2),
+    "watchtower": (82.0, 2.0, 104.5, 141, -18),
+    "watchtower_top": (74.5, 19.6, 92.5, 139, 12),
 }
 
 
@@ -397,10 +489,12 @@ def clear_fn():
     fn.comment("Wipes the showcase area back to flat grass and removes the staged mobs.")
     fn.c(f"kill @e[tag={TAG}]")
     x1, y1, z1, x2, y2, z2 = AREA
-    for x in range(x1, x2 + 1, 12):
-        hx = min(x + 11, x2)
-        fn.fill(x, 0, z1, hx, y2, z2, "air")
-        fn.fill(x, -1, z1, hx, -1, z2, "grass_block")
+    for x in range(x1, x2 + 1, 16):
+        hx = min(x + 15, x2)
+        for z in range(z1, z2 + 1, 32):
+            hz = min(z + 31, z2)
+            fn.fill(x, 0, z, hx, y2, hz, "air")
+            fn.fill(x, -1, z, hx, -1, hz, "grass_block")
     fn.c("kill @e[type=item,distance=..200]")
     return fn
 
@@ -421,13 +515,14 @@ def main():
     fns = OUT / "data" / "showcase" / "function"
 
     scenes = {"workshop": workshop, "armory": armory, "range": archery_range,
-              "armed_mobs": armed_mobs, "market": market}
+              "armed_mobs": armed_mobs, "market": market, "garrison": garrison, "lineup": lineup,
+              "watchtower": watchtower}
     for name, build in scenes.items():
         fn = Fn()
         build(fn)
         write(fns / "scene" / f"{name}.mcfunction", fn)
 
-    cx, cz = 38, 30
+    cx, cz = 40, 52
     write(fns / "build.mcfunction", [
         "# Loads the area, then builds every scene a moment later (chunks need a tick to load).",
         f"forceload add {AREA[0]} {AREA[2]} {AREA[3]} {AREA[5]}",
@@ -453,6 +548,15 @@ def main():
         "gamerule doFireTick false",
         "weather clear",
         "time set 12300",
+    ])
+    write(fns / "garrison_attack.mcfunction", [
+        "# Wakes the garrison's crews and sends zombies across the field in front of the wall.",
+        f"execute as @e[type={NS}:garrison_golem,tag={TAG},x=0,y={BASE_Y},z=80,dx=30,dy=10,dz=10] run data merge entity @s {{NoAI:0b}}",
+        "gamerule doMobSpawning false",
+        # Helmets, so the low sun doesn't set them alight before the crews can.
+        *[f"summon minecraft:zombie {x} {BASE_Y} {z} {{Tags:[\"{TAG}\"],PersistenceRequired:1b,"
+          f"ArmorItems:[{{}},{{}},{{}},{{id:\"minecraft:leather_helmet\",count:1}}],ArmorDropChances:[0f,0f,0f,0f]}}"
+          for x, z in ((6.5, 71.5), (11.5, 73.5), (15.5, 70.5), (20.5, 72.5), (25.5, 71.5))],
     ])
     write(fns / "time" / "noon.mcfunction", ["time set 6000"])
     write(fns / "time" / "golden.mcfunction", ["time set 12300"])
@@ -483,7 +587,10 @@ def main():
     write(fns / "kit.mcfunction", ["# Weapons, a filled quiver and arrows, for in-hand screenshots.",
                                    *[f"give @s {give_cmd(i)}" for i in kit],
                                    f"give @s {quiver}",
-                                   f"give @s {NS}:fletcher_guide 1"])
+                                   f"give @s {NS}:fletcher_guide 1",
+                                   f"give @s {NS}:emplacement 3",
+                                   f"give @s {NS}:mechanical_trigger 2",
+                                   f"give @s {NS}:garrison_golem_spawn_egg 4"])
 
     total = sum(len(p.read_text().splitlines()) for p in OUT.rglob("*.mcfunction"))
     print(f"Wrote {OUT} ({total} lines across {len(list(OUT.rglob('*.mcfunction')))} functions)")

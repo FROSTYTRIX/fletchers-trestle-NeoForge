@@ -1,0 +1,30 @@
+{
+  "parent": "fletcherstrestle:marksmanship/tame_eagle",
+  "display": {
+    "icon": {
+      "id": "fletcherstrestle:eagle_nest"
+    },
+    "title": {
+      "translate": "advancement.fletcherstrestle.eagle_nest_defence.title"
+    },
+    "description": {
+      "translate": "advancement.fletcherstrestle.eagle_nest_defence.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "nest_defence": {
+      "trigger": "fletcherstrestle:eagle",
+      "conditions": {
+        "event": "nest_defence"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "nest_defence"
+    ]
+  ]
+}

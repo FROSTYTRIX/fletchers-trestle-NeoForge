@@ -1,0 +1,219 @@
+{
+  "parent": "block/block",
+  "textures": {
+    "beam": "fletcherstrestle:block/emplacement_beam",
+    "end": "fletcherstrestle:block/emplacement_wood_end",
+    "iron": "fletcherstrestle:block/emplacement_iron",
+    "wood": "fletcherstrestle:block/emplacement_wood",
+    "particle": "fletcherstrestle:block/emplacement_wood"
+  },
+  "elements": [
+    {
+      "name": "cradle",
+      "from": [
+        6.5,
+        18,
+        3
+      ],
+      "to": [
+        9.5,
+        19,
+        13
+      ],
+      "faces": {
+        "west": {
+          "uv": [
+            3,
+            0,
+            13,
+            1
+          ],
+          "texture": "#beam"
+        },
+        "east": {
+          "uv": [
+            3,
+            0,
+            13,
+            1
+          ],
+          "texture": "#beam"
+        },
+        "up": {
+          "uv": [
+            6.5,
+            3,
+            9.5,
+            13
+          ],
+          "texture": "#wood"
+        },
+        "down": {
+          "uv": [
+            6.5,
+            3,
+            9.5,
+            13
+          ],
+          "texture": "#wood"
+        },
+        "north": {
+          "uv": [
+            6.5,
+            0,
+            9.5,
+            1
+          ],
+          "texture": "#end"
+        },
+        "south": {
+          "uv": [
+            6.5,
+            0,
+            9.5,
+            1
+          ],
+          "texture": "#end"
+        }
+      }
+    },
+    {
+      "name": "front strap",
+      "from": [
+        6.25,
+        17.75,
+        4.5
+      ],
+      "to": [
+        9.75,
+        19.25,
+        5.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            6.25,
+            0.0,
+            9.75,
+            1.5
+          ],
+          "texture": "#iron"
+        },
+        "south": {
+          "uv": [
+            6.25,
+            0.0,
+            9.75,
+            1.5
+          ],
+          "texture": "#iron"
+        },
+        "west": {
+          "uv": [
+            4.5,
+            0.0,
+            5.5,
+            1.5
+          ],
+          "texture": "#iron"
+        },
+        "east": {
+          "uv": [
+            10.5,
+            0.0,
+            11.5,
+            1.5
+          ],
+          "texture": "#iron"
+        },
+        "up": {
+          "uv": [
+            6.25,
+            4.5,
+            9.75,
+            5.5
+          ],
+          "texture": "#iron"
+        },
+        "down": {
+          "uv": [
+            6.25,
+            10.5,
+            9.75,
+            11.5
+          ],
+          "texture": "#iron"
+        }
+      }
+    },
+    {
+      "name": "back strap",
+      "from": [
+        6.25,
+        17.75,
+        10.5
+      ],
+      "to": [
+        9.75,
+        19.25,
+        11.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            6.25,
+            0.0,
+            9.75,
+            1.5
+          ],
+          "texture": "#iron"
+        },
+        "south": {
+          "uv": [
+            6.25,
+            0.0,
+            9.75,
+            1.5
+          ],
+          "texture": "#iron"
+        },
+        "west": {
+          "uv": [
+            10.5,
+            0.0,
+            11.5,
+            1.5
+          ],
+          "texture": "#iron"
+        },
+        "east": {
+          "uv": [
+            4.5,
+            0.0,
+            5.5,
+            1.5
+          ],
+          "texture": "#iron"
+        },
+        "up": {
+          "uv": [
+            6.25,
+            10.5,
+            9.75,
+            11.5
+          ],
+          "texture": "#iron"
+        },
+        "down": {
+          "uv": [
+            6.25,
+            4.5,
+            9.75,
+            5.5
+          ],
+          "texture": "#iron"
+        }
+      }
+    }
+  ]
+}

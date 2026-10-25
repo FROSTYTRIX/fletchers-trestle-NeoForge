@@ -1,0 +1,30 @@
+{
+  "parent": "fletcherstrestle:marksmanship/tame_eagle",
+  "display": {
+    "icon": {
+      "id": "minecraft:elytra"
+    },
+    "title": {
+      "translate": "advancement.fletcherstrestle.eagle_wingman.title"
+    },
+    "description": {
+      "translate": "advancement.fletcherstrestle.eagle_wingman.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "wingman": {
+      "trigger": "fletcherstrestle:eagle",
+      "conditions": {
+        "event": "wingman"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "wingman"
+    ]
+  ]
+}

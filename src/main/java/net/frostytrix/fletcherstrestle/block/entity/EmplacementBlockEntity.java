@@ -33,8 +33,16 @@ import java.util.UUID;
  */
 public class EmplacementBlockEntity extends BlockEntity {
 
-    /** Height of the crossbow's pivot above the block's base. */
-    public static final double PIVOT_HEIGHT = 1.15;
+    /** Height of the crossbow, where it rests on its cradle, above the block's base. */
+    public static final double PIVOT_HEIGHT = 19.6 / 16.0;
+    /** Height of the trunnion pin the cradle pitches on. */
+    public static final double TRUNNION_HEIGHT = 18.5 / 16.0;
+    /** How far above or below itself a post can engage. */
+    public static final double VERTICAL_REACH = 32.0;
+    /** How far the cradle tilts, down or up, in degrees. */
+    public static final float MAX_PITCH = 80.0f;
+    /** How far behind the pivot a crew stands to work the crossbow. */
+    private static final double STAND_OFF = 1.0;
     /** A crew claim lapses if the golem stops refreshing it for this long. */
     private static final long CREW_TIMEOUT = 20;
     private static final float AIM_SYNC_DEGREES = 2.0f;
@@ -96,9 +104,10 @@ public class EmplacementBlockEntity extends BlockEntity {
         return !quiver.isEmpty() && ModularQuiverItem.hasArrows(quiver);
     }
 
-    /** Ready to fire: a crossbow, arrows, and no redstone signal holding it. */
+    /** Ready to fire: a crossbow, arrows (in the quiver or already loaded), and no redstone signal holding it. */
     public boolean isReady() {
-        return level != null && !crossbow.isEmpty() && hasAmmo() && !level.hasNeighborSignal(getBlockPos());
+        return level != null && !crossbow.isEmpty() && (hasAmmo() || CrossbowItem.isCharged(crossbow))
+                && !level.hasNeighborSignal(getBlockPos());
     }
 
     // ---------------- crew ----------------
@@ -136,27 +145,44 @@ public class EmplacementBlockEntity extends BlockEntity {
         return Vec3.atBottomCenterOf(getBlockPos()).add(0.0, PIVOT_HEIGHT, 0.0);
     }
 
-    public double range() {
+    /** Where a crew stands to work the crossbow: behind it, along its aim. */
+    public Vec3 standingSpot() {
+        float yaw = getAimYaw() * Mth.DEG_TO_RAD;
+        return Vec3.atBottomCenterOf(getBlockPos()).add(Mth.sin(yaw) * STAND_OFF, 0.0, -Mth.cos(yaw) * STAND_OFF);
+    }
+
+    /** Whether the crossbow wears an attachment that zooms, such as the Scope. */
+    public boolean isScoped() {
         ResourceLocation id = crossbow.get(ModDataComponents.CROSSBOW_ATTACHMENT.get());
         if (id != null && level != null) {
             var def = level.registryAccess().registryOrThrow(ModCrossbowAttachments.CROSSBOW_ATTACHMENT).get(id);
-            if (def != null && def.stats().zoom() != 1.0f) {
-                return FletcherConfig.GARRISON_SCOPED_RANGE.get();
-            }
+            return def != null && def.stats().zoom() != 1.0f;
         }
-        return FletcherConfig.GARRISON_RANGE.get();
+        return false;
     }
 
-    /** Whether a point lies inside this post's cone and range. */
+    public double range() {
+        return isScoped() ? FletcherConfig.GARRISON_SCOPED_RANGE.get() : FletcherConfig.GARRISON_RANGE.get();
+    }
+
+    /**
+     * Whether a point lies inside this post's cone and range. Range is measured
+     * across the ground, so a post up a tower or a wall reaches as far as one
+     * at the foot of it; it can work up to {@link #VERTICAL_REACH} blocks above
+     * or below itself.
+     */
     public boolean covers(Vec3 point) {
         Vec3 muzzle = muzzle();
         Vec3 to = point.subtract(muzzle);
-        if (to.lengthSqr() > range() * range()) return false;
+        if (to.x * to.x + to.z * to.z > range() * range() || Math.abs(to.y) > VERTICAL_REACH) return false;
         float yaw = (float) (Mth.atan2(to.z, to.x) * Mth.RAD_TO_DEG) - 90.0f;
         return Math.abs(Mth.wrapDegrees(yaw - restYaw())) <= FletcherConfig.GARRISON_HALF_CONE.get();
     }
 
+    /** Aims the crossbow, which stops at the edges of its cone. */
     public void setAim(float yaw, float pitch) {
+        float half = FletcherConfig.GARRISON_HALF_CONE.get();
+        yaw = Mth.wrapDegrees(restYaw() + Mth.clamp(Mth.wrapDegrees(yaw - restYaw()), -half, half));
         this.aimYaw = yaw;
         this.aimPitch = pitch;
         this.aimed = true;

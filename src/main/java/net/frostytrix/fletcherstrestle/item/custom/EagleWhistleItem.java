@@ -26,12 +26,13 @@ import java.util.UUID;
 //                                          affect the bound eagle.
 //   - Sneak + right-click an eagle       → unbind (whistle returns to "all
 //                                          owned eagles in range" mode).
-//   - Right-click in air                 → toggle fetch mode on the targeted
-//                                          eagles. The first eagle's current
-//                                          mode is flipped and all matched
-//                                          eagles are set to that new value.
+//   - Right-click in air                 → cycle the targeted eagles' orders:
+//                                          fetch and guard, fetch only, guard
+//                                          only, neither. The first eagle's
+//                                          orders pick the next step and every
+//                                          matched eagle is set to it.
 //   - Sneak + right-click in air         → recall. Clears any active hunt and
-//                                          paths each eagle toward the player.
+//                                          brings each eagle in to land by the player.
 public class EagleWhistleItem extends Item {
 
     // Radius around the player searched for owned eagles when no specific
@@ -54,7 +55,7 @@ public class EagleWhistleItem extends Item {
             } else if (player.isShiftKeyDown()) {
                 recall(targets, player);
             } else {
-                toggleFetchMode(targets, player);
+                cycleOrders(targets, player);
             }
             // Audible cue regardless: gives feedback even when "no eagles in range".
             level.playSound(null, player.getX(), player.getY(), player.getZ(),
@@ -108,22 +109,28 @@ public class EagleWhistleItem extends Item {
                         && (bound == null || e.getUUID().equals(bound)));
     }
 
-    private static void toggleFetchMode(List<EagleEntity> targets, Player player) {
-        // Use the first matched eagle's mode as the reference. All targets
-        // get flipped to the opposite: keeps the squad in sync rather than
-        // each eagle drifting to its own state.
-        boolean newMode = !targets.get(0).isFetchModeEnabled();
-        for (EagleEntity e : targets) e.setFetchModeEnabled(newMode);
-        player.displayClientMessage(
-                Component.translatable(newMode ? "message.fletcherstrestle.eagles_fetch_on" : "message.fletcherstrestle.eagles_fetch_off"), true);
+    /** Fetch and guard, fetch only, guard only, neither, and round again. */
+    private static void cycleOrders(List<EagleEntity> targets, Player player) {
+        // The first matched eagle's orders pick the next step, and every target
+        // is set to it, so the squad stays in sync.
+        EagleEntity first = targets.get(0);
+        int current = (first.isFetchModeEnabled() ? 0 : 2) + (first.isGuarding() ? 0 : 1);
+        int next = (current + 1) % 4;
+        boolean fetch = next < 2;
+        boolean guard = next % 2 == 0;
+        for (EagleEntity e : targets) {
+            e.setFetchModeEnabled(fetch);
+            e.setGuarding(guard);
+        }
+        player.displayClientMessage(Component.translatable("message.fletcherstrestle.eagles_orders",
+                Component.translatable(fetch ? "message.fletcherstrestle.on" : "message.fletcherstrestle.off"),
+                Component.translatable(guard ? "message.fletcherstrestle.on" : "message.fletcherstrestle.off")), true);
     }
 
     private static void recall(List<EagleEntity> targets, Player player) {
         for (EagleEntity e : targets) {
-            e.setHuntTarget(null);
-            // Path a touch above the player so the eagle approaches from
-            // above rather than colliding at body level.
-            e.getNavigation().moveTo(player.getX(), player.getY() + 1.5, player.getZ(), 1.4);
+            // Drops any hunt and comes in to land beside the player.
+            e.recall();
         }
         player.displayClientMessage(
                 Component.translatable("message.fletcherstrestle.whistle_recalled"), true);

@@ -7,7 +7,6 @@ import net.frostytrix.fletcherstrestle.entity.custom.EagleEntity;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.phys.Vec3;
 
 public class EagleRenderer extends MobRenderer<EagleEntity, EagleModel> {
 
@@ -19,6 +18,7 @@ public class EagleRenderer extends MobRenderer<EagleEntity, EagleModel> {
         super(context,
                 new EagleModel(context.bakeLayer(EagleModel.LAYER_LOCATION)),
                 0.4f); // shadow radius
+        this.addLayer(new EagleCarryLayer(this, context.getItemRenderer()));
     }
 
     @Override
@@ -26,19 +26,24 @@ public class EagleRenderer extends MobRenderer<EagleEntity, EagleModel> {
         return TEXTURE;
     }
 
+    /** Height of the body's middle above the feet, in blocks: the point it pitches and rolls about. */
+    private static final float BODY_CENTRE = 0.5f;
+
     @Override
     protected void setupRotations(EagleEntity entity, PoseStack poseStack,
                                   float ageInTicks, float rotationYaw, float partialTicks,
                                   float scale) {
         super.setupRotations(entity, poseStack, ageInTicks, rotationYaw, partialTicks, scale);
 
-        // Tilt the whole body forward during flight: feels more aerodynamic
-        if (entity.isFlying()) {
-            Vec3 motion = entity.getDeltaMovement();
-            float speed = (float) motion.horizontalDistance();
-            // Pitch forward up to 30 degrees based on horizontal speed
-            float pitchAngle = Math.min(speed * 40f, 30f);
-            poseStack.mulPose(Axis.XP.rotationDegrees(pitchAngle));
+        // Flight attitude. In this frame forward is -Z and the eagle's right is +X,
+        // so a positive X turn lifts the nose and a positive Z turn lifts the right wing.
+        float pitch = entity.getFlightPitch(partialTicks);
+        float bank = entity.getBank(partialTicks);
+        if (pitch != 0f || bank != 0f) {
+            poseStack.translate(0.0f, BODY_CENTRE, 0.0f);
+            poseStack.mulPose(Axis.XP.rotationDegrees(-pitch));
+            poseStack.mulPose(Axis.ZP.rotationDegrees(-bank));
+            poseStack.translate(0.0f, -BODY_CENTRE, 0.0f);
         }
     }
 }

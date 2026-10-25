@@ -60,6 +60,7 @@ public class FletcherTrestle {
         ModFluids.FLUIDS.register(modEventBus);
         ModSounds.register(modEventBus);
         ModFeatures.register(modEventBus);
+        net.frostytrix.fletcherstrestle.worldgen.ModStructureTypes.register(modEventBus);
         // MaterialEffectType registry + the six datapack-driven material registries
         // (data/<ns>/fletcherstrestle/{bow_limb,arrow_head,...}/<id>.json, synced to clients).
         ModMaterialEffectTypes.register(modEventBus);

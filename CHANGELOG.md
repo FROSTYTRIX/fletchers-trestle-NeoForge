@@ -1,3 +1,105 @@
+# Fletcher's Trestle: 2.8.0
+
+Standing Orders. The **Garrison** is finished: the Bolt Warden gets its real
+look, in the wood it was built from, and a soldier's manners to go with it, and
+the Emplacement becomes an iron-banded trestle whose crossbow swings on a yoke.
+Abandoned **Ranger's Watchtowers** hold old garrisons waiting to be woken,
+**eagles** learn to fly properly and to live like eagles, and the mod gets
+real sounds.
+
+---
+
+## 🏰 The Garrison
+
+- **No longer a work in progress.** Real models, textures and animation for both
+  halves of it.
+- **The Bolt Warden** is a wooden toy soldier in a shako, with a clockwork heart
+  turning behind a brass porthole and a wind-up key in its back that spins
+  faster the busier it is.
+- **Eleven woods.** A warden is made of the log you wind up (the middle of the
+  top row), oak to warped and bamboo, and modded logs get the closest match. It
+  drops two of those logs when it's destroyed.
+- **Cracks and repairs**: it cracks in three stages as it takes damage, and a
+  plank patches it up.
+- **A real crew**: it winds itself up before it runs to a post, cranks the
+  reload, rocks back when it fires, and shuffles round behind the crossbow as it
+  traverses. Its eyes and heart glow while it's on duty.
+- **The high ground counts**: an emplacement's range is measured across the
+  ground, and its crossbow tilts down to 80°, so a post up a wall or a tower
+  covers as much ground as one at its foot.
+- **Smarter about posts**: it favours a Scope for a far target and a Magazine
+  for a crowd. A target that leaves a post's cone is followed to the edge, and
+  the warden runs to another post that can take the shot.
+- **Out of bolts**, it shrugs, puffs smoke from its key and moves on to the next
+  loaded post. A crossbow that's still loaded gets its last shot first.
+- **Manners**: it salutes players walking by (not ones sneaking past), wanders
+  over to tinker with its crossbows when off duty, and cowers away from a player
+  who hits it. It still never fights back.
+- **The Emplacement** is an iron-banded trestle with a turntable. The crossbow
+  lies in a cradle on a swivel yoke that turns and tilts with the aim and stops
+  visibly at the edge of its cone, and the quiver hangs on a leg.
+- **Sounds**: clockwork ticking, winding up, the reload crank, an empty click,
+  cracking and patching, with subtitles.
+- **New advancement: Field of Fire**, for a Bolt Warden you built, with three or
+  more posts to man, shooting down a captain.
+
+## 🗼 Ranger's Watchtower
+
+- **A new structure** in forests, taigas, hills and savannas: an abandoned
+  rangers' lookout, a stone base with arrow slits and a bunk room under a tall
+  timber trestle, a railed platform and a hipped roof. An eagle has nested on
+  the peak.
+- **A garrison waiting to be woken**: three emplacements on the platform, one
+  still holding a worn crossbow, and the unwound T of a Bolt Warden. The chest
+  beside it always holds a Mechanical Trigger.
+- **Loot**: a modular bow or crossbow or a quiver, plus arrows, flax, iron,
+  emeralds and the odd spyglass or eagle egg. The barrels hold fletcher's and
+  taiga house loot.
+- **It only stands on level, dry ground**: never half-buried in a hillside or
+  out on the water. For modpacks, the structure type that does this,
+  `fletcherstrestle:level_jigsaw`, takes any jigsaw structure.
+- Its stonework weathers differently every time, and a trapdoor over the
+  ladder keeps a warden from falling down it.
+- **New advancement: The High Ground**, for finding one.
+
+## 🔊 Sounds
+
+- **Real recordings replace the vanilla stand-ins** for the eagle (Yellowstone
+  bald eagle calls), bows (longbow and recurve draws and releases), the
+  Bolt Warden (clockwork ticks, a ratchet for winding and cranking, an empty
+  trigger, cracking and hammering) and the Steam Box's hiss. All public domain
+  or CC0; credits are in the README.
+
+## 🦅 Eagles
+
+- **They fly like birds now.** Smooth, steered flight that banks into turns,
+  glides, flares to land and swerves around obstacles, with proper pathfinding
+  when the way isn't clear. Once landed, an eagle walks short distances instead
+  of taking off again.
+- **New animations**: a real wingbeat with a strong downstroke, gliding,
+  landing, head glances, tail flicks, and legs that actually walk.
+- **Wild eagles have lives**: they ride thermals and ridges, roost at night and
+  shelter from storms, hunt rabbits and fish to feed their eaglets, and defend
+  their nests, with warning dives before the real ones.
+- **Your eagle** circles overhead while you travel and waits on a lookout when
+  you stop, flies at your wing when you take off on an elytra, dives at mobs
+  that hurt you, and goes fishing now and then. The whistle cycles its orders
+  (fetch, guard); sneak and use it to call your eagle back.
+- **Care**: eagles moult the odd feather, unless you set their feathers with
+  honeycomb, which rain washes off. Badly hurt, an eagle glides down and limps;
+  feed it a rabbit or a fish to heal it. Hit while carrying prey, it drops it.
+- **Five new advancements**: Death From Above, Wingman, Growing Up, Keep Your
+  Distance and Looking Sharp.
+
+## 🐛 Fixes
+
+- The Weighted Blunt's bonus for long shots never applied. It does now.
+- Archery targets, eagle perches and shaving horses now turn with a structure
+  when it generates rotated: a turned Fletcher's Camp had its shaving horse
+  facing the wrong way.
+
+---
+
 # Fletcher's Trestle: 2.7.1
 
 Well Mixed. The Dipping Vat now keeps every potion whole, so mixed potions from

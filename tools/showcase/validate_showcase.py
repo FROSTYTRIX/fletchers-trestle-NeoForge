@@ -36,11 +36,13 @@ for f in glob.glob(str(ROOT / "src/*/resources/assets/fletcherstrestle/models/it
     items.add("fletcherstrestle:" + pathlib.Path(f).stem)
 items |= set(states)  # block items
 ENTITIES = {"minecraft:skeleton", "minecraft:stray", "minecraft:bogged", "minecraft:pillager",
-            "fletcherstrestle:eagle", "fletcherstrestle:heavy_dummy"}
+            "minecraft:zombie", "fletcherstrestle:eagle", "fletcherstrestle:heavy_dummy",
+            "fletcherstrestle:garrison_golem"}
 # Blocks drawn by a block-entity renderer list no properties in their blockstate file.
 FACING4 = {"north", "south", "east", "west"}
 for wood in ("oak", "spruce", "birch", "jungle", "acacia", "dark_oak", "mangrove", "cherry", "bamboo", "crimson", "warped"):
     states.setdefault(f"minecraft:{wood}_wall_sign", {})["facing"] = FACING4
+    states.setdefault(f"minecraft:{wood}_sign", {})["rotation"] = {str(i) for i in range(16)}
 states.setdefault("minecraft:chest", {}).update({"facing": FACING4, "type": {"single", "left", "right"}})
 # Block properties that never affect the model, so blockstate files don't list them.
 NON_MODEL = {"persistent", "distance", "waterlogged", "signal_fire", "powered", "bottom"}

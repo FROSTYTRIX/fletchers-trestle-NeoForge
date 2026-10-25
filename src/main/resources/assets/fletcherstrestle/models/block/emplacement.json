@@ -1,44 +1,1152 @@
 {
   "parent": "block/block",
   "textures": {
-    "log": "minecraft:block/stripped_oak_log",
-    "top": "minecraft:block/stripped_oak_log_top",
-    "iron": "minecraft:block/iron_block",
-    "particle": "minecraft:block/stripped_oak_log"
+    "beam": "fletcherstrestle:block/emplacement_beam",
+    "drum": "fletcherstrestle:block/emplacement_drum",
+    "end": "fletcherstrestle:block/emplacement_wood_end",
+    "iron": "fletcherstrestle:block/emplacement_iron",
+    "wood": "fletcherstrestle:block/emplacement_wood",
+    "particle": "fletcherstrestle:block/emplacement_wood"
   },
   "elements": [
     {
-      "from": [3, 0, 3],
-      "to": [13, 2, 13],
+      "name": "front left leg",
+      "from": [
+        5,
+        -1,
+        3
+      ],
+      "to": [
+        7,
+        10.5,
+        5
+      ],
+      "rotation": {
+        "angle": -22.5,
+        "axis": "z",
+        "origin": [
+          6,
+          10.5,
+          4
+        ]
+      },
       "faces": {
-        "north": {"uv": [3, 14, 13, 16], "texture": "#log"},
-        "south": {"uv": [3, 14, 13, 16], "texture": "#log"},
-        "east": {"uv": [3, 14, 13, 16], "texture": "#log"},
-        "west": {"uv": [3, 14, 13, 16], "texture": "#log"},
-        "up": {"uv": [3, 3, 13, 13], "texture": "#top"},
-        "down": {"uv": [3, 3, 13, 13], "texture": "#top", "cullface": "down"}
+        "north": {
+          "uv": [
+            9,
+            4.5,
+            11,
+            16
+          ],
+          "texture": "#wood"
+        },
+        "south": {
+          "uv": [
+            5,
+            4.5,
+            7,
+            16
+          ],
+          "texture": "#wood"
+        },
+        "west": {
+          "uv": [
+            3,
+            4.5,
+            5,
+            16
+          ],
+          "texture": "#wood"
+        },
+        "east": {
+          "uv": [
+            11,
+            4.5,
+            13,
+            16
+          ],
+          "texture": "#wood"
+        },
+        "up": {
+          "uv": [
+            5,
+            3,
+            7,
+            5
+          ],
+          "texture": "#end"
+        },
+        "down": {
+          "uv": [
+            5,
+            11,
+            7,
+            13
+          ],
+          "texture": "#end"
+        }
       }
     },
     {
-      "from": [6.5, 2, 6.5],
-      "to": [9.5, 14, 9.5],
+      "name": "front left leg foot",
+      "from": [
+        0.09914052780146765,
+        0,
+        2.5
+      ],
+      "to": [
+        3.0991405278014676,
+        1,
+        5.5
+      ],
       "faces": {
-        "north": {"uv": [6, 2, 9, 14], "texture": "#log"},
-        "south": {"uv": [6, 2, 9, 14], "texture": "#log"},
-        "east": {"uv": [6, 2, 9, 14], "texture": "#log"},
-        "west": {"uv": [6, 2, 9, 14], "texture": "#log"}
+        "north": {
+          "uv": [
+            12.901,
+            15,
+            15.901,
+            16
+          ],
+          "texture": "#iron"
+        },
+        "south": {
+          "uv": [
+            0.099,
+            15,
+            3.099,
+            16
+          ],
+          "texture": "#iron"
+        },
+        "west": {
+          "uv": [
+            2.5,
+            15,
+            5.5,
+            16
+          ],
+          "texture": "#iron"
+        },
+        "east": {
+          "uv": [
+            10.5,
+            15,
+            13.5,
+            16
+          ],
+          "texture": "#iron"
+        },
+        "up": {
+          "uv": [
+            0.099,
+            2.5,
+            3.099,
+            5.5
+          ],
+          "texture": "#iron"
+        },
+        "down": {
+          "uv": [
+            0.099,
+            10.5,
+            3.099,
+            13.5
+          ],
+          "texture": "#iron"
+        }
       }
     },
     {
-      "from": [5, 14, 5],
-      "to": [11, 16, 11],
+      "name": "back left leg",
+      "from": [
+        5,
+        -1,
+        11
+      ],
+      "to": [
+        7,
+        10.5,
+        13
+      ],
+      "rotation": {
+        "angle": -22.5,
+        "axis": "z",
+        "origin": [
+          6,
+          10.5,
+          12
+        ]
+      },
       "faces": {
-        "north": {"uv": [5, 0, 11, 2], "texture": "#iron"},
-        "south": {"uv": [5, 0, 11, 2], "texture": "#iron"},
-        "east": {"uv": [5, 0, 11, 2], "texture": "#iron"},
-        "west": {"uv": [5, 0, 11, 2], "texture": "#iron"},
-        "up": {"uv": [5, 5, 11, 11], "texture": "#iron"},
-        "down": {"uv": [5, 5, 11, 11], "texture": "#iron"}
+        "north": {
+          "uv": [
+            9,
+            4.5,
+            11,
+            16
+          ],
+          "texture": "#wood"
+        },
+        "south": {
+          "uv": [
+            5,
+            4.5,
+            7,
+            16
+          ],
+          "texture": "#wood"
+        },
+        "west": {
+          "uv": [
+            11,
+            4.5,
+            13,
+            16
+          ],
+          "texture": "#wood"
+        },
+        "east": {
+          "uv": [
+            3,
+            4.5,
+            5,
+            16
+          ],
+          "texture": "#wood"
+        },
+        "up": {
+          "uv": [
+            5,
+            11,
+            7,
+            13
+          ],
+          "texture": "#end"
+        },
+        "down": {
+          "uv": [
+            5,
+            3,
+            7,
+            5
+          ],
+          "texture": "#end"
+        }
+      }
+    },
+    {
+      "name": "back left leg foot",
+      "from": [
+        0.09914052780146765,
+        0,
+        10.5
+      ],
+      "to": [
+        3.0991405278014676,
+        1,
+        13.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            12.901,
+            15,
+            15.901,
+            16
+          ],
+          "texture": "#iron"
+        },
+        "south": {
+          "uv": [
+            0.099,
+            15,
+            3.099,
+            16
+          ],
+          "texture": "#iron"
+        },
+        "west": {
+          "uv": [
+            10.5,
+            15,
+            13.5,
+            16
+          ],
+          "texture": "#iron"
+        },
+        "east": {
+          "uv": [
+            2.5,
+            15,
+            5.5,
+            16
+          ],
+          "texture": "#iron"
+        },
+        "up": {
+          "uv": [
+            0.099,
+            10.5,
+            3.099,
+            13.5
+          ],
+          "texture": "#iron"
+        },
+        "down": {
+          "uv": [
+            0.099,
+            2.5,
+            3.099,
+            5.5
+          ],
+          "texture": "#iron"
+        }
+      }
+    },
+    {
+      "name": "front right leg",
+      "from": [
+        9,
+        -1,
+        3
+      ],
+      "to": [
+        11,
+        10.5,
+        5
+      ],
+      "rotation": {
+        "angle": 22.5,
+        "axis": "z",
+        "origin": [
+          10,
+          10.5,
+          4
+        ]
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            5,
+            4.5,
+            7,
+            16
+          ],
+          "texture": "#wood"
+        },
+        "south": {
+          "uv": [
+            9,
+            4.5,
+            11,
+            16
+          ],
+          "texture": "#wood"
+        },
+        "west": {
+          "uv": [
+            3,
+            4.5,
+            5,
+            16
+          ],
+          "texture": "#wood"
+        },
+        "east": {
+          "uv": [
+            11,
+            4.5,
+            13,
+            16
+          ],
+          "texture": "#wood"
+        },
+        "up": {
+          "uv": [
+            9,
+            3,
+            11,
+            5
+          ],
+          "texture": "#end"
+        },
+        "down": {
+          "uv": [
+            9,
+            11,
+            11,
+            13
+          ],
+          "texture": "#end"
+        }
+      }
+    },
+    {
+      "name": "front right leg foot",
+      "from": [
+        12.900859472198533,
+        0,
+        2.5
+      ],
+      "to": [
+        15.900859472198533,
+        1,
+        5.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0.099,
+            15,
+            3.099,
+            16
+          ],
+          "texture": "#iron"
+        },
+        "south": {
+          "uv": [
+            12.901,
+            15,
+            15.901,
+            16
+          ],
+          "texture": "#iron"
+        },
+        "west": {
+          "uv": [
+            2.5,
+            15,
+            5.5,
+            16
+          ],
+          "texture": "#iron"
+        },
+        "east": {
+          "uv": [
+            10.5,
+            15,
+            13.5,
+            16
+          ],
+          "texture": "#iron"
+        },
+        "up": {
+          "uv": [
+            12.901,
+            2.5,
+            15.901,
+            5.5
+          ],
+          "texture": "#iron"
+        },
+        "down": {
+          "uv": [
+            12.901,
+            10.5,
+            15.901,
+            13.5
+          ],
+          "texture": "#iron"
+        }
+      }
+    },
+    {
+      "name": "back right leg",
+      "from": [
+        9,
+        -1,
+        11
+      ],
+      "to": [
+        11,
+        10.5,
+        13
+      ],
+      "rotation": {
+        "angle": 22.5,
+        "axis": "z",
+        "origin": [
+          10,
+          10.5,
+          12
+        ]
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            5,
+            4.5,
+            7,
+            16
+          ],
+          "texture": "#wood"
+        },
+        "south": {
+          "uv": [
+            9,
+            4.5,
+            11,
+            16
+          ],
+          "texture": "#wood"
+        },
+        "west": {
+          "uv": [
+            11,
+            4.5,
+            13,
+            16
+          ],
+          "texture": "#wood"
+        },
+        "east": {
+          "uv": [
+            3,
+            4.5,
+            5,
+            16
+          ],
+          "texture": "#wood"
+        },
+        "up": {
+          "uv": [
+            9,
+            11,
+            11,
+            13
+          ],
+          "texture": "#end"
+        },
+        "down": {
+          "uv": [
+            9,
+            3,
+            11,
+            5
+          ],
+          "texture": "#end"
+        }
+      }
+    },
+    {
+      "name": "back right leg foot",
+      "from": [
+        12.900859472198533,
+        0,
+        10.5
+      ],
+      "to": [
+        15.900859472198533,
+        1,
+        13.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0.099,
+            15,
+            3.099,
+            16
+          ],
+          "texture": "#iron"
+        },
+        "south": {
+          "uv": [
+            12.901,
+            15,
+            15.901,
+            16
+          ],
+          "texture": "#iron"
+        },
+        "west": {
+          "uv": [
+            10.5,
+            15,
+            13.5,
+            16
+          ],
+          "texture": "#iron"
+        },
+        "east": {
+          "uv": [
+            2.5,
+            15,
+            5.5,
+            16
+          ],
+          "texture": "#iron"
+        },
+        "up": {
+          "uv": [
+            12.901,
+            10.5,
+            15.901,
+            13.5
+          ],
+          "texture": "#iron"
+        },
+        "down": {
+          "uv": [
+            12.901,
+            2.5,
+            15.901,
+            5.5
+          ],
+          "texture": "#iron"
+        }
+      }
+    },
+    {
+      "name": "trestle bar",
+      "from": [
+        5,
+        10,
+        2
+      ],
+      "to": [
+        11,
+        13,
+        14
+      ],
+      "faces": {
+        "west": {
+          "uv": [
+            2,
+            3,
+            14,
+            6
+          ],
+          "texture": "#beam"
+        },
+        "east": {
+          "uv": [
+            2,
+            3,
+            14,
+            6
+          ],
+          "texture": "#beam"
+        },
+        "up": {
+          "uv": [
+            5,
+            2,
+            11,
+            14
+          ],
+          "texture": "#wood"
+        },
+        "down": {
+          "uv": [
+            5,
+            2,
+            11,
+            14
+          ],
+          "texture": "#wood"
+        },
+        "north": {
+          "uv": [
+            5,
+            3,
+            11,
+            6
+          ],
+          "texture": "#end"
+        },
+        "south": {
+          "uv": [
+            5,
+            3,
+            11,
+            6
+          ],
+          "texture": "#end"
+        }
+      }
+    },
+    {
+      "name": "front bar band",
+      "from": [
+        4.75,
+        11,
+        4.25
+      ],
+      "to": [
+        11.25,
+        13.25,
+        5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            4.75,
+            2.75,
+            11.25,
+            5
+          ],
+          "texture": "#iron"
+        },
+        "south": {
+          "uv": [
+            4.75,
+            2.75,
+            11.25,
+            5
+          ],
+          "texture": "#iron"
+        },
+        "west": {
+          "uv": [
+            4.25,
+            2.75,
+            5,
+            5
+          ],
+          "texture": "#iron"
+        },
+        "east": {
+          "uv": [
+            11,
+            2.75,
+            11.75,
+            5
+          ],
+          "texture": "#iron"
+        },
+        "up": {
+          "uv": [
+            4.75,
+            4.25,
+            11.25,
+            5
+          ],
+          "texture": "#iron"
+        },
+        "down": {
+          "uv": [
+            4.75,
+            11,
+            11.25,
+            11.75
+          ],
+          "texture": "#iron"
+        }
+      }
+    },
+    {
+      "name": "back bar band",
+      "from": [
+        4.75,
+        11,
+        11
+      ],
+      "to": [
+        11.25,
+        13.25,
+        11.75
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            4.75,
+            2.75,
+            11.25,
+            5
+          ],
+          "texture": "#iron"
+        },
+        "south": {
+          "uv": [
+            4.75,
+            2.75,
+            11.25,
+            5
+          ],
+          "texture": "#iron"
+        },
+        "west": {
+          "uv": [
+            11,
+            2.75,
+            11.75,
+            5
+          ],
+          "texture": "#iron"
+        },
+        "east": {
+          "uv": [
+            4.25,
+            2.75,
+            5,
+            5
+          ],
+          "texture": "#iron"
+        },
+        "up": {
+          "uv": [
+            4.75,
+            11,
+            11.25,
+            11.75
+          ],
+          "texture": "#iron"
+        },
+        "down": {
+          "uv": [
+            4.75,
+            4.25,
+            11.25,
+            5
+          ],
+          "texture": "#iron"
+        }
+      }
+    },
+    {
+      "name": "front stretcher",
+      "from": [
+        3,
+        4,
+        3.5
+      ],
+      "to": [
+        13,
+        5.5,
+        4.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            3,
+            10.5,
+            13,
+            12
+          ],
+          "texture": "#beam"
+        },
+        "south": {
+          "uv": [
+            3,
+            10.5,
+            13,
+            12
+          ],
+          "texture": "#beam"
+        },
+        "up": {
+          "uv": [
+            3,
+            3.5,
+            13,
+            4.5
+          ],
+          "texture": "#beam"
+        },
+        "down": {
+          "uv": [
+            3,
+            11.5,
+            13,
+            12.5
+          ],
+          "texture": "#beam"
+        },
+        "west": {
+          "uv": [
+            3.5,
+            10.5,
+            4.5,
+            12
+          ],
+          "texture": "#end"
+        },
+        "east": {
+          "uv": [
+            11.5,
+            10.5,
+            12.5,
+            12
+          ],
+          "texture": "#end"
+        }
+      }
+    },
+    {
+      "name": "back stretcher",
+      "from": [
+        3,
+        4,
+        11.5
+      ],
+      "to": [
+        13,
+        5.5,
+        12.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            3,
+            10.5,
+            13,
+            12
+          ],
+          "texture": "#beam"
+        },
+        "south": {
+          "uv": [
+            3,
+            10.5,
+            13,
+            12
+          ],
+          "texture": "#beam"
+        },
+        "up": {
+          "uv": [
+            3,
+            11.5,
+            13,
+            12.5
+          ],
+          "texture": "#beam"
+        },
+        "down": {
+          "uv": [
+            3,
+            3.5,
+            13,
+            4.5
+          ],
+          "texture": "#beam"
+        },
+        "west": {
+          "uv": [
+            11.5,
+            10.5,
+            12.5,
+            12
+          ],
+          "texture": "#end"
+        },
+        "east": {
+          "uv": [
+            3.5,
+            10.5,
+            4.5,
+            12
+          ],
+          "texture": "#end"
+        }
+      }
+    },
+    {
+      "name": "left stretcher",
+      "from": [
+        2,
+        1.5,
+        4
+      ],
+      "to": [
+        3,
+        2.5,
+        12
+      ],
+      "faces": {
+        "west": {
+          "uv": [
+            4,
+            13.5,
+            12,
+            14.5
+          ],
+          "texture": "#beam"
+        },
+        "east": {
+          "uv": [
+            4,
+            13.5,
+            12,
+            14.5
+          ],
+          "texture": "#beam"
+        },
+        "up": {
+          "uv": [
+            2,
+            4,
+            3,
+            12
+          ],
+          "texture": "#wood"
+        },
+        "down": {
+          "uv": [
+            2,
+            4,
+            3,
+            12
+          ],
+          "texture": "#wood"
+        },
+        "north": {
+          "uv": [
+            13,
+            13.5,
+            14,
+            14.5
+          ],
+          "texture": "#end"
+        },
+        "south": {
+          "uv": [
+            2,
+            13.5,
+            3,
+            14.5
+          ],
+          "texture": "#end"
+        }
+      }
+    },
+    {
+      "name": "right stretcher",
+      "from": [
+        13,
+        1.5,
+        4
+      ],
+      "to": [
+        14,
+        2.5,
+        12
+      ],
+      "faces": {
+        "west": {
+          "uv": [
+            4,
+            13.5,
+            12,
+            14.5
+          ],
+          "texture": "#beam"
+        },
+        "east": {
+          "uv": [
+            4,
+            13.5,
+            12,
+            14.5
+          ],
+          "texture": "#beam"
+        },
+        "up": {
+          "uv": [
+            13,
+            4,
+            14,
+            12
+          ],
+          "texture": "#wood"
+        },
+        "down": {
+          "uv": [
+            13,
+            4,
+            14,
+            12
+          ],
+          "texture": "#wood"
+        },
+        "north": {
+          "uv": [
+            2,
+            13.5,
+            3,
+            14.5
+          ],
+          "texture": "#end"
+        },
+        "south": {
+          "uv": [
+            13,
+            13.5,
+            14,
+            14.5
+          ],
+          "texture": "#end"
+        }
+      }
+    },
+    {
+      "name": "turntable",
+      "from": [
+        4,
+        13,
+        4
+      ],
+      "to": [
+        12,
+        15,
+        12
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            4,
+            1,
+            12,
+            3
+          ],
+          "texture": "#drum"
+        },
+        "south": {
+          "uv": [
+            4,
+            1,
+            12,
+            3
+          ],
+          "texture": "#drum"
+        },
+        "west": {
+          "uv": [
+            4,
+            1,
+            12,
+            3
+          ],
+          "texture": "#drum"
+        },
+        "east": {
+          "uv": [
+            4,
+            1,
+            12,
+            3
+          ],
+          "texture": "#drum"
+        },
+        "up": {
+          "uv": [
+            4,
+            4,
+            12,
+            12
+          ],
+          "texture": "#end"
+        },
+        "down": {
+          "uv": [
+            4,
+            4,
+            12,
+            12
+          ],
+          "texture": "#end"
+        }
       }
     }
   ]

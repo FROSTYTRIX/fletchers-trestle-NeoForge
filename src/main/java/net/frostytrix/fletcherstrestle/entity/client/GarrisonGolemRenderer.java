@@ -1,35 +1,85 @@
 package net.frostytrix.fletcherstrestle.entity.client;
 
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.frostytrix.fletcherstrestle.FletcherTrestle;
 import net.frostytrix.fletcherstrestle.entity.custom.GarrisonGolemEntity;
-import net.minecraft.client.model.HumanoidModel;
-import net.minecraft.client.model.geom.ModelLayerLocation;
-import net.minecraft.client.model.geom.builders.CubeDeformation;
-import net.minecraft.client.model.geom.builders.LayerDefinition;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
-import net.minecraft.client.renderer.entity.HumanoidMobRenderer;
+import net.minecraft.client.renderer.entity.MobRenderer;
+import net.minecraft.client.renderer.entity.RenderLayerParent;
+import net.minecraft.client.renderer.entity.layers.RenderLayer;
+import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.Crackiness;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
- * Placeholder look for the garrison golem: a plain humanoid in a wooden texture,
- * until its own model exists.
+ * Draws the Bolt Warden in the wood it was built from, cracked as it takes
+ * damage, with its eyes and heart glowing while it is on duty.
  */
-public class GarrisonGolemRenderer extends HumanoidMobRenderer<GarrisonGolemEntity, HumanoidModel<GarrisonGolemEntity>> {
-    public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(
-            ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "garrison_golem"), "main");
-    private static final ResourceLocation TEXTURE =
-            ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "textures/entity/garrison_golem.png");
+public class GarrisonGolemRenderer extends MobRenderer<GarrisonGolemEntity, GarrisonGolemModel> {
+
+    private static final Map<String, ResourceLocation> TEXTURES = new HashMap<>();
+    private static final ResourceLocation GLOW = texture("glow");
+    private static final Map<Crackiness.Level, ResourceLocation> CRACKS = Map.of(
+            Crackiness.Level.LOW, texture("crackiness_low"),
+            Crackiness.Level.MEDIUM, texture("crackiness_medium"),
+            Crackiness.Level.HIGH, texture("crackiness_high"));
 
     public GarrisonGolemRenderer(EntityRendererProvider.Context context) {
-        super(context, new HumanoidModel<>(context.bakeLayer(LAYER_LOCATION)), 0.5f);
+        super(context, new GarrisonGolemModel(context.bakeLayer(GarrisonGolemModel.LAYER_LOCATION)), 0.5f);
+        this.addLayer(new Cracks(this));
+        this.addLayer(new Glow(this));
     }
 
-    public static LayerDefinition createBodyLayer() {
-        return LayerDefinition.create(HumanoidModel.createMesh(CubeDeformation.NONE, 0.0f), 64, 32);
+    private static ResourceLocation texture(String name) {
+        return ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID,
+                "textures/entity/garrison_golem/" + name + ".png");
     }
 
     @Override
-    public ResourceLocation getTextureLocation(GarrisonGolemEntity entity) {
-        return TEXTURE;
+    public ResourceLocation getTextureLocation(GarrisonGolemEntity golem) {
+        return TEXTURES.computeIfAbsent(golem.getWood(), GarrisonGolemRenderer::texture);
+    }
+
+    /** Cracks in three stages, like the iron golem's, over whatever wood it is. */
+    private static class Cracks extends RenderLayer<GarrisonGolemEntity, GarrisonGolemModel> {
+        Cracks(RenderLayerParent<GarrisonGolemEntity, GarrisonGolemModel> parent) {
+            super(parent);
+        }
+
+        @Override
+        public void render(PoseStack poseStack, MultiBufferSource buffer, int light, GarrisonGolemEntity golem,
+                           float limbSwing, float limbSwingAmount, float partialTick, float ageInTicks,
+                           float netHeadYaw, float headPitch) {
+            if (golem.isInvisible()) return;
+            ResourceLocation cracks = CRACKS.get(golem.getCrackiness());
+            if (cracks != null) {
+                renderColoredCutoutModel(getParentModel(), cracks, poseStack, buffer, light, golem, -1);
+            }
+        }
+    }
+
+    /** On duty, its eyes and the heart behind its porthole glow. */
+    private static class Glow extends RenderLayer<GarrisonGolemEntity, GarrisonGolemModel> {
+        Glow(RenderLayerParent<GarrisonGolemEntity, GarrisonGolemModel> parent) {
+            super(parent);
+        }
+
+        @Override
+        public void render(PoseStack poseStack, MultiBufferSource buffer, int light, GarrisonGolemEntity golem,
+                           float limbSwing, float limbSwingAmount, float partialTick, float ageInTicks,
+                           float netHeadYaw, float headPitch) {
+            byte state = golem.getGarrisonState();
+            if (golem.isInvisible() || (state != GarrisonGolemEntity.ALERT && state != GarrisonGolemEntity.MANNING
+                    && state != GarrisonGolemEntity.RELOADING)) {
+                return;
+            }
+            getParentModel().renderToBuffer(poseStack, buffer.getBuffer(RenderType.eyes(GLOW)),
+                    0xF00000, OverlayTexture.NO_OVERLAY);
+        }
     }
 }

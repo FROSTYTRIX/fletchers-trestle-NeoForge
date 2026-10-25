@@ -70,13 +70,21 @@ public class ModClientEvents {
     @SubscribeEvent
     public static void registerLayerDefinitions(EntityRenderersEvent.RegisterLayerDefinitions event) {
         event.registerLayerDefinition(EagleModel.LAYER_LOCATION, EagleModel::createBodyLayer);
-        event.registerLayerDefinition(net.frostytrix.fletcherstrestle.entity.client.GarrisonGolemRenderer.LAYER_LOCATION,
-                net.frostytrix.fletcherstrestle.entity.client.GarrisonGolemRenderer::createBodyLayer);
+        event.registerLayerDefinition(net.frostytrix.fletcherstrestle.entity.client.GarrisonGolemModel.LAYER_LOCATION,
+                net.frostytrix.fletcherstrestle.entity.client.GarrisonGolemModel::createBodyLayer);
     }
 
     @SubscribeEvent
     public static void registerGeometryLoaders(ModelEvent.RegisterGeometryLoaders event) {
         event.register(ResourceLocation.fromNamespaceAndPath(FletcherTrestle.MOD_ID, "modular_loader"), ModularModelLoader.INSTANCE);
+    }
+
+    // The emplacement's swivel yoke and cradle turn with its aim, so its renderer
+    // draws them; they have to be baked on their own to be found there.
+    @SubscribeEvent
+    public static void registerAdditionalModels(ModelEvent.RegisterAdditional event) {
+        event.register(net.frostytrix.fletcherstrestle.block.entity.renderer.EmplacementRenderer.YOKE);
+        event.register(net.frostytrix.fletcherstrestle.block.entity.renderer.EmplacementRenderer.CRADLE);
     }
 
     private static final ResourceLocation ARROW_SLIT_ID =

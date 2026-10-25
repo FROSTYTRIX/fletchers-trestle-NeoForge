@@ -1,0 +1,90 @@
+# The mod page's screenshots, taken by ShowcaseDirector in the "Showcase" world
+# (./gradlew runShowcase). One instruction a line: cmd, wait <ticks>, hud on|off,
+# shot <name> (saved to run/screenshots/<name>.png), quit.
+
+cmd gamemode spectator
+cmd function showcase:build
+wait 320
+hud off
+cmd function showcase:time/golden
+
+# ---- this release: the Garrison and the Ranger's Watchtower
+cmd function showcase:cam/garrison
+wait 140
+shot garrison_wall
+cmd function showcase:cam/garrison_crew
+wait 100
+shot garrison_crew
+cmd function showcase:cam/emplacement
+wait 60
+shot emplacement_closeup
+cmd function showcase:cam/lineup
+wait 140
+shot warden_lineup
+cmd function showcase:cam/watchtower
+wait 160
+shot watchtower
+cmd function showcase:cam/watchtower_top
+wait 100
+shot watchtower_platform
+
+# The garrison at work: crews woken, zombies across the field.
+cmd function showcase:cam/garrison_crew
+wait 60
+cmd function showcase:garrison_attack
+wait 50
+shot garrison_attack_1
+wait 12
+shot garrison_attack_2
+wait 12
+shot garrison_attack_3
+cmd function showcase:cam/garrison
+wait 30
+shot garrison_attack_4
+wait 15
+shot garrison_attack_5
+
+# Night falls on the wall: the crews' eyes and hearts glow on duty, seen from the field.
+cmd function showcase:time/night
+cmd function showcase:garrison_attack
+cmd function showcase:cam/garrison_front
+wait 40
+shot garrison_night_1
+wait 20
+shot garrison_night_2
+cmd function showcase:cam/garrison
+wait 20
+shot garrison_night_3
+
+# ---- the rest of the mod
+cmd function showcase:time/golden
+cmd function showcase:cam/workshop
+wait 140
+shot workshop
+cmd function showcase:cam/workshop_inside
+wait 80
+shot workshop_inside
+cmd function showcase:cam/steam_box
+wait 80
+shot steam_box
+cmd function showcase:cam/armory
+wait 140
+shot armory
+cmd function showcase:cam/range
+wait 140
+shot range
+cmd function showcase:cam/range_aerial
+wait 120
+shot range_aerial
+cmd function showcase:cam/eagle
+wait 100
+shot eagle_perch
+cmd function showcase:cam/armed_mobs
+wait 120
+shot armed_mobs
+cmd function showcase:cam/market
+wait 140
+shot linen_market
+
+hud on
+quit

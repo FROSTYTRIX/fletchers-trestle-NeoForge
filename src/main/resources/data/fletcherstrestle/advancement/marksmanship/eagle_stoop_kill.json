@@ -1,0 +1,30 @@
+{
+  "parent": "fletcherstrestle:marksmanship/tame_eagle",
+  "display": {
+    "icon": {
+      "id": "minecraft:spyglass"
+    },
+    "title": {
+      "translate": "advancement.fletcherstrestle.eagle_stoop_kill.title"
+    },
+    "description": {
+      "translate": "advancement.fletcherstrestle.eagle_stoop_kill.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "stoop_kill": {
+      "trigger": "fletcherstrestle:eagle",
+      "conditions": {
+        "event": "stoop_kill"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "stoop_kill"
+    ]
+  ]
+}

@@ -34,7 +34,11 @@ import org.jetbrains.annotations.Nullable;
 
 public class ModularArrowEntity extends AbstractArrow
         implements net.neoforged.neoforge.entity.IEntityWithComplexSpawn {
-    private final Vec3 startPos = null;
+    // Where the arrow began its flight, for distance-scaled effects. Set on its
+    // first tick rather than in a constructor, so it's right however the arrow
+    // got into the world (a bow, a dispenser, an emplacement moving it to its muzzle).
+    @Nullable
+    private Vec3 startPos = null;
 
     // Echo Shard Head
     private int resonanceTicks = -1;
@@ -98,8 +102,8 @@ public class ModularArrowEntity extends AbstractArrow
     }
 
     /**
-     * Position at which this arrow was spawned. {@code null} until set
-     * by the shooting code on the first tick. Used by distance-scaled
+     * Position at which this arrow began its flight. {@code null} until its
+     * first tick. Used by distance-scaled
      * effects (e.g. {@link net.frostytrix.fletcherstrestle.material.effect.DamageMultiplierByDistanceEffect}).
      */
     public @Nullable Vec3 getStartPos() {
@@ -266,6 +270,9 @@ public class ModularArrowEntity extends AbstractArrow
 
     @Override
     public void tick() {
+        if (this.startPos == null) {
+            this.startPos = this.position();
+        }
         super.tick();
         ArrowAssembly assembly = this.getAssembly();
         var shaft = net.frostytrix.fletcherstrestle.material.Materials.arrowShaft(assembly.shaft());

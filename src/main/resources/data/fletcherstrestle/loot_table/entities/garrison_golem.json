@@ -9,21 +9,6 @@
           "name": "fletcherstrestle:mechanical_trigger"
         }
       ]
-    },
-    {
-      "rolls": 1,
-      "entries": [
-        {
-          "type": "minecraft:item",
-          "name": "minecraft:stripped_oak_log",
-          "functions": [
-            {
-              "function": "minecraft:set_count",
-              "count": 2
-            }
-          ]
-        }
-      ]
     }
   ]
 }

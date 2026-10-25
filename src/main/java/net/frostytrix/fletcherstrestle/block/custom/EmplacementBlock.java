@@ -41,10 +41,15 @@ public class EmplacementBlock extends HorizontalDirectionalBlock implements Enti
 
     public static final MapCodec<EmplacementBlock> CODEC = simpleCodec(EmplacementBlock::new);
 
-    private static final VoxelShape SHAPE = Shapes.or(
-            Block.box(3, 0, 3, 13, 2, 13),
-            Block.box(6, 2, 6, 10, 14, 10),
-            Block.box(4, 14, 4, 12, 16, 12));
+    /** The trestle facing north or south: legs splayed east-west under a bar running north-south. */
+    private static final VoxelShape SHAPE_NS = Shapes.or(
+            Block.box(1, 0, 3, 15, 10, 13),
+            Block.box(5, 10, 2, 11, 13, 14),
+            Block.box(4, 13, 4, 12, 16, 12));
+    private static final VoxelShape SHAPE_EW = Shapes.or(
+            Block.box(3, 0, 1, 13, 10, 15),
+            Block.box(2, 10, 5, 14, 13, 11),
+            Block.box(4, 13, 4, 12, 16, 12));
 
     public EmplacementBlock(Properties properties) {
         super(properties);
@@ -70,7 +75,7 @@ public class EmplacementBlock extends HorizontalDirectionalBlock implements Enti
 
     @Override
     protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
-        return SHAPE;
+        return state.getValue(FACING).getAxis() == Direction.Axis.X ? SHAPE_EW : SHAPE_NS;
     }
 
     @Nullable

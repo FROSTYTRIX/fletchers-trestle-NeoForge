@@ -1,0 +1,1878 @@
+{
+  "parent": "block/block",
+  "textures": {
+    "beam": "fletcherstrestle:block/emplacement_beam",
+    "drum": "fletcherstrestle:block/emplacement_drum",
+    "end": "fletcherstrestle:block/emplacement_wood_end",
+    "iron": "fletcherstrestle:block/emplacement_iron",
+    "wood": "fletcherstrestle:block/emplacement_wood",
+    "particle": "fletcherstrestle:block/emplacement_wood"
+  },
+  "elements": [
+    {
+      "name": "front left leg",
+      "from": [
+        5,
+        -1,
+        3
+      ],
+      "to": [
+        7,
+        10.5,
+        5
+      ],
+      "rotation": {
+        "angle": -22.5,
+        "axis": "z",
+        "origin": [
+          6,
+          10.5,
+          4
+        ]
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            9,
+            4.5,
+            11,
+            16
+          ],
+          "texture": "#wood"
+        },
+        "south": {
+          "uv": [
+            5,
+            4.5,
+            7,
+            16
+          ],
+          "texture": "#wood"
+        },
+        "west": {
+          "uv": [
+            3,
+            4.5,
+            5,
+            16
+          ],
+          "texture": "#wood"
+        },
+        "east": {
+          "uv": [
+            11,
+            4.5,
+            13,
+            16
+          ],
+          "texture": "#wood"
+        },
+        "up": {
+          "uv": [
+            5,
+            3,
+            7,
+            5
+          ],
+          "texture": "#end"
+        },
+        "down": {
+          "uv": [
+            5,
+            11,
+            7,
+            13
+          ],
+          "texture": "#end"
+        }
+      }
+    },
+    {
+      "name": "front left leg foot",
+      "from": [
+        0.09914052780146765,
+        0,
+        2.5
+      ],
+      "to": [
+        3.0991405278014676,
+        1,
+        5.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            12.901,
+            15,
+            15.901,
+            16
+          ],
+          "texture": "#iron"
+        },
+        "south": {
+          "uv": [
+            0.099,
+            15,
+            3.099,
+            16
+          ],
+          "texture": "#iron"
+        },
+        "west": {
+          "uv": [
+            2.5,
+            15,
+            5.5,
+            16
+          ],
+          "texture": "#iron"
+        },
+        "east": {
+          "uv": [
+            10.5,
+            15,
+            13.5,
+            16
+          ],
+          "texture": "#iron"
+        },
+        "up": {
+          "uv": [
+            0.099,
+            2.5,
+            3.099,
+            5.5
+          ],
+          "texture": "#iron"
+        },
+        "down": {
+          "uv": [
+            0.099,
+            10.5,
+            3.099,
+            13.5
+          ],
+          "texture": "#iron"
+        }
+      }
+    },
+    {
+      "name": "back left leg",
+      "from": [
+        5,
+        -1,
+        11
+      ],
+      "to": [
+        7,
+        10.5,
+        13
+      ],
+      "rotation": {
+        "angle": -22.5,
+        "axis": "z",
+        "origin": [
+          6,
+          10.5,
+          12
+        ]
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            9,
+            4.5,
+            11,
+            16
+          ],
+          "texture": "#wood"
+        },
+        "south": {
+          "uv": [
+            5,
+            4.5,
+            7,
+            16
+          ],
+          "texture": "#wood"
+        },
+        "west": {
+          "uv": [
+            11,
+            4.5,
+            13,
+            16
+          ],
+          "texture": "#wood"
+        },
+        "east": {
+          "uv": [
+            3,
+            4.5,
+            5,
+            16
+          ],
+          "texture": "#wood"
+        },
+        "up": {
+          "uv": [
+            5,
+            11,
+            7,
+            13
+          ],
+          "texture": "#end"
+        },
+        "down": {
+          "uv": [
+            5,
+            3,
+            7,
+            5
+          ],
+          "texture": "#end"
+        }
+      }
+    },
+    {
+      "name": "back left leg foot",
+      "from": [
+        0.09914052780146765,
+        0,
+        10.5
+      ],
+      "to": [
+        3.0991405278014676,
+        1,
+        13.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            12.901,
+            15,
+            15.901,
+            16
+          ],
+          "texture": "#iron"
+        },
+        "south": {
+          "uv": [
+            0.099,
+            15,
+            3.099,
+            16
+          ],
+          "texture": "#iron"
+        },
+        "west": {
+          "uv": [
+            10.5,
+            15,
+            13.5,
+            16
+          ],
+          "texture": "#iron"
+        },
+        "east": {
+          "uv": [
+            2.5,
+            15,
+            5.5,
+            16
+          ],
+          "texture": "#iron"
+        },
+        "up": {
+          "uv": [
+            0.099,
+            10.5,
+            3.099,
+            13.5
+          ],
+          "texture": "#iron"
+        },
+        "down": {
+          "uv": [
+            0.099,
+            2.5,
+            3.099,
+            5.5
+          ],
+          "texture": "#iron"
+        }
+      }
+    },
+    {
+      "name": "front right leg",
+      "from": [
+        9,
+        -1,
+        3
+      ],
+      "to": [
+        11,
+        10.5,
+        5
+      ],
+      "rotation": {
+        "angle": 22.5,
+        "axis": "z",
+        "origin": [
+          10,
+          10.5,
+          4
+        ]
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            5,
+            4.5,
+            7,
+            16
+          ],
+          "texture": "#wood"
+        },
+        "south": {
+          "uv": [
+            9,
+            4.5,
+            11,
+            16
+          ],
+          "texture": "#wood"
+        },
+        "west": {
+          "uv": [
+            3,
+            4.5,
+            5,
+            16
+          ],
+          "texture": "#wood"
+        },
+        "east": {
+          "uv": [
+            11,
+            4.5,
+            13,
+            16
+          ],
+          "texture": "#wood"
+        },
+        "up": {
+          "uv": [
+            9,
+            3,
+            11,
+            5
+          ],
+          "texture": "#end"
+        },
+        "down": {
+          "uv": [
+            9,
+            11,
+            11,
+            13
+          ],
+          "texture": "#end"
+        }
+      }
+    },
+    {
+      "name": "front right leg foot",
+      "from": [
+        12.900859472198533,
+        0,
+        2.5
+      ],
+      "to": [
+        15.900859472198533,
+        1,
+        5.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0.099,
+            15,
+            3.099,
+            16
+          ],
+          "texture": "#iron"
+        },
+        "south": {
+          "uv": [
+            12.901,
+            15,
+            15.901,
+            16
+          ],
+          "texture": "#iron"
+        },
+        "west": {
+          "uv": [
+            2.5,
+            15,
+            5.5,
+            16
+          ],
+          "texture": "#iron"
+        },
+        "east": {
+          "uv": [
+            10.5,
+            15,
+            13.5,
+            16
+          ],
+          "texture": "#iron"
+        },
+        "up": {
+          "uv": [
+            12.901,
+            2.5,
+            15.901,
+            5.5
+          ],
+          "texture": "#iron"
+        },
+        "down": {
+          "uv": [
+            12.901,
+            10.5,
+            15.901,
+            13.5
+          ],
+          "texture": "#iron"
+        }
+      }
+    },
+    {
+      "name": "back right leg",
+      "from": [
+        9,
+        -1,
+        11
+      ],
+      "to": [
+        11,
+        10.5,
+        13
+      ],
+      "rotation": {
+        "angle": 22.5,
+        "axis": "z",
+        "origin": [
+          10,
+          10.5,
+          12
+        ]
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            5,
+            4.5,
+            7,
+            16
+          ],
+          "texture": "#wood"
+        },
+        "south": {
+          "uv": [
+            9,
+            4.5,
+            11,
+            16
+          ],
+          "texture": "#wood"
+        },
+        "west": {
+          "uv": [
+            11,
+            4.5,
+            13,
+            16
+          ],
+          "texture": "#wood"
+        },
+        "east": {
+          "uv": [
+            3,
+            4.5,
+            5,
+            16
+          ],
+          "texture": "#wood"
+        },
+        "up": {
+          "uv": [
+            9,
+            11,
+            11,
+            13
+          ],
+          "texture": "#end"
+        },
+        "down": {
+          "uv": [
+            9,
+            3,
+            11,
+            5
+          ],
+          "texture": "#end"
+        }
+      }
+    },
+    {
+      "name": "back right leg foot",
+      "from": [
+        12.900859472198533,
+        0,
+        10.5
+      ],
+      "to": [
+        15.900859472198533,
+        1,
+        13.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0.099,
+            15,
+            3.099,
+            16
+          ],
+          "texture": "#iron"
+        },
+        "south": {
+          "uv": [
+            12.901,
+            15,
+            15.901,
+            16
+          ],
+          "texture": "#iron"
+        },
+        "west": {
+          "uv": [
+            10.5,
+            15,
+            13.5,
+            16
+          ],
+          "texture": "#iron"
+        },
+        "east": {
+          "uv": [
+            2.5,
+            15,
+            5.5,
+            16
+          ],
+          "texture": "#iron"
+        },
+        "up": {
+          "uv": [
+            12.901,
+            10.5,
+            15.901,
+            13.5
+          ],
+          "texture": "#iron"
+        },
+        "down": {
+          "uv": [
+            12.901,
+            2.5,
+            15.901,
+            5.5
+          ],
+          "texture": "#iron"
+        }
+      }
+    },
+    {
+      "name": "trestle bar",
+      "from": [
+        5,
+        10,
+        2
+      ],
+      "to": [
+        11,
+        13,
+        14
+      ],
+      "faces": {
+        "west": {
+          "uv": [
+            2,
+            3,
+            14,
+            6
+          ],
+          "texture": "#beam"
+        },
+        "east": {
+          "uv": [
+            2,
+            3,
+            14,
+            6
+          ],
+          "texture": "#beam"
+        },
+        "up": {
+          "uv": [
+            5,
+            2,
+            11,
+            14
+          ],
+          "texture": "#wood"
+        },
+        "down": {
+          "uv": [
+            5,
+            2,
+            11,
+            14
+          ],
+          "texture": "#wood"
+        },
+        "north": {
+          "uv": [
+            5,
+            3,
+            11,
+            6
+          ],
+          "texture": "#end"
+        },
+        "south": {
+          "uv": [
+            5,
+            3,
+            11,
+            6
+          ],
+          "texture": "#end"
+        }
+      }
+    },
+    {
+      "name": "front bar band",
+      "from": [
+        4.75,
+        11,
+        4.25
+      ],
+      "to": [
+        11.25,
+        13.25,
+        5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            4.75,
+            2.75,
+            11.25,
+            5
+          ],
+          "texture": "#iron"
+        },
+        "south": {
+          "uv": [
+            4.75,
+            2.75,
+            11.25,
+            5
+          ],
+          "texture": "#iron"
+        },
+        "west": {
+          "uv": [
+            4.25,
+            2.75,
+            5,
+            5
+          ],
+          "texture": "#iron"
+        },
+        "east": {
+          "uv": [
+            11,
+            2.75,
+            11.75,
+            5
+          ],
+          "texture": "#iron"
+        },
+        "up": {
+          "uv": [
+            4.75,
+            4.25,
+            11.25,
+            5
+          ],
+          "texture": "#iron"
+        },
+        "down": {
+          "uv": [
+            4.75,
+            11,
+            11.25,
+            11.75
+          ],
+          "texture": "#iron"
+        }
+      }
+    },
+    {
+      "name": "back bar band",
+      "from": [
+        4.75,
+        11,
+        11
+      ],
+      "to": [
+        11.25,
+        13.25,
+        11.75
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            4.75,
+            2.75,
+            11.25,
+            5
+          ],
+          "texture": "#iron"
+        },
+        "south": {
+          "uv": [
+            4.75,
+            2.75,
+            11.25,
+            5
+          ],
+          "texture": "#iron"
+        },
+        "west": {
+          "uv": [
+            11,
+            2.75,
+            11.75,
+            5
+          ],
+          "texture": "#iron"
+        },
+        "east": {
+          "uv": [
+            4.25,
+            2.75,
+            5,
+            5
+          ],
+          "texture": "#iron"
+        },
+        "up": {
+          "uv": [
+            4.75,
+            11,
+            11.25,
+            11.75
+          ],
+          "texture": "#iron"
+        },
+        "down": {
+          "uv": [
+            4.75,
+            4.25,
+            11.25,
+            5
+          ],
+          "texture": "#iron"
+        }
+      }
+    },
+    {
+      "name": "front stretcher",
+      "from": [
+        3,
+        4,
+        3.5
+      ],
+      "to": [
+        13,
+        5.5,
+        4.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            3,
+            10.5,
+            13,
+            12
+          ],
+          "texture": "#beam"
+        },
+        "south": {
+          "uv": [
+            3,
+            10.5,
+            13,
+            12
+          ],
+          "texture": "#beam"
+        },
+        "up": {
+          "uv": [
+            3,
+            3.5,
+            13,
+            4.5
+          ],
+          "texture": "#beam"
+        },
+        "down": {
+          "uv": [
+            3,
+            11.5,
+            13,
+            12.5
+          ],
+          "texture": "#beam"
+        },
+        "west": {
+          "uv": [
+            3.5,
+            10.5,
+            4.5,
+            12
+          ],
+          "texture": "#end"
+        },
+        "east": {
+          "uv": [
+            11.5,
+            10.5,
+            12.5,
+            12
+          ],
+          "texture": "#end"
+        }
+      }
+    },
+    {
+      "name": "back stretcher",
+      "from": [
+        3,
+        4,
+        11.5
+      ],
+      "to": [
+        13,
+        5.5,
+        12.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            3,
+            10.5,
+            13,
+            12
+          ],
+          "texture": "#beam"
+        },
+        "south": {
+          "uv": [
+            3,
+            10.5,
+            13,
+            12
+          ],
+          "texture": "#beam"
+        },
+        "up": {
+          "uv": [
+            3,
+            11.5,
+            13,
+            12.5
+          ],
+          "texture": "#beam"
+        },
+        "down": {
+          "uv": [
+            3,
+            3.5,
+            13,
+            4.5
+          ],
+          "texture": "#beam"
+        },
+        "west": {
+          "uv": [
+            11.5,
+            10.5,
+            12.5,
+            12
+          ],
+          "texture": "#end"
+        },
+        "east": {
+          "uv": [
+            3.5,
+            10.5,
+            4.5,
+            12
+          ],
+          "texture": "#end"
+        }
+      }
+    },
+    {
+      "name": "left stretcher",
+      "from": [
+        2,
+        1.5,
+        4
+      ],
+      "to": [
+        3,
+        2.5,
+        12
+      ],
+      "faces": {
+        "west": {
+          "uv": [
+            4,
+            13.5,
+            12,
+            14.5
+          ],
+          "texture": "#beam"
+        },
+        "east": {
+          "uv": [
+            4,
+            13.5,
+            12,
+            14.5
+          ],
+          "texture": "#beam"
+        },
+        "up": {
+          "uv": [
+            2,
+            4,
+            3,
+            12
+          ],
+          "texture": "#wood"
+        },
+        "down": {
+          "uv": [
+            2,
+            4,
+            3,
+            12
+          ],
+          "texture": "#wood"
+        },
+        "north": {
+          "uv": [
+            13,
+            13.5,
+            14,
+            14.5
+          ],
+          "texture": "#end"
+        },
+        "south": {
+          "uv": [
+            2,
+            13.5,
+            3,
+            14.5
+          ],
+          "texture": "#end"
+        }
+      }
+    },
+    {
+      "name": "right stretcher",
+      "from": [
+        13,
+        1.5,
+        4
+      ],
+      "to": [
+        14,
+        2.5,
+        12
+      ],
+      "faces": {
+        "west": {
+          "uv": [
+            4,
+            13.5,
+            12,
+            14.5
+          ],
+          "texture": "#beam"
+        },
+        "east": {
+          "uv": [
+            4,
+            13.5,
+            12,
+            14.5
+          ],
+          "texture": "#beam"
+        },
+        "up": {
+          "uv": [
+            13,
+            4,
+            14,
+            12
+          ],
+          "texture": "#wood"
+        },
+        "down": {
+          "uv": [
+            13,
+            4,
+            14,
+            12
+          ],
+          "texture": "#wood"
+        },
+        "north": {
+          "uv": [
+            2,
+            13.5,
+            3,
+            14.5
+          ],
+          "texture": "#end"
+        },
+        "south": {
+          "uv": [
+            13,
+            13.5,
+            14,
+            14.5
+          ],
+          "texture": "#end"
+        }
+      }
+    },
+    {
+      "name": "turntable",
+      "from": [
+        4,
+        13,
+        4
+      ],
+      "to": [
+        12,
+        15,
+        12
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            4,
+            1,
+            12,
+            3
+          ],
+          "texture": "#drum"
+        },
+        "south": {
+          "uv": [
+            4,
+            1,
+            12,
+            3
+          ],
+          "texture": "#drum"
+        },
+        "west": {
+          "uv": [
+            4,
+            1,
+            12,
+            3
+          ],
+          "texture": "#drum"
+        },
+        "east": {
+          "uv": [
+            4,
+            1,
+            12,
+            3
+          ],
+          "texture": "#drum"
+        },
+        "up": {
+          "uv": [
+            4,
+            4,
+            12,
+            12
+          ],
+          "texture": "#end"
+        },
+        "down": {
+          "uv": [
+            4,
+            4,
+            12,
+            12
+          ],
+          "texture": "#end"
+        }
+      }
+    },
+    {
+      "name": "swivel plate",
+      "from": [
+        4,
+        15,
+        4
+      ],
+      "to": [
+        12,
+        16,
+        12
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            4,
+            0,
+            12,
+            1
+          ],
+          "texture": "#iron"
+        },
+        "south": {
+          "uv": [
+            4,
+            0,
+            12,
+            1
+          ],
+          "texture": "#iron"
+        },
+        "west": {
+          "uv": [
+            4,
+            0,
+            12,
+            1
+          ],
+          "texture": "#iron"
+        },
+        "east": {
+          "uv": [
+            4,
+            0,
+            12,
+            1
+          ],
+          "texture": "#iron"
+        },
+        "up": {
+          "uv": [
+            4,
+            4,
+            12,
+            12
+          ],
+          "texture": "#end"
+        },
+        "down": {
+          "uv": [
+            4,
+            4,
+            12,
+            12
+          ],
+          "texture": "#end"
+        }
+      }
+    },
+    {
+      "name": "left fork",
+      "from": [
+        4,
+        16,
+        7
+      ],
+      "to": [
+        6,
+        20,
+        9
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            10,
+            0,
+            12,
+            4
+          ],
+          "texture": "#wood"
+        },
+        "south": {
+          "uv": [
+            4,
+            0,
+            6,
+            4
+          ],
+          "texture": "#wood"
+        },
+        "west": {
+          "uv": [
+            7,
+            0,
+            9,
+            4
+          ],
+          "texture": "#wood"
+        },
+        "east": {
+          "uv": [
+            7,
+            0,
+            9,
+            4
+          ],
+          "texture": "#wood"
+        },
+        "up": {
+          "uv": [
+            4,
+            7,
+            6,
+            9
+          ],
+          "texture": "#end"
+        },
+        "down": {
+          "uv": [
+            4,
+            7,
+            6,
+            9
+          ],
+          "texture": "#end"
+        }
+      }
+    },
+    {
+      "name": "right fork",
+      "from": [
+        10,
+        16,
+        7
+      ],
+      "to": [
+        12,
+        20,
+        9
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            4,
+            0,
+            6,
+            4
+          ],
+          "texture": "#wood"
+        },
+        "south": {
+          "uv": [
+            10,
+            0,
+            12,
+            4
+          ],
+          "texture": "#wood"
+        },
+        "west": {
+          "uv": [
+            7,
+            0,
+            9,
+            4
+          ],
+          "texture": "#wood"
+        },
+        "east": {
+          "uv": [
+            7,
+            0,
+            9,
+            4
+          ],
+          "texture": "#wood"
+        },
+        "up": {
+          "uv": [
+            10,
+            7,
+            12,
+            9
+          ],
+          "texture": "#end"
+        },
+        "down": {
+          "uv": [
+            10,
+            7,
+            12,
+            9
+          ],
+          "texture": "#end"
+        }
+      }
+    },
+    {
+      "name": "left fork cap",
+      "from": [
+        3.75,
+        20,
+        6.75
+      ],
+      "to": [
+        6.25,
+        20.5,
+        9.25
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            9.75,
+            0.0,
+            12.25,
+            0.5
+          ],
+          "texture": "#iron"
+        },
+        "south": {
+          "uv": [
+            3.75,
+            0.0,
+            6.25,
+            0.5
+          ],
+          "texture": "#iron"
+        },
+        "west": {
+          "uv": [
+            6.75,
+            0.0,
+            9.25,
+            0.5
+          ],
+          "texture": "#iron"
+        },
+        "east": {
+          "uv": [
+            6.75,
+            0.0,
+            9.25,
+            0.5
+          ],
+          "texture": "#iron"
+        },
+        "up": {
+          "uv": [
+            3.75,
+            6.75,
+            6.25,
+            9.25
+          ],
+          "texture": "#iron"
+        },
+        "down": {
+          "uv": [
+            3.75,
+            6.75,
+            6.25,
+            9.25
+          ],
+          "texture": "#iron"
+        }
+      }
+    },
+    {
+      "name": "right fork cap",
+      "from": [
+        9.75,
+        20,
+        6.75
+      ],
+      "to": [
+        12.25,
+        20.5,
+        9.25
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            3.75,
+            0.0,
+            6.25,
+            0.5
+          ],
+          "texture": "#iron"
+        },
+        "south": {
+          "uv": [
+            9.75,
+            0.0,
+            12.25,
+            0.5
+          ],
+          "texture": "#iron"
+        },
+        "west": {
+          "uv": [
+            6.75,
+            0.0,
+            9.25,
+            0.5
+          ],
+          "texture": "#iron"
+        },
+        "east": {
+          "uv": [
+            6.75,
+            0.0,
+            9.25,
+            0.5
+          ],
+          "texture": "#iron"
+        },
+        "up": {
+          "uv": [
+            9.75,
+            6.75,
+            12.25,
+            9.25
+          ],
+          "texture": "#iron"
+        },
+        "down": {
+          "uv": [
+            9.75,
+            6.75,
+            12.25,
+            9.25
+          ],
+          "texture": "#iron"
+        }
+      }
+    },
+    {
+      "name": "trunnion pin",
+      "from": [
+        3.5,
+        18.125,
+        7.625
+      ],
+      "to": [
+        12.5,
+        18.875,
+        8.375
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            3.5,
+            0.0,
+            12.5,
+            0.75
+          ],
+          "texture": "#iron"
+        },
+        "south": {
+          "uv": [
+            3.5,
+            0.0,
+            12.5,
+            0.75
+          ],
+          "texture": "#iron"
+        },
+        "west": {
+          "uv": [
+            7.625,
+            0.0,
+            8.375,
+            0.75
+          ],
+          "texture": "#iron"
+        },
+        "east": {
+          "uv": [
+            7.625,
+            0.0,
+            8.375,
+            0.75
+          ],
+          "texture": "#iron"
+        },
+        "up": {
+          "uv": [
+            3.5,
+            7.625,
+            12.5,
+            8.375
+          ],
+          "texture": "#iron"
+        },
+        "down": {
+          "uv": [
+            3.5,
+            7.625,
+            12.5,
+            8.375
+          ],
+          "texture": "#iron"
+        }
+      }
+    },
+    {
+      "name": "cradle",
+      "from": [
+        6.5,
+        18,
+        3
+      ],
+      "to": [
+        9.5,
+        19,
+        13
+      ],
+      "faces": {
+        "west": {
+          "uv": [
+            3,
+            0,
+            13,
+            1
+          ],
+          "texture": "#beam"
+        },
+        "east": {
+          "uv": [
+            3,
+            0,
+            13,
+            1
+          ],
+          "texture": "#beam"
+        },
+        "up": {
+          "uv": [
+            6.5,
+            3,
+            9.5,
+            13
+          ],
+          "texture": "#wood"
+        },
+        "down": {
+          "uv": [
+            6.5,
+            3,
+            9.5,
+            13
+          ],
+          "texture": "#wood"
+        },
+        "north": {
+          "uv": [
+            6.5,
+            0,
+            9.5,
+            1
+          ],
+          "texture": "#end"
+        },
+        "south": {
+          "uv": [
+            6.5,
+            0,
+            9.5,
+            1
+          ],
+          "texture": "#end"
+        }
+      }
+    },
+    {
+      "name": "front strap",
+      "from": [
+        6.25,
+        17.75,
+        4.5
+      ],
+      "to": [
+        9.75,
+        19.25,
+        5.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            6.25,
+            0.0,
+            9.75,
+            1.5
+          ],
+          "texture": "#iron"
+        },
+        "south": {
+          "uv": [
+            6.25,
+            0.0,
+            9.75,
+            1.5
+          ],
+          "texture": "#iron"
+        },
+        "west": {
+          "uv": [
+            4.5,
+            0.0,
+            5.5,
+            1.5
+          ],
+          "texture": "#iron"
+        },
+        "east": {
+          "uv": [
+            10.5,
+            0.0,
+            11.5,
+            1.5
+          ],
+          "texture": "#iron"
+        },
+        "up": {
+          "uv": [
+            6.25,
+            4.5,
+            9.75,
+            5.5
+          ],
+          "texture": "#iron"
+        },
+        "down": {
+          "uv": [
+            6.25,
+            10.5,
+            9.75,
+            11.5
+          ],
+          "texture": "#iron"
+        }
+      }
+    },
+    {
+      "name": "back strap",
+      "from": [
+        6.25,
+        17.75,
+        10.5
+      ],
+      "to": [
+        9.75,
+        19.25,
+        11.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            6.25,
+            0.0,
+            9.75,
+            1.5
+          ],
+          "texture": "#iron"
+        },
+        "south": {
+          "uv": [
+            6.25,
+            0.0,
+            9.75,
+            1.5
+          ],
+          "texture": "#iron"
+        },
+        "west": {
+          "uv": [
+            10.5,
+            0.0,
+            11.5,
+            1.5
+          ],
+          "texture": "#iron"
+        },
+        "east": {
+          "uv": [
+            4.5,
+            0.0,
+            5.5,
+            1.5
+          ],
+          "texture": "#iron"
+        },
+        "up": {
+          "uv": [
+            6.25,
+            10.5,
+            9.75,
+            11.5
+          ],
+          "texture": "#iron"
+        },
+        "down": {
+          "uv": [
+            6.25,
+            4.5,
+            9.75,
+            5.5
+          ],
+          "texture": "#iron"
+        }
+      }
+    }
+  ],
+  "display": {
+    "gui": {
+      "rotation": [
+        30,
+        225,
+        0
+      ],
+      "translation": [
+        0,
+        -1.25,
+        0
+      ],
+      "scale": [
+        0.55,
+        0.55,
+        0.55
+      ]
+    },
+    "ground": {
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "translation": [
+        0,
+        3,
+        0
+      ],
+      "scale": [
+        0.25,
+        0.25,
+        0.25
+      ]
+    },
+    "fixed": {
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "translation": [
+        0,
+        -1,
+        0
+      ],
+      "scale": [
+        0.5,
+        0.5,
+        0.5
+      ]
+    },
+    "thirdperson_righthand": {
+      "rotation": [
+        75,
+        45,
+        0
+      ],
+      "translation": [
+        0,
+        2.5,
+        0
+      ],
+      "scale": [
+        0.375,
+        0.375,
+        0.375
+      ]
+    },
+    "firstperson_righthand": {
+      "rotation": [
+        0,
+        45,
+        0
+      ],
+      "translation": [
+        0,
+        0,
+        0
+      ],
+      "scale": [
+        0.4,
+        0.4,
+        0.4
+      ]
+    },
+    "firstperson_lefthand": {
+      "rotation": [
+        0,
+        225,
+        0
+      ],
+      "translation": [
+        0,
+        0,
+        0
+      ],
+      "scale": [
+        0.4,
+        0.4,
+        0.4
+      ]
+    }
+  }
+}

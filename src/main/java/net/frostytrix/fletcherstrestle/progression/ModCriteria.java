@@ -8,7 +8,7 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 
 import java.util.function.Supplier;
 
-/** Custom advancement criterion triggers (Phase 3). */
+/** Custom advancement criterion triggers. */
 public final class ModCriteria {
     private ModCriteria() {
     }
@@ -26,6 +26,10 @@ public final class ModCriteria {
             TRIGGERS.register("capstone", CapstoneTrigger::new);
     public static final Supplier<RestringTrigger> RESTRING =
             TRIGGERS.register("restring", RestringTrigger::new);
+    public static final Supplier<EagleTrigger> EAGLE =
+            TRIGGERS.register("eagle", EagleTrigger::new);
+    public static final Supplier<GarrisonTrigger> GARRISON =
+            TRIGGERS.register("garrison", GarrisonTrigger::new);
 
     public static void register(IEventBus bus) {
         TRIGGERS.register(bus);

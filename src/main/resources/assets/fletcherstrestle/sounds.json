@@ -4,8 +4,28 @@
     "subtitle": "subtitles.fletcherstrestle.eagle.ambient",
     "sounds": [
       {
-        "name": "minecraft:entity.parrot.ambient",
-        "type": "event"
+        "name": "fletcherstrestle:eagle/call_1",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "fletcherstrestle:eagle/call_2",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "fletcherstrestle:eagle/call_3",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "fletcherstrestle:eagle/call_4",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "fletcherstrestle:eagle/call_5",
+        "attenuation_distance": 32
+      },
+      {
+        "name": "fletcherstrestle:eagle/call_6",
+        "attenuation_distance": 32
       }
     ]
   },
@@ -14,8 +34,16 @@
     "subtitle": "subtitles.fletcherstrestle.eagle.hurt",
     "sounds": [
       {
-        "name": "minecraft:entity.parrot.hurt",
-        "type": "event"
+        "name": "fletcherstrestle:eagle/cry_1",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "fletcherstrestle:eagle/cry_2",
+        "attenuation_distance": 24
+      },
+      {
+        "name": "fletcherstrestle:eagle/cry_3",
+        "attenuation_distance": 24
       }
     ]
   },
@@ -24,8 +52,9 @@
     "subtitle": "subtitles.fletcherstrestle.eagle.death",
     "sounds": [
       {
-        "name": "minecraft:entity.parrot.death",
-        "type": "event"
+        "name": "fletcherstrestle:eagle/death_1",
+        "pitch": 0.85,
+        "attenuation_distance": 24
       }
     ]
   },
@@ -34,8 +63,14 @@
     "subtitle": "subtitles.fletcherstrestle.eagle.tame",
     "sounds": [
       {
-        "name": "minecraft:entity.parrot.ambient",
-        "type": "event"
+        "name": "fletcherstrestle:eagle/tame_1",
+        "pitch": 1.1,
+        "attenuation_distance": 24
+      },
+      {
+        "name": "fletcherstrestle:eagle/call_1",
+        "pitch": 1.1,
+        "attenuation_distance": 24
       }
     ]
   },
@@ -44,8 +79,24 @@
     "subtitle": "subtitles.fletcherstrestle.eagle.flap",
     "sounds": [
       {
-        "name": "minecraft:entity.parrot.fly",
-        "type": "event"
+        "name": "fletcherstrestle:eagle/flap_1",
+        "volume": 0.5,
+        "pitch": 0.7
+      },
+      {
+        "name": "fletcherstrestle:eagle/flap_2",
+        "volume": 0.5,
+        "pitch": 0.7
+      },
+      {
+        "name": "fletcherstrestle:eagle/flap_3",
+        "volume": 0.5,
+        "pitch": 0.7
+      },
+      {
+        "name": "fletcherstrestle:eagle/flap_4",
+        "volume": 0.5,
+        "pitch": 0.7
       }
     ]
   },
@@ -54,8 +105,10 @@
     "subtitle": "subtitles.fletcherstrestle.eagle.dive",
     "sounds": [
       {
-        "name": "minecraft:entity.phantom.flap",
-        "type": "event"
+        "name": "fletcherstrestle:eagle/dive_1",
+        "volume": 0.9,
+        "pitch": 0.8,
+        "attenuation_distance": 24
       }
     ]
   },
@@ -64,29 +117,24 @@
     "subtitle": "subtitles.fletcherstrestle.bow.draw",
     "sounds": [
       {
-        "name": "minecraft:block/wooden_trapdoor/open1",
-        "volume": 0.25,
-        "pitch": 0.75
+        "name": "fletcherstrestle:bow/draw_1",
+        "volume": 0.6
       },
       {
-        "name": "minecraft:block/wooden_trapdoor/open2",
-        "volume": 0.25,
-        "pitch": 0.75
+        "name": "fletcherstrestle:bow/draw_2",
+        "volume": 0.6
       },
       {
-        "name": "minecraft:block/wooden_trapdoor/open3",
-        "volume": 0.25,
-        "pitch": 0.75
+        "name": "fletcherstrestle:bow/draw_3",
+        "volume": 0.6
       },
       {
-        "name": "minecraft:block/wooden_trapdoor/open4",
-        "volume": 0.25,
-        "pitch": 0.75
+        "name": "fletcherstrestle:bow/draw_4",
+        "volume": 0.6
       },
       {
-        "name": "minecraft:block/wooden_trapdoor/open5",
-        "volume": 0.25,
-        "pitch": 0.75
+        "name": "fletcherstrestle:bow/draw_5",
+        "volume": 0.6
       }
     ]
   },
@@ -95,9 +143,16 @@
     "subtitle": "subtitles.fletcherstrestle.bow.ready",
     "sounds": [
       {
-        "name": "minecraft:random/click",
-        "volume": 0.3,
-        "pitch": 1.4
+        "name": "fletcherstrestle:bow/nock_1",
+        "volume": 0.35
+      },
+      {
+        "name": "fletcherstrestle:bow/nock_2",
+        "volume": 0.35
+      },
+      {
+        "name": "fletcherstrestle:bow/nock_3",
+        "volume": 0.35
       }
     ]
   },
@@ -106,9 +161,36 @@
     "subtitle": "subtitles.fletcherstrestle.bow.release",
     "sounds": [
       {
-        "name": "minecraft:random/bow",
-        "volume": 1.0,
-        "pitch": 1.0
+        "name": "fletcherstrestle:bow/longbow_shoot_1",
+        "volume": 0.9
+      },
+      {
+        "name": "fletcherstrestle:bow/longbow_shoot_2",
+        "volume": 0.9
+      },
+      {
+        "name": "fletcherstrestle:bow/longbow_shoot_3",
+        "volume": 0.9
+      },
+      {
+        "name": "fletcherstrestle:bow/longbow_shoot_4",
+        "volume": 0.9
+      },
+      {
+        "name": "fletcherstrestle:bow/recurve_shoot_1",
+        "volume": 0.9
+      },
+      {
+        "name": "fletcherstrestle:bow/recurve_shoot_2",
+        "volume": 0.9
+      },
+      {
+        "name": "fletcherstrestle:bow/recurve_shoot_3",
+        "volume": 0.9
+      },
+      {
+        "name": "fletcherstrestle:bow/recurve_shoot_4",
+        "volume": 0.9
       }
     ]
   },
@@ -117,9 +199,24 @@
     "subtitle": "subtitles.fletcherstrestle.bow.release.flax",
     "sounds": [
       {
-        "name": "minecraft:random/bow",
+        "name": "fletcherstrestle:bow/longbow_shoot_1",
         "volume": 0.9,
-        "pitch": 0.8
+        "pitch": 0.95
+      },
+      {
+        "name": "fletcherstrestle:bow/longbow_shoot_2",
+        "volume": 0.9,
+        "pitch": 0.95
+      },
+      {
+        "name": "fletcherstrestle:bow/longbow_shoot_3",
+        "volume": 0.9,
+        "pitch": 0.95
+      },
+      {
+        "name": "fletcherstrestle:bow/longbow_shoot_4",
+        "volume": 0.9,
+        "pitch": 0.95
       }
     ]
   },
@@ -128,8 +225,23 @@
     "subtitle": "subtitles.fletcherstrestle.bow.release.spider",
     "sounds": [
       {
-        "name": "minecraft:random/bow",
-        "volume": 1.0,
+        "name": "fletcherstrestle:bow/recurve_shoot_1",
+        "volume": 0.9,
+        "pitch": 1.05
+      },
+      {
+        "name": "fletcherstrestle:bow/recurve_shoot_2",
+        "volume": 0.9,
+        "pitch": 1.05
+      },
+      {
+        "name": "fletcherstrestle:bow/recurve_shoot_3",
+        "volume": 0.9,
+        "pitch": 1.05
+      },
+      {
+        "name": "fletcherstrestle:bow/recurve_shoot_4",
+        "volume": 0.9,
         "pitch": 1.05
       }
     ]
@@ -139,19 +251,19 @@
     "subtitle": "subtitles.fletcherstrestle.bow.release.high_tension",
     "sounds": [
       {
-        "name": "minecraft:item/crossbow/shoot1",
-        "volume": 0.9,
-        "pitch": 1.25
+        "name": "fletcherstrestle:bow/crossbow_shoot_1",
+        "volume": 0.85,
+        "pitch": 1.15
       },
       {
-        "name": "minecraft:item/crossbow/shoot2",
-        "volume": 0.9,
-        "pitch": 1.25
+        "name": "fletcherstrestle:bow/crossbow_shoot_2",
+        "volume": 0.85,
+        "pitch": 1.15
       },
       {
-        "name": "minecraft:item/crossbow/shoot3",
-        "volume": 0.9,
-        "pitch": 1.25
+        "name": "fletcherstrestle:bow/crossbow_shoot_3",
+        "volume": 0.85,
+        "pitch": 1.15
       }
     ]
   },
@@ -160,9 +272,24 @@
     "subtitle": "subtitles.fletcherstrestle.steam_box.hiss",
     "sounds": [
       {
-        "name": "minecraft:random/fizz",
-        "volume": 0.08,
-        "pitch": 1.6
+        "name": "fletcherstrestle:workshop/steam_hiss_1",
+        "volume": 0.15
+      },
+      {
+        "name": "fletcherstrestle:workshop/steam_hiss_2",
+        "volume": 0.15
+      },
+      {
+        "name": "fletcherstrestle:workshop/steam_hiss_3",
+        "volume": 0.15
+      },
+      {
+        "name": "fletcherstrestle:workshop/steam_hiss_4",
+        "volume": 0.15
+      },
+      {
+        "name": "fletcherstrestle:workshop/steam_hiss_5",
+        "volume": 0.15
       }
     ]
   },
@@ -285,6 +412,110 @@
         "name": "minecraft:block/amethyst/shimmer",
         "volume": 0.6,
         "pitch": 1.3
+      }
+    ]
+  },
+  "garrison_golem.tick": {
+    "category": "neutral",
+    "subtitle": "subtitles.fletcherstrestle.garrison_golem.tick",
+    "sounds": [
+      {
+        "name": "fletcherstrestle:garrison/tick_1",
+        "volume": 0.35
+      },
+      {
+        "name": "fletcherstrestle:garrison/tick_2",
+        "volume": 0.35
+      },
+      {
+        "name": "fletcherstrestle:garrison/tick_3",
+        "volume": 0.35
+      },
+      {
+        "name": "fletcherstrestle:garrison/tick_4",
+        "volume": 0.35
+      }
+    ]
+  },
+  "garrison_golem.wind_up": {
+    "category": "neutral",
+    "subtitle": "subtitles.fletcherstrestle.garrison_golem.wind_up",
+    "sounds": [
+      {
+        "name": "fletcherstrestle:garrison/wind_up_1",
+        "volume": 0.9
+      }
+    ]
+  },
+  "garrison_golem.crank": {
+    "category": "neutral",
+    "subtitle": "subtitles.fletcherstrestle.garrison_golem.crank",
+    "sounds": [
+      {
+        "name": "fletcherstrestle:garrison/crank_1",
+        "volume": 0.6
+      },
+      {
+        "name": "fletcherstrestle:garrison/crank_2",
+        "volume": 0.6
+      },
+      {
+        "name": "fletcherstrestle:garrison/crank_3",
+        "volume": 0.6
+      },
+      {
+        "name": "fletcherstrestle:garrison/crank_4",
+        "volume": 0.6
+      }
+    ]
+  },
+  "garrison_golem.empty": {
+    "category": "neutral",
+    "subtitle": "subtitles.fletcherstrestle.garrison_golem.empty",
+    "sounds": [
+      {
+        "name": "fletcherstrestle:garrison/empty_1",
+        "volume": 0.9
+      },
+      {
+        "name": "fletcherstrestle:garrison/empty_2",
+        "volume": 0.9
+      },
+      {
+        "name": "fletcherstrestle:garrison/empty_3",
+        "volume": 0.9
+      }
+    ]
+  },
+  "garrison_golem.repair": {
+    "category": "neutral",
+    "subtitle": "subtitles.fletcherstrestle.garrison_golem.repair",
+    "sounds": [
+      {
+        "name": "fletcherstrestle:garrison/repair_1",
+        "volume": 0.9
+      },
+      {
+        "name": "fletcherstrestle:garrison/repair_2",
+        "volume": 0.9
+      }
+    ]
+  },
+  "garrison_golem.crack": {
+    "category": "neutral",
+    "subtitle": "subtitles.fletcherstrestle.garrison_golem.crack",
+    "sounds": [
+      {
+        "name": "fletcherstrestle:garrison/crack_1"
+      },
+      {
+        "name": "fletcherstrestle:garrison/crack_2"
+      },
+      {
+        "name": "fletcherstrestle:garrison/crack_3"
+      },
+      {
+        "name": "fletcherstrestle:garrison/crack_4"
       }
     ]
   }
